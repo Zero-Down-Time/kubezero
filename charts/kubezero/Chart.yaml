@@ -9,8 +9,9 @@ keywords:
   - gitops
 maintainers:
   - name: Quarky9
-dependencies:
-  - name: argo-cd
-    version: 2.2.12
-    repository: https://argoproj.github.io/argo-helm
-    alias: argocd
+# Once PR is merged
+#dependencies:
+#  - name: argo-cd
+#    version: 2.2.12
+#    repository: https://argoproj.github.io/argo-helm
+#    alias: argocd
