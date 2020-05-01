@@ -1,0 +1,12 @@
+destination:
+  server: https://kubernetes.default.svc
+source:
+  repoURL: https://git.zero-downtime.net/ZeroDownTime/k8s-kustomize-lib
+  targetRevision: HEAD
+  pathPrefix: ''
+
+calico:
+  enabled: false
+
+localVolumeProvisioner:
+  enabled: false

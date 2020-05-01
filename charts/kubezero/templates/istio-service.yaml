@@ -1,0 +1,29 @@
+{{- if .Values.istio.enabled }}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: argocd-server
+  namespace: argocd
+spec:
+  gateways:
+  - {{ .Values.istio.gateway }}
+  hosts:
+  - {{ .Values.argocd.server.config.url }}
+  http:
+  - name: grpc
+    match:
+    - headers:
+        user-agent:
+          prefix: argocd-client
+    route:
+    - destination:
+        host: {{ .Release.Name }}-argocd-server
+        port:
+          number: 443
+  - name: http
+    route:
+    - destination:
+        host: {{ .Release.Name }}-argocd-server
+        port:
+          number: 80
+{{- end }}
