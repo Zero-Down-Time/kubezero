@@ -1,10 +1,10 @@
 argocd:
   installCRDs: false
     
-  configs:
-    secret:
-      # argocdServerAdminPassword: "$2a$10$ivKzaXVxMqdeDSfS3nqi1Od3iDbnL7oXrixzDfZFRHlXHnAG6LydG"
-      # argocdServerAdminPasswordMtime: "2020-04-24T15:33:09BST"
+  #configs:
+  #  secret:
+  #    argocdServerAdminPassword: "$2a$10$ivKzaXVxMqdeDSfS3nqi1Od3iDbnL7oXrixzDfZFRHlXHnAG6LydG"
+  #    argocdServerAdminPasswordMtime: "2020-04-24T15:33:09BST"
   
   # Run Argo on the controllers
   controller:

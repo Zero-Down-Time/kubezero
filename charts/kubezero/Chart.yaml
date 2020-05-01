@@ -1,5 +1,5 @@
 apiVersion: v2
-description: KubeZero Helm chart to bootstrap Kube cluster incl. ArgoCD
+description: KubeZero Helm chart to install Zero Down Time Kuberenetes platform
 name: kubezero
 version: 0.1.1
 home: https://kubezero.com
@@ -9,9 +9,10 @@ keywords:
   - gitops
 maintainers:
   - name: Quarky9
-# Once PR is merged
-#dependencies:
-#  - name: argo-cd
-#    version: 2.2.12
-#    repository: https://argoproj.github.io/argo-helm
-#    alias: argocd
+dependencies:
+  - name: argo-cd
+    version: 2.2.12
+    # Switch once PR is merged
+    # repository: https://argoproj.github.io/argo-helm
+    repository: file://charts/argo-cd
+    alias: argocd
