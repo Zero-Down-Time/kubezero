@@ -3,8 +3,8 @@ argocd:
     
   configs:
     secret:
-      argocdServerAdminPassword: "$2a$10$ivKzaXVxMqdeDSfS3nqi1Od3iDbnL7oXrixzDfZFRHlXHnAG6LydG"
-      argocdServerAdminPasswordMtime: "2020-04-24T15:33:09BST"
+      # argocdServerAdminPassword: "$2a$10$ivKzaXVxMqdeDSfS3nqi1Od3iDbnL7oXrixzDfZFRHlXHnAG6LydG"
+      # argocdServerAdminPasswordMtime: "2020-04-24T15:33:09BST"
   
   # Run Argo on the controllers
   controller:
@@ -44,9 +44,9 @@ argocd:
         namespace: argocd
         project: kubezero
         source: 
-          repoURL: https://git.zero-downtime.net/ZeroDownTime/k8s-kustomize-lib
+          repoURL: https://github.com/Zero-Down-Time/kubezero
           targetRevision: HEAD
-          path: kubezero
+          path: charts/kubezero-app
         destination:
           server: https://kubernetes.default.svc
           namespace: argocd
