@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: canal
+spec:
+  template:
+    spec:
+      containers:
+        - name: calico-node
+          env:
+            - name: FELIX_PROMETHEUSGOMETRICSENABLED
+              value: "false"
+            - name: FELIX_PROMETHEUSMETRICSENABLED
+              value: "true"

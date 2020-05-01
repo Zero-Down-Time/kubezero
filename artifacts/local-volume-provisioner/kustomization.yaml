@@ -1,0 +1,5 @@
+nameSpace: kube-system
+
+resources:
+- local-sc-xfs.yaml
+- local-volume-provisioner.yaml 

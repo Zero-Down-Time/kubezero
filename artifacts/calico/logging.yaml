@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: canal
+spec:
+  template:
+    spec:
+      containers:
+        - name: calico-node
+          env:
+            - name: FELIX_LOGSEVERITYSCREEN
+              value: "Warning"
+            - name: FELIX_LOGSEVERITYFILE
+              value: "Warning"
+            - name: FELIX_LOGSEVERITYSYS
+              value: ""
