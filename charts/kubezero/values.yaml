@@ -1,0 +1,83 @@
+argocd:
+  installCRDs: false
+    
+  configs:
+    secret:
+      argocdServerAdminPassword: "$2a$10$ivKzaXVxMqdeDSfS3nqi1Od3iDbnL7oXrixzDfZFRHlXHnAG6LydG"
+      argocdServerAdminPasswordMtime: "2020-04-24T15:33:09BST"
+  
+  # Run Argo on the controllers
+  controller:
+    nodeSelector:
+      node-role.kubernetes.io/master: ""
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+  
+  repoServer:
+    nodeSelector:
+      node-role.kubernetes.io/master: ""
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+  
+  server:
+    config:
+      url: argocd.example.com
+
+      additionalProjects:
+      - name: kubezero
+        namespace: argocd
+        description: KubeZero - ZeroDownTime Kubernetes Platform
+        sourceRepos:
+        - '*'
+        destinations:
+        - namespace: argocd
+          server: https://kubernetes.default.svc
+        - namespace: kube-system
+          server: https://kubernetes.default.svc
+        - namespace: cert-manager
+          server: https://kubernetes.default.svc
+
+      additionalApplications:
+      - name: kubezero
+        namespace: argocd
+        project: kubezero
+        source: 
+          repoURL: https://git.zero-downtime.net/ZeroDownTime/k8s-kustomize-lib
+          targetRevision: HEAD
+          path: kubezero
+        destination:
+          server: https://kubernetes.default.svc
+          namespace: argocd
+        syncPolicy:
+          automated:
+            prune: false
+            selfHeal: false
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+
+
+    extraArgs:
+    - --insecure
+    nodeSelector:
+      node-role.kubernetes.io/master: ""
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+  
+  redis:
+    nodeSelector:
+      node-role.kubernetes.io/master: ""
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+  
+  dex:
+    enabled: false
+
+istio:
+  enabled: false
+  gateway: ingressgateway.istio-system.svc.cluster.local

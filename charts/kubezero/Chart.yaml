@@ -1,0 +1,16 @@
+apiVersion: v2
+description: KubeZero Helm chart to bootstrap Kube cluster incl. ArgoCD
+name: kubezero
+version: 0.1.0
+home: https://kubezero.com
+keywords:
+  - kubezero
+  - argocd
+  - gitops
+maintainers:
+  - name: Quarky9
+dependencies:
+  - name: argo-cd
+    version: 2.2.12
+    repository: https://argoproj.github.io/argo-helm
+    alias: argocd

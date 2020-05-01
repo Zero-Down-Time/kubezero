@@ -1,0 +1,20 @@
+{{- if .Values.localVolumeProvisioner.enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: local-volume-provisioner
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: kubezero
+
+  source:
+    repoURL: {{ .Values.source.repoURL }}
+    targetRevision: {{ .Values.source.targetRevision }}
+    path: {{ .Values.source.pathPrefix }}/artifacts/local-volume-provisioner
+
+  destination:
+    server: {{ .Values.destination.server }}
+    namespace: kube-system
+{{- end }}
