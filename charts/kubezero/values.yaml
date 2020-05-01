@@ -55,11 +55,6 @@ argocd:
             prune: false
             selfHeal: false
 
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: argocd
-
-
     extraArgs:
     - --insecure
     nodeSelector:
