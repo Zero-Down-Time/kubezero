@@ -1,4 +1,4 @@
-argocd:
+argo-cd:
   installCRDs: false
     
   #configs:
@@ -54,6 +54,9 @@ argocd:
           automated:
             prune: false
             selfHeal: false
+    # Set to allow routing via istio
+    #service:
+    #  servicePortHttpName: grpc
 
     extraArgs:
     - --insecure

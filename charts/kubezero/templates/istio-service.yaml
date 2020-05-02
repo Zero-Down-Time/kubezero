@@ -8,7 +8,7 @@ spec:
   gateways:
   - {{ .Values.istio.gateway }}
   hosts:
-  - {{ .Values.argocd.server.config.url }}
+  - {{ index .Values "argo-cd" "server" "config" "url" }}
   http:
   - name: grpc
     match:

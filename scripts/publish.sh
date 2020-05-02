@@ -13,7 +13,7 @@ helm repo add argoproj https://argoproj.github.io/argo-helm
 
 for dir in $(find $SRCROOT/charts -mindepth 1 -maxdepth 1 -type d);
 do
-    # Cleanup disabled as we have a un-released chart of argo-cd
+    # Disabled until PR merged
     # rm -rf $dir/charts
 
     name=$(basename $dir)
@@ -28,7 +28,8 @@ do
             git checkout $dir
         fi
         echo "Processing chart dependencies"
-        helm --debug dep build $dir
+        # Disabled until PR merged
+        # helm --debug dep build $dir
     fi
 
     echo "Processing $dir"
