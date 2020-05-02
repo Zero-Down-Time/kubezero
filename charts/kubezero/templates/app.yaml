@@ -1,0 +1,25 @@
+{{- if .Values.bootstrap }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kubezero
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}-argocd-application
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  project: kubezero
+  source: 
+    repoURL: https://github.com/Zero-Down-Time/kubezero
+    targetRevision: HEAD
+    path: charts/kubezero-app
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
+{{- end }}
