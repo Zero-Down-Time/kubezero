@@ -1,7 +1,7 @@
 apiVersion: v2
 description: KubeZero Helm chart to install Zero Down Time Kuberenetes platform
 name: kubezero
-version: 0.1.6
+version: 0.1.7
 home: https://kubezero.com
 keywords:
   - kubezero

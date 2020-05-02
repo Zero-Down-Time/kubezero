@@ -27,9 +27,9 @@ argo-cd:
     config:
       url: argocd.example.com
 
-    # Set to allow routing via istio
-    #service:
-    #  servicePortHttpName: grpc
+    # Rename former https port to grpc, works with istio + insecure
+    service:
+      servicePortHttpsName: grpc
 
     extraArgs:
     - --insecure
