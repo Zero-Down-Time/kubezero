@@ -3,7 +3,13 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: argocd-server
-  namespace: argocd
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}-argocd-virtualservice
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/part-of: argocd
+    app.kubernetes.io/component: server
 spec:
   gateways:
   - {{ .Values.istio.gateway }}
