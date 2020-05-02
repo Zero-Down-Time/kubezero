@@ -1,3 +1,5 @@
+bootstrap: true
+
 argo-cd:
   installCRDs: false
     
@@ -25,35 +27,6 @@ argo-cd:
     config:
       url: argocd.example.com
 
-      additionalProjects:
-      - name: kubezero
-        namespace: argocd
-        description: KubeZero - ZeroDownTime Kubernetes Platform
-        sourceRepos:
-        - '*'
-        destinations:
-        - namespace: argocd
-          server: https://kubernetes.default.svc
-        - namespace: kube-system
-          server: https://kubernetes.default.svc
-        - namespace: cert-manager
-          server: https://kubernetes.default.svc
-
-      additionalApplications:
-      - name: kubezero
-        namespace: argocd
-        project: kubezero
-        source: 
-          repoURL: https://github.com/Zero-Down-Time/kubezero
-          targetRevision: HEAD
-          path: charts/kubezero-app
-        destination:
-          server: https://kubernetes.default.svc
-          namespace: argocd
-        syncPolicy:
-          automated:
-            prune: false
-            selfHeal: false
     # Set to allow routing via istio
     #service:
     #  servicePortHttpName: grpc
