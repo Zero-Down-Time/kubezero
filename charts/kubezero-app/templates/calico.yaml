@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: {{ default .Values.defaultSource.repoURL }}
     targetRevision: {{ default .Values.defaultSource.targetRevision }}
-    path: {{ default .Values.defaultSource.pathPrefix }}/artifacts/calico
+    path: {{ default .Values.defaultSource.pathPrefix }}artifacts/calico
 
   destination:
     server: {{ default .Values.defaultDestination.server }}
