@@ -1,0 +1,2 @@
+# Ignore sub-charts
+charts/*/charts/*

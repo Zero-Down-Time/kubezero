@@ -1,0 +1,19 @@
+defaultDestination:
+  server: https://kubernetes.default.svc
+
+defaultSource:
+  # This repoURL is used a base for all the repoURLs applications
+  # Setting this to a eg. private git repo incl. the use of pathPrefix allows kubezero to be 
+  # integrated into any repository as a git subtree if for example public internet access is unavailable
+  repoURL: https://github.com/zero-down-time/kubezero
+  targetRevision: HEAD
+  pathPrefix: ''
+
+calico:
+  enabled: true
+
+localVolumeProvisioner:
+  enabled: true
+
+certManager:
+  enabled: true
