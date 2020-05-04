@@ -27,12 +27,13 @@ Source code can be found [here](https://kubezero.com)
 | argo-cd.repoServer.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
 | argo-cd.repoServer.tolerations[0].effect | string | `"NoSchedule"` |  |
 | argo-cd.repoServer.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
-| argo-cd.server.config.url | string | `"argocd.example.com"` |  |
+| argo-cd.server.config.url | string | `"argocd.example.com"` | ArgoCD hostname to be exposed via Istio |
 | argo-cd.server.extraArgs[0] | string | `"--insecure"` |  |
 | argo-cd.server.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
 | argo-cd.server.service.servicePortHttpsName | string | `"grpc"` |  |
 | argo-cd.server.tolerations[0].effect | string | `"NoSchedule"` |  |
 | argo-cd.server.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
-| bootstrap | bool | `true` |  |
-| istio.enabled | bool | `false` |  |
-| istio.gateway | string | `"ingressgateway.istio-system.svc.cluster.local"` |  |
+| bootstrap | bool | `true` | Wether to install the root-app `kubezero-app` |
+| config | object | `{}` | Kubezero configuration to be passed into kubezero-app |
+| istio.enabled | bool | `false` | Deploy Istio VirtualService to expose ArgoCD |
+| istio.gateway | string | `"ingressgateway.istio-system.svc.cluster.local"` | Name of the Istio gateway to add the VirtualService to |
