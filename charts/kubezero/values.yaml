@@ -1,22 +1,17 @@
+# bootstrap -- Wether to install the root-app `kubezero-app`
 bootstrap: true
 
-#config:
-#  defaultSource:
-#    repoURL: https://myprivate.repo.com/k8s-components
-#    pathPrefix: 'some-folder'
-#
-#  # Enabled component
-#  calico:
-#    enabled: true
+# config -- Kubezero configuration to be passed into kubezero-app
+config: {}
 
 argo-cd:
   installCRDs: false
-    
+
   #configs:
   #  secret:
   #    argocdServerAdminPassword: "$2a$10$ivKzaXVxMqdeDSfS3nqi1Od3iDbnL7oXrixzDfZFRHlXHnAG6LydG"
   #    argocdServerAdminPasswordMtime: "2020-04-24T15:33:09BST"
-  
+
   # Run Argo on the controllers
   controller:
     nodeSelector:
@@ -24,16 +19,17 @@ argo-cd:
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
-  
+
   repoServer:
     nodeSelector:
       node-role.kubernetes.io/master: ""
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
-  
+
   server:
     config:
+      # argo-cd.server.config.url -- ArgoCD hostname to be exposed via Istio
       url: argocd.example.com
 
     # Rename former https port to grpc, works with istio + insecure
@@ -47,17 +43,19 @@ argo-cd:
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
-  
+
   redis:
     nodeSelector:
       node-role.kubernetes.io/master: ""
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
-  
+
   dex:
     enabled: false
 
 istio:
+  # istio.enabled -- Deploy Istio VirtualService to expose ArgoCD
   enabled: false
+  # istio.gateway -- Name of the Istio gateway to add the VirtualService to
   gateway: ingressgateway.istio-system.svc.cluster.local
