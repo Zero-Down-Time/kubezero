@@ -1,5 +1,14 @@
 bootstrap: true
 
+#config:
+#  defaultSource:
+#    repoURL: https://myprivate.repo.com/k8s-components
+#    pathPrefix: 'some-folder'
+#
+#  # Enabled component
+#  calico:
+#    enabled: true
+
 argo-cd:
   installCRDs: false
     

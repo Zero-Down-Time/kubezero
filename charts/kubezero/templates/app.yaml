@@ -15,11 +15,18 @@ spec:
     repoURL: https://github.com/Zero-Down-Time/kubezero
     targetRevision: HEAD
     path: charts/kubezero-app
+
+    {{- if .Values.config }}
+    helm:
+      values: |
+{{- toYaml .Values.config | nindent 8 }}
+    {{- end }}
+
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
   syncPolicy:
     automated:
-      prune: false
+      prune: true
       selfHeal: false
 {{- end }}

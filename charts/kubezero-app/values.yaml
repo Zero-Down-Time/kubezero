@@ -1,6 +1,7 @@
-destination:
+defaultDestination:
   server: https://kubernetes.default.svc
-source:
+
+defaultSource:
   # This repoURL is used a base for all the repoURLs applications
   # Setting this to a eg. private git repo incl. the use of pathPrefix allows kubezero to be 
   # integrated into any repository as a git subtree if for example public internet access is unavailable
