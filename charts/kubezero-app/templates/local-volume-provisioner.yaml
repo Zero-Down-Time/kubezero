@@ -4,6 +4,11 @@ kind: Application
 metadata:
   name: local-volume-provisioner
   namespace: argocd
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}-localVolumeProvisioner
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/part-of: kubezero
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:

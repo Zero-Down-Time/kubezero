@@ -2,4 +2,11 @@ apiVersion: v2
 name: kubezero-app
 description: KubeZero ArgoCD Application - Root chart of the KubeZero
 type: application
-version: 0.1.2
+version: 0.1.3
+home: https://kubezero.com
+keywords:
+  - kubezero
+  - argocd
+  - gitops
+maintainers:
+  - name: Quarky9
