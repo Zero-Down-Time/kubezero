@@ -8,11 +8,11 @@ spec:
   project: kubezero
 
   source:
-    repoURL: {{ .Values.source.repoURL }}
-    targetRevision: {{ .Values.source.targetRevision }}
-    path: {{ .Values.source.pathPrefix }}/artifacts/calico
+    repoURL: {{ default .Values.defaultSource.repoURL }}
+    targetRevision: {{ default .Values.defaultSource.targetRevision }}
+    path: {{ default .Values.defaultSource.pathPrefix }}/artifacts/calico
 
   destination:
-    server: {{ .Values.destination.server }}
+    server: {{ default .Values.defaultDestination.server }}
     namespace: kube-system
 {{- end }}
