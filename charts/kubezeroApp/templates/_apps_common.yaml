@@ -1,0 +1,27 @@
+{{- define "kubezero.app" }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .name }}
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: {{ .name }}
+    helm.sh/chart: {{ .root.Chart.Name }}-{{ .root.Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .root.Release.Service }}
+    app.kubernetes.io/part-of: kubezero
+spec:
+  project: kubezero
+
+  source:
+    repoURL: {{ default .root.Values.defaultSource.repoURL }}
+    targetRevision: {{ default .root.Values.defaultSource.targetRevision }}
+    {{- if eq .type "helm" }}
+    path: {{ default .root.Values.defaultSource.pathPrefix }}charts/{{ .name }}
+    {{- else }}
+    path: {{ default .root.Values.defaultSource.pathPrefix }}artifacts/{{ .name }}
+    {{- end }}
+
+  destination:
+    server: {{ default .root.Values.defaultDestination.server }}
+    namespace: kube-system
+{{- end }}

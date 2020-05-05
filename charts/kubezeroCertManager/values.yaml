@@ -1,0 +1,28 @@
+cert-manager:
+  tolerations:
+  - key: node-role.kubernetes.io/master
+    effect: NoSchedule
+  nodeSelector:
+    node-role.kubernetes.io/master: ""
+  ingressShim:
+    defaultIssuerName: letsencrypt-dns-prod
+    defaultIssuerKind: ClusterIssuer
+  webhook:
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    nodeSelector:
+      node-role.kubernetes.io/master: ""
+  cainjector:
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    nodeSelector:
+      node-role.kubernetes.io/master: ""
+  extraArgs:
+    - "--dns01-recursive-nameservers-only"
+  prometheus:
+    servicemonitor:
+      enabled: false
+  #podAnnotations:
+  #  iam.amazonaws.com/role: "INSERT_CLOUDFORMATION_OUTPUT_CertManagerRoleArn"

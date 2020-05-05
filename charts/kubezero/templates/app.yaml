@@ -1,25 +1,24 @@
-{{- if .Values.bootstrap }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: kubezero
   namespace: argocd
   labels:
-    app.kubernetes.io/name: {{ .Chart.Name }}-argocd-application
+    app.kubernetes.io/name: kubezero
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   project: kubezero
-  source: 
+  source:
     repoURL: https://github.com/Zero-Down-Time/kubezero
     targetRevision: HEAD
-    path: charts/kubezero-app
+    path: charts/kubezeroApp
 
     {{- if .Values.config }}
     helm:
       values: |
-{{- toYaml .Values.config | nindent 8 }}
+{{- toYaml .Values.kubezero | nindent 8 }}
     {{- end }}
 
   destination:
@@ -29,4 +28,3 @@ spec:
     automated:
       prune: true
       selfHeal: false
-{{- end }}

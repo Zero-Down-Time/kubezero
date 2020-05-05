@@ -1,4 +1,3 @@
-{{- if .Values.bootstrap }}
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
@@ -28,4 +27,3 @@ spec:
   clusterResourceWhitelist:
   - group: '*'
     kind: '*'
-{{- end }}

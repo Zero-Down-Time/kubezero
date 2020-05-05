@@ -2,7 +2,7 @@ kubezero
 ========
 KubeZero Helm chart to install Zero Down Time Kuberenetes platform
 
-Current chart version is `0.1.8`
+Current chart version is `0.2.0`
 
 Source code can be found [here](https://kubezero.com)
 
@@ -10,7 +10,7 @@ Source code can be found [here](https://kubezero.com)
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://argoproj.github.io/argo-helm | argo-cd | 2.2.12 |
+| https://argoproj.github.io/argo-helm | argo-cd | 2.2.13 |
 
 ## Chart Values
 
@@ -33,7 +33,6 @@ Source code can be found [here](https://kubezero.com)
 | argo-cd.server.service.servicePortHttpsName | string | `"grpc"` |  |
 | argo-cd.server.tolerations[0].effect | string | `"NoSchedule"` |  |
 | argo-cd.server.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
-| bootstrap | bool | `true` | Wether to install the root-app `kubezero-app` |
-| config | object | `{}` | Kubezero configuration to be passed into kubezero-app |
 | istio.enabled | bool | `false` | Deploy Istio VirtualService to expose ArgoCD |
 | istio.gateway | string | `"ingressgateway.istio-system.svc.cluster.local"` | Name of the Istio gateway to add the VirtualService to |
+| kubezero | object | `{}` | Kubezero configuration, values.yaml please see kubezeroApp |

@@ -1,0 +1,15 @@
+apiVersion: v2
+name: kubezeroCertManager
+description: KubeZero Umbrella Chart for cert-manager
+type: application
+version: 0.1.0
+home: https://kubezero.com
+keywords:
+  - kubezero
+  - cert-manager
+maintainers:
+  - name: Quarky9
+dependencies:
+  - name: cert-manager
+    version: 0.14.3
+    repository: https://charts.jetstack.io

@@ -1,0 +1,10 @@
+{{- if .Values.certManager.enabled }}
+{{ template "kubezero.app" dict "root" . "name" "kubezeroCertManager" "type" "helm" }}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cert-manager
+  annotations:
+    iam.amazonaws.com/permitted: ".*CertManagerRole.*"
+{{- end }}
