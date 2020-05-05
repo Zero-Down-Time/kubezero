@@ -13,8 +13,7 @@ helm repo add argoproj https://argoproj.github.io/argo-helm
 
 for dir in $(find $SRCROOT/charts -mindepth 1 -maxdepth 1 -type d);
 do
-    # Disabled until PR merged
-    # rm -rf $dir/charts
+    rm -rf $dir/charts
 
     name=$(basename $dir)
 
@@ -28,8 +27,7 @@ do
             git checkout $dir
         fi
         echo "Processing chart dependencies"
-        # Disabled until PR merged
-        # helm --debug dep build $dir
+        helm --debug dep build $dir
     fi
 
     echo "Processing $dir"
