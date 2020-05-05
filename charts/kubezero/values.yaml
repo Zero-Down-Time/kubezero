@@ -1,8 +1,5 @@
-# bootstrap -- Wether to install the root-app `kubezero-app`
-bootstrap: true
-
-# config -- Kubezero configuration to be passed into kubezero-app
-config: {}
+# kubezero -- Kubezero configuration, values.yaml please see kubezeroApp
+kubezero: {}
 
 argo-cd:
   installCRDs: false

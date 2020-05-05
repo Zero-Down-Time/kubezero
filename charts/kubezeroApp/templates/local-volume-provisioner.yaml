@@ -1,0 +1,3 @@
+{{- if .Values.localVolumeProvisioner.enabled }}
+{{ template "kubezero.app" dict "root" . "name" "localVolumeProvisioner" "type" "kustomize" }}
+{{- end }}

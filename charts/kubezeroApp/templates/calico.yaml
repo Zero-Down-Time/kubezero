@@ -1,0 +1,3 @@
+{{- if .Values.calico.enabled }}
+{{ template "kubezero.app" dict "root" . "name" "calico" "type" "kustomize" }}
+{{- end }}
