@@ -15,11 +15,9 @@ spec:
     targetRevision: HEAD
     path: charts/kubezeroApp
 
-    {{- if .Values.config }}
     helm:
       values: |
 {{- toYaml .Values.kubezero | nindent 8 }}
-    {{- end }}
 
   destination:
     server: https://kubernetes.default.svc
