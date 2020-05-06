@@ -17,14 +17,14 @@ spec:
     targetRevision: {{ default .root.Values.defaultSource.targetRevision }}
     {{- if eq .type "helm" }}
     {{ $values := index .root.Values .name "values" }}
-    path: {{ default .root.Values.defaultSource.pathPrefix }}charts/kubezero{{ .name }}
+    path: {{ default .root.Values.defaultSource.pathPrefix }}charts/kubezero-{{ .name }}
     {{- if $values }}
     helm:
       values: |
 {{- toYaml $values | nindent 8 }}
     {{- end }}
     {{- else }}
-    path: {{ default .root.Values.defaultSource.pathPrefix }}artifacts/{{ .name }}
+    path: {{ default .root.Values.defaultSource.pathPrefix }}artifacts/kubezero-{{ .name }}
     {{- end }}
 
   destination:

@@ -12,8 +12,8 @@ defaultSource:
 calico:
   enabled: true
 
-localVolumeProvisioner:
+local-volume-provisioner:
   enabled: true
 
-certManager:
+cert-manager:
   enabled: true
