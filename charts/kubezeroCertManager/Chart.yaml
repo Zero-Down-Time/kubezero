@@ -2,7 +2,7 @@ apiVersion: v2
 name: kubezeroCertManager
 description: KubeZero Umbrella Chart for cert-manager
 type: application
-version: 0.1.0
+version: 0.1.1
 home: https://kubezero.com
 keywords:
   - kubezero
