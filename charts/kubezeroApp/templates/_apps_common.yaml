@@ -16,7 +16,13 @@ spec:
     repoURL: {{ default .root.Values.defaultSource.repoURL }}
     targetRevision: {{ default .root.Values.defaultSource.targetRevision }}
     {{- if eq .type "helm" }}
+    {{ $values := index .root.Values .name "values" }}
     path: {{ default .root.Values.defaultSource.pathPrefix }}charts/{{ .name }}
+    {{- if $values }}
+    helm:
+      values:
+{{- toYaml $values | nindent 8 }}
+    {{- end }}
     {{- else }}
     path: {{ default .root.Values.defaultSource.pathPrefix }}artifacts/{{ .name }}
     {{- end }}
