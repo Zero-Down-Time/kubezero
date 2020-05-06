@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ .name }}
+  name: {{ .name | lower }}
   namespace: argocd
   labels:
     app.kubernetes.io/name: {{ .name }}
