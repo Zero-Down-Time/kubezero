@@ -6,3 +6,6 @@ output
 .DS_Store
 .idea
 **/*.tgz
+
+# Breaks Helm V3 dependencies in Argo
+Chart.lock
