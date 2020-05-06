@@ -1,0 +1,14 @@
+{{- if .Values.clusterIssuer.name }}
+apiVersion: cert-manager.io/v1alpha2
+kind: ClusterIssuer
+metadata:
+  name: {{ .Values.clusterIssuer.name }}
+spec:
+  acme:
+    server: {{ .Values.clusterIssuer.server }}
+    email: {{ .Values.clusterIssuer.email }}
+    privateKeySecretRef:
+      name: {{ .Values.clusterIssuer.name }}
+    solvers:
+{{ toYaml .Values.clusterIssuer.solvers | indent 6 }}
+{{- end }}

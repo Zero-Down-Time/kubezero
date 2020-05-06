@@ -1,3 +1,13 @@
+clusterIssuer: {}
+# name: letsencrypt-dns-prod
+# server: https://acme-v02.api.letsencrypt.org/directory
+# email: admin@example.com
+# solvers:
+#   - dns01:
+#       route53:
+#         region: us-west-2
+#         hostedZoneID: 1234567890
+
 cert-manager:
   tolerations:
   - key: node-role.kubernetes.io/master
