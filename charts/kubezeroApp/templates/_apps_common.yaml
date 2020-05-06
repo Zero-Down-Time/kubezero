@@ -20,7 +20,7 @@ spec:
     path: {{ default .root.Values.defaultSource.pathPrefix }}charts/{{ .name }}
     {{- if $values }}
     helm:
-      values:
+      values: |
 {{- toYaml $values | nindent 8 }}
     {{- end }}
     {{- else }}
