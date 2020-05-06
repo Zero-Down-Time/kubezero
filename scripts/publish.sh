@@ -7,6 +7,8 @@ SRCROOT="$(cd "$(dirname "$0")/.." && pwd)"
 GIT_PUSH=${GIT_PUSH:-false}
 
 rm -rf $SRCROOT/output && git clone -b gh-pages ssh://git@git.zero-downtime.net:22000/ZeroDownTime/KubeZero.git $SRCROOT/output
+# Reset all
+# rm -rf $SRCROOT/output/*tgz $SRCROOT/output/index.yaml
 
 helm repo add stable https://kubernetes-charts.storage.googleapis.com
 helm repo add argoproj https://argoproj.github.io/argo-helm
