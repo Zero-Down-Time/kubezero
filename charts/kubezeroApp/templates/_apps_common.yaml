@@ -17,7 +17,7 @@ spec:
     targetRevision: {{ default .root.Values.defaultSource.targetRevision }}
     {{- if eq .type "helm" }}
     {{ $values := index .root.Values .name "values" }}
-    path: {{ default .root.Values.defaultSource.pathPrefix }}charts/{{ .name }}
+    path: {{ default .root.Values.defaultSource.pathPrefix }}charts/kubezero{{ .name }}
     {{- if $values }}
     helm:
       values: |
