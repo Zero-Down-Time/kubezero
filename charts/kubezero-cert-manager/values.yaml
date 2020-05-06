@@ -9,6 +9,7 @@ clusterIssuer: {}
 #         hostedZoneID: 1234567890
 
 cert-manager:
+  installCRDs: true
   tolerations:
   - key: node-role.kubernetes.io/master
     effect: NoSchedule
@@ -31,6 +32,8 @@ cert-manager:
       node-role.kubernetes.io/master: ""
   extraArgs:
     - "--dns01-recursive-nameservers-only"
+    # When this flag is enabled, secrets will be automatically removed when the certificate resource is deleted
+    # - --enable-certificate-owner-ref=true
   prometheus:
     servicemonitor:
       enabled: false
