@@ -13,7 +13,7 @@ spec:
   source:
     repoURL: https://github.com/Zero-Down-Time/kubezero
     targetRevision: HEAD
-    path: charts/kubezeroApp
+    path: charts/kubezero-app
 
     helm:
       values: |
