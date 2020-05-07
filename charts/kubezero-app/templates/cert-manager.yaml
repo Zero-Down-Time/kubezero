@@ -1,5 +1,5 @@
 {{- if index .Values "cert-manager" "enabled" }}
-{{ template "kubezero.app" dict "root" . "name" "cert-manager" "type" "helm" }}
+{{ template "kubezero.app" dict "root" . "name" "cert-manager" "type" "helm" "namespace" "cert-manager" }}
 ---
 apiVersion: v1
 kind: Namespace

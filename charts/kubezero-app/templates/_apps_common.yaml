@@ -29,5 +29,5 @@ spec:
 
   destination:
     server: {{ default .root.Values.defaultDestination.server }}
-    namespace: kube-system
+    namespace: {{ default "kube-system" .namespace }}
 {{- end }}
