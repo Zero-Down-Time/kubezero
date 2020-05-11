@@ -30,4 +30,9 @@ spec:
   destination:
     server: {{ default .root.Values.defaultDestination.server }}
     namespace: {{ default "kube-system" .namespace }}
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
 {{- end }}
