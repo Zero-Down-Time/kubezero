@@ -1,17 +1,17 @@
 apiVersion: v2
-name: kubezero-cert-manager
-description: KubeZero Umbrella Chart for cert-manager
+name: kubezero-kiam
+description: KubeZero Umbrella Chart for Kiam
 type: application
-version: 0.3.2
+version: 0.1.0
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/logo_small.png
 keywords:
   - kubezero
-  - cert-manager
+  - kiam
 maintainers:
   - name: Quarky9
 dependencies:
-  - name: cert-manager
-    version: 0.15.0
-    repository: https://charts.jetstack.io
+  - name: kiam
+    version: 5.7.0
+    repository: https://uswitch.github.io/kiam-helm-charts/charts/
 kubeVersion: ">= 1.16.0"

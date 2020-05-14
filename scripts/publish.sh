@@ -12,6 +12,8 @@ rm -rf $SRCROOT/output && git clone -b gh-pages ssh://git@git.zero-downtime.net:
 
 helm repo add stable https://kubernetes-charts.storage.googleapis.com
 helm repo add argoproj https://argoproj.github.io/argo-helm
+helm repo add jetstack https://charts.jetstack.io
+helm repo add uswitch https://uswitch.github.io/kiam-helm-charts/charts/
 
 for dir in $(find $SRCROOT/charts -mindepth 1 -maxdepth 1 -type d);
 do
@@ -33,7 +35,7 @@ do
     fi
 
     echo "Processing $dir"
-    helm --debug package $dir
+    helm lint $dir && helm --debug package $dir
 done
 
 cp $SRCROOT/*.tgz output/
