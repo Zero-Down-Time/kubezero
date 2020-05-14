@@ -8,6 +8,14 @@ clusterIssuer: {}
 #         region: us-west-2
 #         hostedZoneID: 1234567890
 
+localCA:
+  enabled: true
+  # If selfsigning is false you must provide the ca key and crt below
+  selfsigning: true
+  #ca:
+  #  key: <pem-key-material>
+  #  crt: <pem-crt-material>
+
 cert-manager:
   installCRDs: true
   tolerations:
