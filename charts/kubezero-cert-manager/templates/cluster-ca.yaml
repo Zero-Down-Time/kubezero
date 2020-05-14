@@ -1,0 +1,48 @@
+{{- if .Values.localCA.enabled }}
+{{- if .Values.localCA.selfsigning }}
+
+# KubeZero / Local cluster CA
+apiVersion: cert-manager.io/v1alpha2
+kind: Issuer
+metadata:
+  name: kubezero-selfsigning-issuer
+  namespace: kube-system
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: kubezero-localCA
+  namespace: kube-system
+spec:
+  secretName: kubezero-ca-tls
+  commonName: "kubezero-localCA"
+  isCA: true
+  issuerRef:
+    name: kubezero-selfsigning-issuer
+  usages:
+  - "any"
+---
+
+{{ else }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kubezero-ca-tls
+  namespace: kube-system
+data:
+  tls.crt: {{ .Values.localCA.ca.crt | b64enc }}
+  tls.key: {{ .Values.localCA.ca.key | b64enc }}
+---
+{{- end }}
+
+apiVersion: cert-manager.io/v1alpha2
+kind: Issuer
+metadata:
+  name: kubezero-localCA-issuer
+  namespace: kube-system
+spec:
+  ca:
+    secretName: kubezero-ca-tls
+{{- end }}
