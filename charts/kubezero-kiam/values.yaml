@@ -1,0 +1,42 @@
+kiam:
+  server:
+    # assumeRoleArn: <INSERT_CLOUDFORMATION_OUTPUT_KiamServerRoleArn> 
+    useHostNetwork: true
+    sslCertHostPath: /etc/ssl/certs
+    tlsSecret: kiam-server-tls
+    service:
+      port: 6444
+      targetPort: 6444
+    deployment:
+      enabled: true
+      replicas: 2
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    nodeSelector:
+      node-role.kubernetes.io/master: ""
+    prometheus:
+      servicemonitor:
+        enabled: false
+  #  log:
+  #    level: warn
+  
+  agent:
+    host:
+      iptables: true
+    whiteListRouteRegexp: '^/latest/(meta-data/instance-id|dynamic)'
+    sslCertHostPath: /etc/ssl/certs
+    tlsSecret: kiam-agent-tls
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    prometheus:
+      servicemonitor:
+        enabled: false
+  #  log:
+  #    level: warn
+  #  extraEnv:
+  #  - name: GRPC_GO_LOG_SEVERITY_LEVEL
+  #    value: "info"
+  #  - name: GRPC_GO_LOG_VERBOSITY_LEVEL
+  #    value: "8"

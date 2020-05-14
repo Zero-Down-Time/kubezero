@@ -17,3 +17,6 @@ local-volume-provisioner:
 
 cert-manager:
   enabled: true
+
+kiam:
+  enabled: true
