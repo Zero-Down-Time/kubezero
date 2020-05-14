@@ -13,11 +13,11 @@ spec:
 apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
 metadata:
-  name: kubezero-localCA
+  name: kubezero-local-ca
   namespace: kube-system
 spec:
   secretName: kubezero-ca-tls
-  commonName: "kubezero-localCA"
+  commonName: "kubezero-local-ca"
   isCA: true
   issuerRef:
     name: kubezero-selfsigning-issuer
@@ -40,7 +40,7 @@ data:
 apiVersion: cert-manager.io/v1alpha2
 kind: Issuer
 metadata:
-  name: kubezero-localCA-issuer
+  name: kubezero-local-ca-issuer
   namespace: kube-system
 spec:
   ca:
