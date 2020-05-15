@@ -11,16 +11,18 @@ metadata:
 spec:
   project: kubezero
   source:
-    repoURL: https://github.com/Zero-Down-Time/kubezero
-    targetRevision: HEAD
-    path: charts/kubezero-app
+    repoURL: {{ .Values.global.defaultSource.repoURL }}
+    targetRevision: {{ .Values.global.defaultSource.targetRevision }}
+    path: {{ .Values.global.defaultSource.pathPrefix}}charts/kubezero-app
 
+{{ if .Values.kubezero }}
     helm:
       values: |
 {{- toYaml .Values.kubezero | nindent 8 }}
+{{- end }}
 
   destination:
-    server: https://kubernetes.default.svc
+    server: {{ .Values.global.defaultDestination.server }}
     namespace: argocd
   syncPolicy:
     automated:

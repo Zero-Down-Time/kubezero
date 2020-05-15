@@ -17,22 +17,22 @@ spec:
   project: kubezero
 
   source:
-    repoURL: {{ default .root.Values.defaultSource.repoURL }}
-    targetRevision: {{ default .root.Values.defaultSource.targetRevision }}
+    repoURL: {{ .root.Values.global.defaultSource.repoURL }}
+    targetRevision: {{ .root.Values.global.defaultSource.targetRevision }}
     {{- if eq .type "helm" }}
-    {{ $my_values := index .root.Values .name "values" }}
-    path: {{ default .root.Values.defaultSource.pathPrefix }}charts/kubezero-{{ .name }}
+    {{- $my_values := index .root.Values .name "values" }}
+    path: {{ .root.Values.global.defaultSource.pathPrefix}}charts/kubezero-{{ .name }}
     {{- if $my_values }}
     helm:
       values: |
 {{- toYaml $my_values | nindent 8 }}
     {{- end }}
     {{- else }}
-    path: {{ default .root.Values.defaultSource.pathPrefix }}artifacts/kubezero-{{ .name }}
+    path: {{ .root.Values.global.defaultSource.pathPrefix }}artifacts/kubezero-{{ .name }}
     {{- end }}
 
   destination:
-    server: {{ default .root.Values.defaultDestination.server }}
+    server: {{ .root.Values.global.defaultDestination.server }}
     namespace: {{ default "kube-system" .namespace }}
 
   syncPolicy:
