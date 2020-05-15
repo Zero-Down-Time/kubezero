@@ -1,3 +1,18 @@
+global:
+  defaultDestination:
+    server: https://kubernetes.default.svc
+
+  # This repoURL is used a base for all the repoURLs applications
+  # Setting this to a eg. private git repo incl. the use of pathPrefix allows kubezero to be
+  # integrated into any repository as a git subtree if for example public internet access is unavailable
+  defaultSource:
+    # defaultSource.repoURL -- default repository for argocd applications
+    repoURL: https://github.com/zero-down-time/kubezero
+    # defaultSource.targetRevision -- default tracking of repoURL
+    targetRevision: HEAD
+    # defaultSource.pathPrefix -- optional path prefix within repoURL to support eg. remote subtrees
+    pathPrefix: ''
+
 # kubezero -- Kubezero configuration, values.yaml please see kubezeroApp
 kubezero: {}
 
