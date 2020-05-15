@@ -5,6 +5,10 @@ kiam:
     useHostNetwork: true
     sslCertHostPath: /etc/ssl/certs
     tlsSecret: kiam-server-tls
+    tlsCerts:
+      certFileName: tls.crt
+      keyFileName:  tls.key
+      caFileName:   ca.crt
     service:
       port: 6444
       targetPort: 6444
@@ -28,6 +32,10 @@ kiam:
     whiteListRouteRegexp: '^/latest/(meta-data/instance-id|dynamic)'
     sslCertHostPath: /etc/ssl/certs
     tlsSecret: kiam-agent-tls
+    tlsCerts:
+      certFileName: tls.crt
+      keyFileName:  tls.key
+      caFileName:   ca.crt
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
