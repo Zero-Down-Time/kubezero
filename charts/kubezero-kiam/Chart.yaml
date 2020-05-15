@@ -2,7 +2,7 @@ apiVersion: v2
 name: kubezero-kiam
 description: KubeZero Umbrella Chart for Kiam
 type: application
-version: 0.1.0
+version: 0.1.1
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/logo_small.png
 keywords:
