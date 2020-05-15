@@ -1,6 +1,7 @@
 kiam:
   server:
-    # assumeRoleArn: <INSERT_CLOUDFORMATION_OUTPUT_KiamServerRoleArn> 
+    # kiam.server.assumeRoleArn --  kiam server IAM role to assume, required as we run the agents next to the servers normally
+    assumeRoleArn: arn:aws:iam::123456789012:role/kiam-server-role
     useHostNetwork: true
     sslCertHostPath: /etc/ssl/certs
     tlsSecret: kiam-server-tls
@@ -9,7 +10,7 @@ kiam:
       targetPort: 6444
     deployment:
       enabled: true
-      replicas: 2
+      replicas: 1
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
@@ -18,9 +19,9 @@ kiam:
     prometheus:
       servicemonitor:
         enabled: false
-  #  log:
-  #    level: warn
-  
+    log:
+      level: warn
+
   agent:
     host:
       iptables: true
@@ -33,8 +34,8 @@ kiam:
     prometheus:
       servicemonitor:
         enabled: false
-  #  log:
-  #    level: warn
+    log:
+      level: warn
   #  extraEnv:
   #  - name: GRPC_GO_LOG_SEVERITY_LEVEL
   #    value: "info"

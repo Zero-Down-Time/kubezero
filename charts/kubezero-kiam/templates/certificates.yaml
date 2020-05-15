@@ -1,0 +1,28 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: kiam-agent
+spec:
+  secretName: kiam-agent-tls
+  issuerRef:
+    name: kubezero-local-ca-issuer
+  usages:
+  - "any"
+  dnsNames:
+  - "kiam-agent"
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: kiam-server
+spec:
+  secretName: kiam-server-tls
+  issuerRef:
+    name: kubezero-local-ca-issuer
+  usages:
+  - "any"
+  dnsNames:
+  - "localhost"
+  - "kiam-server"
+  ipAddresses:
+  - "127.0.0.1"
