@@ -1,5 +1,7 @@
 kiam:
   server:
+    image:
+      tag: "v3.6-rc1"
     # kiam.server.assumeRoleArn --  kiam server IAM role to assume, required as we run the agents next to the servers normally
     assumeRoleArn: arn:aws:iam::123456789012:role/kiam-server-role
     useHostNetwork: true
@@ -15,6 +17,7 @@ kiam:
     deployment:
       enabled: true
       replicas: 1
+    updateStrategy: RollingUpdate
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
@@ -27,8 +30,14 @@ kiam:
       level: warn
 
   agent:
+    image:
+      tag: "v3.6-rc1"
+    gatewayTimeoutCreation: "5s"
+    updateStrategy: RollingUpdate
+    # IP tables set on each node at boot, see CloudBender
     host:
-      iptables: true
+      iptables: false
+      interface: "cali+"
     whiteListRouteRegexp: '^/latest/(meta-data/instance-id|dynamic)'
     sslCertHostPath: /etc/ssl/certs
     tlsSecret: kiam-agent-tls
