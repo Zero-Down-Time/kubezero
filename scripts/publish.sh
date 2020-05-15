@@ -17,7 +17,7 @@ helm repo add uswitch https://uswitch.github.io/kiam-helm-charts/charts/
 
 for dir in $(find $SRCROOT/charts -mindepth 1 -maxdepth 1 -type d);
 do
-    rm -rf $dir/charts
+    rm -rf $dir/charts $dir/Chart.lock
 
     name=$(basename $dir)
 

@@ -15,9 +15,11 @@ spec:
     targetRevision: {{ .Values.global.defaultSource.targetRevision }}
     path: {{ .Values.global.defaultSource.pathPrefix}}charts/kubezero-app
 
-{{ if .Values.kubezero }}
     helm:
       values: |
+        global:
+{{- toYaml .Values.global | nindent 10 }}
+{{- if .Values.kubezero }}
 {{- toYaml .Values.kubezero | nindent 8 }}
 {{- end }}
 
