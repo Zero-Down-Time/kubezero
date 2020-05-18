@@ -2,7 +2,7 @@ kubezero-kiam
 =============
 KubeZero Umbrella Chart for Kiam
 
-Current chart version is `0.1.1`
+Current chart version is `0.2.0`
 
 Source code can be found [here](https://kubezero.com)
 
@@ -33,26 +33,38 @@ Required for the *csi ebs plugin* and most likely various others assuming basic 
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| kiam.agent.host.iptables | bool | `true` |  |
+| kiam.agent.gatewayTimeoutCreation | string | `"5s"` |  |
+| kiam.agent.host.interface | string | `"cali+"` |  |
+| kiam.agent.host.iptables | bool | `false` |  |
+| kiam.agent.image.tag | string | `"v3.6-rc1"` |  |
 | kiam.agent.log.level | string | `"warn"` |  |
 | kiam.agent.prometheus.servicemonitor.enabled | bool | `false` |  |
 | kiam.agent.sslCertHostPath | string | `"/etc/ssl/certs"` |  |
+| kiam.agent.tlsCerts.caFileName | string | `"ca.crt"` |  |
+| kiam.agent.tlsCerts.certFileName | string | `"tls.crt"` |  |
+| kiam.agent.tlsCerts.keyFileName | string | `"tls.key"` |  |
 | kiam.agent.tlsSecret | string | `"kiam-agent-tls"` |  |
 | kiam.agent.tolerations[0].effect | string | `"NoSchedule"` |  |
 | kiam.agent.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| kiam.agent.updateStrategy | string | `"RollingUpdate"` |  |
 | kiam.agent.whiteListRouteRegexp | string | `"^/latest/(meta-data/instance-id|dynamic)"` |  |
 | kiam.server.assumeRoleArn | string | `"arn:aws:iam::123456789012:role/kiam-server-role"` |  kiam server IAM role to assume, required as we run the agents next to the servers normally |
 | kiam.server.deployment.enabled | bool | `true` |  |
 | kiam.server.deployment.replicas | int | `1` |  |
+| kiam.server.image.tag | string | `"v3.6-rc1"` |  |
 | kiam.server.log.level | string | `"warn"` |  |
 | kiam.server.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
 | kiam.server.prometheus.servicemonitor.enabled | bool | `false` |  |
 | kiam.server.service.port | int | `6444` |  |
 | kiam.server.service.targetPort | int | `6444` |  |
 | kiam.server.sslCertHostPath | string | `"/etc/ssl/certs"` |  |
+| kiam.server.tlsCerts.caFileName | string | `"ca.crt"` |  |
+| kiam.server.tlsCerts.certFileName | string | `"tls.crt"` |  |
+| kiam.server.tlsCerts.keyFileName | string | `"tls.key"` |  |
 | kiam.server.tlsSecret | string | `"kiam-server-tls"` |  |
 | kiam.server.tolerations[0].effect | string | `"NoSchedule"` |  |
 | kiam.server.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| kiam.server.updateStrategy | string | `"RollingUpdate"` |  |
 | kiam.server.useHostNetwork | bool | `true` |  |
 
 ## Debugging
@@ -63,7 +75,3 @@ Required for the *csi ebs plugin* and most likely various others assuming basic 
 ## Resources
 - https://github.com/uswitch/kiam
 - https://www.bluematador.com/blog/iam-access-in-kubernetes-kube2iam-vs-kiam
-
----
-![Architecture](kiam_architecure.png)  
-Image Credits: Blue Matador, Inc.
