@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kiam-kube-system-ns-annotation
+  namespace: kube-system
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+  labels:
+    app.kubernetes.io/name: {{ .name }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/part-of: kubezero
+spec:
+  template:
+    spec:
+      serviceAccountName: default
+      containers:
+        - name: kubectl
+          image: "bitnami/kubectl:latest"
+          imagePullPolicy: "IfNotPresent"
+          command:
+          - /bin/sh
+          - -c
+          - kubectl annotate --overwrite namespace kube-system 'iam.amazonaws.com/permitted=.*'
+      restartPolicy: Never
