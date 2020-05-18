@@ -23,6 +23,8 @@ rules:
     resources:
       - namespaces
     verbs:
+      - get
+      - list
       - update
       - patch
 ---
