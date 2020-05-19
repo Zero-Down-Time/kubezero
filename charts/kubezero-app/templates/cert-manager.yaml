@@ -1,10 +1,12 @@
 {{- if index .Values "cert-manager" "enabled" }}
-{{ template "kubezero.app" dict "root" . "name" "cert-manager" "type" "helm" "namespace" "cert-manager" }}
+{{ template "kubezero-app.app" dict "root" . "name" "cert-manager" "type" "helm" "namespace" "cert-manager" }}
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
   name: cert-manager
+{{- if index .Values "kiam" "enabled" }}
   annotations:
     iam.amazonaws.com/permitted: ".*CertManagerRole.*"
+{{- end }}
 {{- end }}
