@@ -1,0 +1,22 @@
+apiVersion: v2
+name: kubezero-aws-ebs
+description: KubeZero Umbrella Chart for aws-ebs-csi-driver
+type: application
+version: 0.1.0
+home: https://kubezero.com
+icon: https://cdn.zero-downtime.net/assets/logo_small.png
+sources:
+  - https://github.com/kubernetes-sigs/aws-ebs-csi-driver
+  - https://github.com/Zero-Down-Time/kubezero
+keywords:
+  - kubezero
+  - aws
+  - ebs
+  - csi
+maintainers:
+  - name: Quarky9
+dependencies:
+  - name: kubezero-lib
+    version: ">= 0.1.1"
+    repository: https://zero-down-time.github.io/kubezero/
+kubeVersion: ">= 1.16.0"

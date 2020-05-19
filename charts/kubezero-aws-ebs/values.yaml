@@ -1,0 +1,21 @@
+aws-ebs-csi-driver:
+  replicaCount: 1
+
+  enableVolumeScheduling: true
+  enableVolumeResizing: false
+  enableVolumeSnapshot: false
+
+  nodeSelector:
+    node-role.kubernetes.io/master: ""
+
+  tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+
+  # aws-ebs-csi-driver.podAnnotations --  iam.amazonaws.com/role: <IAM role ARN> to assume
+  podAnnotations: {}
+  # iam.amazonaws.com/role: ''
+
+  # aws-ebs-csi-driver.extraVolumeTags -- Optional tags to be added to each EBS volume
+  extraVolumeTags: {}
+  #  Name: KubeZero-Cluster

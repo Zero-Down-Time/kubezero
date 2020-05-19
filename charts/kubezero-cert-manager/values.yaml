@@ -45,5 +45,6 @@ cert-manager:
   prometheus:
     servicemonitor:
       enabled: false
-  #podAnnotations:
-  #  iam.amazonaws.com/role: "INSERT_CLOUDFORMATION_OUTPUT_CertManagerRoleArn"
+  # cert-manager.podAnnotations."iam.amazonaws.com/role" -- IAM role ARN the cert-manager might use via kiam eg."arn:aws:iam::123456789012:role/certManagerRoleArn"
+  podAnnotations:
+    iam.amazonaws.com/role: ""
