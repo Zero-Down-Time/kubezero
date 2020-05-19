@@ -25,6 +25,7 @@ Source code can be found [here](https://kubezero.com)
 | cert-manager.ingressShim.defaultIssuerName | string | `"letsencrypt-dns-prod"` |  |
 | cert-manager.installCRDs | bool | `true` |  |
 | cert-manager.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
+| cert-manager.podAnnotations."iam.amazonaws.com/role" | string | `""` | IAM role ARN the cert-manager might use via kiam eg."arn:aws:iam::123456789012:role/certManagerRoleArn" |
 | cert-manager.prometheus.servicemonitor.enabled | bool | `false` |  |
 | cert-manager.tolerations[0].effect | string | `"NoSchedule"` |  |
 | cert-manager.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |

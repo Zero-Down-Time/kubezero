@@ -49,7 +49,7 @@ Required for the *csi ebs plugin* and most likely various others assuming basic 
 | kiam.agent.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | kiam.agent.updateStrategy | string | `"RollingUpdate"` |  |
 | kiam.agent.whiteListRouteRegexp | string | `"^/latest/(meta-data/instance-id|dynamic)"` |  |
-| kiam.server.assumeRoleArn | string | `"arn:aws:iam::123456789012:role/kiam-server-role"` |  kiam server IAM role to assume, required as we run the agents next to the servers normally |
+| kiam.server.assumeRoleArn | string | `""` |  kiam server IAM role to assume, required as we run the agents next to the servers normally, eg. arn:aws:iam::123456789012:role/kiam-server-role |
 | kiam.server.deployment.enabled | bool | `true` |  |
 | kiam.server.deployment.replicas | int | `1` |  |
 | kiam.server.image.tag | string | `"v3.6-rc1"` |  |

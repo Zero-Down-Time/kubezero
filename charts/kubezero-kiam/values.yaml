@@ -2,8 +2,8 @@ kiam:
   server:
     image:
       tag: "v3.6-rc1"
-    # kiam.server.assumeRoleArn --  kiam server IAM role to assume, required as we run the agents next to the servers normally
-    assumeRoleArn: arn:aws:iam::123456789012:role/kiam-server-role
+    # kiam.server.assumeRoleArn --  kiam server IAM role to assume, required as we run the agents next to the servers normally, eg. arn:aws:iam::123456789012:role/kiam-server-role
+    assumeRoleArn: ''
     useHostNetwork: true
     sslCertHostPath: /etc/ssl/certs
     tlsSecret: kiam-server-tls
