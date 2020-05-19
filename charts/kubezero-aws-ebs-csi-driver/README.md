@@ -1,5 +1,5 @@
-kubezero-aws-ebs
-================
+kubezero-aws-ebs-csi-driver
+===========================
 KubeZero Umbrella Chart for aws-ebs-csi-driver
 
 Current chart version is `0.1.0`
@@ -11,6 +11,17 @@ Source code can be found [here](https://kubezero.com)
 | Repository | Name | Version |
 |------------|------|---------|
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.1 |
+
+## IAM Role
+If you use kiam or kube2iam and restrict access on nodes running this controller please adjust:
+```
+podAnnotations:
+  iam.amazonaws.com/role: <ROLE>
+```
+
+## Storage Classes
+Provides the *ebs-sc-gp2-xfs* storage class for gp2, enrypted and XFS.
+This class is also set as default.
 
 ## Chart Values
 

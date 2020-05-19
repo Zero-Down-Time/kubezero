@@ -2,7 +2,7 @@ kubezero-app
 ============
 KubeZero ArgoCD Application - Root chart of the KubeZero
 
-Current chart version is `0.2.1`
+Current chart version is `0.2.2`
 
 Source code can be found [here](https://kubezero.com)
 
@@ -16,6 +16,7 @@ Source code can be found [here](https://kubezero.com)
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| aws-ebs-csi-driver.enabled | bool | `false` |  |
 | calico.enabled | bool | `false` |  |
 | cert-manager.enabled | bool | `false` |  |
 | global.defaultDestination.server | string | `"https://kubernetes.default.svc"` |  |
