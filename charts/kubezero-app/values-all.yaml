@@ -24,3 +24,6 @@ cert-manager:
 
 kiam:
   enabled: true
+
+aws-ebs-csi-driver:
+  enabled: true
