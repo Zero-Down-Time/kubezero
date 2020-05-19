@@ -1,7 +1,7 @@
 apiVersion: v2
 description: KubeZero Helm chart to install Zero Down Time Kuberenetes platform
 name: kubezero
-version: 0.2.5
+version: 0.2.6
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/logo_small.png
 keywords:
@@ -11,6 +11,10 @@ keywords:
 maintainers:
   - name: Quarky9
 dependencies:
+dependencies:
+  - name: kubezero-lib
+    version: ">= 0.1.1"
+    repository: https://zero-down-time.github.io/kubezero/
   - name: argo-cd
     version: 2.3.2
     repository: https://argoproj.github.io/argo-helm

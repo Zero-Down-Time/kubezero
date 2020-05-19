@@ -4,12 +4,7 @@ kind: VirtualService
 metadata:
   name: argocd-server
   labels:
-    app.kubernetes.io/name: {{ .Chart.Name }}-argocd-virtualservice
-    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/part-of: argocd
-    app.kubernetes.io/component: server
+{{ include "kubezero-lib.labels" . | indent 4 }}
 spec:
   gateways:
   - {{ .Values.istio.gateway }}

@@ -4,10 +4,7 @@ metadata:
   name: kubezero
   namespace: argocd
   labels:
-    app.kubernetes.io/name: {{ .Chart.Name }}-project
-    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{ include "kubezero-lib.labels" . | indent 4 }}
 spec:
   description: KubeZero - ZeroDownTime Kubernetes Platform
 
