@@ -1,0 +1,12 @@
+apiVersion: v2
+name: kubezero-lib
+description: KubeZero helm library - common helm functions and blocks
+type: library
+version: 0.1.0
+home: https://kubezero.com
+icon: https://cdn.zero-downtime.net/assets/logo_small.png
+keywords:
+  - kubezero
+maintainers:
+  - name: Quarky9
+kubeVersion: ">= 1.16.0"
