@@ -7,6 +7,8 @@ kind: Issuer
 metadata:
   name: kubezero-selfsigning-issuer
   namespace: kube-system
+  labels:
+{{ include "kubezero-lib.labels" . | indent 4 }}
 spec:
   selfSigned: {}
 ---
@@ -15,6 +17,8 @@ kind: Certificate
 metadata:
   name: kubezero-local-ca
   namespace: kube-system
+  labels:
+{{ include "kubezero-lib.labels" . | indent 4 }}
 spec:
   secretName: kubezero-ca-tls
   commonName: "kubezero-local-ca"
@@ -31,6 +35,8 @@ kind: Secret
 metadata:
   name: kubezero-ca-tls
   namespace: kube-system
+  labels:
+{{ include "kubezero-lib.labels" . | indent 4 }}
 data:
   tls.crt: {{ .Values.localCA.ca.crt | b64enc }}
   tls.key: {{ .Values.localCA.ca.key | b64enc }}
@@ -42,6 +48,8 @@ kind: Issuer
 metadata:
   name: kubezero-local-ca-issuer
   namespace: kube-system
+  labels:
+{{ include "kubezero-lib.labels" . | indent 4 }}
 spec:
   ca:
     secretName: kubezero-ca-tls
