@@ -2,7 +2,7 @@ apiVersion: v2
 name: kubezero-lib
 description: KubeZero helm library - common helm functions and blocks
 type: library
-version: 0.1.1
+version: 0.1.2
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/logo_small.png
 keywords:
