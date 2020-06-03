@@ -4,7 +4,7 @@ description: KubeZero ArgoCD Application - Root chart of the KubeZero
 type: application
 version: 0.2.2
 home: https://kubezero.com
-icon: https://cdn.zero-downtime.net/assets/logo_small.png
+icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
   - kubezero
   - argocd
