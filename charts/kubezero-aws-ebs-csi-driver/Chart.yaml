@@ -4,7 +4,7 @@ description: KubeZero Umbrella Chart for aws-ebs-csi-driver
 type: application
 version: 0.1.0
 home: https://kubezero.com
-icon: https://cdn.zero-downtime.net/assets/logo_small.png
+icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 sources:
   - https://github.com/kubernetes-sigs/aws-ebs-csi-driver
   - https://github.com/Zero-Down-Time/kubezero

@@ -4,7 +4,7 @@ description: KubeZero Umbrella Chart for cert-manager
 type: application
 version: 0.3.3
 home: https://kubezero.com
-icon: https://cdn.zero-downtime.net/assets/logo_small.png
+icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
   - kubezero
   - cert-manager
