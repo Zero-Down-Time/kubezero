@@ -9,4 +9,4 @@ See eg: `https://github.com/kubernetes-sigs/kustomize/issues/1351`
 
 ## Upgrade
 See: https://docs.projectcalico.org/maintenance/kubernetes-upgrade  
-`curl https://docs.projectcalico.org/manifests/canal.yaml -O`
+`curl https://docs.projectcalico.org/manifests/canal.yaml -O && patch < remove-namespace.patch`
