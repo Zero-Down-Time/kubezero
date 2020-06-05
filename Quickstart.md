@@ -72,5 +72,16 @@ Until Istio is integrated into KubeZero as well as upgraded to 1.6 we have to in
 - update.sh
 - deploy.sh
 
+### Logging
+To deploy fluentbit only required adjustment is the `fluentd_host=<LOG_HOST>` in the kustomization.yaml.
+
+- deploy namespace for logging via deploy.sh
+- deploy fluentbit via `kubectl apply -k fluentbit`
+
+### Prometheus / Grafana
+Only adjustment required is the ingress routing config in istio-service.yaml. Adjust as needed before executing:  
+`deploy.sh`
+
+
 # Demo / own apps
 - Add your own application to ArgoCD via the cli
