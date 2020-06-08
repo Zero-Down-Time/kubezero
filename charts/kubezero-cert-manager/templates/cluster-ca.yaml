@@ -9,6 +9,8 @@ metadata:
   namespace: kube-system
   labels:
 {{ include "kubezero-lib.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": "post-install"
 spec:
   selfSigned: {}
 ---
@@ -19,6 +21,8 @@ metadata:
   namespace: kube-system
   labels:
 {{ include "kubezero-lib.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": "post-install"
 spec:
   secretName: kubezero-ca-tls
   commonName: "kubezero-local-ca"
@@ -37,6 +41,8 @@ metadata:
   namespace: kube-system
   labels:
 {{ include "kubezero-lib.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": "post-install"
 data:
   tls.crt: {{ .Values.localCA.ca.crt | b64enc }}
   tls.key: {{ .Values.localCA.ca.key | b64enc }}
@@ -50,6 +56,8 @@ metadata:
   namespace: kube-system
   labels:
 {{ include "kubezero-lib.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": "post-install"
 spec:
   ca:
     secretName: kubezero-ca-tls
