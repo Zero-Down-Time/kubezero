@@ -2,7 +2,7 @@ apiVersion: v2
 name: kubezero-app
 description: KubeZero ArgoCD Application - Root chart of the KubeZero
 type: application
-version: 0.2.3
+version: 0.2.4
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:

@@ -2,7 +2,7 @@ kubezero-cert-manager
 =====================
 KubeZero Umbrella Chart for cert-manager
 
-Current chart version is `0.3.3`
+Current chart version is `0.3.4`
 
 Source code can be found [here](https://kubezero.com)
 
@@ -10,8 +10,18 @@ Source code can be found [here](https://kubezero.com)
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://charts.jetstack.io | cert-manager | 0.15.0 |
+| https://charts.jetstack.io | cert-manager | 0.15.1 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.1 |
+
+## AWS - IAM Role
+If you use kiam or kube2iam and restrict access on nodes running cert-manager please adjust:
+```
+cert-manager.podAnnotations:
+  iam.amazonaws.com/role: <ROLE>
+```
+
+## Resolver Secrets
+If your resolvers need additional sercrets like CloudFlare API tokens etc. make sure to provide these secrets separatly matching your defined issuers.
 
 ## Chart Values
 
@@ -25,7 +35,7 @@ Source code can be found [here](https://kubezero.com)
 | cert-manager.ingressShim.defaultIssuerName | string | `"letsencrypt-dns-prod"` |  |
 | cert-manager.installCRDs | bool | `true` |  |
 | cert-manager.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
-| cert-manager.podAnnotations."iam.amazonaws.com/role" | string | `""` | IAM role ARN the cert-manager might use via kiam eg."arn:aws:iam::123456789012:role/certManagerRoleArn" |
+| cert-manager.podAnnotations | object | `{}` | "iam.amazonaws.com/roleIAM:" role ARN the cert-manager might use via kiam eg."arn:aws:iam::123456789012:role/certManagerRoleArn" |
 | cert-manager.prometheus.servicemonitor.enabled | bool | `false` |  |
 | cert-manager.tolerations[0].effect | string | `"NoSchedule"` |  |
 | cert-manager.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
