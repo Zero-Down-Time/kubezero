@@ -1,0 +1,20 @@
+{{ template "chart.header" . }}
+{{ template "chart.description" . }}
+
+{{ template "chart.versionLine" . }}
+
+{{ template "chart.sourceLinkLine" . }}
+
+{{ template "chart.requirementsSection" . }}
+
+## AWS - IAM Role
+If you use kiam or kube2iam and restrict access on nodes running cert-manager please adjust:
+```
+cert-manager.podAnnotations:
+  iam.amazonaws.com/role: <ROLE>
+```
+
+## Resolver Secrets
+If your resolvers need additional sercrets like CloudFlare API tokens etc. make sure to provide these secrets separatly matching your defined issuers.
+
+{{ template "chart.valuesSection" . }}
