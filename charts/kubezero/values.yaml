@@ -21,6 +21,7 @@ argo-cd:
 
   #configs:
   #  secret:
+  #    `htpasswd -nbBC 10 "" $ARGO_PWD | tr -d ':\n' | sed 's/$2y/$2a/'`
   #    argocdServerAdminPassword: "$2a$10$ivKzaXVxMqdeDSfS3nqi1Od3iDbnL7oXrixzDfZFRHlXHnAG6LydG"
   #    argocdServerAdminPasswordMtime: "2020-04-24T15:33:09BST"
 

@@ -14,4 +14,3 @@ This also implements the *umbrella chart* pattern in order to inject custom valu
 ## Components
 
 ### ArgoCD
-
