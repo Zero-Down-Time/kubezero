@@ -8,20 +8,16 @@ metadata:
 spec:
   project: kubezero
   source:
-    repoURL: {{ .Values.global.defaultSource.repoURL }}
-    targetRevision: {{ .Values.global.defaultSource.targetRevision }}
-    path: {{ .Values.global.defaultSource.pathPrefix}}charts/kubezero-app
+    repoURL: {{ .Values.kubezero.global.defaultSource.repoURL }}
+    targetRevision: {{ .Values.kubezero.global.defaultSource.targetRevision }}
+    path: {{ .Values.kubezero.global.defaultSource.pathPrefix}}charts/kubezero
 
     helm:
       values: |
-        global:
-{{- toYaml .Values.global | nindent 10 }}
-{{- if .Values.kubezero }}
 {{- toYaml .Values.kubezero | nindent 8 }}
-{{- end }}
 
   destination:
-    server: {{ .Values.global.defaultDestination.server }}
+    server: {{ .Values.kubezero.global.defaultDestination.server }}
     namespace: argocd
   syncPolicy:
     automated:
