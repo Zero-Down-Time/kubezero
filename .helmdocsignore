@@ -1,2 +1,4 @@
 # Ignore sub-charts
 charts/*/charts/*
+charts/kubezero-lib
+deploy

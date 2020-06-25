@@ -1,0 +1,73 @@
+kubezero:
+  global:
+    # kubezero.global.defaultDestination -- Destination cluster
+    defaultDestination:
+      server: https://kubernetes.default.svc
+
+    # This repoURL is used a base for all the repoURLs applications
+    # Setting this to a eg. private git repo incl. the use of pathPrefix allows kubezero to be
+    # integrated into any repository as a git subtree if for example public internet access is unavailable
+    defaultSource:
+      # kubezero.global.defaultSource.repoURL -- default repository for argocd applications
+      repoURL: https://github.com/zero-down-time/kubezero
+      # kubezero.global.defaultSource.targetRevision -- default tracking of repoURL
+      targetRevision: HEAD
+      # kubezero.global.defaultSource.pathPrefix -- optional path prefix within repoURL to support eg. remote subtrees
+      pathPrefix: ''
+
+argo-cd:
+  installCRDs: false
+
+  #configs:
+  #  secret:
+  #    `htpasswd -nbBC 10 "" $ARGO_PWD | tr -d ':\n' | sed 's/$2y/$2a/'`
+  #    argocdServerAdminPassword: "$2a$10$ivKzaXVxMqdeDSfS3nqi1Od3iDbnL7oXrixzDfZFRHlXHnAG6LydG"
+  #    argocdServerAdminPasswordMtime: "2020-04-24T15:33:09BST"
+
+  # Run Argo on the controllers
+  controller:
+    nodeSelector:
+      node-role.kubernetes.io/master: ""
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+
+  repoServer:
+    nodeSelector:
+      node-role.kubernetes.io/master: ""
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+
+  server:
+    config:
+      # argo-cd.server.config.url -- ArgoCD hostname to be exposed via Istio
+      url: argocd.example.com
+
+    # Rename former https port to grpc, works with istio + insecure
+    service:
+      servicePortHttpsName: grpc
+
+    extraArgs:
+    - --insecure
+    nodeSelector:
+      node-role.kubernetes.io/master: ""
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+
+  redis:
+    nodeSelector:
+      node-role.kubernetes.io/master: ""
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+
+  dex:
+    enabled: false
+
+  istio:
+    # argo-cd.istio.enabled -- Deploy Istio VirtualService to expose ArgoCD
+    enabled: false
+    # argo-cd.istio.gateway -- Name of the Istio gateway to add the VirtualService to
+    gateway: ingressgateway.istio-system.svc.cluster.local
