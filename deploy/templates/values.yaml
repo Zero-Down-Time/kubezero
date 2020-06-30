@@ -1,0 +1,63 @@
+kubezero:
+  calico:
+    enabled: {{ .Values.calico.enabled  }}
+  cert-manager:
+    enabled: {{ index .Values "cert-manager" "enabled" }}
+{{- if not .Values.bootstrap }}
+    values:
+      {{- if .Values.aws }}
+      cert-manager:
+        podAnnotations:
+          iam.amazonaws.com/role: "{{ index .Values "cert-manager" "IamArn" }}"
+      {{- end }}
+      clusterIssuer:
+        name: letsencrypt-dns-prod
+        server: https://acme-v02.api.letsencrypt.org/directory
+        email: {{ index .Values "cert-manager" "email" }}
+        solvers:
+          - selector:
+              dnsZones: {{ index .Values "cert-manager" "domains" }}
+            dns01:
+              {{- if .Values.aws }}
+              route53:
+                region: {{ .Values.region }}
+              {{- end }}
+
+  {{- if .Values.aws }}
+  aws-ebs-csi-driver:
+    enabled: {{ index .Values "aws-ebs-csi-driver" "enabled" }}
+    values:
+      aws-ebs-csi-driver:
+        replicaCount: {{ ternary 2 1 .Values.HighAvailableControlplane }}
+        podAnnotations:
+          iam.amazonaws.com/role: "{{ index .Values "aws-ebs-csi-driver" "IamArn" }}"
+        extraVolumeTags:
+          Name: {{ .Values.ClusterName }}
+  kiam:
+    enabled: {{ .Values.kiam.enabled }}
+    values:
+      kiam:
+        server:
+          assumeRoleArn: "{{ .Values.kiam.IamArn }}"
+          deployment:
+            replicas: {{ ternary 2 1 .Values.HighAvailableControlplane }}
+          prometheus:
+            servicemonitor:
+              enabled: {{ .Values.prometheus.enabled }}
+  {{- end }}
+{{- end }}
+
+argo-cd:
+  {{- with index .Values "argo-cd" "server" }}
+  server:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with index .Values "argo-cd" "configs" }}
+  configs:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- if not .Values.bootstrap }}
+  istio:
+    enabled: {{ .Values.istio.enabled }}
+    gateway: private-ingressgateway.istio-system.svc.cluster.local
+  {{- end }}
