@@ -60,3 +60,6 @@ spec:
           - -c
           - kubectl annotate --overwrite namespace kube-system 'iam.amazonaws.com/permitted=.*'
       restartPolicy: Never
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/master

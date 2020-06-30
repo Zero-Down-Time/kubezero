@@ -1,0 +1,26 @@
+ClusterName: Test-cluster
+Domain: example.com
+
+aws: true
+HighAvailableControlplane: false
+
+calico:
+  enabled: true
+
+cert-manager:
+  enabled: true
+  IamArn: ""
+
+aws-ebs-csi-driver:
+  enabled: true
+  IamArn: ""
+
+kiam:
+  enabled: true
+  IamArn: ""
+
+istio:
+  enabled: false
+
+prometheus:
+  enabled: false
