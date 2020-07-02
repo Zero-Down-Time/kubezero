@@ -20,7 +20,7 @@ helm repo update
 # Determine if we bootstrap or update
 helm list -n argocd -f kubezero -q | grep -q kubezero && rc=$? || rc=$?
 if [ $rc -eq 0 ]; then
-  helm template $DEPLOY_DIR -f values.yaml -f kubezero.yaml > generated-values.yaml
+  helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml > generated-values.yaml
   helm upgrade -n argocd kubezero kubezero/kubezero-argo-cd -f generated-values.yaml
 else
   # During bootstrap we first generate a minimal values.yaml to prevent various deadlocks
