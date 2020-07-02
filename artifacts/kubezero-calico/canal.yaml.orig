@@ -5,6 +5,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: canal-config
+  namespace: kube-system
 data:
   # Typha is disabled.
   typha_service_name: "none"
@@ -3437,6 +3438,7 @@ kind: DaemonSet
 apiVersion: apps/v1
 metadata:
   name: canal
+  namespace: kube-system
   labels:
     k8s-app: canal
 spec:
@@ -3681,6 +3683,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: canal
+  namespace: kube-system
 
 ---
 # Source: calico/templates/calico-kube-controllers.yaml
@@ -3689,6 +3692,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: calico-kube-controllers
+  namespace: kube-system
   labels:
     k8s-app: calico-kube-controllers
 spec:
@@ -3702,6 +3706,7 @@ spec:
   template:
     metadata:
       name: calico-kube-controllers
+      namespace: kube-system
       labels:
         k8s-app: calico-kube-controllers
     spec:
@@ -3736,6 +3741,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: calico-kube-controllers
+  namespace: kube-system
 
 ---
 # Source: calico/templates/calico-etcd-secrets.yaml
