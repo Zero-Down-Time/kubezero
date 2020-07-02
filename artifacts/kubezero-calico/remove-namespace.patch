@@ -1,0 +1,50 @@
+--- canal.yaml.orig	2020-06-03 15:39:41.972295775 +0100
++++ canal.yaml	2020-06-03 15:39:59.718477177 +0100
+@@ -5,7 +5,6 @@
+ apiVersion: v1
+ metadata:
+   name: canal-config
+-  namespace: kube-system
+ data:
+   # Typha is disabled.
+   typha_service_name: "none"
+@@ -536,7 +535,6 @@
+ apiVersion: apps/v1
+ metadata:
+   name: canal
+-  namespace: kube-system
+   labels:
+     k8s-app: canal
+ spec:
+@@ -781,7 +779,6 @@
+ kind: ServiceAccount
+ metadata:
+   name: canal
+-  namespace: kube-system
+ 
+ ---
+ # Source: calico/templates/calico-kube-controllers.yaml
+@@ -790,7 +787,6 @@
+ kind: Deployment
+ metadata:
+   name: calico-kube-controllers
+-  namespace: kube-system
+   labels:
+     k8s-app: calico-kube-controllers
+ spec:
+@@ -804,7 +800,6 @@
+   template:
+     metadata:
+       name: calico-kube-controllers
+-      namespace: kube-system
+       labels:
+         k8s-app: calico-kube-controllers
+       annotations:
+@@ -841,7 +836,6 @@
+ kind: ServiceAccount
+ metadata:
+   name: calico-kube-controllers
+-  namespace: kube-system
+ 
+ ---
+ # Source: calico/templates/calico-etcd-secrets.yaml
