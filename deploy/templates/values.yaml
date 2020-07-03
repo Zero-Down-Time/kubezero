@@ -1,6 +1,6 @@
 kubezero:
   {{- if .Values.global }}
-  globals:
+  global:
     {{- toYaml .Values.global | nindent 4 }}
   {{- end }}
   calico:
