@@ -1,11 +1,15 @@
 # Calico CNI
 
-## Known issues
-Due to a bug in Kustomize V2 vs. V3 we have to remove all namespaces from the base resources.
-The kube-system namespace will be applied by kustomize.  
+Current top-level still contains the deprecated Canal implementation.
+Removed once new AWS config is tested and rolled out to all existing clusters.
 
-See eg: `https://github.com/kubernetes-sigs/kustomize/issues/1351`
+## AWS
+Calico is setup based on the upstream calico-vxlan config from  
+`https://docs.projectcalico.org/v3.15/manifests/calico-vxlan.yaml`
 
-## Upgrade
-See: https://docs.projectcalico.org/maintenance/kubernetes-upgrade  
-`curl https://docs.projectcalico.org/manifests/canal.yaml -O && patch < remove-namespace.patch`
+Changes:
+
+- MTU set to 8941
+- Disable BGB and BIRD healthchecks
+- Set FELIX log level to warning
+- Enable Prometheus metrics
