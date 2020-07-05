@@ -9,7 +9,7 @@ metadata:
   {{- if not .retain }}
   finalizers:
     - resources-finalizer.argocd.argoproj.io
-  {{ end }}
+  {{- end }}
 spec:
   project: kubezero
 
@@ -18,14 +18,14 @@ spec:
     targetRevision: {{ .root.Values.global.defaultSource.targetRevision }}
     {{- if eq .type "helm" }}
     {{- $my_values := index .root.Values .name "values" }}
-    path: {{ .root.Values.global.defaultSource.pathPrefix}}charts/kubezero-{{ .name }}
+    path: {{ .root.Values.global.defaultSource.pathPrefix}}charts/kubezero-{{ default .name .path }}
     {{- if $my_values }}
     helm:
       values: |
 {{- toYaml $my_values | nindent 8 }}
     {{- end }}
     {{- else }}
-    path: {{ .root.Values.global.defaultSource.pathPrefix }}artifacts/kubezero-{{ .name }}
+    path: {{ .root.Values.global.defaultSource.pathPrefix }}artifacts/kubezero-{{ default .name .path }}
     {{- end }}
 
   destination:
