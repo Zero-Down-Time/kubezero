@@ -58,7 +58,8 @@ EOF
   helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set istio.enabled=false --set prometheus.enabled=false > generated-values.yaml
   helm upgrade -n argocd kubezero kubezero/kubezero-argo-cd -f generated-values.yaml
 
-	exit 0
+	echo "Install Istio / kube-prometheus manually for now, before proceeding! <Any key to continue>"
+  read
   # Todo: Now we need to wait till all is synced and healthy ... argocd cli or kubectl ?
   # Wait for aws-ebs or kiam to be all ready, or all pods running ?
 
