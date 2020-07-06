@@ -2,7 +2,7 @@ kubezero-argo-cd
 ================
 KubeZero ArgoCD Helm chart to install ArgoCD itself and the KubeZero ArgoCD Application
 
-Current chart version is `0.3.0`
+Current chart version is `0.3.1`
 
 Source code can be found [here](https://kubezero.com)
 
@@ -10,7 +10,7 @@ Source code can be found [here](https://kubezero.com)
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://argoproj.github.io/argo-helm | argo-cd | 2.3.2 |
+| https://argoproj.github.io/argo-helm | argo-cd | 2.5.0 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.1 |
 
 ## Chart Values
