@@ -1,14 +1,13 @@
 apiVersion: v2
-name: kubezero
-description: KubeZero ArgoCD Application - Root App of Apps chart of KubeZero
+name: kubezero-calico
+description: KubeZero Umbrella Chart for Calico
 type: application
-version: 0.3.1
+version: 0.1.0
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
   - kubezero
-  - argocd
-  - gitops
+  - calico
 maintainers:
   - name: Quarky9
 dependencies:

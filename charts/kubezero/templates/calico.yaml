@@ -1,7 +1,7 @@
 # {{ .Values.calico.network }}
 {{- if .Values.calico.enabled }}
 {{- if .Values.calico.network }}
-{{ template "kubezero-app.app" dict "root" . "name" "calico" "type" "kustomize" "retain" true "path" (printf "%s/%s" "calico" .Values.platform) }}
+{{ template "kubezero-app.app" dict "root" . "name" "calico" "type" "helm" "retain" true }}
 {{- else }}
 {{ template "kubezero-app.app" dict "root" . "name" "calico" "type" "kustomize" "retain" true }}
 {{- end }}

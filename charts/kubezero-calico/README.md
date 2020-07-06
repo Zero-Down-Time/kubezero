@@ -1,13 +1,24 @@
-# Calico CNI
+kubezero-calico
+===============
+KubeZero Umbrella Chart for Calico
 
-Current top-level still contains the deprecated Canal implementation.
-Removed once new AWS config is tested and rolled out to all existing clusters.
+Current chart version is `0.1.0`
+
+Source code can be found [here](https://kubezero.com)
+
+## Chart Requirements
+
+| Repository | Name | Version |
+|------------|------|---------|
+| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.1 |
+
+## KubeZero default configuration
 
 ## AWS
-Calico is setup based on the upstream calico-vxlan config from  
+The setup is based on the upstream calico-vxlan config from  
 `https://docs.projectcalico.org/v3.15/manifests/calico-vxlan.yaml`
 
-Changes:
+### Changes
 
 - VxLAN set to Always to not expose cluster communication to VPC  
 
@@ -23,9 +34,7 @@ Changes:
 
 - Set FELIX log level to warning
 
-- Enable Prometheus metrics
 
+## Resources
 
-## Prometheus
-
-See: https://grafana.com/grafana/dashboards/12175
+- Grafana Dashboard: https://grafana.com/grafana/dashboards/12175
