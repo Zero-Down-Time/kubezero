@@ -5,10 +5,11 @@ kubezero:
   {{- end }}
   calico:
     enabled: {{ .Values.calico.enabled  }}
-    type: {{ .Values.calico.type  }}
+    type: {{ default "kustomize" .Values.calico.type  }}
     values:
-      migration: {{ .Values.calico.migration }}
-      prometheus: {{ .Values.prometheus.enabled }}
+      migration: {{ default false .Values.calico.migration }}
+      prometheus: false
+      # prometheus: {{ .Values.prometheus.enabled }}
       {{- if .Values.calico.network }}
       network: {{ .Values.calico.network }}
       {{- end }}
