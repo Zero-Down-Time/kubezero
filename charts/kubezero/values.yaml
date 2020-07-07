@@ -17,6 +17,7 @@ platform: aws
 
 calico:
   enabled: true
+  type: kustomize
 
 cert-manager:
   enabled: true
