@@ -8,6 +8,7 @@ kubezero:
     {{- if .Values.calico.network }}
     network: {{ .Values.calico.network }}
     {{- end }}
+    migration: {{ .Values.calico.migration }}
     prometheus: {{ .Values.prometheus.enabled }}
   cert-manager:
     enabled: {{ index .Values "cert-manager" "enabled" }}

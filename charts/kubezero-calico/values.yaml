@@ -1,4 +1,9 @@
+migration: false
+
 network: vxlan
+
 mtu: 8941
+
 loglevel: Warning
+
 prometheus: false
