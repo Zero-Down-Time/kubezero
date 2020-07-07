@@ -21,13 +21,15 @@
 
 ---
 # KubeZero
+All configs and scriptss are normally under:  
+`artifacts/<ENV>/<REGION>/kubezero`
 
 ## Prepare Config
-check values.yaml
+check values.yaml for your cluster
 
 ## Get CloudBender kubezero config
 Cloudbender creates a kubezero config file, which incl. all outputs from the Cloudformation stacks in `outputs/kube/kubezero.yaml`.  
-Copy or link that file *next* to the values.yaml for kubezero named as `cloudbender.yaml`
+- copy kubezero.yaml *next* to the values.yaml named as `cloudbender.yaml`.  
 
 ## Deploy KubeZero Helm chart
 `./deploy.sh`
@@ -72,6 +74,9 @@ To deploy fluentbit only required adjustment is the `fluentd_host=<LOG_HOST>` in
 Only adjustment required is the ingress routing config in istio-service.yaml. Adjust as needed before executing:  
 `deploy.sh`
 
+### EFS CSI
+- add the EFS fs-ID from the worker cloudformation output into values.yaml and the efs-pv.yaml
+- `./deploy.sh`
 
 # Demo / own apps
 - Add your own application to ArgoCD via the cli
