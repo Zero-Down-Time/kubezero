@@ -7,35 +7,33 @@
 - check config/kube/kube-control-plane.yaml
 - check config/kube/kube-workers.yaml
 
-
-## Deploy Control Plane
-- cloudbender sync kube-control-plane
+## Deploy Cluster
+- cloudbender sync config/kube --multi  
+  The latest versions now support waiting for the control plane to bootstrap allowing deployments in one step !
 
 ## Get kubectl config
-- get admin.conf from S3 and store in your local `~/.kube` folder
+- get admin.conf from S3 and store in your local `~/.kube` folder  
+  S3 URL will also be in the Slack message after successful bootstrap !
 
-## Verify controller nodes
-- Verify all controller nodes have the expected version and are *Ready*, eg via: `kubectl get nodes`
-
-## Deploy Worker group
-- cloudbender sync kube-workers
-
-## Verify all nodes
-- Verify all nodes incl. workers have the expected version and are *Ready*, eg via: `kubectl get nodes`
+## Verify nodes
+- Verify all nodes have the expected version and are *Ready*, eg via: `kubectl get nodes`
 
 
 ---
-# KubeZero 
+# KubeZero
 
 ## Prepare Config
-- check values.yaml
+check values.yaml
 
-Easiest way to get the ARNs for various IAM roles is to use the CloudBender output command:  
-`cloudbender outputs config/kube-control-plane.yaml`
+## Get CloudBender kubezero config
+Cloudbender creates a kubezero config file, which incl. all outputs from the Cloudformation stacks in `outputs/kube/kubezero.yaml`.  
+Copy or link that file *next* to the values.yaml for kubezero named as `cloudbender.yaml`
 
 ## Deploy KubeZero Helm chart
 `./deploy.sh`
 
+The deploy script will handle the initial bootstrap process up to point of installing advanced services like Istio or Prometheus.  
+It will take about 10min to reach the point of being able to install these advanced services.
 
 ## Verify ArgoCD
 At this stage we there is no support for any kind of Ingress yet. To reach the Argo API port forward from localhost via:  
@@ -52,15 +50,7 @@ eg. `argocd app cert-manager sync`
 
 # Only proceed any further if all Argo Applications show healthy !!
 
-
 ## WIP not yet integrated into KubeZero
-
-### EFS CSI 
-To deploy the EFS CSI driver the backing EFS filesystem needs to be in place ahead of time. This is easy to do by enabling the EFS functionality in the worker CloudBender stack.  
-
-- retrieve the EFS: `cloudbender outputs config/kube-control-worker.yaml` and look for *EfsFileSystemId*
-- update values.yaml in the `aws-efs-csi` artifact folder as well as the efs_pv.yaml
-- execute `deploy.sh`
 
 ### Istio
 Istio is currently pinned to version 1.4.X as this is the last version supporting installation via helm charts. 

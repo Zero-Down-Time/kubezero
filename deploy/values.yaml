@@ -6,6 +6,7 @@ HighAvailableControlplane: false
 
 calico:
   enabled: true
+  migration: false
 
 cert-manager:
   enabled: true
@@ -24,3 +25,6 @@ istio:
 
 prometheus:
   enabled: false
+
+argo-cd:
+  server: {}
