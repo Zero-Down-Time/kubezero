@@ -5,6 +5,7 @@ kubezero:
   {{- end }}
   calico:
     enabled: {{ .Values.calico.enabled  }}
+    type: {{ .Values.calico.type  }}
     values:
       migration: {{ .Values.calico.migration }}
       prometheus: {{ .Values.prometheus.enabled }}

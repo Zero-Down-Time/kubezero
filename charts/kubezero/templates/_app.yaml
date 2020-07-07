@@ -32,6 +32,7 @@ spec:
     server: {{ .root.Values.global.defaultDestination.server }}
     namespace: {{ default "kube-system" .namespace }}
 
+  {{- if or ( not .retain ) .selfheal }}
   syncPolicy:
     automated:
       {{- if not .retain }}
@@ -40,4 +41,5 @@ spec:
       {{- if .selfheal }}
       selfHeal: true
       {{- end }}
+  {{- end }}
 {{- end }}
