@@ -5,11 +5,12 @@ kubezero:
   {{- end }}
   calico:
     enabled: {{ .Values.calico.enabled  }}
-    {{- if .Values.calico.network }}
-    network: {{ .Values.calico.network }}
-    {{- end }}
-    migration: {{ .Values.calico.migration }}
-    prometheus: {{ .Values.prometheus.enabled }}
+    values:
+      migration: {{ .Values.calico.migration }}
+      prometheus: {{ .Values.prometheus.enabled }}
+      {{- if .Values.calico.network }}
+      network: {{ .Values.calico.network }}
+      {{- end }}
   cert-manager:
     enabled: {{ index .Values "cert-manager" "enabled" }}
     values:
