@@ -1,3 +1,8 @@
 {{- if .Values.calico.enabled }}
 {{ template "kubezero-app.app" dict "root" . "name" "calico" "type" .Values.calico.type "retain" true }}
+  ignoreDifferences:
+  - group: api
+    kind: CustomResourceDefinition
+    jsonPointers:
+    - /status
 {{- end }}
