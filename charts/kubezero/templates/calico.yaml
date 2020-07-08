@@ -1,6 +1,6 @@
 {{- if .Values.calico.enabled }}
 {{ template "kubezero-app.app" dict "root" . "name" "calico" "type" .Values.calico.type "retain" true }}
-  {{- if not .Values.calico.migration }}
+  {{- if not .Values.calico.values.migration }}
   syncPolicy:
     automated:
       prune: true
