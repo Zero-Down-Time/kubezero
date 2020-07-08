@@ -1,5 +1,9 @@
 {{- if index .Values "cert-manager" "enabled" }}
-{{ template "kubezero-app.app" dict "root" . "name" "cert-manager" "type" "helm" "namespace" "cert-manager" "selfheal" "true" }}
+{{ template "kubezero-app.app" dict "root" . "name" "cert-manager" "type" "helm" "namespace" "cert-manager" }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
 ---
 apiVersion: v1
 kind: Namespace
