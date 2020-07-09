@@ -1,0 +1,19 @@
+{{ template "chart.header" . }}
+{{ template "chart.description" . }}
+
+Provides persistent volumes backed by local volumes, eg. additional SSDs or spindles.
+
+{{ template "chart.versionLine" . }}
+
+{{ template "chart.sourceLinkLine" . }}
+
+{{ template "chart.requirementsSection" . }}
+
+## KubeZero default configuration
+
+- add nodeSelector to only install on nodes actually having ephemeral local storage
+- provide matching storage class to expose mounted disks under `/mnt/disks`
+
+## Resources
+
+- https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner

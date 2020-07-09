@@ -1,0 +1,12 @@
+local-static-provisioner:
+  common:
+    namespace: kube-system
+  classes:
+  - name: local-sc-xfs
+    hostDir: /mnt/disks
+  daemonset:
+    nodeSelector:
+      node.kubernetes.io/localVolume: present
+  prometheus:
+    operator:
+      enabled: false
