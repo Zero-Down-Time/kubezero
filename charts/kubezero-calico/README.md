@@ -2,7 +2,7 @@ kubezero-calico
 ===============
 KubeZero Umbrella Chart for Calico
 
-Current chart version is `0.1.3`
+Current chart version is `0.1.4`
 
 Source code can be found [here](https://kubezero.com)
 
