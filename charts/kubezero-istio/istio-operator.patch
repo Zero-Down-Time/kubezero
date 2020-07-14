@@ -1,0 +1,17 @@
+diff --git a/charts/kubezero-istio/charts/istio-operator/templates/deployment.yaml b/charts/kubezero-istio/charts/istio-operator/templates/deployment.yaml
+index 5ef7848..8350dd5 100644
+--- a/charts/kubezero-istio/charts/istio-operator/templates/deployment.yaml
++++ b/charts/kubezero-istio/charts/istio-operator/templates/deployment.yaml
+@@ -14,6 +14,12 @@ spec:
+         name: istio-operator
+     spec:
+       serviceAccountName: istio-operator
++      nodeSelector:
++        kubernetes.io/os: linux
++        node-role.kubernetes.io/master: ""
++      tolerations:
++        - key: node-role.kubernetes.io/master
++          effect: NoSchedule
+       containers:
+         - name: istio-operator
+           image: {{.Values.hub}}/operator:{{.Values.tag}}
