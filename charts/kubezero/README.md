@@ -2,7 +2,7 @@ kubezero
 ========
 KubeZero ArgoCD Application - Root App of Apps chart of KubeZero
 
-Current chart version is `0.3.6`
+Current chart version is `0.3.7`
 
 Source code can be found [here](https://kubezero.com)
 
@@ -25,6 +25,7 @@ Source code can be found [here](https://kubezero.com)
 | global.defaultSource.pathPrefix | string | `""` |  |
 | global.defaultSource.repoURL | string | `"https://github.com/zero-down-time/kubezero"` |  |
 | global.defaultSource.targetRevision | string | `"HEAD"` |  |
+| istio.enabled | bool | `false` |  |
 | kiam.enabled | bool | `false` |  |
 | local-volume-provisioner.enabled | bool | `false` |  |
 | platform | string | `"aws"` |  |
