@@ -2,7 +2,7 @@ kubezero-kiam
 =============
 KubeZero Umbrella Chart for Kiam
 
-Current chart version is `0.2.5`
+Current chart version is `0.2.6`
 
 Source code can be found [here](https://kubezero.com)
 
@@ -37,7 +37,7 @@ Required for the *csi ebs plugin* and most likely various others assuming basic 
 | kiam.agent.gatewayTimeoutCreation | string | `"5s"` |  |
 | kiam.agent.host.interface | string | `"cali+"` |  |
 | kiam.agent.host.iptables | bool | `false` |  |
-| kiam.agent.image.tag | string | `"v3.6-rc1"` |  |
+| kiam.agent.image.tag | string | `"v3.6"` |  |
 | kiam.agent.log.level | string | `"warn"` |  |
 | kiam.agent.prometheus.servicemonitor.enabled | bool | `false` |  |
 | kiam.agent.sslCertHostPath | string | `"/etc/ssl/certs"` |  |
@@ -52,7 +52,7 @@ Required for the *csi ebs plugin* and most likely various others assuming basic 
 | kiam.server.assumeRoleArn | string | `""` |  kiam server IAM role to assume, required as we run the agents next to the servers normally, eg. arn:aws:iam::123456789012:role/kiam-server-role |
 | kiam.server.deployment.enabled | bool | `true` |  |
 | kiam.server.deployment.replicas | int | `1` |  |
-| kiam.server.image.tag | string | `"v3.6-rc1"` |  |
+| kiam.server.image.tag | string | `"v3.6"` |  |
 | kiam.server.log.level | string | `"warn"` |  |
 | kiam.server.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
 | kiam.server.prometheus.servicemonitor.enabled | bool | `false` |  |
