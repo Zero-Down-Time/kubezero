@@ -1,16 +1,16 @@
 #!/bin/bash
 set -ex
 
-ISTIO_VERSION=1.5.8
+ISTIO_VERSION=1.6.5
 
 NAME="istio-$ISTIO_VERSION"
-URL="https://github.com/istio/istio/releases/download/${ISTIO_VERSION}/istio-${ISTIO_VERSION}-linux.tar.gz"
+URL="https://github.com/istio/istio/releases/download/${ISTIO_VERSION}/istio-${ISTIO_VERSION}-linux-amd64.tar.gz"
 
 curl -sL "$URL" | tar xz
 
 # Now lets extract what we need
 rm -rf charts/istio-operator
-cp -r istio-${ISTIO_VERSION}/install/kubernetes/operator/charts/istio-operator charts
+cp -r istio-${ISTIO_VERSION}/manifests/charts/istio-operator charts
 
 rm -rf istio-${ISTIO_VERSION}
 
