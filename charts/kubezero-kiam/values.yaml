@@ -1,7 +1,7 @@
 kiam:
   server:
     image:
-      tag: "v3.6-rc1"
+      tag: "v3.6"
     # kiam.server.assumeRoleArn --  kiam server IAM role to assume, required as we run the agents next to the servers normally, eg. arn:aws:iam::123456789012:role/kiam-server-role
     assumeRoleArn: ''
     useHostNetwork: true
@@ -31,7 +31,7 @@ kiam:
 
   agent:
     image:
-      tag: "v3.6-rc1"
+      tag: "v3.6"
     gatewayTimeoutCreation: "5s"
     updateStrategy: RollingUpdate
     # IP tables set on each node at boot, see CloudBender

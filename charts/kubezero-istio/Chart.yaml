@@ -1,21 +1,20 @@
 apiVersion: v2
-name: kubezero-kiam
-description: KubeZero Umbrella Chart for Kiam
+name: kubezero-istio
+description: KubeZero Umbrella Chart for Istio
 type: application
-version: 0.2.6
-appVersion: 3.6
+version: 0.0.1
+appVersion: 1.5
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
   - kubezero
-  - kiam
+  - istio
 maintainers:
   - name: Quarky9
 dependencies:
   - name: kubezero-lib
     version: ">= 0.1.1"
     repository: https://zero-down-time.github.io/kubezero/
-  - name: kiam
-    version: 5.8.1
-    repository: https://uswitch.github.io/kiam-helm-charts/charts/
+  - name: istio-operator
+    version: "= 1.5"
 kubeVersion: ">= 1.16.0"
