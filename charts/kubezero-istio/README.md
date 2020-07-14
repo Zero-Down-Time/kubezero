@@ -17,6 +17,7 @@ Source code can be found [here](https://kubezero.com)
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.1 |
 
 ## KubeZero default configuration
+- mapped istio-operator to run on the controller nodes only
 
 
 ## Resources
