@@ -63,6 +63,10 @@ kubezero:
             servicemonitor:
               enabled: {{ .Values.prometheus.enabled }}
   {{- end }}
+
+  istio:
+    enabled: {{ .Values.istio.enabled }}
+
 {{- end }}
 
 argo-cd:
