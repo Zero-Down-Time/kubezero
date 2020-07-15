@@ -65,7 +65,7 @@ kubezero:
   {{- end }}
 
   istio:
-    enabled: {{ .Values.istio.enabled }}
+    enabled: {{ index .Values "istio-operator" "enabled" }}
 
 {{- end }}
 
