@@ -3,4 +3,11 @@
   syncPolicy:
     automated:
       prune: true
+
+ ignoreDifferences:
+  - group: apiextensions.k8s.io
+    kind: CustomResourceDefinition
+    jsonPointers:
+    - /metadata/labels
+    - /spec/additionalPrinterColumns
 {{- end }}
