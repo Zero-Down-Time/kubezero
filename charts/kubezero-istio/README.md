@@ -20,6 +20,7 @@ Source code can be found [here](https://kubezero.com)
 - mapped istio-operator to run on the controller nodes only
 
 
+
 ## Resources
 
 - https://istio.io/latest/docs/setup/install/standalone-operator/

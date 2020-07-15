@@ -1,3 +1,4 @@
+{{- if .Values.customIPPool }}
 apiVersion: crd.projectcalico.org/v1
 kind: IPPool
 metadata:
@@ -9,3 +10,4 @@ spec:
   natOutgoing: true
   nodeSelector: all()
   vxlanMode: Always
+{{- end }}
