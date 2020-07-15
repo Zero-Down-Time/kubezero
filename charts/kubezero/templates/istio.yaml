@@ -4,7 +4,7 @@
     automated:
       prune: true
 
- ignoreDifferences:
+  ignoreDifferences:
   - group: apiextensions.k8s.io
     kind: CustomResourceDefinition
     jsonPointers:
