@@ -2,6 +2,7 @@
 {{- if .Values.localCA.selfsigning }}
 
 # KubeZero / Local cluster CA
+# The resources are serialized via waves in Argo
 apiVersion: cert-manager.io/v1alpha2
 kind: Issuer
 metadata:
@@ -9,6 +10,8 @@ metadata:
   namespace: kube-system
   labels:
 {{ include "kubezero-lib.labels" . | indent 4 }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
 spec:
   selfSigned: {}
 ---
@@ -19,6 +22,8 @@ metadata:
   namespace: kube-system
   labels:
 {{ include "kubezero-lib.labels" . | indent 4 }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "11"
 spec:
   secretName: kubezero-ca-tls
   commonName: "kubezero-local-ca"
@@ -50,6 +55,8 @@ metadata:
   namespace: kube-system
   labels:
 {{ include "kubezero-lib.labels" . | indent 4 }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "12"
 spec:
   ca:
     secretName: kubezero-ca-tls
