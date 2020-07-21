@@ -16,10 +16,7 @@ kubezero:
   cert-manager:
     enabled: {{ index .Values "cert-manager" "enabled" }}
     values:
-{{- if .Values.bootstrap }}
-      localCA:
-        enabled: false 
-{{- else }}
+{{- if not .Values.bootstrap }}
       {{- if .Values.aws }}
       cert-manager:
         podAnnotations:
@@ -41,6 +38,7 @@ kubezero:
                 region: {{ .Values.region }}
               {{- end }}
 
+  # AWS only components
   {{- if .Values.aws }}
   aws-ebs-csi-driver:
     enabled: {{ index .Values "aws-ebs-csi-driver" "enabled" }}

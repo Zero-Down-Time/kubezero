@@ -1,3 +1,13 @@
+istiod:
+  autoscale: true
+  # replicaCount: 2
+
+ingress:
+  autoscale: true
+  # replicaCount: 2
+  dnsNames:
+  - "*.example.com"
+
 istio-operator:
   hub: docker.io/istio
   tag: 1.6.5
