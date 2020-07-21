@@ -1,10 +1,10 @@
 istiod:
-  autoscale: true
-  # replicaCount: 2
+  autoscaleEnabled: false
+  replicaCount: 1
 
 ingress:
-  autoscale: true
-  # replicaCount: 2
+  autoscaleEnabled: false
+  replicaCount: 2
   dnsNames:
   - "*.example.com"
 
