@@ -11,11 +11,8 @@ spec:
       enabled: true
       namespace: istio-system
       k8s:
-        env:
-        - name: ISTIO_META_HTTP10
-          value: '"1"'
-        - name: ISTIO_META_ROUTER_MODE
-          value: standard
+        replicaCount: {{ .Values.ingress.replicaCount }}
+        {{- if .Values.ingress.autoscaleEnabled }}
         hpaSpec:
           maxReplicas: 5
           metrics:
@@ -28,6 +25,12 @@ spec:
             apiVersion: apps/v1
             kind: Deployment
             name: istio-private-ingressgateway
+        {{- end }}
+        env:
+        - name: ISTIO_META_HTTP10
+          value: '"1"'
+        - name: ISTIO_META_ROUTER_MODE
+          value: standard
         nodeSelector:
           node.kubernetes.io/ingress.private: "31080_31443_30671_30672_31224"
         resources:
@@ -44,6 +47,7 @@ spec:
   values:
     gateways:
       istio-ingressgateway:
+        autoscaleEnabled: {{ .Values.ingress.autoscaleEnabled }}
         externalTrafficPolicy: Local
         labels:
           app: istio-private-ingressgateway

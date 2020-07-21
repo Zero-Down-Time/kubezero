@@ -9,8 +9,6 @@ spec:
     prometheus:
       enabled: false
   components:
-    base:
-      enabled: true
     citadel:
       enabled: false
     galley:
@@ -18,11 +16,8 @@ spec:
     ingressGateways:
     - enabled: true
       k8s:
-        env:
-        - name: ISTIO_META_HTTP10
-          value: '"1"'
-        - name: ISTIO_META_ROUTER_MODE
-          value: standard
+        replicaCount: {{ .Values.ingress.replicaCount }}
+        {{- if .Values.ingress.autoscaleEnabled }}
         hpaSpec:
           maxReplicas: 5
           metrics:
@@ -35,6 +30,12 @@ spec:
             apiVersion: apps/v1
             kind: Deployment
             name: istio-ingressgateway
+        {{- end }}
+        env:
+        - name: ISTIO_META_HTTP10
+          value: '"1"'
+        - name: ISTIO_META_ROUTER_MODE
+          value: standard
         nodeSelector:
           node.kubernetes.io/ingress.public: "30080_30443"
         resources:
@@ -52,25 +53,26 @@ spec:
     pilot:
       enabled: true
       k8s:
+        replicaCount: {{ .Values.istiod.replicaCount }}
         nodeSelector:
           node-role.kubernetes.io/master: ""
-        replicaCount: 1
+        tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
         resources:
           requests:
             cpu: 100m
             memory: 128Mi
-        tolerations:
-        - effect: NoSchedule
-          key: node-role.kubernetes.io/master
     policy:
       enabled: true
       k8s:
-        replicaCount: 1
+        replicaCount: {{ .Values.istiod.replicaCount }}
         nodeSelector:
           node-role.kubernetes.io/master: ""
         tolerations:
         - effect: NoSchedule
           key: node-role.kubernetes.io/master
+
     sidecarInjector:
       enabled: false
     telemetry:
@@ -78,6 +80,7 @@ spec:
   values:
     gateways:
       istio-ingressgateway:
+        autoscaleEnabled: {{ .Values.ingress.autoscaleEnabled }}
         externalTrafficPolicy: Local
         labels:
           app: istio-ingressgateway
@@ -128,3 +131,7 @@ spec:
       useMCP: false
     pilot:
       sidecar: false
+      autoscaleEnabled: false
+    mixer:
+      policy:
+        autoscaleEnabled: false
