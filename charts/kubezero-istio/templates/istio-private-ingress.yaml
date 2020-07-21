@@ -57,7 +57,7 @@ spec:
         - key: app
           operator: In
           topologyKey: kubernetes.io/hostname
-          values: istio-ingressgateway
+          values: istio-private-ingressgateway
         ports:
         - name: http2
           nodePort: 31080
