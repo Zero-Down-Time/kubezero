@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: public-ingress-cert
+  namespace: istio-system
+spec:
+  secretName: public-ingress-cert
+  issuerRef:
+    name: letsencrypt-dns-prod
+    kind: ClusterIssuer
+  dnsNames:
+{{ toYaml .Values.ingress.dnsNames | indent 4 }}

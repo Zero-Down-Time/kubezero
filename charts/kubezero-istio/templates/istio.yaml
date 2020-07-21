@@ -1,0 +1,130 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: kubezero-istio
+  namespace: istio-system
+spec:
+  profile: empty
+  addonComponents:
+    prometheus:
+      enabled: false
+  components:
+    base:
+      enabled: true
+    citadel:
+      enabled: false
+    galley:
+      enabled: false
+    ingressGateways:
+    - enabled: true
+      k8s:
+        env:
+        - name: ISTIO_META_HTTP10
+          value: '"1"'
+        - name: ISTIO_META_ROUTER_MODE
+          value: standard
+        hpaSpec:
+          maxReplicas: 5
+          metrics:
+          - resource:
+              name: cpu
+              targetAverageUtilization: 80
+            type: Resource
+          minReplicas: 1
+          scaleTargetRef:
+            apiVersion: apps/v1
+            kind: Deployment
+            name: istio-ingressgateway
+        nodeSelector:
+          node.kubernetes.io/ingress.public: "30080_30443"
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 1024Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        strategy:
+          rollingUpdate:
+            maxSurge: 100%
+            maxUnavailable: 25%
+      name: istio-ingressgateway
+    pilot:
+      enabled: true
+      k8s:
+        nodeSelector:
+          node-role.kubernetes.io/master: ""
+        replicaCount: 1
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
+    policy:
+      enabled: true
+      k8s:
+        replicaCount: 1
+        nodeSelector:
+          node-role.kubernetes.io/master: ""
+        tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
+    sidecarInjector:
+      enabled: false
+    telemetry:
+      enabled: false
+  values:
+    gateways:
+      istio-ingressgateway:
+        externalTrafficPolicy: Local
+        labels:
+          app: istio-ingressgateway
+          istio: ingressgateway
+        meshExpansionPorts: []
+        podAntiAffinityLabelSelector:
+        - key: app
+          operator: In
+          topologyKey: kubernetes.io/hostname
+          values: istio-ingressgateway
+        ports:
+        - name: http2
+          nodePort: 30080
+          port: 80
+          targetPort: 80
+        - name: https
+          nodePort: 30443
+          port: 443
+        sds:
+          enabled: true
+          image: node-agent-k8s
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 1024Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+        secretVolumes:
+        - mountPath: /etc/istio/ingressgateway-certs
+          name: ingressgateway-certs
+          secretName: istio-ingressgateway-certs
+        - mountPath: /etc/istio/ingressgateway-ca-certs
+          name: ingressgateway-ca-certs
+          secretName: istio-ingressgateway-ca-certs
+        type: NodePort
+    meshConfig:
+      accessLogFile: /dev/stdout
+      disablePolicyChecks: false
+    global:
+      jwtPolicy: first-party-jwt
+      omitSidecarInjectorConfigMap: true
+      proxy:
+        accessLogEncoding: JSON
+        autoInject: disabled
+        envoyStatsd:
+          enabled: false
+      useMCP: false
+    pilot:
+      sidecar: false

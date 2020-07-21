@@ -1,0 +1,97 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: kubezero-istio-private-ingress
+  namespace: istio-system
+spec:
+  profile: empty
+  components:
+    ingressGateways:
+    - name: istio-private-ingressgateway
+      enabled: true
+      namespace: istio-system
+      k8s:
+        env:
+        - name: ISTIO_META_HTTP10
+          value: '"1"'
+        - name: ISTIO_META_ROUTER_MODE
+          value: standard
+        hpaSpec:
+          maxReplicas: 5
+          metrics:
+          - resource:
+              name: cpu
+              targetAverageUtilization: 80
+            type: Resource
+          minReplicas: 1
+          scaleTargetRef:
+            apiVersion: apps/v1
+            kind: Deployment
+            name: istio-private-ingressgateway
+        nodeSelector:
+          node.kubernetes.io/ingress.private: "31080_31443_30671_30672_31224"
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 1024Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        strategy:
+          rollingUpdate:
+            maxSurge: 100%
+            maxUnavailable: 25%
+  values:
+    gateways:
+      istio-ingressgateway:
+        externalTrafficPolicy: Local
+        labels:
+          app: istio-private-ingressgateway
+          istio: private-ingressgateway
+        meshExpansionPorts: []
+        podAntiAffinityLabelSelector:
+        - key: app
+          operator: In
+          topologyKey: kubernetes.io/hostname
+          values: istio-ingressgateway
+        ports:
+        - name: http2
+          nodePort: 31080
+          port: 80
+          targetPort: 80
+        - name: https
+          nodePort: 31443
+          port: 443
+        - name: amqp
+          nodePort: 30672
+          port: 5672
+          targetPort: 5672
+        - name: amqps
+          nodePort: 30671
+          port: 5671
+          targetPort: 5671
+        - name: fluentd-forward
+          nodePort: 31224
+          port: 24224
+          targetPort: 24224
+        sds:
+          enabled: true
+          image: node-agent-k8s
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 1024Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+        secretVolumes:
+        - mountPath: /etc/istio/ingressgateway-certs
+          name: ingressgateway-certs
+          secretName: istio-ingressgateway-certs
+        - mountPath: /etc/istio/ingressgateway-ca-certs
+          name: ingressgateway-ca-certs
+          secretName: istio-ingressgateway-ca-certs
+        type: NodePort
+
+    global:
+      jwtPolicy: first-party-jwt
