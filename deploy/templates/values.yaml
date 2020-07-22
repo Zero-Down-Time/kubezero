@@ -82,7 +82,7 @@ argo-cd:
   configs:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- if not .Values.bootstrap }}
+  {{- if and ( not .Values.bootstrap ) .Values.istio.enabled }}
   istio:
     enabled: {{ index .Values "argo-cd" "istio" "enabled" }}
     gateway: private-ingressgateway.istio-system.svc.cluster.local
