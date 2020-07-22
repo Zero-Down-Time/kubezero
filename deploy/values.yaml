@@ -23,9 +23,6 @@ kiam:
 istio:
   enabled: false
 
-istio-operator:
-  enabled: false
-
 prometheus:
   enabled: false
 
