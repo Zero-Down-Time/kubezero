@@ -16,3 +16,6 @@ rm -rf istio-${ISTIO_VERSION}
 
 # Apply our patch
 patch  -i istio-operator.patch -p3
+
+# Extract base / CRDs from istioctl into plain manifest to workaround chicken egg problem with CRDs
+istioctl manifest generate --set profile=empty --set components.base.enabled=true > templates/istio-base.yaml
