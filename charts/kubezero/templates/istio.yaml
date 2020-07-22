@@ -13,6 +13,6 @@
   - group: admissionregistration.k8s.io
     kind: ValidatingWebhookConfiguration
     jsonPointers:
-    - /webhooks/clientConfig/caBundle
-    - /webhooks/failurePolicy
+    - /webhooks/0/clientConfig/caBundle
+    - /webhooks/0/failurePolicy
 {{- end }}
