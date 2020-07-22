@@ -65,6 +65,8 @@ kubezero:
   istio:
     enabled: {{ .Values.istio.enabled }}
     values:
+      istiod:
+        replicaCount: {{ ternary 2 1 .Values.HighAvailableControlplane }}
       ingress:
         dnsNames:
         {{- with .Values.istio.ingress.dnsNames }}

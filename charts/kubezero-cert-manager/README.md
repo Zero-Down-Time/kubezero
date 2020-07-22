@@ -2,7 +2,7 @@ kubezero-cert-manager
 =====================
 KubeZero Umbrella Chart for cert-manager
 
-Current chart version is `0.3.4`
+Current chart version is `0.3.5`
 
 Source code can be found [here](https://kubezero.com)
 

@@ -5,8 +5,8 @@ istiod:
 ingress:
   autoscaleEnabled: false
   replicaCount: 2
-  dnsNames:
-  - "*.example.com"
+  #dnsNames:
+  #- "*.example.com"
 
 istio-operator:
   hub: docker.io/istio
