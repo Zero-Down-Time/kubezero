@@ -64,6 +64,12 @@ kubezero:
 
   istio:
     enabled: {{ index .Values "istio-operator" "enabled" }}
+    values:
+      ingress:
+        dnsNames:
+        {{- with .Values.istio.ingress.dnsNames }}
+        {{- . | toYaml | nindent 8 }}
+        {{- end }}
 
 {{- end }}
 
