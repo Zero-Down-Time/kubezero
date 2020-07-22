@@ -10,7 +10,7 @@ function wait_for() {
     $@ && break
     [ $TRIES -eq 100 ] && return 1
     let TRIES=$TRIES+1
-		sleep 3
+    sleep 3
   done
 }
 
@@ -58,14 +58,18 @@ EOF
   helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set istio.enabled=false --set prometheus.enabled=false > generated-values.yaml
   helm upgrade -n argocd kubezero kubezero/kubezero-argo-cd -f generated-values.yaml
 
-	echo "Install Istio / kube-prometheus manually for now, before proceeding! <Any key to continue>"
+  # Install Istio if enabled, but keep ArgoCD istio support disabled for now in case
+  helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set argo-cd.istio.enabled=false > generated-values.yaml
+  helm upgrade -n argocd kubezero kubezero/kubezero-argo-cd -f generated-values.yaml
+
+  echo "Install kube-prometheus and logging manually for now, before proceeding! <Any key to continue>"
   read
   # Todo: Now we need to wait till all is synced and healthy ... argocd cli or kubectl ?
   # Wait for aws-ebs or kiam to be all ready, or all pods running ?
 
   # Todo: 
-  # - integrate Istio
   # - integrate Prometheus-Grafana
+  # - integrate ES based logging
 
   # Finally we could enable the actual config and deploy all
   helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml > generated-values.yaml
