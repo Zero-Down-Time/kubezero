@@ -5,7 +5,7 @@ KubeZero Umbrella Chart for Istio
 Installs Istio Operator and KubeZero Istio profile
 
 
-Current chart version is `0.1.3`
+Current chart version is `0.1.4`
 
 Source code can be found [here](https://kubezero.com)
 
@@ -23,8 +23,12 @@ Source code can be found [here](https://kubezero.com)
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| ingress.autoscaleEnabled | bool | `false` |  |
+| ingress.replicaCount | int | `2` |  |
 | istio-operator.hub | string | `"docker.io/istio"` |  |
 | istio-operator.tag | string | `"1.6.5"` |  |
+| istiod.autoscaleEnabled | bool | `false` |  |
+| istiod.replicaCount | int | `1` |  |
 
 ## Resources
 

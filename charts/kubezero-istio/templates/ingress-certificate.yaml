@@ -1,3 +1,4 @@
+{{- if .Values.ingress.dnsNames }}
 apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
 metadata:
@@ -10,3 +11,4 @@ spec:
     kind: ClusterIssuer
   dnsNames:
 {{ toYaml .Values.ingress.dnsNames | indent 4 }}
+{{- end }}
