@@ -63,7 +63,7 @@ kubezero:
   {{- end }}
 
   istio:
-    enabled: {{ index .Values "istio-operator" "enabled" }}
+    enabled: {{ .Values.istio.enabled }}
     values:
       ingress:
         dnsNames:
@@ -84,6 +84,6 @@ argo-cd:
   {{- end }}
   {{- if not .Values.bootstrap }}
   istio:
-    enabled: {{ .Values.istio.enabled }}
+    enabled: {{ index .Values "argo-cd" "istio" "enabled" }}
     gateway: private-ingressgateway.istio-system.svc.cluster.local
   {{- end }}
