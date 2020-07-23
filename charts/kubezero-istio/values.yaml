@@ -6,6 +6,7 @@ ingress:
   autoscaleEnabled: false
   replicaCount: 2
   type: NodePort
+  private: true
   #dnsNames:
   #- "*.example.com"
 
