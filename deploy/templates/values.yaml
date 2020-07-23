@@ -10,14 +10,13 @@ kubezero:
       migration: {{ default false .Values.calico.migration }}
       prometheus: false
       # prometheus: {{ .Values.prometheus.enabled }}
-      {{- if .Values.calico.network }}
-      network: {{ .Values.calico.network }}
-      {{- end }}
+      network: {{ default "vxlan" .Values.calico.network }}
+      mtu: {{ default "8941" .Values.calico.mtu }}
   cert-manager:
     enabled: {{ index .Values "cert-manager" "enabled" }}
-    values:
 {{- if not .Values.bootstrap }}
-      {{- if .Values.aws }}
+    values:
+      {{- if eq .Values.platform "aws" }}
       cert-manager:
         podAnnotations:
           iam.amazonaws.com/role: "{{ index .Values "cert-manager" "IamArn" }}"
@@ -33,13 +32,17 @@ kubezero:
               {{- . | toYaml | nindent 14 }}
               {{- end }}
             dns01:
-              {{- if .Values.aws }}
+              {{- if eq .Values.platform "aws" }}
               route53:
                 region: {{ .Values.region }}
+              {{- else }}
+              {{- with index .Values "cert-manager" "solvers" }}
+              {{- . | toYaml | nindent 14 }}
+              {{- end }}
               {{- end }}
 
   # AWS only components
-  {{- if .Values.aws }}
+  {{- if eq .Values.platform "aws" }}
   aws-ebs-csi-driver:
     enabled: {{ index .Values "aws-ebs-csi-driver" "enabled" }}
     values:
@@ -68,6 +71,7 @@ kubezero:
       istiod:
         replicaCount: {{ ternary 2 1 .Values.HighAvailableControlplane }}
       ingress:
+        type: {{ default "NodePort" .Values.istio.ingress.type }}
         dnsNames:
         {{- with .Values.istio.ingress.dnsNames }}
         {{- . | toYaml | nindent 8 }}

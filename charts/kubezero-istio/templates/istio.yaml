@@ -36,8 +36,10 @@ spec:
           value: '"1"'
         - name: ISTIO_META_ROUTER_MODE
           value: standard
+        {{- if eq .Values.ingress.type "NodePort" }}
         nodeSelector:
           node.kubernetes.io/ingress.public: "30080_30443"
+        {{- end }}
         resources:
           limits:
             cpu: 2000m
@@ -91,14 +93,18 @@ spec:
           operator: In
           topologyKey: kubernetes.io/hostname
           values: istio-ingressgateway
+        type: {{ default "NodePort" .Values.ingress.type }}
         ports:
         - name: http2
-          nodePort: 30080
           port: 80
-          targetPort: 80
+          {{- if eq .Values.ingress.type "NodePort" }}
+          nodePort: 30080
+          {{- end }}
         - name: https
-          nodePort: 30443
           port: 443
+          {{- if eq .Values.ingress.type "NodePort" }}
+          nodePort: 30443
+          {{- end }}
         sds:
           enabled: true
           image: node-agent-k8s
@@ -116,7 +122,6 @@ spec:
         - mountPath: /etc/istio/ingressgateway-ca-certs
           name: ingressgateway-ca-certs
           secretName: istio-ingressgateway-ca-certs
-        type: NodePort
     meshConfig:
       accessLogFile: /dev/stdout
       disablePolicyChecks: false

@@ -5,6 +5,7 @@ istiod:
 ingress:
   autoscaleEnabled: false
   replicaCount: 2
+  type: NodePort
   #dnsNames:
   #- "*.example.com"
 
