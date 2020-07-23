@@ -71,8 +71,8 @@ kubezero:
       istiod:
         replicaCount: {{ ternary 2 1 .Values.HighAvailableControlplane }}
       ingress:
-        private: {{ default true .Vauues.istio.ingress.private }}
-        type: {{ default "NodePort" .Values.istio.ingress.type }}
+        private: {{ .Values.istio.ingress.private }}
+        type: {{ .Values.istio.ingress.type }}
         dnsNames:
         {{- with .Values.istio.ingress.dnsNames }}
         {{- . | toYaml | nindent 8 }}
