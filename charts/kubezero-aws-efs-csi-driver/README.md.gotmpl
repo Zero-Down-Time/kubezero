@@ -1,0 +1,14 @@
+{{ template "chart.header" . }}
+{{ template "chart.description" . }}
+
+{{ template "chart.versionLine" . }}
+
+{{ template "chart.sourceLinkLine" . }}
+
+{{ template "chart.requirementsSection" . }}
+
+## Storage Class
+Optionally creates the *efs-cs* storage class.
+Could also be made the default storage class if requested.
+
+{{ template "chart.valuesSection" . }}

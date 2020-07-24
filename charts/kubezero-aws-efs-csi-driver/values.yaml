@@ -1,0 +1,12 @@
+aws-efs-csi-driver:
+  nodeSelector:  {}
+    # node.kubernetes.io/csi.efs.fs: EFS-FS_ID
+
+StorageClass:
+  create: true
+  default: false
+  
+PersistentVolume:
+  create: false
+  EfsId: ""
+  Name: ""

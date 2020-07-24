@@ -2,7 +2,7 @@ kubezero-aws-ebs-csi-driver
 ===========================
 KubeZero Umbrella Chart for aws-ebs-csi-driver
 
-Current chart version is `0.1.0`
+Current chart version is `0.1.1`
 
 Source code can be found [here](https://kubezero.com)
 
@@ -20,13 +20,15 @@ podAnnotations:
 ```
 
 ## Storage Classes
-Provides the *ebs-sc-gp2-xfs* storage class for gp2, enrypted and XFS.
-This class is also set as default.
+By default it also creates the *ebs-sc-gp2-xfs* storage class for gp2, enrypted and XFS.
+This class is by default also set as default storage class.
 
 ## Chart Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| StorageClass.create | bool | `true` |  |
+| StorageClass.default | bool | `true` |  |
 | aws-ebs-csi-driver.enableVolumeResizing | bool | `false` |  |
 | aws-ebs-csi-driver.enableVolumeScheduling | bool | `true` |  |
 | aws-ebs-csi-driver.enableVolumeSnapshot | bool | `false` |  |
