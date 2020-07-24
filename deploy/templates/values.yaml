@@ -93,5 +93,5 @@ argo-cd:
   {{- if and ( not .Values.bootstrap ) .Values.istio.enabled }}
   istio:
     enabled: {{ index .Values "argo-cd" "istio" "enabled" }}
-    gateway: private-ingressgateway.istio-system.svc.cluster.local
+    gateway: {{ index .Values "argo-cd" "istio" "gateway" }}
   {{- end }}

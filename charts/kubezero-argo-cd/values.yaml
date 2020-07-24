@@ -71,3 +71,4 @@ argo-cd:
     enabled: false
     # argo-cd.istio.gateway -- Name of the Istio gateway to add the VirtualService to
     gateway: ingressgateway.istio-system.svc.cluster.local
+    ipBlocks: []
