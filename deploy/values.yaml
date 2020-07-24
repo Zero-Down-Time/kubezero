@@ -28,3 +28,4 @@ prometheus:
 
 argo-cd:
   server: {}
+  gateway: private-ingressgateway.istio-system.svc.cluster.local

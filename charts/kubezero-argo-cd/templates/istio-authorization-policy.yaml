@@ -1,0 +1,23 @@
+{{- if index .Values "argo-cd" "istio" "enabled" }}
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: argocd-allow-only
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      app: istio-ingressgateway
+  rules:
+  {{- if index .Values "argo-cd" "istio" "ipBlocks" }}
+  - from:
+    - source:
+        ipBlocks:
+        {{- with index .Values "argo-cd" "istio" "ipBlocks" }}
+        {{- . | toYaml | nindent 8 }}
+        {{- end }}
+  {{- end }}
+    to:
+    - operation:
+        hosts: ["{{ index .Values "argo-cd" "server" "config" "url" }}"]
+{{- end }}
