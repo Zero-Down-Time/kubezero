@@ -19,3 +19,7 @@ aws-ebs-csi-driver:
   # aws-ebs-csi-driver.extraVolumeTags -- Optional tags to be added to each EBS volume
   extraVolumeTags: {}
   #  Name: KubeZero-Cluster
+
+StorageClass:
+  create: true
+  default: true
