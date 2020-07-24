@@ -32,8 +32,10 @@ spec:
           value: '"1"'
         - name: ISTIO_META_ROUTER_MODE
           value: standard
+        {{- if eq .Values.ingress.type "NodePort" }}
         nodeSelector:
           node.kubernetes.io/ingress.private: "31080_31443_30671_30672_31224"
+        {{- end }}
         resources:
           limits:
             cpu: 2000m
@@ -59,26 +61,33 @@ spec:
           operator: In
           topologyKey: kubernetes.io/hostname
           values: istio-private-ingressgateway
+        type: {{ default "NodePort" .Values.ingress.type }}
         ports:
         - name: http2
-          nodePort: 31080
           port: 80
-          targetPort: 80
+          {{- if eq .Values.ingress.type "NodePort" }}
+          nodePort: 31080
+          {{- end }}
         - name: https
-          nodePort: 31443
           port: 443
+          {{- if eq .Values.ingress.type "NodePort" }}
+          nodePort: 31443
+          {{- end }}
         - name: amqp
-          nodePort: 30672
           port: 5672
-          targetPort: 5672
+          {{- if eq .Values.ingress.type "NodePort" }}
+          nodePort: 30672
+          {{- end }}
         - name: amqps
-          nodePort: 30671
           port: 5671
-          targetPort: 5671
+          {{- if eq .Values.ingress.type "NodePort" }}
+          nodePort: 30671
+          {{- end }}
         - name: fluentd-forward
-          nodePort: 31224
           port: 24224
-          targetPort: 24224
+          {{- if eq .Values.ingress.type "NodePort" }}
+          nodePort: 31224
+          {{- end }}
         sds:
           enabled: true
           image: node-agent-k8s
@@ -96,7 +105,6 @@ spec:
         - mountPath: /etc/istio/ingressgateway-ca-certs
           name: ingressgateway-ca-certs
           secretName: istio-ingressgateway-ca-certs
-        type: NodePort
 
     global:
       jwtPolicy: first-party-jwt
