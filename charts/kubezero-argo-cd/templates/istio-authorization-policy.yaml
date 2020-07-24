@@ -16,8 +16,10 @@ spec:
         {{- with index .Values "argo-cd" "istio" "ipBlocks" }}
         {{- . | toYaml | nindent 8 }}
         {{- end }}
-  {{- end }}
     to:
     - operation:
         hosts: ["{{ index .Values "argo-cd" "server" "config" "url" }}"]
+  {{- else }}
+  - {}
+  {{- end }}
 {{- end }}
