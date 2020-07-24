@@ -73,6 +73,7 @@ kubezero:
       ingress:
         private: {{ .Values.istio.ingress.private }}
         type: {{ .Values.istio.ingress.type }}
+        replicaCount: {{ default 2 .Values.istio.ingress.replicaCount }}
         dnsNames:
         {{- with .Values.istio.ingress.dnsNames }}
         {{- . | toYaml | nindent 8 }}
