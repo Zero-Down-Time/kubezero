@@ -92,6 +92,7 @@ argo-cd:
   {{- end }}
   {{- if and ( not .Values.bootstrap ) .Values.istio.enabled }}
   istio:
-    enabled: {{ index .Values "argo-cd" "istio" "enabled" }}
-    gateway: {{ index .Values "argo-cd" "istio" "gateway" }}
+    {{- with index .Values "argo-cd" "istio" }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
   {{- end }}
