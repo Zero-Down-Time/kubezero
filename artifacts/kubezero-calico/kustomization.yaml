@@ -1,8 +1,0 @@
-namespace: kube-system
-
-resources:
-- canal.yaml
-
-patchesStrategicMerge:
-- logging.yaml
-- prometheus.yaml
