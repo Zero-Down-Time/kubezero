@@ -1,25 +1,24 @@
 {{- if index .Values "argo-cd" "istio" "enabled" }}
+{{- if index .Values "argo-cd" "istio" "ipBlocks" }}
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
-  name: argocd-allow-only
+  name: argocd-deny-not-in-ipblocks
   namespace: istio-system
 spec:
   selector:
     matchLabels:
       app: istio-ingressgateway
+  action: DENY
   rules:
-  {{- if index .Values "argo-cd" "istio" "ipBlocks" }}
   - from:
     - source:
-        ipBlocks:
+        notIpBlocks:
         {{- with index .Values "argo-cd" "istio" "ipBlocks" }}
         {{- . | toYaml | nindent 8 }}
         {{- end }}
     to:
     - operation:
         hosts: ["{{ index .Values "argo-cd" "server" "config" "url" }}"]
-  {{- else }}
-  - {}
-  {{- end }}
+{{- end }}
 {{- end }}
