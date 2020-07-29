@@ -1,12 +1,11 @@
 ClusterName: Test-cluster
 Domain: example.com
 
-aws: true
+platform: aws
 HighAvailableControlplane: false
 
 calico:
   enabled: true
-  migration: false
 
 cert-manager:
   enabled: true
@@ -15,6 +14,9 @@ cert-manager:
 aws-ebs-csi-driver:
   enabled: true
   IamArn: ""
+
+aws-efs-csi-driver:
+  enabled: false
 
 kiam:
   enabled: true
@@ -28,4 +30,6 @@ prometheus:
 
 argo-cd:
   server: {}
-  gateway: private-ingressgateway.istio-system.svc.cluster.local
+  istio:
+    enabled: true
+    gateway: private-ingressgateway.istio-system.svc.cluster.local

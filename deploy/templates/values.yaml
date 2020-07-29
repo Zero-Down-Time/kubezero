@@ -7,11 +7,9 @@ kubezero:
     enabled: {{ .Values.calico.enabled  }}
     type: {{ default "kustomize" .Values.calico.type  }}
     values:
-      migration: {{ default false .Values.calico.migration }}
-      prometheus: false
-      # prometheus: {{ .Values.prometheus.enabled }}
       network: {{ default "vxlan" .Values.calico.network }}
       mtu: {{ default "8941" .Values.calico.mtu }}
+      prometheus: {{ .Values.prometheus.enabled }}
   cert-manager:
     enabled: {{ index .Values "cert-manager" "enabled" }}
 {{- if not .Values.bootstrap }}
@@ -52,6 +50,7 @@ kubezero:
           iam.amazonaws.com/role: "{{ index .Values "aws-ebs-csi-driver" "IamArn" }}"
         extraVolumeTags:
           Name: {{ .Values.ClusterName }}
+
   kiam:
     enabled: {{ .Values.kiam.enabled }}
     values:
@@ -63,6 +62,17 @@ kubezero:
           prometheus:
             servicemonitor:
               enabled: {{ .Values.prometheus.enabled }}
+
+  aws-efs-csi-driver:
+    enabled: {{ index .Values "aws-efs-csi-driver" "enabled" }}
+    values:
+      aws-efs-csi-driver:
+        nodeSelector:
+          node.kubernetes.io/csi.efs.fs: {{ index .Values "aws-efs-csi-driver" "EfsId" }}
+      PersistentVolume:
+        create: true
+        EfsId: {{ index .Values "aws-efs-csi-driver" "EfsId" }}
+        Name: {{ default "kubezero-efs-pv" ( index .Values "aws-efs-csi-driver" "PVName" ) }}
   {{- end }}
 
   istio:
@@ -70,14 +80,10 @@ kubezero:
     values:
       istiod:
         replicaCount: {{ ternary 2 1 .Values.HighAvailableControlplane }}
+      {{- if .Values.istio.ingress }}
       ingress:
-        private: {{ .Values.istio.ingress.private }}
-        type: {{ .Values.istio.ingress.type }}
-        replicaCount: {{ default 2 .Values.istio.ingress.replicaCount }}
-        dnsNames:
-        {{- with .Values.istio.ingress.dnsNames }}
-        {{- . | toYaml | nindent 8 }}
-        {{- end }}
+        {{- toYaml .Values.istio.ingress | nindent 8 }}
+      {{- end }}
 
 {{- end }}
 
@@ -90,7 +96,7 @@ argo-cd:
   configs:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- if and ( not .Values.bootstrap ) .Values.istio.enabled }}
+  {{- if and ( not .Values.bootstrap ) ( index .Values "argo-cd" "istio" ) }}
   istio:
     {{- with index .Values "argo-cd" "istio" }}
     {{- toYaml . | nindent 4 }}
