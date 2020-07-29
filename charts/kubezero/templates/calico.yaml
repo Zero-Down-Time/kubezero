@@ -1,10 +1,8 @@
 {{- if .Values.calico.enabled }}
-{{ template "kubezero-app.app" dict "root" . "name" "calico" "type" .Values.calico.type "retain" true }}
-  {{- if not .Values.calico.values.migration }}
+{{ template "kubezero-app.app" dict "root" . "name" "calico" "type" "helm" "retain" true }}
   syncPolicy:
     automated:
       prune: true
-  {{- end }}
 
   ignoreDifferences:
   - group: apiextensions.k8s.io

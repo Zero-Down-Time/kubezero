@@ -1,0 +1,34 @@
+# Once pod is running:
+# kubectl -n NAME-SPACE-TO-TEST exec -it pod/POD_NAME /bin/sh 
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netshoot
+  namespace: kube-system
+  labels:
+    app: netshoot
+spec:
+  replicas: 2
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: netshoot
+  template:
+    metadata:
+      labels:
+        app: netshoot
+    spec:
+      containers:
+      - name: netshoot
+        image: nicolaka/netshoot
+        imagePullPolicy: Always
+        command:
+          - /bin/sleep
+        args:
+          - "3600"
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: "kubernetes.io/hostname"
