@@ -15,4 +15,4 @@ dependencies:
   - name: kubezero-lib
     version: ">= 0.1.1"
     repository: https://zero-down-time.github.io/kubezero/
-kubeVersion: ">= 1.16.12"
+kubeVersion: ">= 1.16.0"
