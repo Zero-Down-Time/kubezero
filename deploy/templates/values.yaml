@@ -96,7 +96,7 @@ argo-cd:
   configs:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- if and ( not .Values.bootstrap ) ( index .Values "argo-cd" "istio" ) }}
+  {{- if and ( not .Values.bootstrap ) ( index .Values "argo-cd" "istio" "enabled" ) .Values.istio.enabled }}
   istio:
     {{- with index .Values "argo-cd" "istio" }}
     {{- toYaml . | nindent 4 }}
