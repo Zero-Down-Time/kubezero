@@ -25,6 +25,10 @@ kiam:
 istio:
   enabled: false
 
+metrics:
+  enabled: false
+
+# Deprecated once metrics goes live
 prometheus:
   enabled: false
 

@@ -85,6 +85,8 @@ kubezero:
         {{- toYaml .Values.istio.ingress | nindent 8 }}
       {{- end }}
 
+  metrics:
+    enabled: {{ .Values.metrics.enabled }}
 {{- end }}
 
 argo-cd:
