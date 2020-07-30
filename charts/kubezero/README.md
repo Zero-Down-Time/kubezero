@@ -27,4 +27,5 @@ Source code can be found [here](https://kubezero.com)
 | istio.enabled | bool | `false` |  |
 | kiam.enabled | bool | `false` |  |
 | local-volume-provisioner.enabled | bool | `false` |  |
+| metrics.enabled | bool | `false` |  |
 | platform | string | `"aws"` |  |
