@@ -30,9 +30,13 @@ prometheus-operator:
   # Default configuration of prometheus operator will create CRDs in the cluster idempotently
   prometheusOperator:
     enabled: true
+
+    # We use Argo
+    manageCrds: false
+    createCustomResource: true
+
     serviceMonitor:
       selfMonitor: false
-    createCustomResource: false
     tlsProxy:
       enabled: false
     admissionWebhooks:

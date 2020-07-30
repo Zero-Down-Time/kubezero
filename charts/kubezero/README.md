@@ -2,7 +2,7 @@ kubezero
 ========
 KubeZero ArgoCD Application - Root App of Apps chart of KubeZero
 
-Current chart version is `0.3.11`
+Current chart version is `0.4.1`
 
 Source code can be found [here](https://kubezero.com)
 
