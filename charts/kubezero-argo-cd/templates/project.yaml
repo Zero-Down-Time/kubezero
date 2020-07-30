@@ -24,6 +24,10 @@ spec:
     server: https://kubernetes.default.svc
   - namespace: istio-system
     server: https://kubernetes.default.svc
+  - namespace: monitoring
+    server: https://kubernetes.default.svc
+  - namespace: logging
+    server: https://kubernetes.default.svc
 
   clusterResourceWhitelist:
   - group: '*'
