@@ -35,3 +35,6 @@ aws-efs-csi-driver:
 
 istio:
   enabled: false
+
+metrics:
+  enabled: false
