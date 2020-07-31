@@ -27,9 +27,11 @@ prometheus-operator:
     enabled: false
   defaultRules:
     create: false
-  # Default configuration of prometheus operator will create CRDs in the cluster idempotently
+
   prometheusOperator:
     enabled: true
+    image:
+      tag: v0.41.0
 
     # Run on controller nodes
     tolerations:
@@ -38,24 +40,17 @@ prometheus-operator:
     nodeSelector:
       node-role.kubernetes.io/master: ""
 
-    # We use Argo
+    # Argo takes care of CRDs
     manageCrds: false
     createCustomResource: true
 
     # Operator has TLS support starting 0.39, but chart does not support CAConfig and operator flags yet
     # see: https://github.com/coreos/prometheus-operator/blob/master/Documentation/user-guides/webhook.md#deploying-the-admission-webhook
-    # Until then we use the patch job and tls proxy, to be reviewed later on to use the kubezero local cluster CA from cert-manager
+    # Until then we disable them as the patching interferes with Argo anyways
     tlsProxy:
-      enabled: true
+      enabled: false
     admissionWebhooks:
-      enabled: true
-      patch:
-        enabled: true
-        tolerations:
-        - key: node-role.kubernetes.io/master
-          effect: NoSchedule
-        nodeSelector:
-          node-role.kubernetes.io/master: ""
+      enabled: false
 
     #namespaces:
     #  releaseNamespace: true
