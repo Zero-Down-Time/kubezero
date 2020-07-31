@@ -31,17 +31,33 @@ prometheus-operator:
   prometheusOperator:
     enabled: true
 
+    # Run on controller nodes
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    nodeSelector:
+      node-role.kubernetes.io/master: ""
+
     # We use Argo
     manageCrds: false
     createCustomResource: true
 
-    serviceMonitor:
-      selfMonitor: false
+    # Operator has TLS support starting 0.39, but chart does not support CAConfig and operator flags yet
+    # see: https://github.com/coreos/prometheus-operator/blob/master/Documentation/user-guides/webhook.md#deploying-the-admission-webhook
+    # Until then we use the patch job and tls proxy, to be reviewed later on to use the kubezero local cluster CA from cert-manager
     tlsProxy:
-      enabled: false
+      enabled: true
     admissionWebhooks:
-      enabled: false
-    namespaces:
-      releaseNamespace: true
-      additional:
-        - kube-system
+      enabled: true
+      patch:
+        enabled: true
+        tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+        nodeSelector:
+          node-role.kubernetes.io/master: ""
+
+    #namespaces:
+    #  releaseNamespace: true
+    #  additional:
+    #    - kube-system
