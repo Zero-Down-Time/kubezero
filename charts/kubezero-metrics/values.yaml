@@ -19,8 +19,7 @@ prometheus-operator:
     enabled: false
   kubelet:
     enabled: false
-  grafana:
-    enabled: false
+
   defaultRules:
     create: false
 
@@ -75,6 +74,23 @@ prometheus-operator:
             resources:
               requests:
                 storage: 8Gi
+
+  # Custom Grafana tweaks
+  # - persistence, plugins, auth
+  grafana:
+    enabled: true
+    persistence:
+      enabled: true
+      size: 4Gi
+      storageClassName: ebs-sc-gp2-xfs
+    plugins:
+    - grafana-piechart-panel
+    service:
+      portName: http-grafana
+    initChownData:
+      enabled: false
+    testFramework:
+      enabled: false
 
 # Metrics adapter
 prometheus-adapter:
