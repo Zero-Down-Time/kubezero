@@ -12,13 +12,14 @@ kubezero:
       prometheus: {{ .Values.prometheus.enabled }}
   cert-manager:
     enabled: {{ index .Values "cert-manager" "enabled" }}
-{{- if not .Values.bootstrap }}
     values:
       {{- if eq .Values.platform "aws" }}
       cert-manager:
         podAnnotations:
           iam.amazonaws.com/role: "{{ index .Values "cert-manager" "IamArn" }}"
       {{- end }}
+
+      {{- if not .Values.kiam.not_ready }}
       clusterIssuer:
         name: letsencrypt-dns-prod
         server: https://acme-v02.api.letsencrypt.org/directory
@@ -38,19 +39,11 @@ kubezero:
               {{- . | toYaml | nindent 14 }}
               {{- end }}
               {{- end }}
+      {{- end }}
 
-  # AWS only components
+
   {{- if eq .Values.platform "aws" }}
-  aws-ebs-csi-driver:
-    enabled: {{ index .Values "aws-ebs-csi-driver" "enabled" }}
-    values:
-      aws-ebs-csi-driver:
-        replicaCount: {{ ternary 2 1 .Values.HighAvailableControlplane }}
-        podAnnotations:
-          iam.amazonaws.com/role: "{{ index .Values "aws-ebs-csi-driver" "IamArn" }}"
-        extraVolumeTags:
-          Name: {{ .Values.ClusterName }}
-
+  {{- if not ( index .Values "cert-manager" "not_ready" ) }}
   kiam:
     enabled: {{ .Values.kiam.enabled }}
     values:
@@ -62,6 +55,20 @@ kubezero:
           prometheus:
             servicemonitor:
               enabled: {{ .Values.prometheus.enabled }}
+  {{- end }}
+
+  {{- if not .Values.kiam.not_ready }}
+  # AWS only components
+  aws-ebs-csi-driver:
+    enabled: {{ index .Values "aws-ebs-csi-driver" "enabled" }}
+    values:
+      aws-ebs-csi-driver:
+        replicaCount: {{ ternary 2 1 .Values.HighAvailableControlplane }}
+        podAnnotations:
+          iam.amazonaws.com/role: "{{ index .Values "aws-ebs-csi-driver" "IamArn" }}"
+        extraVolumeTags:
+          Name: {{ .Values.ClusterName }}
+  {{- end }}
 
   aws-efs-csi-driver:
     enabled: {{ index .Values "aws-efs-csi-driver" "enabled" }}
@@ -87,7 +94,6 @@ kubezero:
 
   metrics:
     enabled: {{ .Values.metrics.enabled }}
-{{- end }}
 
 argo-cd:
   {{- with index .Values "argo-cd" "server" }}

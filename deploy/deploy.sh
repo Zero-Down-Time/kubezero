@@ -40,30 +40,31 @@ else
 EOF
   fi
 
-  helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set bootstrap=true > generated-values.yaml
-
-  # Deploy initial argo-cd
+  # Deploy initial argo-cad
+  helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set kiam.not_ready=true --set cert-manager.not_ready=true --set istio.enabled=false --set prometheus.enabled=false > generated-values.yaml
   helm install -n argocd kubezero kubezero/kubezero-argo-cd --create-namespace -f generated-values.yaml
-
   # Wait for argocd-server to be running
   kubectl rollout status deployment -n argocd kubezero-argocd-server
 
-  # Now wait for cert-manager to be bootstrapped
+  # Now wait for cert-manager and the local CA to be bootstrapped
   echo "Waiting for cert-manager to be deployed..."
   wait_for kubectl get deployment -n cert-manager cert-manager-webhook 2>/dev/null 1>&2
   kubectl rollout status deployment -n cert-manager cert-manager-webhook
+  wait_for kubectl get Issuer -n kube-system kubezero-local-ca-issuer 2>/dev/null 1>&2
+  kubectl wait --for=condition=Ready -n kube-system Issuer/kubezero-local-ca-issuer
 
-  # Now lets get kiam and cert-manager to work as they depend on each other, keep advanced options still disabled though
-  # - istio, prometheus
-  helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set istio.enabled=false --set prometheus.enabled=false > generated-values.yaml
-  helm upgrade -n argocd kubezero kubezero/kubezero-argo-cd -f generated-values.yaml
+  # Now lets make sure kiam is working
+  helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set kiam.not_ready=true --set istio.enabled=false --set prometheus.enabled=false > generated-values.yaml
+  helm upgrade -n argocd kubezero kubezero/kubezero-argo-cd --create-namespace -f generated-values.yaml
+  wait_for kubectl get daemonset -n kube-system kiam-agent 2>/dev/null 1>&2
+  kubectl rollout status daemonset -n kube-system kiam-agent
 
   # Install Istio if enabled, but keep ArgoCD istio support disabled for now in case
   helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set argo-cd.istio.enabled=false > generated-values.yaml
   helm upgrade -n argocd kubezero kubezero/kubezero-argo-cd -f generated-values.yaml
+  wait_for kubectl get deployment -n istio-operator istio-operator 2>/dev/null 1>&2
+  kubectl rollout status deployment -n istio-operator istio-operator
 
-  echo "Install kube-prometheus and logging manually for now, before proceeding! <Any key to continue>"
-  read
   # Todo: Now we need to wait till all is synced and healthy ... argocd cli or kubectl ?
   # Wait for aws-ebs or kiam to be all ready, or all pods running ?
 
