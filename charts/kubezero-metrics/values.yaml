@@ -18,15 +18,15 @@ prometheus-operator:
   kubeApiServer:
     enabled: true
   kubeControllerManager:
-    enabled: true
+    enabled: false
   kubeDns:
     enabled: false
   kubeEtcd:
-    enabled: true
+    enabled: false
   kubeProxy:
-    enabled: true
+    enabled: false
   kubeScheduler:
-    enabled: true
+    enabled: false
   kubeStateMetrics:
     enabled: true
   kubelet:
