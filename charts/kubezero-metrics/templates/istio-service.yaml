@@ -12,5 +12,5 @@ spec:
   http:
   - route:
     - destination:
-        host: grafana
+        host: metrics-grafana
 {{- end }}
