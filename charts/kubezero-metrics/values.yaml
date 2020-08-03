@@ -1,3 +1,9 @@
+grafana:
+  istio:
+    enabled: false
+    url: ""
+    gateway: ingressgateway.istio-system.svc.cluster.local
+
 prometheus-operator:
   alertmanager:
     enabled: false
