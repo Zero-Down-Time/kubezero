@@ -121,6 +121,7 @@ prometheus-adapter:
   # Basic rules for HPA to work replacing heaptster, taken from kube-prometheus project
   # https://github.com/coreos/kube-prometheus/blob/master/manifests/prometheus-adapter-configMap.yaml
   rules:
+    default: false
     resource:
       cpu:
         containerQuery: sum(rate(container_cpu_usage_seconds_total{<<.LabelMatchers>>}[3m])) by (<<.GroupBy>>)
