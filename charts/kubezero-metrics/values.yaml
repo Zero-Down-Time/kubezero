@@ -20,7 +20,7 @@ prometheus-operator:
   kubelet:
     enabled: false
   nodeExporter:
-    enabled: false
+    enabled: true
   grafana:
     enabled: false
   prometheus:
@@ -66,7 +66,8 @@ prometheus-adapter:
     effect: NoSchedule
   nodeSelector:
     node-role.kubernetes.io/master: ""
-
+  # Basic rules for HPA to work replacing heaptster, taken from kube-prometheus project
+  # https://github.com/coreos/kube-prometheus/blob/master/manifests/prometheus-adapter-configMap.yaml
   resource:
     cpu:
       containerQuery: sum(irate(container_cpu_usage_seconds_total{<<.LabelMatchers>>,container!="POD",container!="",pod!=""}[5m])) by (<<.GroupBy>>)
