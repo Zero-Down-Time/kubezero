@@ -52,8 +52,8 @@ prometheus-operator:
 
     namespaces:
       releaseNamespace: true
-    #  additional:
-    #    - kube-system
+      additional:
+        - kube-system
 
   nodeExporter:
     enabled: true
