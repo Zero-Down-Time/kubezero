@@ -19,11 +19,7 @@ prometheus-operator:
     enabled: false
   kubelet:
     enabled: false
-  nodeExporter:
-    enabled: true
   grafana:
-    enabled: false
-  prometheus:
     enabled: false
   defaultRules:
     create: false
@@ -58,6 +54,26 @@ prometheus-operator:
     #  releaseNamespace: true
     #  additional:
     #    - kube-system
+
+  nodeExporter:
+    enabled: true
+
+  prometheus:
+    enabled: true
+    retention: 10d
+
+    resources:
+      requests:
+        memory: 512Mi
+
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: ebs-sc-gp2-xfs
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 8Gi
 
 # Metrics adapter
 prometheus-adapter:
