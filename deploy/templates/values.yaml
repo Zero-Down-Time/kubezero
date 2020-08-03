@@ -94,12 +94,14 @@ kubezero:
 
   metrics:
     enabled: {{ .Values.metrics.enabled }}
-    {{- if and .Values.metrics.istio.enabled .Values.istio.enabled }}
-    istio:
-      {{- with .Values.metrics.istio }}
-      {{- toYaml . | nindent 6 }}
+    values:
+      {{- if and .Values.metrics.istio.enabled .Values.istio.enabled }}
+      grafana:
+        istio:
+          {{- with .Values.metrics.istio }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
       {{- end }}
-    {{- end }}
 
 argo-cd:
   {{- with index .Values "argo-cd" "server" }}
