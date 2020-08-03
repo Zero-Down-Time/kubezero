@@ -112,7 +112,7 @@ prometheus-operator:
 # Metrics adapter
 prometheus-adapter:
   prometheus:
-    url: metrics-prometheus-operato-prometheus
+    url: http://metrics-prometheus-operato-prometheus
   tolerations:
   - key: node-role.kubernetes.io/master
     effect: NoSchedule
