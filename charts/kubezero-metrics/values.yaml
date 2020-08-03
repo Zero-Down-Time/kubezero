@@ -4,6 +4,12 @@ grafana:
     url: ""
     gateway: ingressgateway.istio-system.svc.cluster.local
 
+prometheus:
+  istio:
+    enabled: false
+    url: ""
+    gateway: ingressgateway.istio-system.svc.cluster.local
+
 prometheus-operator:
   defaultRules:
     create: true
@@ -64,7 +70,9 @@ prometheus-operator:
     enabled: true
 
     prometheusSpec:
-      retention: 10d
+      retention: 8d
+      portName: http-prometheus
+
       resources:
         requests:
           memory: 512Mi

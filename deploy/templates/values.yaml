@@ -95,10 +95,17 @@ kubezero:
   metrics:
     enabled: {{ .Values.metrics.enabled }}
     values:
-      {{- if and .Values.metrics.istio.enabled .Values.istio.enabled }}
+      {{- if and .Values.metrics.istio.grafana.enabled .Values.istio.enabled }}
       grafana:
         istio:
-          {{- with .Values.metrics.istio }}
+          {{- with .Values.metrics.istio.grafana }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+      {{- end }}
+      {{- if and .Values.metrics.istio.prometheus.enabled .Values.istio.enabled }}
+      prometheus:
+        istio:
+          {{- with .Values.metrics.istio.prometheus }}
           {{- toYaml . | nindent 10 }}
           {{- end }}
       {{- end }}

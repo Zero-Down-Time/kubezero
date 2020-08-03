@@ -28,7 +28,10 @@ istio:
 metrics:
   enabled: false
   istio:
-    enabled: false
+    grafana:
+      enabled: false
+    prometheus:
+      enabled: false
 
 # Deprecated once metrics goes live
 prometheus:
