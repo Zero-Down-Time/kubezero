@@ -1,0 +1,16 @@
+{{- if .Values.grafana.istio.enabled }}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  hosts:
+  - {{ .Values.grafana.istio.url }}
+  gateways:
+  - {{ .Values.grafana.istio.gateway }}
+  http:
+  - route:
+    - destination:
+        host: grafana
+{{- end }}

@@ -27,6 +27,8 @@ istio:
 
 metrics:
   enabled: false
+  istio:
+    enabled: false
 
 # Deprecated once metrics goes live
 prometheus:
