@@ -5,15 +5,8 @@ grafana:
     gateway: ingressgateway.istio-system.svc.cluster.local
 
 prometheus-operator:
-  alertmanager:
-    enabled: false
-
-
   defaultRules:
     create: true
-    rules:
-      alertmanager: false
-
   coreDns:
     enabled: true
   kubeApiServer:
@@ -101,6 +94,10 @@ prometheus-operator:
       enabled: false
     testFramework:
       enabled: false
+
+  # Todo
+  alertmanager:
+    enabled: false
 
 # Metrics adapter
 prometheus-adapter:
