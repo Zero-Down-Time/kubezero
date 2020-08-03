@@ -26,10 +26,10 @@ prometheus-operator:
 
   prometheusOperator:
     enabled: true
-    image:
-      tag: v0.41.0
-    prometheusConfigReloaderImage:
-      tag: v0.41.0
+    #image:
+    #  tag: v0.41.0
+    #prometheusConfigReloaderImage:
+    #  tag: v0.41.0
 
     # Run on controller nodes
     tolerations:
