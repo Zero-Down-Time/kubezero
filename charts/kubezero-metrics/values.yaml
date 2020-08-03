@@ -7,27 +7,31 @@ grafana:
 prometheus-operator:
   alertmanager:
     enabled: false
+
+
+  defaultRules:
+    create: true
+    rules:
+      alertmanager: false
+
   coreDns:
-    enabled: false
+    enabled: true
   kubeApiServer:
-    enabled: false
+    enabled: true
   kubeControllerManager:
-    enabled: false
+    enabled: true
   kubeDns:
     enabled: false
   kubeEtcd:
-    enabled: false
+    enabled: true
   kubeProxy:
-    enabled: false
+    enabled: true
   kubeScheduler:
-    enabled: false
+    enabled: true
   kubeStateMetrics:
-    enabled: false
+    enabled: true
   kubelet:
-    enabled: false
-
-  defaultRules:
-    create: false
+    enabled: true
 
   prometheusOperator:
     enabled: true
