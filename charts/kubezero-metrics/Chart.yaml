@@ -2,12 +2,12 @@ apiVersion: v2
 name: kubezero-metrics
 description: KubeZero Umbrella Chart for prometheus-operator
 type: application
-version: 0.0.1
+version: 0.0.2
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
   - kubezero
-  - prometheus-operator
+  - prometheus
   - grafana
 maintainers:
   - name: Quarky9
@@ -17,5 +17,8 @@ dependencies:
     repository: https://zero-down-time.github.io/kubezero/
   - name: prometheus-operator
     version: 9.3.0
+    repository: https://kubernetes-charts.storage.googleapis.com/
+  - name: prometheus-adapter
+    version: 2.5.0
     repository: https://kubernetes-charts.storage.googleapis.com/
 kubeVersion: ">= 1.16.0"
