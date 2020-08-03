@@ -50,8 +50,8 @@ prometheus-operator:
     admissionWebhooks:
       enabled: false
 
-    #namespaces:
-    #  releaseNamespace: true
+    namespaces:
+      releaseNamespace: true
     #  additional:
     #    - kube-system
 
