@@ -60,20 +60,21 @@ prometheus-operator:
 
   prometheus:
     enabled: true
-    retention: 10d
 
-    resources:
-      requests:
-        memory: 512Mi
+    prometheusSpec:
+      retention: 10d
+      resources:
+        requests:
+          memory: 512Mi
 
-    storageSpec:
-      volumeClaimTemplate:
-        spec:
-          storageClassName: ebs-sc-gp2-xfs
-          accessModes: ["ReadWriteOnce"]
-          resources:
-            requests:
-              storage: 8Gi
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: ebs-sc-gp2-xfs
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 8Gi
 
 # Metrics adapter
 prometheus-adapter:
