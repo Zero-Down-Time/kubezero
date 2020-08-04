@@ -13,6 +13,11 @@ kubezero:
   cert-manager:
     enabled: {{ index .Values "cert-manager" "enabled" }}
     values:
+      # Disable all until webhook is in place
+      {{- if index .Values "cert-manager" "not_ready" }}
+      localCA:
+        enabled: false
+      {{- end }}
       {{- if eq .Values.platform "aws" }}
       cert-manager:
         podAnnotations:
