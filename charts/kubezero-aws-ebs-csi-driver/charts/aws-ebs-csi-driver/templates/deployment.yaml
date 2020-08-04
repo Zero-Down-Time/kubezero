@@ -91,8 +91,10 @@ spec:
             {{- if .Values.enableVolumeScheduling }}
             - --feature-gates=Topology=true
             {{- end}}
+            {{- if gt .Values.replicaCount 1 }}
             - --enable-leader-election
             - --leader-election-type=leases
+            {{- end}}
           env:
             - name: ADDRESS
               value: /var/lib/csi/sockets/pluginproxy/csi.sock
@@ -104,8 +106,10 @@ spec:
           args:
             - --csi-address=$(ADDRESS)
             - --v=5
+            {{- if gt .Values.replicaCount 1 }}
             - --leader-election=true
             - --leader-election-type=leases
+            {{- end}}
           env:
             - name: ADDRESS
               value: /var/lib/csi/sockets/pluginproxy/csi.sock
@@ -117,7 +121,9 @@ spec:
           image: {{ printf "%s:%s" .Values.sidecars.snapshotterImage.repository .Values.sidecars.snapshotterImage.tag }}
           args:
             - --csi-address=$(ADDRESS)
+            {{- if gt .Values.replicaCount 1 }}
             - --leader-election=true
+            {{- end}}
           env:
             - name: ADDRESS
               value: /var/lib/csi/sockets/pluginproxy/csi.sock

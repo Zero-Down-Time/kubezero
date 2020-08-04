@@ -2,8 +2,8 @@ aws-ebs-csi-driver:
   replicaCount: 1
 
   enableVolumeScheduling: true
-  enableVolumeResizing: false
-  enableVolumeSnapshot: false
+  enableVolumeResizing: true
+  enableVolumeSnapshot: true
 
   nodeSelector:
     node-role.kubernetes.io/master: ""
