@@ -50,6 +50,10 @@ EOF
   echo "Waiting for cert-manager to be deployed..."
   wait_for kubectl get deployment -n cert-manager cert-manager-webhook 2>/dev/null 1>&2
   kubectl rollout status deployment -n cert-manager cert-manager-webhook
+
+  # Now that we have the cert-manager webhook, get the kiam certs in place but do NOT deploy kiam yet
+  helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set kiam.not_ready=true --set kiam.enabled=false --set istio.enabled=false --set prometheus.enabled=false > generated-values.yaml
+  helm upgrade -n argocd kubezero kubezero/kubezero-argo-cd --create-namespace -f generated-values.yaml
   wait_for kubectl get Issuer -n kube-system kubezero-local-ca-issuer 2>/dev/null 1>&2
   kubectl wait --for=condition=Ready -n kube-system Issuer/kubezero-local-ca-issuer
 
