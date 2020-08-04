@@ -91,7 +91,7 @@ spec:
             {{- if .Values.enableVolumeScheduling }}
             - --feature-gates=Topology=true
             {{- end}}
-            {{- if gt .Values.replicaCount 1 }}
+            {{- if gt .Values.replicaCount 1.0 }}
             - --enable-leader-election
             - --leader-election-type=leases
             {{- end}}
@@ -106,7 +106,7 @@ spec:
           args:
             - --csi-address=$(ADDRESS)
             - --v=5
-            {{- if gt .Values.replicaCount 1 }}
+            {{- if gt .Values.replicaCount 1.0 }}
             - --leader-election=true
             - --leader-election-type=leases
             {{- end}}
@@ -121,7 +121,7 @@ spec:
           image: {{ printf "%s:%s" .Values.sidecars.snapshotterImage.repository .Values.sidecars.snapshotterImage.tag }}
           args:
             - --csi-address=$(ADDRESS)
-            {{- if gt .Values.replicaCount 1 }}
+            {{- if gt .Values.replicaCount 1.0 }}
             - --leader-election=true
             {{- end}}
           env:
