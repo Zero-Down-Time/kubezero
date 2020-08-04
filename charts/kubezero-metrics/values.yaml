@@ -30,7 +30,7 @@ prometheus-operator:
   kubeEtcd:
     enabled: false
   kubeProxy:
-    enabled: false
+    enabled: true
   kubeScheduler:
     enabled: false
 
