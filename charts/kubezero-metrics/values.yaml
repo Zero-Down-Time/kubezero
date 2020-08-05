@@ -23,20 +23,32 @@ prometheus-operator:
     enabled: true
 
   # Disabled until we figure out how to scrape etcd with ssl client certs, scheduler/proxy/controller require https since 1.17
-  kubeControllerManager:
-    enabled: false
   kubeDns:
     enabled: false
   kubeEtcd:
     enabled: false
+
+  kubeControllerManager:
+    enabled: true
+    service:
+      port: 10257
+      targetPort: 10257
+    serviceMonitor:
+      https: true
+
   kubeScheduler:
-    enabled: false
+    enabled: true
+    service:
+      port: 10259
+      targetPort: 10259
+    serviceMonitor:
+      https: true
 
   kubelet:
     enabled: true
     serviceMonitor:
-      # removed with 1.18 anyways
-      cAdvisor: false
+      # removed with 1.18, but still required for all container metrics ??
+      cAdvisor: true
 
   prometheusOperator:
     enabled: true

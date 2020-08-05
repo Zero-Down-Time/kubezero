@@ -41,7 +41,7 @@ EOF
   fi
 
   # Deploy initial argo-cad
-  helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set kiam.not_ready=true --set cert-manager.not_ready=true --set istio.enabled=false --set prometheus.enabled=false > generated-values.yaml
+  helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set kiam.not_ready=true --set cert-manager.not_ready=true --set istio.enabled=false --set metrics.enabled=false > generated-values.yaml
   helm install -n argocd kubezero kubezero/kubezero-argo-cd --create-namespace -f generated-values.yaml
   # Wait for argocd-server to be running
   kubectl rollout status deployment -n argocd kubezero-argocd-server
@@ -51,20 +51,30 @@ EOF
   wait_for kubectl get deployment -n cert-manager cert-manager-webhook 2>/dev/null 1>&2
   kubectl rollout status deployment -n cert-manager cert-manager-webhook
 
+  # Either inject cert-manager backup or bootstrap
+  if [ -f cert-manager-backup.yaml ]; then
+    kubectl apply -f cert-manager-backup.yaml
+  else
+    helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set kiam.not_ready=true --set istio.enabled=false --set metrics.enabled=false > generated-values.yaml
+    helm upgrade -n argocd kubezero kubezero/kubezero-argo-cd --create-namespace -f generated-values.yaml
+    wait_for kubectl get Issuer -n kube-system kubezero-local-ca-issuer 2>/dev/null 1>&2
+    wait_for kubectl get ClusterIssuer letsencrypt-dns-prod 2>/dev/null 1>&2
+    kubectl wait --for=condition=Ready -n kube-system Issuer/kubezero-local-ca-issuer
+    kubectl wait --for=condition=Ready ClusterIssuer/letsencrypt-dns-prod
+  fi
+
   # Now that we have the cert-manager webhook, get the kiam certs in place but do NOT deploy kiam yet
-  helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set kiam.not_ready=true --set kiam.enabled=false --set istio.enabled=false --set prometheus.enabled=false > generated-values.yaml
+  helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set kiam.not_ready=true --set kiam.enabled=false > generated-values.yaml
   helm upgrade -n argocd kubezero kubezero/kubezero-argo-cd --create-namespace -f generated-values.yaml
-  wait_for kubectl get Issuer -n kube-system kubezero-local-ca-issuer 2>/dev/null 1>&2
-  kubectl wait --for=condition=Ready -n kube-system Issuer/kubezero-local-ca-issuer
 
   # Now lets make sure kiam is working
-  helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set kiam.not_ready=true --set istio.enabled=false --set prometheus.enabled=false > generated-values.yaml
+  helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set kiam.not_ready=true > generated-values.yaml
   helm upgrade -n argocd kubezero kubezero/kubezero-argo-cd --create-namespace -f generated-values.yaml
   wait_for kubectl get daemonset -n kube-system kiam-agent 2>/dev/null 1>&2
   kubectl rollout status daemonset -n kube-system kiam-agent
 
   # Install Istio if enabled, but keep ArgoCD istio support disabled for now in case
-  helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set argo-cd.istio.enabled=false > generated-values.yaml
+  helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set argo-cd.istio.enabled=false --set metrics.istio.prometheus.enabled=false --set metrics.istio.grafana.enabled=false > generated-values.yaml
   helm upgrade -n argocd kubezero kubezero/kubezero-argo-cd -f generated-values.yaml
   wait_for kubectl get deployment -n istio-operator istio-operator 2>/dev/null 1>&2
   kubectl rollout status deployment -n istio-operator istio-operator
