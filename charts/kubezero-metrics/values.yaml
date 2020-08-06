@@ -1,6 +1,7 @@
 grafana:
   istio:
     enabled: false
+    ipBlocks: []
     url: ""
     gateway: ingressgateway.istio-system.svc.cluster.local
 
