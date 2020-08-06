@@ -3,13 +3,13 @@ grafana:
     enabled: false
     ipBlocks: []
     url: ""
-    gateway: ingressgateway.istio-system.svc.cluster.local
+    gateway: istio-system/ingressgateway
 
 prometheus:
   istio:
     enabled: false
     url: ""
-    gateway: ingressgateway.istio-system.svc.cluster.local
+    gateway: istio-system/ingressgateway
 
 prometheus-operator:
   defaultRules:

@@ -41,4 +41,4 @@ argo-cd:
   server: {}
   istio:
     enabled: true
-    gateway: private-ingressgateway.istio-system.svc.cluster.local
+    gateway: istio-system/private-ingressgateway
