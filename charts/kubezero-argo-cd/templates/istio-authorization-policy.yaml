@@ -5,6 +5,8 @@ kind: AuthorizationPolicy
 metadata:
   name: argocd-deny-not-in-ipblocks
   namespace: istio-system
+  labels:
+{{ include "kubezero-lib.labels" . | indent 4 }}
 spec:
   selector:
     matchLabels:
