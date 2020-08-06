@@ -13,8 +13,12 @@ prometheus:
 prometheus-operator:
   defaultRules:
     create: true
+
   coreDns:
     enabled: true
+  kubeDns:
+    enabled: false
+
   kubeApiServer:
     enabled: true
   kubeStateMetrics:
@@ -22,9 +26,7 @@ prometheus-operator:
   kubeProxy:
     enabled: true
 
-  # Disabled until we figure out how to scrape etcd with ssl client certs, scheduler/proxy/controller require https since 1.17
-  kubeDns:
-    enabled: false
+  # Disabled until we figure out how to scrape etcd with ssl client certs
   kubeEtcd:
     enabled: false
 
