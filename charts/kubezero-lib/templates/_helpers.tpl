@@ -2,7 +2,7 @@
 Common set of labels
 */ -}}
 {{- define "kubezero-lib.labels" -}}
-helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+helm.sh/chart: {{ include "kubezero-lib.chart . }}
 app.kubernetes.io/name: {{ include "kubezero-lib.name" . }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/part-of: kubezero
@@ -26,4 +26,8 @@ Common naming functions
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
+{{- end -}}
+
+{{- define "kubezero-lib.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}

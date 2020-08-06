@@ -12,4 +12,4 @@ ingress:
 
 istio-operator:
   hub: docker.io/istio
-  tag: 1.6.5
+  tag: 1.6.7

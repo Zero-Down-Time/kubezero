@@ -4,6 +4,8 @@ kind: IstioOperator
 metadata:
   name: kubezero-istio-private-ingress
   namespace: istio-system
+  labels:
+{{ include "kubezero-lib.labels" . | indent 4 }}
 spec:
   profile: empty
   components:

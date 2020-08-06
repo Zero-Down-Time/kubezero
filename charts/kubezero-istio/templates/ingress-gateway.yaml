@@ -3,6 +3,8 @@ kind: Gateway
 metadata:
   name: ingressgateway
   namespace: istio-system
+  labels:
+{{ include "kubezero-lib.labels" . | indent 4 }}
 spec:
   selector:
     istio: ingressgateway
@@ -33,6 +35,8 @@ kind: Gateway
 metadata:
   name: private-ingressgateway
   namespace: istio-system
+  labels:
+{{ include "kubezero-lib.labels" . | indent 4 }}
 spec:
   selector:
     istio: private-ingressgateway

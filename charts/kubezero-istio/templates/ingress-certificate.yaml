@@ -4,6 +4,8 @@ kind: Certificate
 metadata:
   name: public-ingress-cert
   namespace: istio-system
+  labels:
+{{ include "kubezero-lib.labels" . | indent 4 }}
 spec:
   secretName: public-ingress-cert
   issuerRef:
