@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-ISTIO_VERSION=1.6.5
+ISTIO_VERSION=1.6.7
 
 NAME="istio-$ISTIO_VERSION"
 URL="https://github.com/istio/istio/releases/download/${ISTIO_VERSION}/istio-${ISTIO_VERSION}-linux-amd64.tar.gz"
