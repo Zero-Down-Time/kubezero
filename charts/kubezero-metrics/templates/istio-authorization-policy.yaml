@@ -5,6 +5,8 @@ kind: AuthorizationPolicy
 metadata:
   name: grafana-deny-not-in-ipblocks
   namespace: istio-system
+  labels:
+{{ include "kubezero-lib.labels" . | indent 4 }}
 spec:
   selector:
     matchLabels:
@@ -30,6 +32,8 @@ kind: AuthorizationPolicy
 metadata:
   name: prometheus-deny-not-in-ipblocks
   namespace: istio-system
+  labels:
+{{ include "kubezero-lib.labels" . | indent 4 }}
 spec:
   selector:
     matchLabels:
