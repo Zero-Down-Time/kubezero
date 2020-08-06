@@ -2,7 +2,7 @@ kubezero-aws-ebs-csi-driver
 ===========================
 KubeZero Umbrella Chart for aws-ebs-csi-driver
 
-Current chart version is `0.1.1`
+Current chart version is `0.2.0`
 
 Source code can be found [here](https://kubezero.com)
 
