@@ -7,8 +7,9 @@
 
 # Kubezero
 - fully automated one command bootstrap incl. all kubezero components 
-- migrated from kube-prometheuss to community helm charts for metrics
+- migrated from kube-prometheuss to prometheus-operator helm charts for metrics
 - latest Grafana incl. peristence
 - kube-prometheus adapter improvements / customizations
 - integrated EFS CSI driver into Kubezero
 - prometheus itself can be exposed via istio ingress on demand to ease development of custom metrics
+- backup script to export all cert-manager items between clusters

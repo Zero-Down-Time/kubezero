@@ -116,6 +116,10 @@ kubezero:
           {{- toYaml . | nindent 10 }}
           {{- end }}
       {{- end }}
+      {{- if .Values.metrics.prometheus-operator }}
+      prometheus-operator:
+      {{- toYaml .Values.metrics.prometheus-operator | nindent 8 }}
+      {{- end }}
 
 argo-cd:
   {{- with index .Values "argo-cd" "server" }}
