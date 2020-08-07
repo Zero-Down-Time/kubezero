@@ -12,14 +12,14 @@ Source code can be found [here](https://kubezero.com)
 |------------|------|---------|
 | https://kubernetes-charts.storage.googleapis.com/ | prometheus-adapter | 2.5.0 |
 | https://kubernetes-charts.storage.googleapis.com/ | prometheus-operator | 9.3.0 |
-| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.1 |
+| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## Chart Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | grafana.istio.enabled | bool | `false` |  |
-| grafana.istio.gateway | string | `"ingressgateway.istio-system.svc.cluster.local"` |  |
+| grafana.istio.gateway | string | `"istio-system/ingressgateway"` |  |
 | grafana.istio.ipBlocks | list | `[]` |  |
 | grafana.istio.url | string | `""` |  |
 | prometheus-adapter.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
@@ -93,5 +93,5 @@ Source code can be found [here](https://kubezero.com)
 | prometheus-operator.prometheusOperator.tolerations[0].effect | string | `"NoSchedule"` |  |
 | prometheus-operator.prometheusOperator.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | prometheus.istio.enabled | bool | `false` |  |
-| prometheus.istio.gateway | string | `"ingressgateway.istio-system.svc.cluster.local"` |  |
+| prometheus.istio.gateway | string | `"istio-system/ingressgateway"` |  |
 | prometheus.istio.url | string | `""` |  |
