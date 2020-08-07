@@ -2,7 +2,7 @@ kubezero-argo-cd
 ================
 KubeZero ArgoCD Helm chart to install ArgoCD itself and the KubeZero ArgoCD Application
 
-Current chart version is `0.3.8`
+Current chart version is `0.3.9`
 
 Source code can be found [here](https://kubezero.com)
 
@@ -11,7 +11,7 @@ Source code can be found [here](https://kubezero.com)
 | Repository | Name | Version |
 |------------|------|---------|
 | https://argoproj.github.io/argo-helm | argo-cd | 2.6.0 |
-| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.1 |
+| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## Chart Values
 
@@ -23,7 +23,7 @@ Source code can be found [here](https://kubezero.com)
 | argo-cd.dex.enabled | bool | `false` |  |
 | argo-cd.installCRDs | bool | `false` |  |
 | argo-cd.istio.enabled | bool | `false` | Deploy Istio VirtualService to expose ArgoCD |
-| argo-cd.istio.gateway | string | `"ingressgateway.istio-system.svc.cluster.local"` | Name of the Istio gateway to add the VirtualService to |
+| argo-cd.istio.gateway | string | `"istio-system/ingressgateway"` | Name of the Istio gateway to add the VirtualService to |
 | argo-cd.istio.ipBlocks | list | `[]` |  |
 | argo-cd.redis.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
 | argo-cd.redis.tolerations[0].effect | string | `"NoSchedule"` |  |
