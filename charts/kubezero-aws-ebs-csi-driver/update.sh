@@ -1,6 +1,8 @@
 #!/bin/bash
 set -ex
 
+# Upstream doesnt have proper Helm repo yet so we just download latest release and stuff it into charts
+
 REPO="kubernetes-sigs/aws-ebs-csi-driver"
 LATEST_RELEASE=$(curl -sL -s https://api.github.com/repos/${REPO}/releases | grep '"tag_name":' | cut -d'"' -f4 | grep -v -E "(alpha|beta|rc)" | sort -t"." -k 1,1 -k 2,2 -k 3,3 -k 4,4 | tail -n 1)
 
