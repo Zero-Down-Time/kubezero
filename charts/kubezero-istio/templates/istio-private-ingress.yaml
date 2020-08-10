@@ -36,7 +36,7 @@ spec:
           value: standard
         {{- if eq .Values.ingress.type "NodePort" }}
         nodeSelector:
-          node.kubernetes.io/ingress.private: {{ .Values.ingress.private.nodeSelector }}
+          node.kubernetes.io/ingress.private: "{{ .Values.ingress.private.nodeSelector }}"
         {{- end }}
         resources:
           limits:
