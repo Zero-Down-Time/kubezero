@@ -6,7 +6,9 @@ ingress:
   autoscaleEnabled: false
   replicaCount: 2
   type: NodePort
-  private: true
+  private:
+    enabled: true
+    nodeSelector: "31080_31443_30671_30672_31224"
   #dnsNames:
   #- "*.example.com"
 
