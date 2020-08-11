@@ -1,0 +1,27 @@
+# Default values for zdt-logging.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# This is for backwards compatibility with older zdt-logging setup
+# fullnameOverride: logging
+
+# Version for ElasticSearch and Kibana have to match so we define it at top-level
+version: 7.8.1
+
+es:
+  nodeSets: []
+  #- count: 2
+  #  storage:
+  #    size: 16Gi
+  #    class: local-sc-xfs
+  #  zone: us-west-2a
+  s3_snapshot_iamrole: "" # INSERT_CLOUDFORMATION_OUTPUT_ElasticSearchSnapshots
+  elastic_password: "" # super_secret_elastic_password
+
+kibana:
+  #replicas: 1
+  #servicename: kibana.example.com
+  istio:
+    enabled: false
+    gateway: "istio-system/ingressgateway"
+    url: "" # kibana.example.com

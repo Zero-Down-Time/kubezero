@@ -1,0 +1,35 @@
+{{- if .Values.kibana }}
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: {{ template "kubezero-lib.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kubezero-lib.labels" . | indent 4 }}
+spec:
+  version: {{ .Values.version }}
+  count: {{ .Values.kibana.count }}
+  elasticsearchRef:
+    name: {{ template "kubezero-lib.fullname" . }}
+    namespace: {{ .Release.Namespace }}
+  config:
+    elasticsearch.requestTimeout: 180000
+    elasticsearch.shardTimeout: 180000
+    #xpack.monitoring.enabled: false
+    #xpack.monitoring.ui.enabled: false
+    #xpack.ml.enabled: false
+  podTemplate:
+    spec:
+      containers:
+      - name: kibana
+        resources:
+          requests:
+            memory: 1Gi
+            cpu: 100m
+          limits:
+            memory: 2Gi
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
+{{- end }}
