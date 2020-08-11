@@ -1,0 +1,41 @@
+{{ template "chart.header" . }}
+{{ template "chart.description" . }}
+
+{{ template "chart.versionLine" . }}
+
+{{ template "chart.sourceLinkLine" . }}
+
+{{ template "chart.requirementsSection" . }}
+
+## Changes from upstream
+### ECK
+- Operator mapped to controller nodes
+
+### ES
+
+- SSL disabled ( Todo: provide cluster certs and setup Kibana/Fluentd to use https incl. client certs )
+
+- Installed Plugins:
+  - repository-s3
+  - elasticsearch-prometheus-exporter
+
+- [Cross AZ Zone awareness](https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-advanced-node-scheduling.html#k8s-availability-zone-awareness) is implemented via nodeSets
+
+### Kibana
+
+- increased timeout to ES to 3 minutes
+ 
+
+## Manual tasks ATM
+
+-  Install index template
+- setup Kibana
+- create `logstash-*` Index Pattern
+
+
+{{ template "chart.valuesSection" . }}
+
+## Resources:
+
+- https://www.elastic.co/downloads/elastic-cloud-kubernetes
+- https://github.com/elastic/cloud-on-k8s

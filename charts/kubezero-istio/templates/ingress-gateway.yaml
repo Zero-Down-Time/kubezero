@@ -61,6 +61,18 @@ spec:
       serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
       credentialName: public-ingress-cert
   - port:
+      number: 5672
+      name: amqp
+      protocol: TCP
+    hosts:
+    - "*"
+  - port:
+      number: 5671
+      name: amqps
+      protocol: TCP
+    hosts:
+    - "*"
+  - port:
       number: 24224
       name: fluentd-forward
       protocol: TCP

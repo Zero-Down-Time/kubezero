@@ -1,0 +1,83 @@
+{{- if .Values.es.nodeSets }}
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: {{ template "kubezero-lib.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kubezero-lib.labels" . | indent 4 }}
+spec:
+  version: {{ .Values.version }}
+  nodeSets:
+  {{- range .Values.es.nodeSets }}
+  - name: {{ .name }}
+    config:
+      node.master: true
+      node.data: true
+      node.ingest: true
+      node.ml: false
+      prometheus.indices: false
+      {{- if .zone }}
+      node.attr.zone: {{ .zone }}
+      cluster.routing.allocation.awareness.attributes: zone
+      {{- end }}
+    podTemplate:
+      {{- if $.Values.es.s3_snapshot_iamrole }}
+      metadata:
+        annotations:
+          iam.amazonaws.com/role: {{ $.Values.es.s3_snapshot_iamrole }}
+      {{- end }}
+      spec:
+        initContainers:
+        - name: install-plugins
+          command:
+          - sh
+          - -c
+          - |
+            bin/elasticsearch-plugin install --batch repository-s3 && bin/elasticsearch-plugin install --batch https://github.com/vvanholl/elasticsearch-prometheus-exporter/releases/download/{{ $.Values.version }}.0/prometheus-exporter-{{ $.Values.version }}.0.zip
+        containers:
+        - name: elasticsearch
+          resources:
+            requests:
+              cpu: 100m
+              memory: 2500Mi
+            limits:
+              memory: 4Gi
+          env:
+          - name: ES_JAVA_OPTS
+            value: "-Xms2g -Xmx2g"
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    elasticsearch.k8s.elastic.co/cluster-name: {{ $.Values.name }}
+              topologyKey: kubernetes.io/hostname
+          {{- if .zone }}
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: failure-domain.beta.kubernetes.io/zone
+                  operator: In
+                  values:
+                  - {{ .zone }}
+          {{- end }}
+    count: {{ .count }}
+    volumeClaimTemplates:
+    - metadata:
+        name: elasticsearch-data
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: {{ .storage.size }}
+        storageClassName: {{ .storage.class }}
+  {{- end }}
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
+{{- end }}
