@@ -15,8 +15,12 @@ es:
       size: 16Gi
       class: local-sc-xfs
     zone: us-west-2a
-  s3_snapshot_iamrole: "" # INSERT_CLOUDFORMATION_OUTPUT_ElasticSearchSnapshots
-  elastic_password: "" # super_secret_elastic_password
+  s3Snapshot:
+    enabled: true
+    iamrole: "dfsf" # INSERT_CLOUDFORMATION_OUTPUT_ElasticSearchSnapshots
+  elastic_password: "dsfsfs" # super_secret_elastic_password
+
+  prometheus: true
 
 kibana: 
   replicas: 1

@@ -2,8 +2,8 @@ apiVersion: v2
 name: kubezero-logging
 description: KubeZero Umbrella Chart for complete EFK stack
 type: application
-version: 0.0.1
-appVersion: 1.2.0
+version: 0.0.2
+appVersion: 1.2.1
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
