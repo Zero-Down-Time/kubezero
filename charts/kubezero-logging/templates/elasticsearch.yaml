@@ -25,16 +25,23 @@ spec:
       {{- if $.Values.es.s3_snapshot_iamrole }}
       metadata:
         annotations:
-          iam.amazonaws.com/role: {{ $.Values.es.s3_snapshot_iamrole }}
+          iam.amazonaws.com/role: {{ $.Values.es.s3Snapshot.iamrole }}
       {{- end }}
       spec:
+        {{- if or $.Values.es.prometheus $.Values.es.s3Snapshot.enabled }}
         initContainers:
         - name: install-plugins
           command:
           - sh
           - -c
           - |
-            bin/elasticsearch-plugin install --batch repository-s3 && bin/elasticsearch-plugin install --batch https://github.com/vvanholl/elasticsearch-prometheus-exporter/releases/download/{{ $.Values.version }}.0/prometheus-exporter-{{ $.Values.version }}.0.zip
+            {{- if $.Values.es.s3Snapshot.enabled }}
+            bin/elasticsearch-plugin install --batch repository-s3
+            {{- end }}
+            {{- if $.Values.es.prometheus }}
+            bin/elasticsearch-plugin install --batch https://github.com/vvanholl/elasticsearch-prometheus-exporter/releases/download/{{ $.Values.version }}.0/prometheus-exporter-{{ $.Values.version }}.0.zip
+            {{- end }}
+        {{- end }}
         containers:
         - name: elasticsearch
           resources:
@@ -52,7 +59,7 @@ spec:
             - podAffinityTerm:
                 labelSelector:
                   matchLabels:
-                    elasticsearch.k8s.elastic.co/cluster-name: {{ $.Values.name }}
+                    elasticsearch.k8s.elastic.co/cluster-name: {{ template "kubezero-lib.fullname" $ }}
               topologyKey: kubernetes.io/hostname
           {{- if .zone }}
           nodeAffinity:
