@@ -5,7 +5,6 @@ kubezero:
   {{- end }}
   calico:
     enabled: {{ .Values.calico.enabled  }}
-    type: {{ default "kustomize" .Values.calico.type  }}
     values:
       network: {{ default "vxlan" .Values.calico.network }}
       mtu: {{ default "8941" .Values.calico.mtu }}

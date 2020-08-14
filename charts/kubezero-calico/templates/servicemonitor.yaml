@@ -5,7 +5,7 @@ metadata:
   name: calico-node
   labels:
     k8s-app: calico-node
-    prometheus: kube-prometheus
+    release: metrics
 spec:
   jobLabel: k8s-app
   selector:

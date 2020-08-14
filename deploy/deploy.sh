@@ -56,7 +56,7 @@ EOF
     kubectl apply -f cert-manager-backup.yaml
   else
     helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set kiam.not_ready=true --set istio.enabled=false --set metrics.enabled=false --set logging.enabled=false > generated-values.yaml
-    helm upgrade -n argocd kubezero kubezero/kubezero-argo-cd --create-namespace -f generated-values.yaml
+    helm upgrade -n argocd kubezero kubezero/kubezero-argo-cd -f generated-values.yaml
     wait_for kubectl get Issuer -n kube-system kubezero-local-ca-issuer 2>/dev/null 1>&2
     wait_for kubectl get ClusterIssuer letsencrypt-dns-prod 2>/dev/null 1>&2
     kubectl wait --for=condition=Ready -n kube-system Issuer/kubezero-local-ca-issuer
@@ -64,12 +64,12 @@ EOF
   fi
 
   # Now that we have the cert-manager webhook, get the kiam certs in place but do NOT deploy kiam yet
-  helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set kiam.not_ready=true --set kiam.enabled=false > generated-values.yaml
-  helm upgrade -n argocd kubezero kubezero/kubezero-argo-cd --create-namespace -f generated-values.yaml
+  helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set kiam.not_ready=true --set kiam.enabled=false --set istio.enabled=false --set metrics.enabled=false --set logging.enabled=false > generated-values.yaml
+  helm upgrade -n argocd kubezero kubezero/kubezero-argo-cd -f generated-values.yaml
 
   # Now lets make sure kiam is working
-  helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set kiam.not_ready=true > generated-values.yaml
-  helm upgrade -n argocd kubezero kubezero/kubezero-argo-cd --create-namespace -f generated-values.yaml
+  helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set kiam.not_ready=true --set istio.enabled=false --set metrics.enabled=false --set logging.enabled=false > generated-values.yaml
+  helm upgrade -n argocd kubezero kubezero/kubezero-argo-cd -f generated-values.yaml
   wait_for kubectl get daemonset -n kube-system kiam-agent 2>/dev/null 1>&2
   kubectl rollout status daemonset -n kube-system kiam-agent
 

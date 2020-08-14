@@ -2,7 +2,7 @@ kubezero-aws-ebs-csi-driver
 ===========================
 KubeZero Umbrella Chart for aws-ebs-csi-driver
 
-Current chart version is `0.2.0`
+Current chart version is `0.3.0`
 
 Source code can be found [here](https://kubezero.com)
 
@@ -10,7 +10,7 @@ Source code can be found [here](https://kubezero.com)
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.1 |
+| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## IAM Role
 If you use kiam or kube2iam and restrict access on nodes running this controller please adjust:

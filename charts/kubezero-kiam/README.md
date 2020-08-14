@@ -2,7 +2,7 @@ kubezero-kiam
 =============
 KubeZero Umbrella Chart for Kiam
 
-Current chart version is `0.2.6`
+Current chart version is `0.2.7`
 
 Source code can be found [here](https://kubezero.com)
 
@@ -11,7 +11,7 @@ Source code can be found [here](https://kubezero.com)
 | Repository | Name | Version |
 |------------|------|---------|
 | https://uswitch.github.io/kiam-helm-charts/charts/ | kiam | 5.8.1 |
-| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.1 |
+| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## KubeZero default configuration
 We run agents on the controllers as well, so we force eg. ebs csi controllers and others to assume roles etc.
