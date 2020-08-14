@@ -22,7 +22,7 @@ spec:
       cluster.routing.allocation.awareness.attributes: zone
       {{- end }}
     podTemplate:
-      {{- if $.Values.es.s3_snapshot_iamrole }}
+      {{- if $.Values.es.s3Snapshot.iamrole }}
       metadata:
         annotations:
           iam.amazonaws.com/role: {{ $.Values.es.s3Snapshot.iamrole }}
@@ -36,10 +36,10 @@ spec:
           - -c
           - |
             {{- if $.Values.es.s3Snapshot.enabled }}
-            bin/elasticsearch-plugin install --batch repository-s3
+            bin/elasticsearch-plugin install --batch repository-s3;
             {{- end }}
             {{- if $.Values.es.prometheus }}
-            bin/elasticsearch-plugin install --batch https://github.com/vvanholl/elasticsearch-prometheus-exporter/releases/download/{{ $.Values.version }}.0/prometheus-exporter-{{ $.Values.version }}.0.zip
+            bin/elasticsearch-plugin install --batch https://github.com/vvanholl/elasticsearch-prometheus-exporter/releases/download/{{ $.Values.version }}.0/prometheus-exporter-{{ $.Values.version }}.0.zip;
             {{- end }}
         {{- end }}
         containers:

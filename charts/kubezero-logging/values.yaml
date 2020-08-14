@@ -23,7 +23,7 @@ es:
   prometheus: false
 
 kibana:
-  #replicas: 1
+  count: 1
   #servicename: kibana.example.com
   istio:
     enabled: false

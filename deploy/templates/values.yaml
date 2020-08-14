@@ -9,7 +9,7 @@ kubezero:
     values:
       network: {{ default "vxlan" .Values.calico.network }}
       mtu: {{ default "8941" .Values.calico.mtu }}
-      prometheus: {{ .Values.prometheus.enabled }}
+      prometheus: {{ .Values.metrics.enabled }}
   cert-manager:
     enabled: {{ index .Values "cert-manager" "enabled" }}
     values:
@@ -59,7 +59,7 @@ kubezero:
             replicas: {{ ternary 2 1 .Values.HighAvailableControlplane }}
           prometheus:
             servicemonitor:
-              enabled: {{ .Values.prometheus.enabled }}
+              enabled: {{ .Values.metrics.enabled }}
   {{- end }}
 
   {{- if not .Values.kiam.not_ready }}
@@ -122,6 +122,10 @@ kubezero:
         {{- toYaml . | nindent 8 }}
         {{- end }}
       {{- end }}
+
+  logging:
+    enabled: {{ .Values.logging.enabled }}
+    values:
 
 argo-cd:
   {{- with index .Values "argo-cd" "server" }}

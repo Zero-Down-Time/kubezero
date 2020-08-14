@@ -1,0 +1,13 @@
+{{- if index .Values "logging" "enabled" }}
+{{ template "kubezero-app.app" dict "root" . "name" "logging" "type" "helm" "namespace" "logging"}}
+  syncPolicy:
+    automated:
+      prune: true
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: logging
+  annotations:
+    iam.amazonaws.com/permitted: ".*ElasticSearchSnapshots.*"
+{{- end }}

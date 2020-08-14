@@ -38,3 +38,6 @@ istio:
 
 metrics:
   enabled: false
+
+logging:
+  enabled: false
