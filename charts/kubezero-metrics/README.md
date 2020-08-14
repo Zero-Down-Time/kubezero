@@ -2,7 +2,7 @@ kubezero-metrics
 ================
 KubeZero Umbrella Chart for prometheus-operator
 
-Current chart version is `0.1.2`
+Current chart version is `0.1.3`
 
 Source code can be found [here](https://kubezero.com)
 
@@ -87,6 +87,7 @@ Source code can be found [here](https://kubezero.com)
 | prometheus-operator.prometheusOperator.enabled | bool | `true` |  |
 | prometheus-operator.prometheusOperator.manageCrds | bool | `false` |  |
 | prometheus-operator.prometheusOperator.namespaces.additional[0] | string | `"kube-system"` |  |
+| prometheus-operator.prometheusOperator.namespaces.additional[1] | string | `"logging"` |  |
 | prometheus-operator.prometheusOperator.namespaces.releaseNamespace | bool | `true` |  |
 | prometheus-operator.prometheusOperator.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
 | prometheus-operator.prometheusOperator.tlsProxy.enabled | bool | `false` |  |

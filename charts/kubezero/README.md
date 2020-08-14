@@ -2,7 +2,7 @@ kubezero
 ========
 KubeZero ArgoCD Application - Root App of Apps chart of KubeZero
 
-Current chart version is `0.4.1`
+Current chart version is `0.4.3`
 
 Source code can be found [here](https://kubezero.com)
 
@@ -10,7 +10,7 @@ Source code can be found [here](https://kubezero.com)
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.1 |
+| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## Chart Values
 
@@ -27,5 +27,6 @@ Source code can be found [here](https://kubezero.com)
 | istio.enabled | bool | `false` |  |
 | kiam.enabled | bool | `false` |  |
 | local-volume-provisioner.enabled | bool | `false` |  |
+| logging.enabled | bool | `false` |  |
 | metrics.enabled | bool | `false` |  |
 | platform | string | `"aws"` |  |

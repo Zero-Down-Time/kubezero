@@ -2,7 +2,7 @@ kubezero-logging
 ================
 KubeZero Umbrella Chart for complete EFK stack
 
-Current chart version is `0.0.1`
+Current chart version is `0.0.2`
 
 Source code can be found [here](https://kubezero.com)
 
@@ -16,13 +16,20 @@ Source code can be found [here](https://kubezero.com)
 ### ECK
 - Operator mapped to controller nodes
 
-### ElasticSearch
+### ES
+
+- SSL disabled ( Todo: provide cluster certs and setup Kibana/Fluentd to use https incl. client certs )
 
 - Installed Plugins:
-    - repository-s3
-    - elasticsearch-prometheus-exporter
+  - repository-s3
+  - elasticsearch-prometheus-exporter
 
 - [Cross AZ Zone awareness](https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-advanced-node-scheduling.html#k8s-availability-zone-awareness) is implemented via nodeSets
+
+### Kibana
+
+- increased timeout to ES to 3 minutes
+ 
 
 ## Manual tasks ATM
 
@@ -30,16 +37,21 @@ Source code can be found [here](https://kubezero.com)
 - setup Kibana
 - create `logstash-*` Index Pattern
 
+
 ## Chart Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| es.replicas | int | `2` |  |
-| es.storage.class | string | `"local-sc-xfs"` |  |
-| es.storage.size | string | `"16Gi"` |  |
-| fullnameOverride | string | `"logging"` |  |
-| kibana.replicas | int | `1` |  |
-| version | string | `"7.6.0"` |  |
+| es.elastic_password | string | `""` |  |
+| es.nodeSets | list | `[]` |  |
+| es.prometheus | bool | `false` |  |
+| es.s3Snapshot.enabled | bool | `false` |  |
+| es.s3Snapshot.iamrole | string | `""` |  |
+| kibana.count | int | `1` |  |
+| kibana.istio.enabled | bool | `false` |  |
+| kibana.istio.gateway | string | `"istio-system/ingressgateway"` |  |
+| kibana.istio.url | string | `""` |  |
+| version | string | `"7.8.1"` |  |
 
 ## Resources:
 
