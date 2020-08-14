@@ -1,8 +1,4 @@
-# Default values for zdt-logging.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-# This is for backwards compatibility with older zdt-logging setup
+# use this for backwards compatability
 # fullnameOverride: ""
 
 # Version for ElasticSearch and Kibana have to match so we define it at top-level

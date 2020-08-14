@@ -56,10 +56,9 @@ spec:
         affinity:
           podAntiAffinity:
             requiredDuringSchedulingIgnoredDuringExecution:
-            - podAffinityTerm:
-                labelSelector:
-                  matchLabels:
-                    elasticsearch.k8s.elastic.co/cluster-name: {{ template "kubezero-lib.fullname" $ }}
+            - labelSelector:
+                matchLabels:
+                  elasticsearch.k8s.elastic.co/cluster-name: {{ template "kubezero-lib.fullname" $ }}
               topologyKey: kubernetes.io/hostname
           {{- if .zone }}
           nodeAffinity:
