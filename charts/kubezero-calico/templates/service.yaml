@@ -1,4 +1,5 @@
 {{- if .Values.prometheus }}
+apiVersion: v1
 kind: Service
 metadata:
   labels:
