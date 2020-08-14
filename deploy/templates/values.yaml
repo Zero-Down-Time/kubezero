@@ -59,6 +59,10 @@ kubezero:
           prometheus:
             servicemonitor:
               enabled: {{ .Values.metrics.enabled }}
+        agent:
+          prometheus:
+            servicemonitor:
+              enabled: {{ .Values.metrics.enabled }}
   {{- end }}
 
   {{- if not .Values.kiam.not_ready }}
