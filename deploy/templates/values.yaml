@@ -129,6 +129,9 @@ kubezero:
   logging:
     enabled: {{ .Values.logging.enabled }}
     values:
+      {{- with .Values.logging }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
 
 argo-cd:
   {{- with index .Values "argo-cd" "server" }}
