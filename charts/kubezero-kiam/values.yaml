@@ -26,6 +26,7 @@ kiam:
     prometheus:
       servicemonitor:
         enabled: false
+        interval: 30s
         labels:
           release: metrics
     log:
@@ -53,6 +54,7 @@ kiam:
     prometheus:
       servicemonitor:
         enabled: false
+        interval: 30s
         labels:
           release: metrics
     log:
