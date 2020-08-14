@@ -33,8 +33,7 @@ metrics:
     prometheus:
       enabled: false
 
-# Deprecated once metrics goes live
-prometheus:
+logging:
   enabled: false
 
 argo-cd:

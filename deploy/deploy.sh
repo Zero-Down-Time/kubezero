@@ -41,7 +41,7 @@ EOF
   fi
 
   # Deploy initial argo-cad
-  helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set kiam.not_ready=true --set cert-manager.not_ready=true --set istio.enabled=false --set metrics.enabled=false > generated-values.yaml
+  helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set kiam.not_ready=true --set cert-manager.not_ready=true --set istio.enabled=false --set metrics.enabled=false --set logging.enabled=false > generated-values.yaml
   helm install -n argocd kubezero kubezero/kubezero-argo-cd --create-namespace -f generated-values.yaml
   # Wait for argocd-server to be running
   kubectl rollout status deployment -n argocd kubezero-argocd-server
@@ -55,7 +55,7 @@ EOF
   if [ -f cert-manager-backup.yaml ]; then
     kubectl apply -f cert-manager-backup.yaml
   else
-    helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set kiam.not_ready=true --set istio.enabled=false --set metrics.enabled=false > generated-values.yaml
+    helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml --set kiam.not_ready=true --set istio.enabled=false --set metrics.enabled=false --set logging.enabled=false > generated-values.yaml
     helm upgrade -n argocd kubezero kubezero/kubezero-argo-cd --create-namespace -f generated-values.yaml
     wait_for kubectl get Issuer -n kube-system kubezero-local-ca-issuer 2>/dev/null 1>&2
     wait_for kubectl get ClusterIssuer letsencrypt-dns-prod 2>/dev/null 1>&2

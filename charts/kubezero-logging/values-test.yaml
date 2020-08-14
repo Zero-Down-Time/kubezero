@@ -10,10 +10,11 @@ version: 7.6.0
 
 es:
   nodeSets:
-  - count: 2
+  - name: default-zone-0
+    count: 2
     storage:
-      size: 16Gi
-      class: local-sc-xfs
+      size: 512Gi
+      class: ebs-sc-gp2-xfs
     zone: us-west-2a
   s3Snapshot:
     enabled: true
@@ -23,7 +24,6 @@ es:
   prometheus: true
 
 kibana: 
-  replicas: 1
   istio:
     enabled: true
     url: kibana.example.com
