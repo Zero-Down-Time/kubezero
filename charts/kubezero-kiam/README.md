@@ -2,7 +2,7 @@ kubezero-kiam
 =============
 KubeZero Umbrella Chart for Kiam
 
-Current chart version is `0.2.7`
+Current chart version is `0.2.8`
 
 Source code can be found [here](https://kubezero.com)
 
@@ -41,6 +41,7 @@ By default all access to the meta-data service is blocked, expect for:
 | kiam.agent.image.tag | string | `"v3.6"` |  |
 | kiam.agent.log.level | string | `"warn"` |  |
 | kiam.agent.prometheus.servicemonitor.enabled | bool | `false` |  |
+| kiam.agent.prometheus.servicemonitor.labels.release | string | `"metrics"` |  |
 | kiam.agent.sslCertHostPath | string | `"/etc/ssl/certs"` |  |
 | kiam.agent.tlsCerts.caFileName | string | `"ca.crt"` |  |
 | kiam.agent.tlsCerts.certFileName | string | `"tls.crt"` |  |
@@ -57,6 +58,7 @@ By default all access to the meta-data service is blocked, expect for:
 | kiam.server.log.level | string | `"warn"` |  |
 | kiam.server.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
 | kiam.server.prometheus.servicemonitor.enabled | bool | `false` |  |
+| kiam.server.prometheus.servicemonitor.labels.release | string | `"metrics"` |  |
 | kiam.server.service.port | int | `6444` |  |
 | kiam.server.service.targetPort | int | `6444` |  |
 | kiam.server.sslCertHostPath | string | `"/etc/ssl/certs"` |  |
