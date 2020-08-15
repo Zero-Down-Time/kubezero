@@ -41,6 +41,7 @@ By default all access to the meta-data service is blocked, expect for:
 | kiam.agent.image.tag | string | `"v3.6"` |  |
 | kiam.agent.log.level | string | `"warn"` |  |
 | kiam.agent.prometheus.servicemonitor.enabled | bool | `false` |  |
+| kiam.agent.prometheus.servicemonitor.interval | string | `"30s"` |  |
 | kiam.agent.prometheus.servicemonitor.labels.release | string | `"metrics"` |  |
 | kiam.agent.sslCertHostPath | string | `"/etc/ssl/certs"` |  |
 | kiam.agent.tlsCerts.caFileName | string | `"ca.crt"` |  |
@@ -58,6 +59,7 @@ By default all access to the meta-data service is blocked, expect for:
 | kiam.server.log.level | string | `"warn"` |  |
 | kiam.server.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
 | kiam.server.prometheus.servicemonitor.enabled | bool | `false` |  |
+| kiam.server.prometheus.servicemonitor.interval | string | `"30s"` |  |
 | kiam.server.prometheus.servicemonitor.labels.release | string | `"metrics"` |  |
 | kiam.server.service.port | int | `6444` |  |
 | kiam.server.service.targetPort | int | `6444` |  |
@@ -79,5 +81,5 @@ By default all access to the meta-data service is blocked, expect for:
 ## Resources
 - https://github.com/uswitch/kiam
 - https://www.bluematador.com/blog/iam-access-in-kubernetes-kube2iam-vs-kiam
-
+- [Grafana Dashboard](https://raw.githubusercontent.com/uswitch/kiam/master/docs/dashboard-prom.json)
 ![Kiam overview](./kiam_architecure.png)

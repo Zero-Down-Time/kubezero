@@ -26,6 +26,11 @@ argo-cd:
 
   # Run Argo on the controllers
   controller:
+    args:
+      statusProcessors: "2"
+      operationProcessors: "1"
+      appResyncPeriod: "300"
+
     nodeSelector:
       node-role.kubernetes.io/master: ""
     tolerations:
@@ -44,30 +49,30 @@ argo-cd:
       # argo-cd.server.config.url -- ArgoCD hostname to be exposed via Istio
       url: argocd.example.com
 
-  resource.customizations: |
-    cert-manager.io/Certificate:
-      # Lua script for customizing the health status assessment
-      health.lua: |
-        hs = {}
-        if obj.status ~= nil then
-          if obj.status.conditions ~= nil then
-            for i, condition in ipairs(obj.status.conditions) do
-              if condition.type == "Ready" and condition.status == "False" then
-                hs.status = "Degraded"
-                hs.message = condition.message
-                return hs
-              end
-              if condition.type == "Ready" and condition.status == "True" then
-                hs.status = "Healthy"
-                hs.message = condition.message
-                return hs
+      resource.customizations: |
+        cert-manager.io/Certificate:
+          # Lua script for customizing the health status assessment
+          health.lua: |
+            hs = {}
+            if obj.status ~= nil then
+              if obj.status.conditions ~= nil then
+                for i, condition in ipairs(obj.status.conditions) do
+                  if condition.type == "Ready" and condition.status == "False" then
+                    hs.status = "Degraded"
+                    hs.message = condition.message
+                    return hs
+                  end
+                  if condition.type == "Ready" and condition.status == "True" then
+                    hs.status = "Healthy"
+                    hs.message = condition.message
+                    return hs
+                  end
+                end
               end
             end
-          end
-        end
-        hs.status = "Progressing"
-        hs.message = "Waiting for certificate"
-        return hs
+            hs.status = "Progressing"
+            hs.message = "Waiting for certificate"
+            return hs
 
     # Rename former https port to grpc, works with istio + insecure
     service:
