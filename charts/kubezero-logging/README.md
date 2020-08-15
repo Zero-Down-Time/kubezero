@@ -2,7 +2,7 @@ kubezero-logging
 ================
 KubeZero Umbrella Chart for complete EFK stack
 
-Current chart version is `0.0.2`
+Current chart version is `0.1.0`
 
 Source code can be found [here](https://kubezero.com)
 
@@ -42,7 +42,7 @@ Source code can be found [here](https://kubezero.com)
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| es.elastic_password | string | `""` |  |
+| elastic_password | string | `""` |  |
 | es.nodeSets | list | `[]` |  |
 | es.prometheus | bool | `false` |  |
 | es.s3Snapshot.enabled | bool | `false` |  |
