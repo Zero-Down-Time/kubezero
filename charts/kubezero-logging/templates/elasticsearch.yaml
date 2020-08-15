@@ -16,7 +16,9 @@ spec:
       node.data: true
       node.ingest: true
       node.ml: false
+      {{- if $.Values.es.prometheus }}
       prometheus.indices: false
+      {{- end }}
       {{- if .zone }}
       node.attr.zone: {{ .zone }}
       cluster.routing.allocation.awareness.attributes: zone
