@@ -19,6 +19,9 @@ spec:
     port: http
     path: /_prometheus/metrics
   selector:
+    matchExpressions:
+      key: elasticsearch.k8s.elastic.co/statefulset-name
+      operator: DoesNotExist
     matchLabels:
       common.k8s.elastic.co/type: elasticsearch
       elasticsearch.k8s.elastic.co/cluster-name: {{ template "kubezero-lib.fullname" $ }}
