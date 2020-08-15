@@ -6,6 +6,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
 {{ include "kubezero-lib.labels" . | indent 4 }}
+    release: metrics
 spec:
   endpoints:
   - basicAuth:
