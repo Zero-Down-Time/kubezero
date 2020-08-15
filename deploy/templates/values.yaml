@@ -129,8 +129,28 @@ kubezero:
   logging:
     enabled: {{ .Values.logging.enabled }}
     values:
-      {{- with .Values.logging }}
-      {{- toYaml . | nindent 6 }}
+      elastic_password: {{ .Values.logging.elastic_password }}
+
+      {{- if .Values.logging.version }}
+      version: {{ .Values.logging.version }}
+
+      {{- if .Values.logging.fullnameOverride }}
+      {{- end }}
+      fullnameOverride: {{ .Values.logging.fullnameOverride }}
+      {{- end }}
+      es:
+        {{- if .Values.logging.es.nodeSets }}
+        nodeSets:
+        {{- with .Values.logging.es.nodeSets }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- end }}
+        prometheus: {{ .Values.metrics.enabled }}
+      {{- if .Values.logging.kibana }}
+      kibana:
+        {{- with .Values.logging.kibana }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
       {{- end }}
 
 argo-cd:

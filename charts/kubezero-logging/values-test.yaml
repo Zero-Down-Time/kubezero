@@ -8,6 +8,8 @@ fullnameOverride: logging
 # Version for ElasticSearch and Kibana have to match so we define it at top-level
 version: 7.6.0
 
+elastic_password: "dsfsfs" # super_secret_elastic_password
+
 es:
   nodeSets:
   - name: default-zone-0
@@ -19,7 +21,6 @@ es:
   s3Snapshot:
     enabled: true
     iamrole: "dfsf" # INSERT_CLOUDFORMATION_OUTPUT_ElasticSearchSnapshots
-  elastic_password: "dsfsfs" # super_secret_elastic_password
 
   prometheus: true
 
