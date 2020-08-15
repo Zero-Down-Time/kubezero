@@ -133,11 +133,12 @@ kubezero:
 
       {{- if .Values.logging.version }}
       version: {{ .Values.logging.version }}
+      {{- end }}
 
       {{- if .Values.logging.fullnameOverride }}
-      {{- end }}
       fullnameOverride: {{ .Values.logging.fullnameOverride }}
       {{- end }}
+
       es:
         {{- if .Values.logging.es.nodeSets }}
         nodeSets:
@@ -146,6 +147,14 @@ kubezero:
         {{- end }}
         {{- end }}
         prometheus: {{ .Values.metrics.enabled }}
+
+        {{- if .Values.logging.es.s3Snapshot }}
+        s3Snapshot:
+          {{- with .Values.logging.es.s3Snapshot }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+        {{- end }}
+
       {{- if .Values.logging.kibana }}
       kibana:
         {{- with .Values.logging.kibana }}
