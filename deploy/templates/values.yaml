@@ -164,11 +164,14 @@ kubezero:
 
 argo-cd:
   controller:
-    metrics: {{ .Values.metrics.enabled }}
+    metrics:
+      enabled: {{ .Values.metrics.enabled }}
   repoServer:
-    metrics: {{ .Values.metrics.enabled }}
+    metrics:
+      enabled: {{ .Values.metrics.enabled }}
   server:
-    metrics: {{ .Values.metrics.enabled }}
+    metrics:
+      enabled: {{ .Values.metrics.enabled }}
     {{- with index .Values "argo-cd" "server" }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
