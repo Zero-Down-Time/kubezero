@@ -163,10 +163,15 @@ kubezero:
       {{- end }}
 
 argo-cd:
-  {{- with index .Values "argo-cd" "server" }}
+  controller:
+    metrics: {{ .Values.metrics.enabled }}
+  repoServer:
+    metrics: {{ .Values.metrics.enabled }}
   server:
+    metrics: {{ .Values.metrics.enabled }}
+    {{- with index .Values "argo-cd" "server" }}
     {{- toYaml . | nindent 4 }}
-  {{- end }}
+    {{- end }}
   {{- with index .Values "argo-cd" "configs" }}
   configs:
     {{- toYaml . | nindent 4 }}

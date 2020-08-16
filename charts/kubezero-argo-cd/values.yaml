@@ -24,13 +24,21 @@ argo-cd:
   #    argocdServerAdminPassword: "$2a$10$ivKzaXVxMqdeDSfS3nqi1Od3iDbnL7oXrixzDfZFRHlXHnAG6LydG"
   #    argocdServerAdminPasswordMtime: "2020-04-24T15:33:09BST"
 
-  # Run Argo on the controllers
   controller:
     args:
       statusProcessors: "2"
       operationProcessors: "1"
       appResyncPeriod: "300"
 
+    metrics:
+      enabled: false
+      serviceMonitor:
+        enabled: true
+        namespace: monitoring
+        additionalLabels:
+          release: metrics
+
+    # controller to masters
     nodeSelector:
       node-role.kubernetes.io/master: ""
     tolerations:
@@ -38,6 +46,14 @@ argo-cd:
       effect: NoSchedule
 
   repoServer:
+    metrics:
+      enabled: false
+      serviceMonitor:
+        enabled: true
+        namespace: monitoring
+        additionalLabels:
+          release: metrics
+
     nodeSelector:
       node-role.kubernetes.io/master: ""
     tolerations:
@@ -77,6 +93,14 @@ argo-cd:
     # Rename former https port to grpc, works with istio + insecure
     service:
       servicePortHttpsName: grpc
+
+    metrics:
+      enabled: false
+      serviceMonitor:
+        enabled: true
+        namespace: monitoring
+        additionalLabels:
+          release: metrics
 
     extraArgs:
     - --insecure
