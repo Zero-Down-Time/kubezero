@@ -1,4 +1,5 @@
-{{- if .Values.kibana }}
+{{- if .Values.es.nodeSets }}
+# Only deploy Kibana if we have local ES cluster
 apiVersion: kibana.k8s.elastic.co/v1
 kind: Kibana
 metadata:
