@@ -72,6 +72,8 @@ fluentd:
   output:
     host: logging-es-http
 
+  shared_key: "cloudbender"
+
   env:
     OUTPUT_USER: elastic
     OUTPUT_SSL_VERIFY: "false"
@@ -85,7 +87,7 @@ fluentd:
   - name: FLUENTD_SHARED_KEY
     valueFrom:
       secretKeyRef:
-        name: fluentd-config
+        name: logging-fluentd-secret
         key: shared_key
 
   extraVolumes:
