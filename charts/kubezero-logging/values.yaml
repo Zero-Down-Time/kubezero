@@ -35,8 +35,8 @@ fluentd:
   istio:
     enabled: false
 
-  # we wont persistent buffering
-  useStatefulSet: true
+  # broken as of 2.5.1 ;-(
+  # useStatefulSet: true
   replicaCount: 2
 
   plugins:
