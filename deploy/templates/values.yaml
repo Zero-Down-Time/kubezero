@@ -139,6 +139,7 @@ kubezero:
       fullnameOverride: {{ .Values.logging.fullnameOverride }}
       {{- end }}
 
+      {{- if .Values.logging.es }}
       es:
         {{- if .Values.logging.es.nodeSets }}
         nodeSets:
@@ -154,6 +155,7 @@ kubezero:
           {{- toYaml . | nindent 10 }}
           {{- end }}
         {{- end }}
+      {{- end }}
 
       {{- if .Values.logging.kibana }}
       kibana:
@@ -162,6 +164,19 @@ kubezero:
         {{- end }}
       {{- end }}
 
+      fluentd:
+        enabled: {{ .Values.logging.fluentd.enabled }}
+        metrics:
+          enabled: {{ .Values.metrics.enabled }}
+        url: {{ .Values.logging.fluentd.url }}
+        {{- if and .Values.logging.fluentd.istio .Values.istio.enabled }}
+        istio:
+          {{- with .Values.logging.fluentd.istio }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+        {{- end }}
+
+        
 argo-cd:
   controller:
     metrics:

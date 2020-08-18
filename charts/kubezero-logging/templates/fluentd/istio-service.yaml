@@ -1,0 +1,28 @@
+{{- if .Values.fluentd.istio.enabled }}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: fluentd
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kubezero-lib.labels" . | indent 4 }}
+spec:
+  gateways:
+  - {{ .Values.fluentd.istio.gateway }}
+  hosts:
+  - {{ .Values.fluentd.url }}
+  tcp:
+  - match:
+    - port: 24224
+    route:
+    - destination:
+        host: fluentd
+        port:
+          number: 24224
+  http:
+  - route:
+    - destination:
+        host: fluentd
+        port:
+          number: 9880
+{{- end }}
