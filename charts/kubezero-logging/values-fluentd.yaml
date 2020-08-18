@@ -1,0 +1,11 @@
+fluentd:
+  enabled: true
+
+  metrics:
+    enabled: true
+
+  url: fluentd.example.com
+  istio:
+    enabled: true
+    gateway: istio-system/private-ingressgateway
+

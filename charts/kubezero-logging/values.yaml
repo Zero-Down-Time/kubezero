@@ -26,3 +26,168 @@ kibana:
     enabled: false
     gateway: "istio-system/ingressgateway"
     url: "" # kibana.example.com
+
+fluentd:
+  enabled: false
+  #image:
+    #repository: quay.io/fluentd_elasticsearch/fluentd
+    #tag: v2.9.0
+  istio:
+    enabled: false
+
+  # we wont persistent buffering
+  useStatefulSet: true
+  replicaCount: 2
+
+  plugins:
+    enabled: true
+    pluginsList:
+    - fluent-plugin-detect-exceptions
+  # - fluent-plugin-s3
+  # - fluent-plugin-grok-parser
+
+  persistence:
+    enabled: true
+    storageClass: "ebs-sc-gp2-xfs"
+    accessMode: ReadWriteOnce
+    size: 4Gi
+
+  service:
+    ports:
+    - name: tcp-forward
+      protocol: TCP
+      containerPort: 24224
+    - name: http-fluentd
+      protocol: TCP
+      containerPort: 9880
+
+  metrics:
+    enabled: false
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: metrics
+      namespace: monitoring
+
+  output:
+    host: logging-es-http
+
+  env:
+    OUTPUT_USER: elastic
+    OUTPUT_SSL_VERIFY: "false"
+
+  extraEnvVars:
+  - name: OUTPUT_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: logging-es-elastic-user
+        key: elastic
+  - name: FLUENTD_SHARED_KEY
+    valueFrom:
+      secretKeyRef:
+        name: fluentd-config
+        key: shared_key
+
+  extraVolumes:
+    - name: fluentd-certs
+      secret:
+        secretName: fluentd-certificate
+  extraVolumeMounts:
+    - name: fluentd-certs
+      mountPath: /mnt/fluentd-certs
+      readOnly: true
+
+  configMaps:
+    forward-input.conf: |
+      <source>
+        @type forward
+        port 24224
+        bind 0.0.0.0
+        skip_invalid_event true
+        <transport tls>
+          cert_path /mnt/fluentd-certs/tls.crt
+          private_key_path /mnt/fluentd-certs/tls.key
+        </transport>
+        <security>
+          self_hostname "#{ENV['HOSTNAME']}"
+          shared_key "#{ENV['FLUENTD_SHARED_KEY']}"
+        </security>
+      </source>
+
+    output.conf: |
+      <match **>
+        @id elasticsearch
+        @type elasticsearch
+        @log_level info
+        include_tag_key true
+        id_key id
+        remove_keys id
+
+        # This pipeline incl. eg. GeoIP
+        pipeline fluentd
+
+        host "#{ENV['OUTPUT_HOST']}"
+        port "#{ENV['OUTPUT_PORT']}"
+        scheme "#{ENV['OUTPUT_SCHEME']}"
+        ssl_version "#{ENV['OUTPUT_SSL_VERSION']}"
+        ssl_verify "#{ENV['OUTPUT_SSL_VERIFY']}"
+        user "#{ENV['OUTPUT_USER']}"
+        password "#{ENV['OUTPUT_PASSWORD']}"
+
+        logstash_format true
+        reload_connections false
+        reconnect_on_error true
+        reload_on_failure true
+        request_timeout 15s
+
+        <buffer>
+          @type file
+          path /var/log/fluentd-buffers/kubernetes.system.buffer
+          flush_mode interval
+          flush_thread_count 2
+          flush_interval 5s
+          flush_at_shutdown true
+          retry_type exponential_backoff
+          retry_timeout 60m
+          retry_max_interval 30
+          chunk_limit_size "#{ENV['OUTPUT_BUFFER_CHUNK_LIMIT']}"
+          queue_limit_length "#{ENV['OUTPUT_BUFFER_QUEUE_LIMIT']}"
+          overflow_action drop_oldest_chunk
+        </buffer>
+      </match>
+
+#  filter.conf: |
+#    <filter auth system.auth>
+#      @type parser
+#      key_name message
+#      reserve_data true
+#      reserve_time true
+#      <parse>
+#        @type grok
+#
+#        # SSH
+#        <grok>
+#          pattern %{DATA:system.auth.ssh.event} %{DATA:system.auth.ssh.method} for (invalid user )?%{DATA:system.auth.user} from %{IPORHOST:system.auth.ip} port %{NUMBER:system.auth.port} ssh2(: %{GREEDYDATA:system.auth.ssh.signature})?
+#        </grok>
+#        <grok>
+#          pattern %{DATA:system.auth.ssh.event} user %{DATA:system.auth.user} from %{IPORHOST:system.auth.ip}
+#        </grok>
+#
+#        # sudo
+#        <grok>
+#          pattern \s*%{DATA:system.auth.user} :( %{DATA:system.auth.sudo.error} ;)? TTY=%{DATA:system.auth.sudo.tty} ; PWD=%{DATA:system.auth.sudo.pwd} ; USER=%{DATA:system.auth.sudo.user} ; COMMAND=%{GREEDYDATA:system.auth.sudo.command}
+#        </grok>
+#
+#        # Users
+#        <grok>
+#          pattern new group: name=%{DATA:system.auth.groupadd.name}, GID=%{NUMBER:system.auth.groupadd.gid}
+#        </grok>
+#        <grok>
+#          pattern new user: name=%{DATA:system.auth.useradd.name}, UID=%{NUMBER:system.auth.useradd.uid}, GID=%{NUMBER:system.auth.useradd.gid}, home=%{DATA:system.auth.useradd.home}, shell=%{DATA:system.auth.useradd.shell}$
+#        </grok>
+#
+#        <grok>
+#          pattern %{GREEDYDATA:message}
+#        </grok>
+#      </parse>
+#    </filter>

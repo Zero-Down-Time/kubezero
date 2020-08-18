@@ -29,3 +29,6 @@ kibana:
     enabled: true
     url: kibana.example.com
     gateway: istio-system/private-ingressgateway
+
+fluentd:
+  enabled: true

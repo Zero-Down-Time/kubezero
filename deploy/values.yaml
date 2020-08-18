@@ -35,6 +35,8 @@ metrics:
 
 logging:
   enabled: false
+  fluentd:
+   enabled: false
 
 argo-cd:
   server: {}
