@@ -29,9 +29,9 @@ kibana:
 
 fluentd:
   enabled: false
-  #image:
-    #repository: quay.io/fluentd_elasticsearch/fluentd
-    #tag: v2.9.0
+  image:
+    repository: quay.io/fluentd_elasticsearch/fluentd
+    tag: v2.9.0
   istio:
     enabled: false
 
@@ -40,11 +40,11 @@ fluentd:
   replicaCount: 2
 
   plugins:
-    enabled: true
+    enabled: false
     pluginsList:
-    - fluent-plugin-detect-exceptions
-  # - fluent-plugin-s3
-  # - fluent-plugin-grok-parser
+    #- fluent-plugin-detect-exceptions
+    #- fluent-plugin-s3
+    #- fluent-plugin-grok-parser
 
   #persistence:
   #  enabled: true
