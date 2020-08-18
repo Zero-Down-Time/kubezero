@@ -46,11 +46,11 @@ fluentd:
   # - fluent-plugin-s3
   # - fluent-plugin-grok-parser
 
-  persistence:
-    enabled: true
-    storageClass: "ebs-sc-gp2-xfs"
-    accessMode: ReadWriteOnce
-    size: 4Gi
+  #persistence:
+  #  enabled: true
+  #  storageClass: "ebs-sc-gp2-xfs"
+  #  accessMode: ReadWriteOnce
+  #  size: 4Gi
 
   service:
     ports:
