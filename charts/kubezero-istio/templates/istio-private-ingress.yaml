@@ -35,7 +35,7 @@ spec:
         - name: ISTIO_META_ROUTER_MODE
           value: standard
         - name: ISTIO_META_IDLE_TIMEOUT
-          value: "60s"
+          value: "3600s"
         {{- if eq .Values.ingress.type "NodePort" }}
         nodeSelector:
           node.kubernetes.io/ingress.private: "{{ .Values.ingress.private.nodeSelector }}"
