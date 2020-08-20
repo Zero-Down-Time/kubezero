@@ -15,6 +15,11 @@ kubezero:
       # kubezero.global.defaultSource.pathPrefix -- optional path prefix within repoURL to support eg. remote subtrees
       pathPrefix: ''
 
+    # syncPolicy, details see: https://argoproj.github.io/argo-cd/user-guide/auto_sync
+    #syncPolicy:
+    #  automated:
+    #    prune: true
+
 argo-cd:
   installCRDs: false
 

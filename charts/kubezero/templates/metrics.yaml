@@ -1,8 +1,5 @@
 {{- if index .Values "metrics" "enabled" }}
 {{ template "kubezero-app.app" dict "root" . "name" "metrics" "type" "helm" "namespace" "monitoring"}}
-  syncPolicy:
-    automated:
-      prune: true
 ---
 apiVersion: v1
 kind: Namespace

@@ -2,7 +2,7 @@ kubezero-argo-cd
 ================
 KubeZero ArgoCD Helm chart to install ArgoCD itself and the KubeZero ArgoCD Application
 
-Current chart version is `0.4.0`
+Current chart version is `0.4.1`
 
 Source code can be found [here](https://kubezero.com)
 
@@ -60,3 +60,4 @@ Source code can be found [here](https://kubezero.com)
 
 ## Resources
 - https://argoproj.github.io/argo-cd/operator-manual/metrics/
+- https://raw.githubusercontent.com/argoproj/argo-cd/master/examples/dashboard.json

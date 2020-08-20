@@ -31,4 +31,9 @@ spec:
   destination:
     server: {{ .root.Values.global.defaultDestination.server }}
     namespace: {{ default "kube-system" .namespace }}
+
+  {{- if .root.Values.global.syncPolicy }}
+  syncPolicy:
+    {{- toYaml .root.Values.global.syncPolicy | nindent 4 }}
+  {{- end }}
 {{- end }}

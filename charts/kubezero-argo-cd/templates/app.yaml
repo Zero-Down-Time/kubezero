@@ -14,12 +14,13 @@ spec:
 
     helm:
       values: |
-{{- toYaml .Values.kubezero | nindent 8 }}
+        {{- toYaml .Values.kubezero | nindent 8 }}
 
   destination:
     server: {{ .Values.kubezero.global.defaultDestination.server }}
     namespace: argocd
+
+  {{- if .Values.kubezero.global.syncPolicy }}
   syncPolicy:
-    automated:
-      prune: true
-      selfHeal: false
+    {{- toYaml .Values.kubezero.global.syncPolicy | nindent 4 }}
+  {{- end }}
