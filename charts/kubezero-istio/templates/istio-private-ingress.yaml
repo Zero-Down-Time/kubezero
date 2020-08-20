@@ -30,6 +30,8 @@ spec:
             name: istio-private-ingressgateway
         {{- end }}
         env:
+        - name: TERMINATION_DRAIN_DURATION_SECONDS
+          value: "60"
         - name: ISTIO_META_HTTP10
           value: '"1"'
         - name: ISTIO_META_ROUTER_MODE
