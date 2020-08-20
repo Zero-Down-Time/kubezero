@@ -4,7 +4,7 @@ set -eux
 # all credits go to the argoproj Helm guys https://github.com/argoproj/argo-helm
 
 SRCROOT="$(cd "$(dirname "$0")/.." && pwd)"
-GIT_PUSH=${GIT_PUSH:-false}
+GIT_PUSH=${GIT_PUSH:-true}
 
 rm -rf $SRCROOT/output && git clone -b gh-pages ssh://git@git.zero-downtime.net:22000/ZeroDownTime/KubeZero.git $SRCROOT/output
 # Reset all
