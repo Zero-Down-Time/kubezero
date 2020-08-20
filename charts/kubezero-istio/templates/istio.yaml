@@ -34,10 +34,15 @@ spec:
             name: istio-ingressgateway
         {{- end }}
         env:
+        # https://github.com/istio/istio/issues/26524
+        #- name: TERMINATION_DRAIN_DURATION_SECONDS
+        #  value: "60"
         - name: ISTIO_META_HTTP10
           value: '"1"'
         - name: ISTIO_META_ROUTER_MODE
           value: standard
+        - name: ISTIO_META_IDLE_TIMEOUT
+          value: "3600s"
         {{- if eq .Values.ingress.type "NodePort" }}
         nodeSelector:
           node.kubernetes.io/ingress.public: "30080_30443"
@@ -53,6 +58,16 @@ spec:
           rollingUpdate:
             maxSurge: 100%
             maxUnavailable: 25%
+        overlays:
+        - apiVersion: apps/v1
+          kind: Deployment
+          name: istio-ingressgateway
+          patches:
+            - path: spec.template.spec.containers.[name:istio-proxy].lifecycle
+              value: {"preStop": {"exec": {"command": ["sh", "-c", "curl -X POST http://localhost:15000/healthcheck/fail && sleep 30"]}}}
+            - path: spec.template.spec.terminationGracePeriodSeconds
+              value: 90
+
       name: istio-ingressgateway
     pilot:
       enabled: true
