@@ -1,8 +1,5 @@
 {{- if .Values.istio.enabled }}
 {{ template "kubezero-app.app" dict "root" . "name" "istio" "type" "helm" }}
-  syncPolicy:
-    automated:
-      prune: true
 
   ignoreDifferences:
   - group: apiextensions.k8s.io

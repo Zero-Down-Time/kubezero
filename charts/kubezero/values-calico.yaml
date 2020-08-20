@@ -13,31 +13,5 @@ global:
     # defaultSource.pathPrefix -- optional path prefix within repoURL to support eg. remote subtrees
     pathPrefix: ''
 
-platform: aws
-
 calico:
-  enabled: false
-
-cert-manager:
-  enabled: false
-
-local-volume-provisioner:
-  enabled: false
-
-kiam:
-  enabled: false
-
-aws-ebs-csi-driver:
-  enabled: false
-
-aws-efs-csi-driver:
-  enabled: false
-
-istio:
-  enabled: false
-
-metrics:
-  enabled: false
-
-logging:
-  enabled: false
+  enabled: true
