@@ -49,11 +49,11 @@ spec:
         {{- end }}
         resources:
           limits:
-            cpu: 2000m
+            # cpu: 2000m
             memory: 1024Mi
           requests:
             cpu: 100m
-            memory: 128Mi
+            memory: 64Mi
         strategy:
           rollingUpdate:
             maxSurge: 100%
@@ -112,6 +112,11 @@ spec:
           values: istio-ingressgateway
         type: {{ default "NodePort" .Values.ingress.type }}
         ports:
+        - name: http-status
+          port: 15021
+          {{- if eq .Values.ingress.type "NodePort" }}
+          nodePort: 30021
+          {{- end }}
         - name: http2
           port: 80
           {{- if eq .Values.ingress.type "NodePort" }}

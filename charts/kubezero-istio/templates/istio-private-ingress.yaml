@@ -80,6 +80,11 @@ spec:
           values: istio-private-ingressgateway
         type: {{ default "NodePort" .Values.ingress.type }}
         ports:
+        - name: http-status
+          port: 15021
+          {{- if eq .Values.ingress.type "NodePort" }}
+          nodePort: 31021
+          {{- end }}
         - name: http2
           port: 80
           {{- if eq .Values.ingress.type "NodePort" }}
@@ -90,31 +95,31 @@ spec:
           {{- if eq .Values.ingress.type "NodePort" }}
           nodePort: 31443
           {{- end }}
-        - name: amqp
-          port: 5672
-          {{- if eq .Values.ingress.type "NodePort" }}
-          nodePort: 30672
-          {{- end }}
-        - name: amqps
-          port: 5671
-          {{- if eq .Values.ingress.type "NodePort" }}
-          nodePort: 30671
-          {{- end }}
         - name: fluentd-forward
           port: 24224
           {{- if eq .Values.ingress.type "NodePort" }}
           nodePort: 31224
+          {{- end }}
+        - name: amqps
+          port: 5671
+          {{- if eq .Values.ingress.type "NodePort" }}
+          nodePort: 31671
+          {{- end }}
+        - name: amqp
+          port: 5672
+          {{- if eq .Values.ingress.type "NodePort" }}
+          nodePort: 31672
           {{- end }}
         sds:
           enabled: true
           image: node-agent-k8s
           resources:
             limits:
-              cpu: 2000m
+              #cpu: 2000m
               memory: 1024Mi
             requests:
               cpu: 100m
-              memory: 128Mi
+              memory: 64Mi
         secretVolumes:
         - mountPath: /etc/istio/ingressgateway-certs
           name: ingressgateway-certs
