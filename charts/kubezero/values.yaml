@@ -17,9 +17,11 @@ platform: aws
 
 calico:
   enabled: false
+  retain: true
 
 cert-manager:
   enabled: false
+  namespace: cert-manager
 
 local-volume-provisioner:
   enabled: false
@@ -38,6 +40,8 @@ istio:
 
 metrics:
   enabled: false
+  namespace: monitoring
 
 logging:
   enabled: false
+  namespace: logging

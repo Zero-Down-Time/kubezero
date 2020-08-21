@@ -1,3 +1,3 @@
 {{- if index .Values "aws-efs-csi-driver" "enabled" }}
-{{ template "kubezero-app.app" dict "root" . "name" "aws-efs-csi-driver" "type" "helm" }}
+{{ include "kubezero-app.app" . }}
 {{- end }}
