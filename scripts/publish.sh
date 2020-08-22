@@ -1,6 +1,7 @@
 #!/bin/bash
 set -eux
 
+CHARTS=${1:-'.*'}
 # all credits go to the argoproj Helm guys https://github.com/argoproj/argo-helm
 
 SRCROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -16,10 +17,10 @@ helm repo add jetstack https://charts.jetstack.io
 helm repo add uswitch https://uswitch.github.io/kiam-helm-charts/charts/
 helm repo update
 
-for dir in $(find $SRCROOT/charts -mindepth 1 -maxdepth 1 -type d);
+for dir in $(find -L $SRCROOT/charts -mindepth 1 -maxdepth 1 -type d);
 do
     name=$(basename $dir)
-
+    [[ $name =~ $CHARTS ]] || continue
     if [ $(helm dep list $dir 2>/dev/null| wc -l) -gt 1 ]
     then
         echo "Processing chart dependencies"

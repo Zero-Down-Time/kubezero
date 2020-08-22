@@ -45,11 +45,11 @@ spec:
         {{- end }}
         resources:
           limits:
-            cpu: 2000m
+            # cpu: 2000m
             memory: 1024Mi
           requests:
             cpu: 100m
-            memory: 128Mi
+            memory: 64Mi
         strategy:
           rollingUpdate:
             maxSurge: 100%
@@ -115,11 +115,11 @@ spec:
           image: node-agent-k8s
           resources:
             limits:
-              #cpu: 2000m
+              cpu: 2000m
               memory: 1024Mi
             requests:
               cpu: 100m
-              memory: 64Mi
+              memory: 128Mi
         secretVolumes:
         - mountPath: /etc/istio/ingressgateway-certs
           name: ingressgateway-certs
