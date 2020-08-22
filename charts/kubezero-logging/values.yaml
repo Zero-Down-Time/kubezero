@@ -238,16 +238,6 @@ fluent-bit:
           script  /fluent-bit/etc/functions.lua
           call    dedot
 
-    customParsers: |
-      [PARSER]
-          # http://rubular.com/r/tjUt3Awgg4
-          Name cri
-          Format regex
-          Regex ^(?<time>[^ ]+) (?<stream>stdout|stderr) (?<logtag>[^ ]*) (?<log>.*)$
-          Time_Key    time
-          Time_Format %Y-%m-%dT%H:%M:%S.%L%z
-          # Decode_Field_As json log
-
     service: |
       [SERVICE]
           Flush 5
