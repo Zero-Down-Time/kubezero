@@ -37,6 +37,8 @@ logging:
   enabled: false
   fluentd:
    enabled: false
+  fluent-bit:
+   enabled: false
 
 argo-cd:
   server: {}

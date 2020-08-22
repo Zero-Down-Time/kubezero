@@ -129,7 +129,9 @@ kubezero:
   logging:
     enabled: {{ .Values.logging.enabled }}
     values:
+      {{- if .Values.logging.elastic_password }}
       elastic_password: {{ .Values.logging.elastic_password }}
+      {{- end }}
 
       {{- if .Values.logging.version }}
       version: {{ .Values.logging.version }}
@@ -176,6 +178,16 @@ kubezero:
           {{- end }}
         {{- end }}
 
+      fluent-bit:
+        enabled: {{ index .Values.logging "fluent-bit" "enabled" }}
+        metrics:
+          enabled: {{ .Values.metrics.enabled }}
+        {{- if index .Values.logging "fluent-bit" "config" }}
+        config:
+          {{- with index .Values.logging "fluent-bit" "config" }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+        {{- end }}
         
 argo-cd:
   controller:

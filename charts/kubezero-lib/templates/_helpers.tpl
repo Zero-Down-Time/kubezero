@@ -2,7 +2,7 @@
 Common set of labels
 */ -}}
 {{- define "kubezero-lib.labels" -}}
-helm.sh/chart: {{ include "kubezero-lib.chart . }}
+helm.sh/chart: {{ include "kubezero-lib.chart" . }}
 app.kubernetes.io/name: {{ include "kubezero-lib.name" . }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/part-of: kubezero
