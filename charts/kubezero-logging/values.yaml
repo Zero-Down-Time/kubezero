@@ -205,7 +205,7 @@ fluent-bit:
       [OUTPUT]
           Match *
           Name forward
-          Host fluentd
+          Host logging-fluentd
           Port 24224
           tls on
           tls.verify off
