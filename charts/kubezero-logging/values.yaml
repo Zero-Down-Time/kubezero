@@ -29,9 +29,9 @@ kibana:
 
 fluentd:
   enabled: false
-  #image:
-  #  repository: quay.io/fluentd_elasticsearch/fluentd
-  #  tag: v2.9.0
+  image:
+    repository: quay.io/fluentd_elasticsearch/fluentd
+    tag: v3.0.4
   istio:
     enabled: false
 
@@ -141,6 +141,7 @@ fluentd:
         reconnect_on_error true
         reload_on_failure true
         request_timeout 15s
+        suppress_type_name true
 
         <buffer>
           @type file
@@ -196,7 +197,7 @@ fluentd:
 
 
 fluent-bit:
-  enabled: true
+  enabled: false
   test:
     enabled: false
 
