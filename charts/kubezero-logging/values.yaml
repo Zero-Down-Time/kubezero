@@ -140,7 +140,7 @@ fluentd:
         reload_connections false
         reconnect_on_error true
         reload_on_failure true
-        request_timeout 15s
+        request_timeout 30s
         suppress_type_name true
 
         <buffer>
