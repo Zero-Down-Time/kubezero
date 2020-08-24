@@ -31,7 +31,7 @@ fluentd:
   enabled: false
   image:
     repository: quay.io/fluentd_elasticsearch/fluentd
-    tag: v3.0.4
+    tag: v2.9.0
   istio:
     enabled: false
 
