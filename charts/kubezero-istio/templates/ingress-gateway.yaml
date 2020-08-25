@@ -14,7 +14,7 @@ spec:
       name: http
       protocol: HTTP2
     hosts:
-    - "*"
+    {{- toYaml .Values.ingress.dnsNames | nindent 4 }}
     tls:
       httpsRedirect: true
   - port:
@@ -22,7 +22,7 @@ spec:
       name: https
       protocol: HTTPS
     hosts:
-    - "*"
+    {{- toYaml .Values.ingress.dnsNames | nindent 4 }}
     tls:
       mode: SIMPLE
       privateKey: /etc/istio/ingressgateway-certs/tls.key
@@ -47,7 +47,7 @@ spec:
       name: http
       protocol: HTTP2
     hosts:
-    - "*"
+    {{- toYaml .Values.ingress.dnsNames | nindent 4 }}
     tls:
       httpsRedirect: true
   - port:
@@ -55,7 +55,7 @@ spec:
       name: https
       protocol: HTTPS
     hosts:
-    - "*"
+    {{- toYaml .Values.ingress.dnsNames | nindent 4 }}
     tls:
       mode: SIMPLE
       privateKey: /etc/istio/ingressgateway-certs/tls.key
@@ -66,17 +66,17 @@ spec:
       name: amqp
       protocol: TCP
     hosts:
-    - "*"
+    {{- toYaml .Values.ingress.dnsNames | nindent 4 }}
   - port:
       number: 5671
       name: amqps
       protocol: TCP
     hosts:
-    - "*"
+    {{- toYaml .Values.ingress.dnsNames | nindent 4 }}
   - port:
       number: 24224
       name: fluentd-forward
       protocol: TCP
     hosts:
-    - "*"
+    {{- toYaml .Values.ingress.dnsNames | nindent 4 }}
 {{- end }}
