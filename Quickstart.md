@@ -34,11 +34,18 @@ Cloudbender creates a kubezero config file, which incl. all outputs from the Clo
 ## Deploy KubeZero Helm chart
 `./deploy.sh`
 
-The deploy script will handle the initial bootstrap process up to point of installing advanced services like Istio or Prometheus.  
-It will take about 10min to reach the point of being able to install these advanced services.
+The deploy script will handle the initial bootstrap process as well as the roll out of advanced components like Prometheus, Istio and ElasticSearch/Kibana in various phases.
+
+It will take about 10 to 15 minutes for ArgoCD to roll out all the services...
+
+
+# Own apps
+- Add your own application to ArgoCD via the cli
+
+# Troubleshooting
 
 ## Verify ArgoCD
-At this stage we there is no support for any kind of Ingress yet. To reach the Argo API port forward from localhost via:  
+To reach the Argo API port forward from localhost via:  
 `kubectl port-forward svc/kubezero-argocd-server -n argocd 8080:443`
 
 Next download the argo-cd cli, details for different OS see https://argoproj.github.io/argo-cd/cli_installation/  
@@ -46,37 +53,5 @@ Next download the argo-cd cli, details for different OS see https://argoproj.git
 Finally login into argo-cd via `argocd login localhost:8080` using the *admin* user and the password set in values.yaml earlier.
 
 List all Argo applications via: `argocd app list`.  
-Currently it is very likely that you need to manually trigger sync runs for `cert-manager`as well as `kiam`.  
-eg. `argocd app cert-manager sync`
 
 
-# Only proceed any further if all Argo Applications show healthy !!
-
-## WIP not yet integrated into KubeZero
-
-### Istio
-Istio is currently pinned to version 1.4.X as this is the last version supporting installation via helm charts. 
-
-Until Istio is integrated into KubeZero as well as upgraded to 1.6 we have to install manually.  
-
-- adjust values.yaml
-- update domain in `ingress-certificate.yaml`
-- update.sh
-- deploy.sh
-
-### Logging
-To deploy fluentbit only required adjustment is the `fluentd_host=<LOG_HOST>` in the kustomization.yaml.
-
-- deploy namespace for logging via deploy.sh
-- deploy fluentbit via `kubectl apply -k fluentbit`
-
-### Prometheus / Grafana
-Only adjustment required is the ingress routing config in istio-service.yaml. Adjust as needed before executing:  
-`deploy.sh`
-
-### EFS CSI
-- add the EFS fs-ID from the worker cloudformation output into values.yaml and the efs-pv.yaml
-- `./deploy.sh`
-
-# Demo / own apps
-- Add your own application to ArgoCD via the cli
