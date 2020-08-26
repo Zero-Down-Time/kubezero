@@ -10,7 +10,9 @@ metadata:
 spec:
   endpoints:
   - basicAuth:
-      username: elastic
+      username:
+        name: {{ template "kubezero-lib.fullname" $ }}-es-elastic-user
+        key: username
       password:
         name: {{ template "kubezero-lib.fullname" $ }}-es-elastic-user
         key: elastic
