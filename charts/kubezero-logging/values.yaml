@@ -136,11 +136,11 @@ fluentd:
         user "#{ENV['OUTPUT_USER']}"
         password "#{ENV['OUTPUT_PASSWORD']}"
 
+        log_es_400_reason
         logstash_format true
-        reload_connections false
         reconnect_on_error true
-        reload_on_failure true
-        request_timeout 30s
+        # reload_on_failure true
+        request_timeout 15s
         suppress_type_name true
 
         <buffer>
@@ -148,11 +148,10 @@ fluentd:
           path /var/log/fluentd-buffers/kubernetes.system.buffer
           flush_mode interval
           flush_thread_count 2
-          flush_interval 5s
+          flush_interval 30s
           flush_at_shutdown true
           retry_type exponential_backoff
           retry_timeout 60m
-          retry_max_interval 30
           chunk_limit_size "#{ENV['OUTPUT_BUFFER_CHUNK_LIMIT']}"
           queue_limit_length "#{ENV['OUTPUT_BUFFER_QUEUE_LIMIT']}"
           overflow_action drop_oldest_chunk

@@ -8,7 +8,7 @@ ingress:
   type: NodePort
   private:
     enabled: true
-    nodeSelector: "31080_31443_30671_30672_31224"
+    nodeSelector: "31080_31443_31671_31672_31224"
   dnsNames:
     - "*"
 
