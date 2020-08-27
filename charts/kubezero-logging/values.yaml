@@ -126,7 +126,8 @@ fluentd:
         remove_keys id
 
         # KubeZero pipeline incl. GeoIP etc.
-        pipeline fluentd
+        # Freaking ES jams under load and all is lost ...
+        # pipeline fluentd
 
         host "#{ENV['OUTPUT_HOST']}"
         port "#{ENV['OUTPUT_PORT']}"
@@ -148,7 +149,7 @@ fluentd:
           path /var/log/fluentd-buffers/kubernetes.system.buffer
           flush_mode interval
           flush_thread_count 2
-          flush_interval 30s
+          flush_interval 5s
           flush_at_shutdown true
           retry_type exponential_backoff
           retry_timeout 60m
