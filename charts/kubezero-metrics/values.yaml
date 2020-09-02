@@ -27,9 +27,11 @@ prometheus-operator:
   kubeProxy:
     enabled: true
 
-  # Disabled until we figure out how to scrape etcd with ssl client certs
   kubeEtcd:
-    enabled: false
+    enabled: true
+    service:
+      port: 2381
+      targetPort: 2381
 
   kubeControllerManager:
     enabled: true
