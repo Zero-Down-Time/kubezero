@@ -2,7 +2,7 @@ kubezero-metrics
 ================
 KubeZero Umbrella Chart for prometheus-operator
 
-Current chart version is `0.1.3`
+Current chart version is `0.1.4`
 
 Source code can be found [here](https://kubezero.com)
 
@@ -11,7 +11,7 @@ Source code can be found [here](https://kubezero.com)
 | Repository | Name | Version |
 |------------|------|---------|
 | https://kubernetes-charts.storage.googleapis.com/ | prometheus-adapter | 2.5.0 |
-| https://kubernetes-charts.storage.googleapis.com/ | prometheus-operator | 9.3.0 |
+| https://kubernetes-charts.storage.googleapis.com/ | prometheus-operator | 9.3.1 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## Chart Values
@@ -58,7 +58,9 @@ Source code can be found [here](https://kubezero.com)
 | prometheus-operator.kubeControllerManager.serviceMonitor.https | bool | `true` |  |
 | prometheus-operator.kubeControllerManager.serviceMonitor.insecureSkipVerify | bool | `true` |  |
 | prometheus-operator.kubeDns.enabled | bool | `false` |  |
-| prometheus-operator.kubeEtcd.enabled | bool | `false` |  |
+| prometheus-operator.kubeEtcd.enabled | bool | `true` |  |
+| prometheus-operator.kubeEtcd.service.port | int | `2381` |  |
+| prometheus-operator.kubeEtcd.service.targetPort | int | `2381` |  |
 | prometheus-operator.kubeProxy.enabled | bool | `true` |  |
 | prometheus-operator.kubeScheduler.enabled | bool | `true` |  |
 | prometheus-operator.kubeScheduler.service.port | int | `10259` |  |
@@ -96,3 +98,13 @@ Source code can be found [here](https://kubezero.com)
 | prometheus.istio.enabled | bool | `false` |  |
 | prometheus.istio.gateway | string | `"istio-system/ingressgateway"` |  |
 | prometheus.istio.url | string | `""` |  |
+
+
+# Dashboards
+
+## Etcs
+- https://grafana.com/grafana/dashboards/3070
+
+## ElasticSearch
+- https://grafana.com/grafana/dashboards/266
+

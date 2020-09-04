@@ -4,6 +4,9 @@
 - https://kubernetes.io/docs/tasks/debug-application-cluster/audit/
 - https://kubernetes.io/docs/tasks/debug-application-cluster/falco/
 
+## DNS - Todo
+- https://github.com/kubernetes-sigs/external-dns/blob/0ef226f77ef80158257e1fe9705c095452a51545/docs/tutorials/istio.md
+
 ## Performance - Todo
 - https://kubernetes.io/docs/tasks/administer-cluster/limit-storage-consumption/
 
