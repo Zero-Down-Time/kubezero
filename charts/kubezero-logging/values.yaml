@@ -310,7 +310,7 @@ fluent-bit:
             return -1, 0, 0
          end
          -- otherwise it's a full line, concatenate with accumulated partial lines if any
-         record.message = reassemble_state[reassemble_key] or "" .. record.message
+         record.message = reassemble_state[reassemble_key] or "" .. (record.message or "")
          reassemble_state[reassemble_key] = nil
          return 1, timestamp, record
       end
