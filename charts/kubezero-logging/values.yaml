@@ -163,6 +163,7 @@ fluentd:
         @type parser
         key_name message
         remove_key_name_field true
+        reserve_data true
         emit_invalid_record_to_error false
         <parse>
           @type json
