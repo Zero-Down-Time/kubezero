@@ -222,6 +222,16 @@ fluent-bit:
           Refresh_Interval 10
           DB /var/log/flb_kube.db
           DB.Sync Normal
+      [INPUT]
+          Name tail
+          Path /var/log/kubernetes/audit.log
+          Parser json
+          Tag kube.api.audit
+          Mem_Buf_Limit 5MB
+          Skip_Long_Lines On
+          Refresh_Interval 60
+          DB /var/log/flb_kube_audit.db
+          DB.Sync Normal
 
     filters: |
       [FILTER]
