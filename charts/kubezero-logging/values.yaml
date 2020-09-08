@@ -159,10 +159,11 @@ fluentd:
       </match>
 
     filter.conf: |
-      <filter kube.*>
+      <filter kube.**>
         @type parser
         key_name message
         remove_key_name_field true
+        emit_invalid_record_to_error false
         <parse>
           @type json
         </parse>
