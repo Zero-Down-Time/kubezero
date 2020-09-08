@@ -2,7 +2,7 @@ kubezero-logging
 ================
 KubeZero Umbrella Chart for complete EFK stack
 
-Current chart version is `0.3.1`
+Current chart version is `0.3.2`
 
 Source code can be found [here](https://kubezero.com)
 
@@ -11,7 +11,7 @@ Source code can be found [here](https://kubezero.com)
 | Repository | Name | Version |
 |------------|------|---------|
 | https://kubernetes-charts.storage.googleapis.com/ | fluentd | 2.5.1 |
-| https://zero-down-time.github.io/kubezero/ | fluent-bit | 0.6.3 |
+| https://zero-down-time.github.io/kubezero/ | fluent-bit | 0.6.4 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## Changes from upstream
@@ -32,10 +32,16 @@ Source code can be found [here](https://kubezero.com)
 
 - increased timeout to ES to 3 minutes
  
+### FluentD
+
+
+### Fluent-bit
+- support for dedot Lua filter to replace "." with "_" for all annotations and labels
+- support for api audit log
 
 ## Manual tasks ATM
 
--  Install index template
+- install index template
 - setup Kibana
 - create `logstash-*` Index Pattern
 
@@ -50,7 +56,7 @@ Source code can be found [here](https://kubezero.com)
 | es.s3Snapshot.enabled | bool | `false` |  |
 | es.s3Snapshot.iamrole | string | `""` |  |
 | fluent-bit.config.filters | string | `"[FILTER]\n    Name kubernetes\n    Match kube.*\n    Merge_Log On\n    Keep_Log Off\n    K8S-Logging.Parser On\n    K8S-Logging.Exclude On\n\n[FILTER]\n    Name    lua\n    Match   kube.*\n    script  /fluent-bit/etc/functions.lua\n    call    dedot\n"` |  |
-| fluent-bit.config.inputs | string | `"[INPUT]\n    Name tail\n    Path /var/log/containers/*.log\n    Parser cri\n    Tag kube.*\n    Mem_Buf_Limit 5MB\n    Skip_Long_Lines On\n    Refresh_Interval 10\n    DB /var/log/flb_kube.db\n    DB.Sync Normal\n"` |  |
+| fluent-bit.config.inputs | string | `"[INPUT]\n    Name tail\n    Path /var/log/containers/*.log\n    Parser cri\n    Tag kube.*\n    Mem_Buf_Limit 5MB\n    Skip_Long_Lines On\n    Refresh_Interval 10\n    DB /var/log/flb_kube.db\n    DB.Sync Normal\n[INPUT]\n    Name tail\n    Path /var/log/kubernetes/audit.log\n    Parser json\n    Tag kube.api.audit\n    Mem_Buf_Limit 5MB\n    Skip_Long_Lines On\n    Refresh_Interval 60\n    DB /var/log/flb_kube_audit.db\n    DB.Sync Normal\n"` |  |
 | fluent-bit.config.lua | string | `"function dedot(tag, timestamp, record)\n    if record[\"kubernetes\"] == nil then\n        return 0, 0, 0\n    end\n    dedot_keys(record[\"kubernetes\"][\"annotations\"])\n    dedot_keys(record[\"kubernetes\"][\"labels\"])\n    return 1, timestamp, record\nend\n\nfunction dedot_keys(map)\n    if map == nil then\n        return\n    end\n    local new_map = {}\n    local changed_keys = {}\n    for k, v in pairs(map) do\n        local dedotted = string.gsub(k, \"%.\", \"_\")\n        if dedotted ~= k then\n            new_map[dedotted] = v\n            changed_keys[k] = true\n        end\n    end\n    for k in pairs(changed_keys) do\n        map[k] = nil\n    end\n    for k, v in pairs(new_map) do\n        map[k] = v\n    end\nend\n"` |  |
 | fluent-bit.config.outputs | string | `"[OUTPUT]\n    Match *\n    Name forward\n    Host logging-fluentd\n    Port 24224\n    tls on\n    tls.verify off\n    Shared_Key cloudbender\n"` |  |
 | fluent-bit.config.service | string | `"[SERVICE]\n    Flush 5\n    Daemon Off\n    Log_Level warn\n    Parsers_File parsers.conf\n    Parsers_File custom_parsers.conf\n    HTTP_Server On\n    HTTP_Listen 0.0.0.0\n    HTTP_Port 2020\n"` |  |
