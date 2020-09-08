@@ -542,7 +542,6 @@ spec:
               description: DaemonSet specifies the Beat should be deployed as a DaemonSet,
                 and allows providing its spec. Cannot be used along with `deployment`.
                 If both are absent a default for the Type is used.
-              properties: {}
               type: object
             deployment:
               description: Deployment specifies the Beat should be deployed as a Deployment,
