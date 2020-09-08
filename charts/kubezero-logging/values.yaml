@@ -160,6 +160,7 @@ fluentd:
 
     filter.conf: |
       <filter kube.*>
+        @type parser
         key_name message
         remove_key_name_field true
         <parse>
