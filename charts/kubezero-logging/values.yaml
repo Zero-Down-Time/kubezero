@@ -237,7 +237,7 @@ fluent-bit:
           Name tail
           Path /var/log/kubernetes/audit.log
           Parser json
-          Tag kube.api.audit
+          Tag audit.api-server
           Mem_Buf_Limit 5MB
           Skip_Long_Lines On
           Refresh_Interval 60
