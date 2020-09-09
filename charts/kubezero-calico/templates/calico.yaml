@@ -28,6 +28,7 @@ data:
         {
           "type": "calico",
           "log_level": "info",
+          "log_file_path": "/var/log/calico/cni/cni.log",
           "datastore_type": "kubernetes",
           "nodename": "__KUBERNETES_NODE_NAME__",
           "mtu": __CNI_MTU__,
@@ -341,8 +342,13 @@ spec:
         # This container installs the CNI binaries
         # and CNI network config file on each node.
         - name: install-cni
-          image: calico/cni:v3.15.1
-          command: ["/install-cni.sh"]
+          image: calico/cni:{{ default .Chart.AppVersion .Values.image.tag }}
+          command: ["/opt/cni/bin/install"]
+          envFrom:
+          - configMapRef:
+              # Allow KUBERNETES_SERVICE_HOST and KUBERNETES_SERVICE_PORT to be overridden for eBPF mode.
+              name: kubernetes-services-endpoint
+              optional: true
           env:
             # Name of the CNI config file to create.
             - name: CNI_CONF_NAME
@@ -377,7 +383,7 @@ spec:
         # Adds a Flex Volume Driver that creates a per-pod Unix Domain Socket to allow Dikastes
         # to communicate with Felix over the Policy Sync API.
         - name: flexvol-driver
-          image: calico/pod2daemon-flexvol:v3.15.1
+          image: calico/pod2daemon-flexvol:{{ default .Chart.AppVersion .Values.image.tag }}
           volumeMounts:
           - name: flexvol-driver-host
             mountPath: /host/driver
@@ -388,7 +394,12 @@ spec:
         # container programs network policy and routes on each
         # host.
         - name: calico-node
-          image: calico/node:v3.15.1
+          image: calico/node:{{ default .Chart.AppVersion .Values.image.tag }}
+          envFrom:
+          - configMapRef:
+              # Allow KUBERNETES_SERVICE_HOST and KUBERNETES_SERVICE_PORT to be overridden for eBPF mode.
+              name: kubernetes-services-endpoint
+              optional: true
           env:
             # Use Kubernetes API as the backing datastore.
             - name: DATASTORE_TYPE
@@ -437,17 +448,14 @@ spec:
                 configMapKeyRef:
                   name: calico-config
                   key: veth_mtu
+            # Disable AWS source-destination check on nodes.
+            - name: FELIX_AWSSRCDSTCHECK
+              value: DoNothing
             # The default IPv4 pool to create on startup if none exists. Pod IPs will be
             # chosen from this range. Changing this value after installation will have
             # no effect. This should fall within `--cluster-cidr`.
             # - name: CALICO_IPV4POOL_CIDR
             #   value: "192.168.0.0/16"
-            # Set MTU for the Wireguard tunnel device.
-            - name: FELIX_WIREGUARDMTU
-              valueFrom:
-                configMapKeyRef:
-                  name: calico-config
-                  key: veth_mtu
             # Disable file logging so `kubectl logs` works.
             - name: CALICO_DISABLE_FILE_LOGGING
               value: "true"
@@ -464,12 +472,12 @@ spec:
               value: "{{ .Values.loglevel }}"
             - name: FELIX_LOGSEVERITYSYS
               value: ""
-            - name: FELIX_HEALTHENABLED
-              value: "true"
             - name: FELIX_PROMETHEUSGOMETRICSENABLED
               value: "{{ .Values.prometheus }}"
             - name: FELIX_PROMETHEUSMETRICSENABLED
               value: "{{ .Values.prometheus }}"
+            - name: FELIX_HEALTHENABLED
+              value: "true"
           securityContext:
             privileged: true
           resources:
@@ -483,14 +491,12 @@ spec:
             periodSeconds: 10
             initialDelaySeconds: 10
             failureThreshold: 6
-            timeoutSeconds: 3
           readinessProbe:
             exec:
               command:
               - /bin/calico-node
               - -felix-ready
             periodSeconds: 10
-            timeoutSeconds: 3
           volumeMounts:
             - mountPath: /lib/modules
               name: lib-modules
@@ -506,6 +512,13 @@ spec:
               readOnly: false
             - name: policysync
               mountPath: /var/run/nodeagent
+            # For eBPF mode, we need to be able to mount the BPF filesystem at /sys/fs/bpf so we mount in the
+            # parent directory.
+            - name: sysfs
+              mountPath: /sys/fs/
+              # Bidirectional means that, if we mount the BPF filesystem at /sys/fs/bpf it will propagate to the host.
+              # If the host is known to mount that filesystem already then Bidirectional can be omitted.
+              mountPropagation: Bidirectional
       volumes:
         # Used by calico-node.
         - name: lib-modules
@@ -521,6 +534,10 @@ spec:
           hostPath:
             path: /run/xtables.lock
             type: FileOrCreate
+        - name: sysfs
+          hostPath:
+            path: /sys/fs/
+            type: DirectoryOrCreate
         # Used to install CNI.
         - name: cni-bin-dir
           hostPath:
@@ -590,7 +607,7 @@ spec:
       priorityClassName: system-cluster-critical
       containers:
         - name: calico-kube-controllers
-          image: calico/kube-controllers:v3.15.1
+          image: calico/kube-controllers:{{ default .Chart.AppVersion .Values.image.tag }}
           env:
             # Choose which controllers to run.
             - name: ENABLED_CONTROLLERS

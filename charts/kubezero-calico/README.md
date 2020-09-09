@@ -2,7 +2,7 @@ kubezero-calico
 ===============
 KubeZero Umbrella Chart for Calico
 
-Current chart version is `0.1.9`
+Current chart version is `0.2.0`
 
 Source code can be found [here](https://kubezero.com)
 
@@ -38,10 +38,9 @@ The setup is based on the upstream calico-vxlan config from
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| customIPPool | object | `{}` |  |
+| image.tag | string | `""` |  |
 | installCRDs | bool | `false` |  |
 | loglevel | string | `"Warning"` |  |
-| migration | bool | `false` |  |
 | mtu | int | `8941` |  |
 | network | string | `"vxlan"` |  |
 | prometheus | bool | `false` |  |
