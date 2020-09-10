@@ -18,6 +18,13 @@ kiam:
       enabled: true
       replicas: 1
     updateStrategy: RollingUpdate
+    resources:
+     requests:
+       memory: "50Mi"
+       cpu: "100m"
+     limits:
+       memory: "50Mi"
+       cpu: "100m"
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
@@ -48,6 +55,13 @@ kiam:
       certFileName: tls.crt
       keyFileName:  tls.key
       caFileName:   ca.crt
+    resources:
+     requests:
+       memory: "20Mi"
+       cpu: "50m"
+     limits:
+       memory: "20Mi"
+       cpu: "50m"
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
