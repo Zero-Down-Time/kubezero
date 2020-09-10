@@ -109,7 +109,11 @@ prometheus-operator:
 
       resources:
         requests:
-          memory: 512Mi
+          memory: "1024Mi"
+          cpu: "500m"
+        limits:
+          memory: "2048Mi"
+          cpu: "1000m"
 
       storageSpec:
         volumeClaimTemplate:
@@ -118,7 +122,7 @@ prometheus-operator:
             accessModes: ["ReadWriteOnce"]
             resources:
               requests:
-                storage: 8Gi
+                storage: 16Gi
 
   # Custom Grafana tweaks
   # - persistence, plugins, auth
