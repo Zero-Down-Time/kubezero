@@ -109,10 +109,10 @@ prometheus-operator:
 
       resources:
         requests:
-          memory: "1024Mi"
+          memory: "1Gi"
           cpu: "500m"
         limits:
-          memory: "2048Mi"
+          memory: "3Gi"
           cpu: "1000m"
 
       storageSpec:
