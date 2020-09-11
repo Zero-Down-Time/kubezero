@@ -120,5 +120,7 @@ spec:
     global:
       jwtPolicy: first-party-jwt
       logAsJson: true
-      omitSidecarInjectorConfigMap: true
+      defaultPodDisruptionBudget:
+        enabled: false
+
 {{- end }}
