@@ -87,6 +87,8 @@ spec:
 
     telemetry:
       enabled: false
+  meshConfig:
+    accessLogFile: /dev/stdout
   values:
     gateways:
       istio-ingressgateway:
