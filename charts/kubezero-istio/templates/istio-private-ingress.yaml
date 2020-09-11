@@ -110,4 +110,12 @@ spec:
           {{- if eq .Values.ingress.type "NodePort" }}
           nodePort: 31672
           {{- end }}
+
+    global:
+      jwtPolicy: first-party-jwt
+      logAsJson: true
+      omitSidecarInjectorConfigMap: true
+      proxy:
+        accessLogEncoding: JSON
+        autoInject: disabled
 {{- end }}
