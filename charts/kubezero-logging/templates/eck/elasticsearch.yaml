@@ -49,12 +49,12 @@ spec:
           resources:
             requests:
               cpu: {{ default "200m" .cpu_request }}
-              memory: {{ mul 2 ( default "4" .jvm_heap ) }}Gi
+              memory: {{ mul 2 ( default "2" .jvm_heap ) }}Gi
             limits:
               {{- if .cpu_limit }}
               cpu: {{ .cpu_limit }}
               {{- end }}
-              memory: {{ mul 2 ( default "4" .jvm_heap ) }}Gi
+              memory: {{ mul 2 ( default "2" .jvm_heap ) }}Gi
           env:
           - name: ES_JAVA_OPTS
             value: -Xms{{ default "2" .jvm_heap }}g -Xmx{{ default "2" .jvm_heap }}g
