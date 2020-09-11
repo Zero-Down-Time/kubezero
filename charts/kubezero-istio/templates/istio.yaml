@@ -89,6 +89,7 @@ spec:
       enabled: false
   meshConfig:
     accessLogFile: /dev/stdout
+    accessLogEncoding: json
   values:
     gateways:
       istio-ingressgateway:
