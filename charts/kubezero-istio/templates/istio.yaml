@@ -7,12 +7,7 @@ metadata:
 {{ include "kubezero-lib.labels" . | indent 4 }}
 spec:
   profile: empty
-  addonComponents:
-    prometheus:
-      enabled: false
   components:
-    galley:
-      enabled: false
     ingressGateways:
     - enabled: true
       k8s:
