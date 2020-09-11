@@ -124,8 +124,8 @@ spec:
     global:
       jwtPolicy: first-party-jwt
       logAsJson: true
-      omitSidecarInjectorConfigMap: true
-      operatorManageWebhooks: true
+      #omitSidecarInjectorConfigMap: true
+      #operatorManageWebhooks: true
     pilot:
       autoscaleEnabled: false
     mixer:
