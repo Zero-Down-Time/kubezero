@@ -49,7 +49,7 @@ spec:
         {{- end }}
         resources:
           limits:
-            # cpu: 2000m
+            #cpu: 2000m
             memory: 1024Mi
           requests:
             cpu: 100m
@@ -127,23 +127,6 @@ spec:
           {{- if eq .Values.ingress.type "NodePort" }}
           nodePort: 30443
           {{- end }}
-        sds:
-          enabled: true
-          image: node-agent-k8s
-          resources:
-            limits:
-              cpu: 2000m
-              memory: 1024Mi
-            requests:
-              cpu: 100m
-              memory: 128Mi
-        secretVolumes:
-        - mountPath: /etc/istio/ingressgateway-certs
-          name: ingressgateway-certs
-          secretName: istio-ingressgateway-certs
-        - mountPath: /etc/istio/ingressgateway-ca-certs
-          name: ingressgateway-ca-certs
-          secretName: istio-ingressgateway-ca-certs
     meshConfig:
       accessLogFile: /dev/stdout
       disablePolicyChecks: false

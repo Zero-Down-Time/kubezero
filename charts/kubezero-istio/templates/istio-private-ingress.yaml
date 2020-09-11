@@ -30,15 +30,15 @@ spec:
             name: istio-private-ingressgateway
         {{- end }}
         env:
-        # https://github.com/istio/istio/issues/26524
+        # https://github.com/istio/istio/issues/26524, not in 1.7 either
         #- name: TERMINATION_DRAIN_DURATION_SECONDS
         #  value: "60"
         - name: ISTIO_META_HTTP10
           value: '"1"'
         - name: ISTIO_META_ROUTER_MODE
           value: standard
-        - name: ISTIO_META_IDLE_TIMEOUT
-          value: "3600s"
+        #- name: ISTIO_META_IDLE_TIMEOUT
+        #  value: "3600s"
         {{- if eq .Values.ingress.type "NodePort" }}
         nodeSelector:
           node.kubernetes.io/ingress.private: "{{ .Values.ingress.private.nodeSelector }}"
@@ -110,24 +110,4 @@ spec:
           {{- if eq .Values.ingress.type "NodePort" }}
           nodePort: 31672
           {{- end }}
-        sds:
-          enabled: true
-          image: node-agent-k8s
-          resources:
-            limits:
-              cpu: 2000m
-              memory: 1024Mi
-            requests:
-              cpu: 100m
-              memory: 128Mi
-        secretVolumes:
-        - mountPath: /etc/istio/ingressgateway-certs
-          name: ingressgateway-certs
-          secretName: istio-ingressgateway-certs
-        - mountPath: /etc/istio/ingressgateway-ca-certs
-          name: ingressgateway-ca-certs
-          secretName: istio-ingressgateway-ca-certs
-
-    global:
-      jwtPolicy: first-party-jwt
 {{- end }}
