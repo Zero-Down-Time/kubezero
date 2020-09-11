@@ -11,8 +11,6 @@ spec:
     prometheus:
       enabled: false
   components:
-    citadel:
-      enabled: false
     galley:
       enabled: false
     ingressGateways:
@@ -92,8 +90,6 @@ spec:
         - effect: NoSchedule
           key: node-role.kubernetes.io/master
 
-    sidecarInjector:
-      enabled: false
     telemetry:
       enabled: false
   values:
@@ -127,9 +123,6 @@ spec:
           {{- if eq .Values.ingress.type "NodePort" }}
           nodePort: 30443
           {{- end }}
-    meshConfig:
-      accessLogFile: /dev/stdout
-      disablePolicyChecks: false
     global:
       jwtPolicy: first-party-jwt
       logAsJson: true
