@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: {{.Values.operatorNamespace}}
-  name: istio-operator
+  name: istio-operator{{- if not (eq .Values.revision "") }}-{{ .Values.revision }}{{- end }}
 spec:
   replicas: 1
   selector:
@@ -13,7 +13,7 @@ spec:
       labels:
         name: istio-operator
     spec:
-      serviceAccountName: istio-operator
+      serviceAccountName: istio-operator{{- if not (eq .Values.revision "") }}-{{ .Values.revision }}{{- end }}
       nodeSelector:
         kubernetes.io/os: linux
         node-role.kubernetes.io/master: ""
@@ -26,14 +26,19 @@ spec:
           command:
           - operator
           - server
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsGroup: 1337
+            runAsUser: 1337
+            runAsNonRoot: true
           imagePullPolicy: IfNotPresent
           resources:
-            limits:
-              cpu: 200m
-              memory: 256Mi
-            requests:
-              cpu: 50m
-              memory: 128Mi
+{{ toYaml .Values.operator.resources | trim | indent 12 }}
           env:
             - name: WATCH_NAMESPACE
               value: {{.Values.watchedNamespaces | quote}}
@@ -45,4 +50,8 @@ spec:
                   fieldPath: metadata.name
             - name: OPERATOR_NAME
               value: {{.Values.operatorNamespace | quote}}
+            - name: WAIT_FOR_RESOURCES_TIMEOUT
+              value: {{.Values.waitForResourcesTimeout | quote}}
+            - name: REVISION
+              value: {{.Values.revision | quote}}
 ---

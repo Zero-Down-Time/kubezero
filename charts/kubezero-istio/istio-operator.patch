@@ -1,11 +1,9 @@
-diff --git a/charts/kubezero-istio/charts/istio-operator/templates/deployment.yaml b/charts/kubezero-istio/charts/istio-operator/templates/deployment.yaml
-index 5ef7848..8350dd5 100644
---- a/charts/kubezero-istio/charts/istio-operator/templates/deployment.yaml
-+++ b/charts/kubezero-istio/charts/istio-operator/templates/deployment.yaml
-@@ -14,6 +14,12 @@ spec:
+--- charts/istio-operator/templates/deployment.yaml	2020-09-11 14:57:25.007439918 +0100
++++ charts/istio-operator/templates/deployment.yaml	2020-09-11 14:59:57.998019251 +0100
+@@ -14,6 +14,12 @@
          name: istio-operator
      spec:
-       serviceAccountName: istio-operator
+       serviceAccountName: istio-operator{{- if not (eq .Values.revision "") }}-{{ .Values.revision }}{{- end }}
 +      nodeSelector:
 +        kubernetes.io/os: linux
 +        node-role.kubernetes.io/master: ""
