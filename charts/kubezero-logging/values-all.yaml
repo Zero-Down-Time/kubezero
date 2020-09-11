@@ -18,6 +18,8 @@ es:
       size: 512Gi
       class: ebs-sc-gp2-xfs
     zone: us-west-2a
+    jvm_heap: 4
+    cpu_limit: 2
   s3Snapshot:
     enabled: true
     iamrole: "dfsf" # INSERT_CLOUDFORMATION_OUTPUT_ElasticSearchSnapshots
@@ -31,4 +33,7 @@ kibana:
     gateway: istio-system/private-ingressgateway
 
 fluentd:
+  enabled: true
+
+fluent-bit:
   enabled: true
