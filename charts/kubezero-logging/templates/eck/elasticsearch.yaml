@@ -48,13 +48,16 @@ spec:
         - name: elasticsearch
           resources:
             requests:
-              cpu: 100m
-              memory: 2500Mi
+              cpu: {{ default "200m" .cpu_request }}
+              memory: {{ mul 2 ( default "4" .jvm_heap ) }}Gi
             limits:
-              memory: 4Gi
+              {{- if .cpu_limit }}
+              cpu: {{ .cpu_limit }}
+              {{- end }}
+              memory: {{ mul 2 ( default "4" .jvm_heap ) }}Gi
           env:
           - name: ES_JAVA_OPTS
-            value: "-Xms2g -Xmx2g"
+            value: -Xms{{ default "2" .jvm_heap }}g -Xmx{{ default "2" .jvm_heap }}g
         affinity:
           podAntiAffinity:
             requiredDuringSchedulingIgnoredDuringExecution:
