@@ -34,15 +34,15 @@ spec:
             name: istio-ingressgateway
         {{- end }}
         env:
-        # https://github.com/istio/istio/issues/26524
+        # https://github.com/istio/istio/issues/26524, not in 1.7 !
         #- name: TERMINATION_DRAIN_DURATION_SECONDS
         #  value: "60"
         - name: ISTIO_META_HTTP10
           value: '"1"'
         - name: ISTIO_META_ROUTER_MODE
           value: standard
-        - name: ISTIO_META_IDLE_TIMEOUT
-          value: "3600s"
+        #- name: ISTIO_META_IDLE_TIMEOUT
+        #  value: "3600s"
         {{- if eq .Values.ingress.type "NodePort" }}
         nodeSelector:
           node.kubernetes.io/ingress.public: "30080_30443"
@@ -149,15 +149,12 @@ spec:
       disablePolicyChecks: false
     global:
       jwtPolicy: first-party-jwt
+      logAsJson: true
       omitSidecarInjectorConfigMap: true
       proxy:
         accessLogEncoding: JSON
         autoInject: disabled
-        envoyStatsd:
-          enabled: false
-      useMCP: false
     pilot:
-      sidecar: false
       autoscaleEnabled: false
     mixer:
       policy:
