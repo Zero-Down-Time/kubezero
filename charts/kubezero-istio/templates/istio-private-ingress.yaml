@@ -64,6 +64,9 @@ spec:
             - path: spec.template.spec.terminationGracePeriodSeconds
               value: 90
 
+  meshConfig:
+    accessLogFile: /dev/stdout
+
   values:
     gateways:
       istio-ingressgateway:
