@@ -134,6 +134,7 @@ spec:
       jwtPolicy: first-party-jwt
       logAsJson: true
       omitSidecarInjectorConfigMap: true
+      operatorManageWebhooks: true
       proxy:
         accessLogEncoding: JSON
         autoInject: disabled
