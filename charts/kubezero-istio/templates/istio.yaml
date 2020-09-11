@@ -123,9 +123,6 @@ spec:
       logAsJson: true
       omitSidecarInjectorConfigMap: true
       operatorManageWebhooks: true
-      proxy:
-        accessLogEncoding: JSON
-        autoInject: disabled
     pilot:
       autoscaleEnabled: false
     mixer:
