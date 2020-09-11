@@ -66,7 +66,7 @@ spec:
 
   meshConfig:
     accessLogFile: /dev/stdout
-    accessLogEncoding: json
+    accessLogEncoding: 'JSON'
 
   values:
     gateways:
