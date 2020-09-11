@@ -113,11 +113,13 @@ spec:
           {{- end }}
         - name: http2
           port: 80
+          targetPort: 8080
           {{- if eq .Values.ingress.type "NodePort" }}
           nodePort: 30080
           {{- end }}
         - name: https
           port: 443
+          targetPort: 8443
           {{- if eq .Values.ingress.type "NodePort" }}
           nodePort: 30443
           {{- end }}
