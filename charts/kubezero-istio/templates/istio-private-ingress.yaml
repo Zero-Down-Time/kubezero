@@ -115,7 +115,4 @@ spec:
       jwtPolicy: first-party-jwt
       logAsJson: true
       omitSidecarInjectorConfigMap: true
-      proxy:
-        accessLogEncoding: JSON
-        autoInject: disabled
 {{- end }}
