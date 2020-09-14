@@ -8,12 +8,12 @@ kubezero:
     values:
       network: {{ default "vxlan" .Values.calico.network }}
       mtu: {{ default "8941" .Values.calico.mtu }}
-      prometheus: {{ .Values.metrics.enabled }}
+      prometheus: {{ .Values.metrics.ready }}
   cert-manager:
     enabled: {{ index .Values "cert-manager" "enabled" }}
     values:
       # Disable all until webhook is in place
-      {{- if index .Values "cert-manager" "not_ready" }}
+      {{- if not ( index .Values "cert-manager" "ready" ) }}
       localCA:
         enabled: false
       {{- end }}
@@ -23,7 +23,7 @@ kubezero:
           iam.amazonaws.com/role: "{{ index .Values "cert-manager" "IamArn" }}"
       {{- end }}
 
-      {{- if not .Values.kiam.not_ready }}
+      {{- if .Values.kiam.ready }}
       clusterIssuer:
         name: letsencrypt-dns-prod
         server: https://acme-v02.api.letsencrypt.org/directory
@@ -47,25 +47,24 @@ kubezero:
 
 
   {{- if eq .Values.platform "aws" }}
-  {{- if not ( index .Values "cert-manager" "not_ready" ) }}
   kiam:
     enabled: {{ .Values.kiam.enabled }}
     values:
       kiam:
+        enabled: {{ ( not .Values.kiam.certsOnly ) }}
         server:
           assumeRoleArn: "{{ .Values.kiam.IamArn }}"
           deployment:
             replicas: {{ ternary 2 1 .Values.HighAvailableControlplane }}
           prometheus:
             servicemonitor:
-              enabled: {{ .Values.metrics.enabled }}
+              enabled: {{ .Values.metrics.ready }}
         agent:
           prometheus:
             servicemonitor:
-              enabled: {{ .Values.metrics.enabled }}
-  {{- end }}
+              enabled: {{ .Values.metrics.ready }}
 
-  {{- if not .Values.kiam.not_ready }}
+  {{- if .Values.kiam.ready }}
   # AWS only components
   aws-ebs-csi-driver:
     enabled: {{ index .Values "aws-ebs-csi-driver" "enabled" }}
@@ -95,7 +94,7 @@ kubezero:
     values:
       istiod:
         replicaCount: {{ ternary 2 1 .Values.HighAvailableControlplane }}
-      {{- if not ( index .Values "cert-manager" "not_ready" ) }}
+      {{- if index .Values "cert-manager" "ready" }}
       {{- if .Values.istio.ingress }}
       ingress:
         {{- toYaml .Values.istio.ingress | nindent 8 }}
@@ -103,16 +102,16 @@ kubezero:
       {{- end }}
 
   metrics:
-    enabled: {{ .Values.metrics.enabled }}
+    enabled: {{ .Values.metrics.ready }}
     values:
-      {{- if and .Values.metrics.istio.grafana.enabled .Values.istio.enabled }}
+      {{- if and .Values.metrics.istio.grafana.enabled .Values.istio.ready }}
       grafana:
         istio:
           {{- with .Values.metrics.istio.grafana }}
           {{- toYaml . | nindent 10 }}
           {{- end }}
       {{- end }}
-      {{- if and .Values.metrics.istio.prometheus.enabled .Values.istio.enabled }}
+      {{- if and .Values.metrics.istio.prometheus.enabled .Values.istio.ready }}
       prometheus:
         istio:
           {{- with .Values.metrics.istio.prometheus }}
@@ -149,7 +148,7 @@ kubezero:
         {{- toYaml . | nindent 8 }}
         {{- end }}
         {{- end }}
-        prometheus: {{ .Values.metrics.enabled }}
+        prometheus: {{ .Values.metrics.ready }}
 
         {{- if .Values.logging.es.s3Snapshot }}
         s3Snapshot:
@@ -169,9 +168,9 @@ kubezero:
       fluentd:
         enabled: {{ .Values.logging.fluentd.enabled }}
         metrics:
-          enabled: {{ .Values.metrics.enabled }}
+          enabled: {{ .Values.metrics.ready }}
         url: {{ .Values.logging.fluentd.url }}
-        {{- if and .Values.logging.fluentd.istio .Values.istio.enabled }}
+        {{- if and .Values.logging.fluentd.istio .Values.istio.ready }}
         istio:
           {{- with .Values.logging.fluentd.istio }}
           {{- toYaml . | nindent 10 }}
@@ -181,7 +180,7 @@ kubezero:
       fluent-bit:
         enabled: {{ index .Values.logging "fluent-bit" "enabled" }}
         metrics:
-          enabled: {{ .Values.metrics.enabled }}
+          enabled: {{ .Values.metrics.ready }}
         {{- if index .Values.logging "fluent-bit" "config" }}
         config:
           {{- with index .Values.logging "fluent-bit" "config" }}
@@ -192,13 +191,13 @@ kubezero:
 argo-cd:
   controller:
     metrics:
-      enabled: {{ .Values.metrics.enabled }}
+      enabled: {{ .Values.metrics.ready }}
   repoServer:
     metrics:
-      enabled: {{ .Values.metrics.enabled }}
+      enabled: {{ .Values.metrics.ready }}
   server:
     metrics:
-      enabled: {{ .Values.metrics.enabled }}
+      enabled: {{ .Values.metrics.ready }}
     {{- with index .Values "argo-cd" "server" }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
@@ -206,7 +205,7 @@ argo-cd:
   configs:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- if and ( index .Values "argo-cd" "istio" "enabled" ) .Values.istio.enabled }}
+  {{- if and ( index .Values "argo-cd" "istio" "enabled" ) .Values.istio.ready }}
   istio:
     {{- with index .Values "argo-cd" "istio" }}
     {{- toYaml . | nindent 4 }}
