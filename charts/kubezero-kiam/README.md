@@ -2,7 +2,7 @@ kubezero-kiam
 =============
 KubeZero Umbrella Chart for Kiam
 
-Current chart version is `0.2.8`
+Current chart version is `0.2.10`
 
 Source code can be found [here](https://kubezero.com)
 
@@ -43,6 +43,10 @@ By default all access to the meta-data service is blocked, expect for:
 | kiam.agent.prometheus.servicemonitor.enabled | bool | `false` |  |
 | kiam.agent.prometheus.servicemonitor.interval | string | `"30s"` |  |
 | kiam.agent.prometheus.servicemonitor.labels.release | string | `"metrics"` |  |
+| kiam.agent.resources.limits.cpu | string | `"50m"` |  |
+| kiam.agent.resources.limits.memory | string | `"20Mi"` |  |
+| kiam.agent.resources.requests.cpu | string | `"50m"` |  |
+| kiam.agent.resources.requests.memory | string | `"20Mi"` |  |
 | kiam.agent.sslCertHostPath | string | `"/etc/ssl/certs"` |  |
 | kiam.agent.tlsCerts.caFileName | string | `"ca.crt"` |  |
 | kiam.agent.tlsCerts.certFileName | string | `"tls.crt"` |  |
@@ -52,6 +56,7 @@ By default all access to the meta-data service is blocked, expect for:
 | kiam.agent.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | kiam.agent.updateStrategy | string | `"RollingUpdate"` |  |
 | kiam.agent.whiteListRouteRegexp | string | `"^/latest/(meta-data/instance-id|dynamic)"` |  |
+| kiam.enabled | bool | `true` |  |
 | kiam.server.assumeRoleArn | string | `""` |  kiam server IAM role to assume, required as we run the agents next to the servers normally, eg. arn:aws:iam::123456789012:role/kiam-server-role |
 | kiam.server.deployment.enabled | bool | `true` |  |
 | kiam.server.deployment.replicas | int | `1` |  |
@@ -61,6 +66,10 @@ By default all access to the meta-data service is blocked, expect for:
 | kiam.server.prometheus.servicemonitor.enabled | bool | `false` |  |
 | kiam.server.prometheus.servicemonitor.interval | string | `"30s"` |  |
 | kiam.server.prometheus.servicemonitor.labels.release | string | `"metrics"` |  |
+| kiam.server.resources.limits.cpu | string | `"100m"` |  |
+| kiam.server.resources.limits.memory | string | `"50Mi"` |  |
+| kiam.server.resources.requests.cpu | string | `"100m"` |  |
+| kiam.server.resources.requests.memory | string | `"50Mi"` |  |
 | kiam.server.service.port | int | `6444` |  |
 | kiam.server.service.targetPort | int | `6444` |  |
 | kiam.server.sslCertHostPath | string | `"/etc/ssl/certs"` |  |
