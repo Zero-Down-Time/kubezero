@@ -9,6 +9,7 @@ calico:
 
 cert-manager:
   enabled: true
+  ready: true
   IamArn: ""
 
 aws-ebs-csi-driver:
@@ -20,13 +21,16 @@ aws-efs-csi-driver:
 
 kiam:
   enabled: true
+  ready: true
   IamArn: ""
 
 istio:
+  ready: true
   enabled: false
 
 metrics:
   enabled: false
+  ready: true
   istio:
     grafana:
       enabled: false
