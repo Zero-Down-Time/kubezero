@@ -1,0 +1,6 @@
+istio:
+  ready: false
+
+metrics:
+  enabled: false
+  ready: false
