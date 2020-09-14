@@ -79,10 +79,13 @@ Source code can be found [here](https://kubezero.com)
 | prometheus-operator.nodeExporter.serviceMonitor.relabelings[0].targetLabel | string | `"node"` |  |
 | prometheus-operator.prometheus.enabled | bool | `true` |  |
 | prometheus-operator.prometheus.prometheusSpec.portName | string | `"http-prometheus"` |  |
-| prometheus-operator.prometheus.prometheusSpec.resources.requests.memory | string | `"512Mi"` |  |
+| prometheus-operator.prometheus.prometheusSpec.resources.limits.cpu | string | `"1000m"` |  |
+| prometheus-operator.prometheus.prometheusSpec.resources.limits.memory | string | `"3Gi"` |  |
+| prometheus-operator.prometheus.prometheusSpec.resources.requests.cpu | string | `"500m"` |  |
+| prometheus-operator.prometheus.prometheusSpec.resources.requests.memory | string | `"1Gi"` |  |
 | prometheus-operator.prometheus.prometheusSpec.retention | string | `"8d"` |  |
 | prometheus-operator.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.accessModes[0] | string | `"ReadWriteOnce"` |  |
-| prometheus-operator.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage | string | `"8Gi"` |  |
+| prometheus-operator.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage | string | `"16Gi"` |  |
 | prometheus-operator.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.storageClassName | string | `"ebs-sc-gp2-xfs"` |  |
 | prometheus-operator.prometheusOperator.admissionWebhooks.enabled | bool | `false` |  |
 | prometheus-operator.prometheusOperator.createCustomResource | bool | `true` |  |

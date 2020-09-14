@@ -2,7 +2,7 @@ kubezero-logging
 ================
 KubeZero Umbrella Chart for complete EFK stack
 
-Current chart version is `0.3.3`
+Current chart version is `0.3.5`
 
 Source code can be found [here](https://kubezero.com)
 
@@ -11,7 +11,7 @@ Source code can be found [here](https://kubezero.com)
 | Repository | Name | Version |
 |------------|------|---------|
 | https://kubernetes-charts.storage.googleapis.com/ | fluentd | 2.5.1 |
-| https://zero-down-time.github.io/kubezero/ | fluent-bit | 0.6.4 |
+| https://zero-down-time.github.io/kubezero/ | fluent-bit | 0.7.2 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## Changes from upstream
