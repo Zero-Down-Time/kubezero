@@ -2,7 +2,7 @@ kubezero-argo-cd
 ================
 KubeZero ArgoCD Helm chart to install ArgoCD itself and the KubeZero ArgoCD Application
 
-Current chart version is `0.5.0`
+Current chart version is `0.5.1`
 
 Source code can be found [here](https://kubezero.com)
 
@@ -25,6 +25,9 @@ Source code can be found [here](https://kubezero.com)
 | argo-cd.controller.metrics.serviceMonitor.enabled | bool | `true` |  |
 | argo-cd.controller.metrics.serviceMonitor.namespace | string | `"monitoring"` |  |
 | argo-cd.controller.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
+| argo-cd.controller.resources.limits.memory | string | `"512Mi"` |  |
+| argo-cd.controller.resources.requests.cpu | string | `"100m"` |  |
+| argo-cd.controller.resources.requests.memory | string | `"192Mi"` |  |
 | argo-cd.controller.tolerations[0].effect | string | `"NoSchedule"` |  |
 | argo-cd.controller.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | argo-cd.dex.enabled | bool | `false` |  |
