@@ -49,6 +49,13 @@ argo-cd:
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
+    resources:
+      limits:
+        # cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 192Mi
 
   repoServer:
     metrics:
