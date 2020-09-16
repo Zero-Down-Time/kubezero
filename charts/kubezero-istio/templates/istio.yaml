@@ -90,6 +90,7 @@ spec:
   meshConfig:
     accessLogFile: /dev/stdout
     accessLogEncoding: 'JSON'
+    h2UpgradePolicy: 'DO_NOT_UPGRADE'
   values:
     gateways:
       istio-ingressgateway:
