@@ -67,6 +67,10 @@ spec:
   meshConfig:
     accessLogFile: /dev/stdout
     accessLogEncoding: 'JSON'
+    h2UpgradePolicy: 'DO_NOT_UPGRADE'
+    tcpKeepalive:
+      interval: 30s
+      time: 60s
 
   values:
     gateways:
