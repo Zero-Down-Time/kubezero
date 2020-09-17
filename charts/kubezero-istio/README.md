@@ -5,7 +5,7 @@ KubeZero Umbrella Chart for Istio
 Installs Istio Operator and KubeZero Istio profile
 
 
-Current chart version is `0.3.0`
+Current chart version is `0.3.3`
 
 Source code can be found [here](https://kubezero.com)
 
