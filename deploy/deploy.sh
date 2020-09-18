@@ -8,7 +8,7 @@ function wait_for() {
   local TRIES=0
   while true; do
     $@ && break
-    [ $TRIES -eq 100 ] && return 1
+    [ $TRIES -eq 200 ] && return 1
     let TRIES=$TRIES+1
     sleep 3
   done
@@ -60,12 +60,12 @@ EOF
     wait_for kubectl get Issuer -n kube-system kubezero-local-ca-issuer 2>/dev/null 1>&2
     wait_for kubectl get ClusterIssuer letsencrypt-dns-prod 2>/dev/null 1>&2
     kubectl wait --for=condition=Ready -n kube-system Issuer/kubezero-local-ca-issuer
-    kubectl wait --for=condition=Ready ClusterIssuer/letsencrypt-dns-prod
   fi
 
   # Now that we have the cert-manager webhook, get the kiam certs in place but do NOT deploy kiam yet
   helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml -f $DEPLOY_DIR/values-step-3.yaml > generated-values.yaml
   helm upgrade -n argocd kubezero kubezero/kubezero-argo-cd -f generated-values.yaml
+  kubectl wait --for=condition=Ready -n kube-system certificates/kiam-server
 
   # Now lets make sure kiam is working
   helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml -f $DEPLOY_DIR/values-step-4.yaml > generated-values.yaml
@@ -79,12 +79,10 @@ EOF
   wait_for kubectl get deployment -n istio-operator istio-operator 2>/dev/null 1>&2
   kubectl rollout status deployment -n istio-operator istio-operator
 
-  # Todo: Now we need to wait till all is synced and healthy ... argocd cli or kubectl ?
-  # Wait for aws-ebs or kiam to be all ready, or all pods running ?
-
-  # Todo: 
-  # - integrate Prometheus-Grafana
-  # - integrate ES based logging
+  # Metrics
+  helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml -f $DEPLOY_DIR/values-step-6.yaml  > generated-values.yaml
+  helm upgrade -n argocd kubezero kubezero/kubezero-argo-cd -f generated-values.yaml
+  wait_for kubectl get crds servicemonitors.monitoring.coreos.com 2>/dev/null 1>&2
 
   # Finally we could enable the actual config and deploy all
   helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml > generated-values.yaml
