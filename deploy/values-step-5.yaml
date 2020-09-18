@@ -4,3 +4,6 @@ istio:
 metrics:
   enabled: false
   ready: false
+
+logging:
+  enabled: false
