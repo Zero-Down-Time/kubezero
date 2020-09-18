@@ -70,6 +70,7 @@ fluentd:
       namespace: monitoring
 
   output:
+    # Default should be "logging-kubezero-logging-es-http" if fullnameOverride is NOT used
     host: logging-es-http
 
   shared_key: "cloudbender"
@@ -78,6 +79,7 @@ fluentd:
     OUTPUT_USER: elastic
     OUTPUT_SSL_VERIFY: "false"
 
+  # Same here the secret names change if fullnameOverride is not used !!
   extraEnvVars:
   - name: OUTPUT_PASSWORD
     valueFrom:
