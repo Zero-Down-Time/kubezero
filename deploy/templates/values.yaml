@@ -168,6 +168,14 @@ kubezero:
         metrics:
           enabled: {{ and .Values.metrics.enabled .Values.metrics.ready }}
         url: {{ .Values.logging.fluentd.url }}
+        {{- if .Values.logging.fluentd.output }}
+        output:
+          host: {{ .Values.logging.fluentd.output.host }}
+        {{- end }}
+        {{- if .Values.logging.fluentd.extraEnvVars }}
+        extraEnvVars:
+          {{- toYaml .Values.logging.fluentd.extraEnvVars | nindent 10 }}
+        {{- end }}
         {{- if and .Values.logging.fluentd.istio .Values.istio.enabled .Values.istio.ready }}
         istio:
           {{- with .Values.logging.fluentd.istio }}
