@@ -8,7 +8,7 @@ kubezero:
     values:
       network: {{ default "vxlan" .Values.calico.network }}
       mtu: {{ default "8941" .Values.calico.mtu }}
-      prometheus: {{ default .Values.metrics.enabled .Values.metrics.ready }}
+      prometheus: {{ and .Values.metrics.enabled .Values.metrics.ready }}
   cert-manager:
     enabled: {{ index .Values "cert-manager" "enabled" }}
     values:
@@ -56,11 +56,11 @@ kubezero:
             replicas: {{ ternary 2 1 .Values.HighAvailableControlplane }}
           prometheus:
             servicemonitor:
-              enabled: {{ default .Values.metrics.enabled .Values.metrics.ready }}
+              enabled: {{ and .Values.metrics.enabled .Values.metrics.ready }}
         agent:
           prometheus:
             servicemonitor:
-              enabled: {{ default .Values.metrics.enabled .Values.metrics.ready }}
+              enabled: {{ and .Values.metrics.enabled .Values.metrics.ready }}
 
   {{- if and .Values.kiam.enabled .Values.kiam.ready }}
   # AWS only components
@@ -146,7 +146,7 @@ kubezero:
         {{- toYaml . | nindent 8 }}
         {{- end }}
         {{- end }}
-        prometheus: {{ default .Values.metrics.enabled .Values.metrics.ready }}
+        prometheus: {{ and .Values.metrics.enabled .Values.metrics.ready }}
 
         {{- if .Values.logging.es.s3Snapshot }}
         s3Snapshot:
@@ -166,7 +166,7 @@ kubezero:
       fluentd:
         enabled: {{ .Values.logging.fluentd.enabled }}
         metrics:
-          enabled: {{ default .Values.metrics.enabled .Values.metrics.ready }}
+          enabled: {{ and .Values.metrics.enabled .Values.metrics.ready }}
         url: {{ .Values.logging.fluentd.url }}
         {{- if and .Values.logging.fluentd.istio .Values.istio.enabled .Values.istio.ready }}
         istio:
@@ -178,7 +178,7 @@ kubezero:
       fluent-bit:
         enabled: {{ index .Values.logging "fluent-bit" "enabled" }}
         metrics:
-          enabled: {{ default .Values.metrics.enabled .Values.metrics.ready }}
+          enabled: {{ and .Values.metrics.enabled .Values.metrics.ready }}
         {{- if index .Values.logging "fluent-bit" "config" }}
         config:
           {{- with index .Values.logging "fluent-bit" "config" }}
@@ -189,13 +189,13 @@ kubezero:
 argo-cd:
   controller:
     metrics:
-      enabled: {{ default .Values.metrics.enabled .Values.metrics.ready }}
+      enabled: {{ and .Values.metrics.enabled .Values.metrics.ready }}
   repoServer:
     metrics:
-      enabled: {{ default .Values.metrics.enabled .Values.metrics.ready }}
+      enabled: {{ and .Values.metrics.enabled .Values.metrics.ready }}
   server:
     metrics:
-      enabled: {{ default .Values.metrics.enabled .Values.metrics.ready }}
+      enabled: {{ and .Values.metrics.enabled .Values.metrics.ready }}
     {{- with index .Values "argo-cd" "server" }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
