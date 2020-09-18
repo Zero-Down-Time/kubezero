@@ -35,8 +35,8 @@ argo-cd:
 
   controller:
     args:
-      statusProcessors: "2"
-      operationProcessors: "1"
+      statusProcessors: "4"
+      operationProcessors: "2"
       appResyncPeriod: "300"
 
     metrics:
