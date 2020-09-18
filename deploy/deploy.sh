@@ -62,6 +62,9 @@ EOF
     kubectl wait --for=condition=Ready -n kube-system Issuer/kubezero-local-ca-issuer
   fi
 
+  # Make sure kube-system is allowed to kiam
+  kubectl annotate --overwrite namespace kube-system 'iam.amazonaws.com/permitted=.*'
+
   # Now that we have the cert-manager webhook, get the kiam certs in place but do NOT deploy kiam yet
   helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml -f $DEPLOY_DIR/values-step-3.yaml > generated-values.yaml
   helm upgrade -n argocd kubezero kubezero/kubezero-argo-cd -f generated-values.yaml
