@@ -1,3 +1,5 @@
+annotateKubeSystemNameSpace: false
+
 kiam:
   enabled: true
   server:
