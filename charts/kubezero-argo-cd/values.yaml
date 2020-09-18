@@ -29,6 +29,10 @@ argo-cd:
   #    argocdServerAdminPassword: "$2a$10$ivKzaXVxMqdeDSfS3nqi1Od3iDbnL7oXrixzDfZFRHlXHnAG6LydG"
   #    argocdServerAdminPasswordMtime: "2020-04-24T15:33:09BST"
 
+  global:
+    image:
+      tag: v1.7.5
+
   controller:
     args:
       statusProcessors: "2"
