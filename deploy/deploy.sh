@@ -58,7 +58,6 @@ EOF
     helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml -f $DEPLOY_DIR/values-step-2.yaml > generated-values.yaml
     helm upgrade -n argocd kubezero kubezero/kubezero-argo-cd -f generated-values.yaml
     wait_for kubectl get Issuer -n kube-system kubezero-local-ca-issuer 2>/dev/null 1>&2
-    wait_for kubectl get ClusterIssuer letsencrypt-dns-prod 2>/dev/null 1>&2
     kubectl wait --for=condition=Ready -n kube-system Issuer/kubezero-local-ca-issuer
   fi
 
