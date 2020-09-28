@@ -128,7 +128,7 @@ fluentd:
         remove_keys id
 
         # KubeZero pipeline incl. GeoIP etc.
-        pipeline fluentd
+        # pipeline fluentd
 
         host "#{ENV['OUTPUT_HOST']}"
         port "#{ENV['OUTPUT_PORT']}"
