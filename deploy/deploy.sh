@@ -2,6 +2,7 @@
 set -e
 
 DEPLOY_DIR=$( dirname $( realpath $0 ))
+which yq || { echo "yq not found!"; exit 1; }
 
 # Waits for max 300s and retries
 function wait_for() {
@@ -31,13 +32,15 @@ else
     _argo_date="$(date -u --iso-8601=seconds)"
     _argo_passwd="$($DEPLOY_DIR/argocd_password.py)"
 
-    cat <<EOF >> values.yaml
+    cat <<EOF > _argocd_values.yaml
+argo-cd:
   configs:
     secret:
       # ArgoCD password: ${_argo_passwd%%:*} Please move to secure location !
       argocdServerAdminPassword: "${_argo_passwd##*:}"
       argocdServerAdminPasswordMtime: "$_argo_date"
 EOF
+    yq merge -i --overwrite values.yaml _argocd_values.yaml && rm -f _argocd_values.yaml
   fi
 
   # Deploy initial argocd
