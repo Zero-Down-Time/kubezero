@@ -128,8 +128,7 @@ fluentd:
         remove_keys id
 
         # KubeZero pipeline incl. GeoIP etc.
-        # Freaking ES jams under load and all is lost ...
-        # pipeline fluentd
+        pipeline fluentd
 
         host "#{ENV['OUTPUT_HOST']}"
         port "#{ENV['OUTPUT_PORT']}"
