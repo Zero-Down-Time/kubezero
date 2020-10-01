@@ -108,7 +108,8 @@ fluentd:
         port 24224
         bind 0.0.0.0
         skip_invalid_event true
-        send_keepalive_packet true
+        # Only for TCP not TLS
+        # send_keepalive_packet true
         <transport tls>
           cert_path /mnt/fluentd-certs/tls.crt
           private_key_path /mnt/fluentd-certs/tls.key
