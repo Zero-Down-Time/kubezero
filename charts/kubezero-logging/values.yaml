@@ -31,7 +31,7 @@ fluentd:
   enabled: false
   image:
     repository: quay.io/fluentd_elasticsearch/fluentd
-    tag: v3.0.4
+    tag: v2.9.0
   istio:
     enabled: false
 
@@ -230,9 +230,10 @@ fluent-bit:
           Path /var/log/containers/*.log
           Parser cri
           Tag kube.*
-          Mem_Buf_Limit 5MB
+          Mem_Buf_Limit 8MB
           Skip_Long_Lines On
           Refresh_Interval 10
+          Exclude_Path *.gz,*.zip
           DB /var/log/flb_kube.db
           DB.Sync Normal
       [INPUT]
@@ -240,9 +241,8 @@ fluent-bit:
           Path /var/log/kubernetes/audit.log
           Parser json
           Tag audit.api-server
-          Mem_Buf_Limit 5MB
+          Mem_Buf_Limit 8MB
           Skip_Long_Lines On
-          Refresh_Interval 60
           DB /var/log/flb_kube_audit.db
           DB.Sync Normal
 
