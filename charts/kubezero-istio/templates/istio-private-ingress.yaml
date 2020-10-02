@@ -30,13 +30,13 @@ spec:
             name: istio-private-ingressgateway
         {{- end }}
         env:
+        {{- if .Values.ingress.private.http10 }}
+        - name: ISTIO_META_HTTP10
+          value: '"1"'
+        {{- end }}
         # https://github.com/istio/istio/issues/26524, not in 1.7 either
         #- name: TERMINATION_DRAIN_DURATION_SECONDS
         #  value: "60"
-        - name: ISTIO_META_HTTP10
-          value: '"1"'
-        - name: ISTIO_META_ROUTER_MODE
-          value: standard
         #- name: ISTIO_META_IDLE_TIMEOUT
         #  value: "3600s"
         {{- if eq .Values.ingress.type "NodePort" }}
