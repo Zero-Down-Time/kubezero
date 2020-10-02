@@ -21,3 +21,6 @@ patch  -i istio-operator.patch -p0
 
 # Extract base / CRDs from istioctl into plain manifest to workaround chicken egg problem with CRDs
 ./istioctl manifest generate --set profile=empty --set components.base.enabled=true > templates/istio-base.yaml
+
+# Remove double CRD
+patch  -i istio-base.patch -p3
