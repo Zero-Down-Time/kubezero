@@ -102,6 +102,23 @@ fluentd:
       readOnly: true
 
   configMaps:
+    general.conf: |
+      <label @FLUENT_LOG>
+        @type null
+      </label>
+      <source>
+        @type http
+        port 9880
+        bind 0.0.0.0
+        keepalive_timeout 30
+      </source>
+      <source>
+        @type monitor_agent
+        bind 0.0.0.0
+        port 24220
+        tag fluentd.monitor.metrics
+      </source>
+
     forward-input.conf: |
       <source>
         @type forward
@@ -161,52 +178,17 @@ fluentd:
       </match>
 
     filter.conf: |
-      <filter kube.**>
+      <filter disabled.kube.**>
         @type parser
         key_name message
         remove_key_name_field true
         reserve_data true
+        # inject_key_prefix message_json.
         emit_invalid_record_to_error false
         <parse>
           @type json
         </parse>
       </filter>
-
-#    <filter auth system.auth>
-#      @type parser
-#      key_name message
-#      reserve_data true
-#      reserve_time true
-#      <parse>
-#        @type grok
-#
-#        # SSH
-#        <grok>
-#          pattern %{DATA:system.auth.ssh.event} %{DATA:system.auth.ssh.method} for (invalid user )?%{DATA:system.auth.user} from %{IPORHOST:system.auth.ip} port %{NUMBER:system.auth.port} ssh2(: %{GREEDYDATA:system.auth.ssh.signature})?
-#        </grok>
-#        <grok>
-#          pattern %{DATA:system.auth.ssh.event} user %{DATA:system.auth.user} from %{IPORHOST:system.auth.ip}
-#        </grok>
-#
-#        # sudo
-#        <grok>
-#          pattern \s*%{DATA:system.auth.user} :( %{DATA:system.auth.sudo.error} ;)? TTY=%{DATA:system.auth.sudo.tty} ; PWD=%{DATA:system.auth.sudo.pwd} ; USER=%{DATA:system.auth.sudo.user} ; COMMAND=%{GREEDYDATA:system.auth.sudo.command}
-#        </grok>
-#
-#        # Users
-#        <grok>
-#          pattern new group: name=%{DATA:system.auth.groupadd.name}, GID=%{NUMBER:system.auth.groupadd.gid}
-#        </grok>
-#        <grok>
-#          pattern new user: name=%{DATA:system.auth.useradd.name}, UID=%{NUMBER:system.auth.useradd.uid}, GID=%{NUMBER:system.auth.useradd.gid}, home=%{DATA:system.auth.useradd.home}, shell=%{DATA:system.auth.useradd.shell}$
-#        </grok>
-#
-#        <grok>
-#          pattern %{GREEDYDATA:message}
-#        </grok>
-#      </parse>
-#    </filter>
-
 
 fluent-bit:
   enabled: false
@@ -230,7 +212,7 @@ fluent-bit:
           Path /var/log/containers/*.log
           Parser cri
           Tag kube.*
-          Mem_Buf_Limit 8MB
+          Mem_Buf_Limit 16MB
           Skip_Long_Lines On
           Refresh_Interval 10
           Exclude_Path *.gz,*.zip
