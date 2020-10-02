@@ -104,7 +104,9 @@ fluentd:
   configMaps:
     general.conf: |
       <label @FLUENT_LOG>
-        @type null
+        <match **>
+          @type null
+        </match>
       </label>
       <source>
         @type http
