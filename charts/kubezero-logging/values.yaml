@@ -187,21 +187,21 @@ fluent-bit:
   config:
     outputs: |
       [OUTPUT]
-        Match *
-        Name forward
-        Host logging-fluentd
-        Port 24224
-        Shared_Key cloudbender
-        Send_options true
-        Require_ack_response true
+          Match *
+          Name forward
+          Host logging-fluentd
+          Port 24224
+          Shared_Key cloudbender
+          Send_options true
+          Require_ack_response true
 
     customParsers: |
       [PARSER]
-        Name cri-log
-        Format regex
-        Regex ^(?<time>[^ ]+) (?<stream>stdout|stderr) (?<logtag>[^ ]*) (?<log>.*)$
-        Time_Key    time
-        Time_Format %Y-%m-%dT%H:%M:%S.%L%z
+          Name cri-log
+          Format regex
+          Regex ^(?<time>[^ ]+) (?<stream>stdout|stderr) (?<logtag>[^ ]*) (?<log>.*)$
+          Time_Key    time
+          Time_Format %Y-%m-%dT%H:%M:%S.%L%z
 
     inputs: |
       [INPUT]
