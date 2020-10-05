@@ -1,15 +1,22 @@
-kubezero-istio
-==============
+# kubezero-istio
+
+![Version: 0.3.4](https://img.shields.io/badge/Version-0.3.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.7.3](https://img.shields.io/badge/AppVersion-1.7.3-informational?style=flat-square)
+
 KubeZero Umbrella Chart for Istio
 
 Installs Istio Operator and KubeZero Istio profile
 
+**Homepage:** <https://kubezero.com>
 
-Current chart version is `0.3.3`
+## Maintainers
 
-Source code can be found [here](https://kubezero.com)
+| Name | Email | Url |
+| ---- | ------ | --- |
+| Quarky9 |  |  |
 
-## Chart Requirements
+## Requirements
+
+Kubernetes: `>= 1.16.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
@@ -19,7 +26,7 @@ Source code can be found [here](https://kubezero.com)
 ## KubeZero default configuration
 - mapped istio-operator to run on the controller nodes only
 
-## Chart Values
+## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -30,7 +37,7 @@ Source code can be found [here](https://kubezero.com)
 | ingress.replicaCount | int | `2` |  |
 | ingress.type | string | `"NodePort"` |  |
 | istio-operator.hub | string | `"docker.io/istio"` |  |
-| istio-operator.tag | string | `"1.7.1"` |  |
+| istio-operator.tag | string | `"1.7.3"` |  |
 | istiod.autoscaleEnabled | bool | `false` |  |
 | istiod.replicaCount | int | `1` |  |
 

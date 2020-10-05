@@ -1,25 +1,33 @@
-kubezero-argo-cd
-================
+# kubezero-argo-cd
+
+![Version: 0.5.3](https://img.shields.io/badge/Version-0.5.3-informational?style=flat-square)
+
 KubeZero ArgoCD Helm chart to install ArgoCD itself and the KubeZero ArgoCD Application
 
-Current chart version is `0.5.3`
+**Homepage:** <https://kubezero.com>
 
-Source code can be found [here](https://kubezero.com)
+## Maintainers
 
-## Chart Requirements
+| Name | Email | Url |
+| ---- | ------ | --- |
+| Quarky9 |  |  |
+
+## Requirements
+
+Kubernetes: `>= 1.16.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
 | https://argoproj.github.io/argo-helm | argo-cd | 2.7.0 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
-## Chart Values
+## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | argo-cd.controller.args.appResyncPeriod | string | `"300"` |  |
-| argo-cd.controller.args.operationProcessors | string | `"1"` |  |
-| argo-cd.controller.args.statusProcessors | string | `"2"` |  |
+| argo-cd.controller.args.operationProcessors | string | `"2"` |  |
+| argo-cd.controller.args.statusProcessors | string | `"4"` |  |
 | argo-cd.controller.metrics.enabled | bool | `false` |  |
 | argo-cd.controller.metrics.serviceMonitor.additionalLabels.release | string | `"metrics"` |  |
 | argo-cd.controller.metrics.serviceMonitor.enabled | bool | `true` |  |

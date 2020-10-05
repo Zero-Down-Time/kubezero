@@ -1,12 +1,25 @@
-kubezero-aws-efs-csi-driver
-===========================
+# kubezero-aws-efs-csi-driver
+
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
+
 KubeZero Umbrella Chart for aws-efs-csi-driver
 
-Current chart version is `0.1.1`
+**Homepage:** <https://kubezero.com>
 
-Source code can be found [here](https://kubezero.com)
+## Maintainers
 
-## Chart Requirements
+| Name | Email | Url |
+| ---- | ------ | --- |
+| Quarky9 |  |  |
+
+## Source Code
+
+* <https://github.com/Zero-Down-Time/kubezero>
+* <https://github.com/kubernetes-sigs/aws-efs-csi-driver>
+
+## Requirements
+
+Kubernetes: `>=1.16.0-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
@@ -16,7 +29,7 @@ Source code can be found [here](https://kubezero.com)
 Optionally creates the *efs-cs* storage class.
 Could also be made the default storage class if requested.
 
-## Chart Values
+## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|

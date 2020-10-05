@@ -1,12 +1,20 @@
-kubezero-metrics
-================
+# kubezero-metrics
+
+![Version: 0.1.4](https://img.shields.io/badge/Version-0.1.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+
 KubeZero Umbrella Chart for prometheus-operator
 
-Current chart version is `0.1.4`
+**Homepage:** <https://kubezero.com>
 
-Source code can be found [here](https://kubezero.com)
+## Maintainers
 
-## Chart Requirements
+| Name | Email | Url |
+| ---- | ------ | --- |
+| Quarky9 |  |  |
+
+## Requirements
+
+Kubernetes: `>= 1.16.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
@@ -14,7 +22,7 @@ Source code can be found [here](https://kubezero.com)
 | https://kubernetes-charts.storage.googleapis.com/ | prometheus-operator | 9.3.1 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
-## Chart Values
+## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -101,7 +109,6 @@ Source code can be found [here](https://kubezero.com)
 | prometheus.istio.enabled | bool | `false` |  |
 | prometheus.istio.gateway | string | `"istio-system/ingressgateway"` |  |
 | prometheus.istio.url | string | `""` |  |
-
 
 # Dashboards
 
