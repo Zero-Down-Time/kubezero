@@ -1,12 +1,20 @@
-kubezero-kiam
-=============
+# kubezero-kiam
+
+![Version: 0.2.11](https://img.shields.io/badge/Version-0.2.11-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.6](https://img.shields.io/badge/AppVersion-3.6-informational?style=flat-square)
+
 KubeZero Umbrella Chart for Kiam
 
-Current chart version is `0.2.10`
+**Homepage:** <https://kubezero.com>
 
-Source code can be found [here](https://kubezero.com)
+## Maintainers
 
-## Chart Requirements
+| Name | Email | Url |
+| ---- | ------ | --- |
+| Quarky9 |  |  |
+
+## Requirements
+
+Kubernetes: `>= 1.16.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
@@ -20,21 +28,22 @@ Therefore we also change the default port from 443 to 6444 to not collide with t
 Make sure any firewall rules between controllers and workers are adjusted accordingly.
 
 ## Kiam Certificates
-The required certificates for Kiam server and agents are provided by a local cert-manager, which is configured to have a cluster local self-signing CA as part of the KubeZero platform.  
-[Kiam TLS Config](https://github.com/uswitch/kiam/blob/master/docs/TLS.md#cert-manager)  
+The required certificates for Kiam server and agents are provided by a local cert-manager, which is configured to have a cluster local self-signing CA as part of the KubeZero platform. 
+[Kiam TLS Config](https://github.com/uswitch/kiam/blob/master/docs/TLS.md#cert-manager) 
 [KubeZero cert-manager](../kubezero-cert-manager/README.md)
 
 ## Metadata restrictions
-Some services require access to some basic AWS information. One example is the `aws-ebs-csi` controller.  
-By default all access to the meta-data service is blocked, expect for:  
+Some services require access to some basic AWS information. One example is the `aws-ebs-csi` controller. 
+By default all access to the meta-data service is blocked, expect for: 
 
 - `/latest/meta-data/instance-id`
 - `/latest/dynamic/instance-identity/document`
 
-## Chart Values
+## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| annotateKubeSystemNameSpace | bool | `false` |  |
 | kiam.agent.gatewayTimeoutCreation | string | `"5s"` |  |
 | kiam.agent.host.interface | string | `"cali+"` |  |
 | kiam.agent.host.iptables | bool | `false` |  |
@@ -57,7 +66,7 @@ By default all access to the meta-data service is blocked, expect for:
 | kiam.agent.updateStrategy | string | `"RollingUpdate"` |  |
 | kiam.agent.whiteListRouteRegexp | string | `"^/latest/(meta-data/instance-id|dynamic)"` |  |
 | kiam.enabled | bool | `true` |  |
-| kiam.server.assumeRoleArn | string | `""` |  kiam server IAM role to assume, required as we run the agents next to the servers normally, eg. arn:aws:iam::123456789012:role/kiam-server-role |
+| kiam.server.assumeRoleArn | string | `""` | kiam server IAM role to assume, required as we run the agents next to the servers normally, eg. arn:aws:iam::123456789012:role/kiam-server-role |
 | kiam.server.deployment.enabled | bool | `true` |  |
 | kiam.server.deployment.replicas | int | `1` |  |
 | kiam.server.image.tag | string | `"v3.6"` |  |
@@ -83,8 +92,8 @@ By default all access to the meta-data service is blocked, expect for:
 | kiam.server.useHostNetwork | bool | `true` |  |
 
 ## Debugging
-- Verify iptables rules on hosts to be set by the kiam agent:  
-  `iptables -L -t nat -n --line-numbers`  
+- Verify iptables rules on hosts to be set by the kiam agent: 
+  `iptables -L -t nat -n --line-numbers` 
   `iptables -t nat -D PREROUTING <wrong rule>`
 
 ## Resources

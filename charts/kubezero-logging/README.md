@@ -1,12 +1,20 @@
-kubezero-logging
-================
+# kubezero-logging
+
+![Version: 0.3.9](https://img.shields.io/badge/Version-0.3.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.2.1](https://img.shields.io/badge/AppVersion-1.2.1-informational?style=flat-square)
+
 KubeZero Umbrella Chart for complete EFK stack
 
-Current chart version is `0.3.6`
+**Homepage:** <https://kubezero.com>
 
-Source code can be found [here](https://kubezero.com)
+## Maintainers
 
-## Chart Requirements
+| Name | Email | Url |
+| ---- | ------ | --- |
+| Quarky9 |  |  |
+
+## Requirements
+
+Kubernetes: `>= 1.16.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
@@ -31,9 +39,8 @@ Source code can be found [here](https://kubezero.com)
 ### Kibana
 
 - increased timeout to ES to 3 minutes
- 
-### FluentD
 
+### FluentD
 
 ### Fluent-bit
 - support for dedot Lua filter to replace "." with "_" for all annotations and labels
@@ -45,8 +52,7 @@ Source code can be found [here](https://kubezero.com)
 - setup Kibana
 - create `logstash-*` Index Pattern
 
-
-## Chart Values
+## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -56,9 +62,9 @@ Source code can be found [here](https://kubezero.com)
 | es.s3Snapshot.enabled | bool | `false` |  |
 | es.s3Snapshot.iamrole | string | `""` |  |
 | fluent-bit.config.filters | string | `"[FILTER]\n    Name    lua\n    Match   kube.*\n    script  /fluent-bit/etc/functions.lua\n    call    reassemble_cri_logs\n\n[FILTER]\n    Name kubernetes\n    Match kube.*\n    Merge_Log On\n    Keep_Log Off\n    K8S-Logging.Parser On\n    K8S-Logging.Exclude On\n\n[FILTER]\n    Name    lua\n    Match   kube.*\n    script  /fluent-bit/etc/functions.lua\n    call    dedot\n"` |  |
-| fluent-bit.config.inputs | string | `"[INPUT]\n    Name tail\n    Path /var/log/containers/*.log\n    Parser cri\n    Tag kube.*\n    Mem_Buf_Limit 5MB\n    Skip_Long_Lines On\n    Refresh_Interval 10\n    DB /var/log/flb_kube.db\n    DB.Sync Normal\n[INPUT]\n    Name tail\n    Path /var/log/kubernetes/audit.log\n    Parser json\n    Tag audit.api-server\n    Mem_Buf_Limit 5MB\n    Skip_Long_Lines On\n    Refresh_Interval 60\n    DB /var/log/flb_kube_audit.db\n    DB.Sync Normal\n"` |  |
+| fluent-bit.config.inputs | string | `"[INPUT]\n    Name tail\n    Path /var/log/containers/*.log\n    Parser cri\n    Tag kube.*\n    Mem_Buf_Limit 16MB\n    Skip_Long_Lines On\n    Refresh_Interval 10\n    Exclude_Path *.gz,*.zip\n    DB /var/log/flb_kube.db\n    DB.Sync Normal\n[INPUT]\n    Name tail\n    Path /var/log/kubernetes/audit.log\n    Parser json\n    Tag audit.api-server\n    Mem_Buf_Limit 8MB\n    Skip_Long_Lines On\n    DB /var/log/flb_kube_audit.db\n    DB.Sync Normal\n"` |  |
 | fluent-bit.config.lua | string | `"function dedot(tag, timestamp, record)\n    if record[\"kubernetes\"] == nil then\n        return 0, 0, 0\n    end\n    dedot_keys(record[\"kubernetes\"][\"annotations\"])\n    dedot_keys(record[\"kubernetes\"][\"labels\"])\n    return 1, timestamp, record\nend\n\nfunction dedot_keys(map)\n    if map == nil then\n        return\n    end\n    local new_map = {}\n    local changed_keys = {}\n    for k, v in pairs(map) do\n        local dedotted = string.gsub(k, \"%.\", \"_\")\n        if dedotted ~= k then\n            new_map[dedotted] = v\n            changed_keys[k] = true\n        end\n    end\n    for k in pairs(changed_keys) do\n        map[k] = nil\n    end\n    for k, v in pairs(new_map) do\n        map[k] = v\n    end\nend\n\nlocal reassemble_state = {}\n\nfunction reassemble_cri_logs(tag, timestamp, record)\n   -- IMPORTANT: reassemble_key must be unique for each parser stream\n   -- otherwise entries from different sources will get mixed up.\n   -- Either make sure that your parser tags satisfy this or construct\n   -- reassemble_key some other way\n   local reassemble_key = tag\n   -- if partial line, accumulate\n   if record.logtag == 'P' then\n      reassemble_state[reassemble_key] = reassemble_state[reassemble_key] or \"\" .. record.message\n      return -1, 0, 0\n   end\n   -- otherwise it's a full line, concatenate with accumulated partial lines if any\n   record.message = reassemble_state[reassemble_key] or \"\" .. (record.message or \"\")\n   reassemble_state[reassemble_key] = nil\n   return 1, timestamp, record\nend\n"` |  |
-| fluent-bit.config.outputs | string | `"[OUTPUT]\n    Match *\n    Name forward\n    Host logging-fluentd\n    Port 24224\n    tls on\n    tls.verify off\n    Shared_Key cloudbender\n"` |  |
+| fluent-bit.config.outputs | string | `"[OUTPUT]\n    Match *\n    Name forward\n    Host logging-fluentd\n    Port 24224\n"` |  |
 | fluent-bit.config.service | string | `"[SERVICE]\n    Flush 5\n    Daemon Off\n    Log_Level warn\n    Parsers_File parsers.conf\n    Parsers_File custom_parsers.conf\n    HTTP_Server On\n    HTTP_Listen 0.0.0.0\n    HTTP_Port 2020\n"` |  |
 | fluent-bit.enabled | bool | `false` |  |
 | fluent-bit.serviceMonitor.enabled | bool | `true` |  |
@@ -67,9 +73,10 @@ Source code can be found [here](https://kubezero.com)
 | fluent-bit.test.enabled | bool | `false` |  |
 | fluent-bit.tolerations[0].effect | string | `"NoSchedule"` |  |
 | fluent-bit.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
-| fluentd.configMaps."filter.conf" | string | `"<filter kube.**>\n  @type parser\n  key_name message\n  remove_key_name_field true\n  reserve_data true\n  emit_invalid_record_to_error false\n  <parse>\n    @type json\n  </parse>\n</filter>\n"` |  |
-| fluentd.configMaps."forward-input.conf" | string | `"<source>\n  @type forward\n  port 24224\n  bind 0.0.0.0\n  skip_invalid_event true\n  <transport tls>\n    cert_path /mnt/fluentd-certs/tls.crt\n    private_key_path /mnt/fluentd-certs/tls.key\n  </transport>\n  <security>\n    self_hostname \"#{ENV['HOSTNAME']}\"\n    shared_key \"#{ENV['FLUENTD_SHARED_KEY']}\"\n  </security>\n</source>\n"` |  |
-| fluentd.configMaps."output.conf" | string | `"<match **>\n  @id elasticsearch\n  @type elasticsearch\n  @log_level info\n  include_tag_key true\n  id_key id\n  remove_keys id\n\n  # KubeZero pipeline incl. GeoIP etc.\n  # Freaking ES jams under load and all is lost ...\n  # pipeline fluentd\n\n  host \"#{ENV['OUTPUT_HOST']}\"\n  port \"#{ENV['OUTPUT_PORT']}\"\n  scheme \"#{ENV['OUTPUT_SCHEME']}\"\n  ssl_version \"#{ENV['OUTPUT_SSL_VERSION']}\"\n  ssl_verify \"#{ENV['OUTPUT_SSL_VERIFY']}\"\n  user \"#{ENV['OUTPUT_USER']}\"\n  password \"#{ENV['OUTPUT_PASSWORD']}\"\n\n  log_es_400_reason\n  logstash_format true\n  reconnect_on_error true\n  # reload_on_failure true\n  request_timeout 15s\n  suppress_type_name true\n\n  <buffer>\n    @type file\n    path /var/log/fluentd-buffers/kubernetes.system.buffer\n    flush_mode interval\n    flush_thread_count 2\n    flush_interval 30s\n    flush_at_shutdown true\n    retry_type exponential_backoff\n    retry_timeout 60m\n    chunk_limit_size 16M\n    overflow_action drop_oldest_chunk\n  </buffer>\n</match>\n"` |  |
+| fluentd.configMaps."filter.conf" | string | `"<filter disabled.kube.**>\n  @type parser\n  key_name message\n  remove_key_name_field true\n  reserve_data true\n  # inject_key_prefix message_json.\n  emit_invalid_record_to_error false\n  <parse>\n    @type json\n  </parse>\n</filter>\n"` |  |
+| fluentd.configMaps."forward-input.conf" | string | `"<source>\n  @type forward\n  port 24224\n  bind 0.0.0.0\n  skip_invalid_event true\n  send_keepalive_packet true\n  <security>\n    self_hostname \"#{ENV['HOSTNAME']}\"\n    shared_key \"#{ENV['FLUENTD_SHARED_KEY']}\"\n  </security>\n</source>\n"` |  |
+| fluentd.configMaps."general.conf" | string | `"<label @FLUENT_LOG>\n  <match **>\n    @type null\n  </match>\n</label>\n<source>\n  @type http\n  port 9880\n  bind 0.0.0.0\n  keepalive_timeout 30\n</source>\n<source>\n  @type monitor_agent\n  bind 0.0.0.0\n  port 24220\n  tag fluentd.monitor.metrics\n</source>\n"` |  |
+| fluentd.configMaps."output.conf" | string | `"<match **>\n  @id elasticsearch\n  @type elasticsearch\n  @log_level info\n  include_tag_key true\n  id_key id\n  remove_keys id\n\n  # KubeZero pipeline incl. GeoIP etc.\n  # pipeline fluentd\n\n  host \"#{ENV['OUTPUT_HOST']}\"\n  port \"#{ENV['OUTPUT_PORT']}\"\n  scheme \"#{ENV['OUTPUT_SCHEME']}\"\n  ssl_version \"#{ENV['OUTPUT_SSL_VERSION']}\"\n  ssl_verify \"#{ENV['OUTPUT_SSL_VERIFY']}\"\n  user \"#{ENV['OUTPUT_USER']}\"\n  password \"#{ENV['OUTPUT_PASSWORD']}\"\n\n  log_es_400_reason\n  logstash_format true\n  reconnect_on_error true\n  # reload_on_failure true\n  request_timeout 15s\n  suppress_type_name true\n\n  <buffer tag>\n    @type file_single\n    path /var/log/fluentd-buffers/kubernetes.system.buffer\n    flush_mode interval\n    flush_thread_count 2\n    flush_interval 30s\n    flush_at_shutdown true\n    retry_type exponential_backoff\n    retry_timeout 60m\n    overflow_action drop_oldest_chunk\n  </buffer>\n</match>\n"` |  |
 | fluentd.enabled | bool | `false` |  |
 | fluentd.env.OUTPUT_SSL_VERIFY | string | `"false"` |  |
 | fluentd.env.OUTPUT_USER | string | `"elastic"` |  |
@@ -79,13 +86,8 @@ Source code can be found [here](https://kubezero.com)
 | fluentd.extraEnvVars[1].name | string | `"FLUENTD_SHARED_KEY"` |  |
 | fluentd.extraEnvVars[1].valueFrom.secretKeyRef.key | string | `"shared_key"` |  |
 | fluentd.extraEnvVars[1].valueFrom.secretKeyRef.name | string | `"logging-fluentd-secret"` |  |
-| fluentd.extraVolumeMounts[0].mountPath | string | `"/mnt/fluentd-certs"` |  |
-| fluentd.extraVolumeMounts[0].name | string | `"fluentd-certs"` |  |
-| fluentd.extraVolumeMounts[0].readOnly | bool | `true` |  |
-| fluentd.extraVolumes[0].name | string | `"fluentd-certs"` |  |
-| fluentd.extraVolumes[0].secret.secretName | string | `"fluentd-certificate"` |  |
 | fluentd.image.repository | string | `"quay.io/fluentd_elasticsearch/fluentd"` |  |
-| fluentd.image.tag | string | `"v3.0.4"` |  |
+| fluentd.image.tag | string | `"v2.9.0"` |  |
 | fluentd.istio.enabled | bool | `false` |  |
 | fluentd.metrics.enabled | bool | `false` |  |
 | fluentd.metrics.serviceMonitor.additionalLabels.release | string | `"metrics"` |  |

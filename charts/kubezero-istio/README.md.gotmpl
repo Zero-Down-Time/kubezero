@@ -1,12 +1,17 @@
 {{ template "chart.header" . }}
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.versionBadge" . }}{{ template "chart.typeBadge" . }}{{ template "chart.appVersionBadge" . }}
+
 {{ template "chart.description" . }}
 
 Installs Istio Operator and KubeZero Istio profile
 
+{{ template "chart.homepageLine" . }}
 
-{{ template "chart.versionLine" . }}
+{{ template "chart.maintainersSection" . }}
 
-{{ template "chart.sourceLinkLine" . }}
+{{ template "chart.sourcesSection" . }}
 
 {{ template "chart.requirementsSection" . }}
 

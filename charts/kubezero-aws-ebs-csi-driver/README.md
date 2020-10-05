@@ -1,12 +1,25 @@
-kubezero-aws-ebs-csi-driver
-===========================
+# kubezero-aws-ebs-csi-driver
+
+![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.6.0](https://img.shields.io/badge/AppVersion-0.6.0-informational?style=flat-square)
+
 KubeZero Umbrella Chart for aws-ebs-csi-driver
 
-Current chart version is `0.3.1`
+**Homepage:** <https://kubezero.com>
 
-Source code can be found [here](https://kubezero.com)
+## Maintainers
 
-## Chart Requirements
+| Name | Email | Url |
+| ---- | ------ | --- |
+| Quarky9 |  |  |
+
+## Source Code
+
+* <https://github.com/kubernetes-sigs/aws-ebs-csi-driver>
+* <https://github.com/Zero-Down-Time/kubezero>
+
+## Requirements
+
+Kubernetes: `>= 1.16.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
@@ -23,7 +36,7 @@ podAnnotations:
 By default it also creates the *ebs-sc-gp2-xfs* storage class for gp2, enrypted and XFS.
 This class is by default also set as default storage class.
 
-## Chart Values
+## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -34,7 +47,7 @@ This class is by default also set as default storage class.
 | aws-ebs-csi-driver.enableVolumeSnapshot | bool | `false` |  |
 | aws-ebs-csi-driver.extraVolumeTags | object | `{}` | Optional tags to be added to each EBS volume |
 | aws-ebs-csi-driver.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
-| aws-ebs-csi-driver.podAnnotations | object | `{}` |  iam.amazonaws.com/role: <IAM role ARN> to assume |
+| aws-ebs-csi-driver.podAnnotations | object | `{}` | iam.amazonaws.com/role: <IAM role ARN> to assume |
 | aws-ebs-csi-driver.replicaCount | int | `1` |  |
 | aws-ebs-csi-driver.tolerations[0].effect | string | `"NoSchedule"` |  |
 | aws-ebs-csi-driver.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |

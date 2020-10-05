@@ -92,15 +92,6 @@ fluentd:
         name: logging-fluentd-secret
         key: shared_key
 
-  extraVolumes:
-    - name: fluentd-certs
-      secret:
-        secretName: fluentd-certificate
-  extraVolumeMounts:
-    - name: fluentd-certs
-      mountPath: /mnt/fluentd-certs
-      readOnly: true
-
   configMaps:
     general.conf: |
       <label @FLUENT_LOG>
@@ -127,12 +118,7 @@ fluentd:
         port 24224
         bind 0.0.0.0
         skip_invalid_event true
-        # Only for TCP not TLS
-        # send_keepalive_packet true
-        <transport tls>
-          cert_path /mnt/fluentd-certs/tls.crt
-          private_key_path /mnt/fluentd-certs/tls.key
-        </transport>
+        send_keepalive_packet true
         <security>
           self_hostname "#{ENV['HOSTNAME']}"
           shared_key "#{ENV['FLUENTD_SHARED_KEY']}"
@@ -204,9 +190,6 @@ fluent-bit:
           Name forward
           Host logging-fluentd
           Port 24224
-          tls on
-          tls.verify off
-          Shared_Key cloudbender
 
     inputs: |
       [INPUT]

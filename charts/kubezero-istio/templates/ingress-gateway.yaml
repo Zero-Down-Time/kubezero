@@ -76,7 +76,12 @@ spec:
   - port:
       number: 24224
       name: fluentd-forward
-      protocol: TCP
+      protocol: TLS
     hosts:
     {{- toYaml .Values.ingress.dnsNames | nindent 4 }}
+    tls:
+      mode: SIMPLE
+      privateKey: /etc/istio/ingressgateway-certs/tls.key
+      serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
+      credentialName: public-ingress-cert
 {{- end }}
