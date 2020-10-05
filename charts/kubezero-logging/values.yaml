@@ -171,6 +171,7 @@ fluentd:
         key_name message
         remove_key_name_field true
         reserve_data true
+        reserve_time true
         # inject_key_prefix message_json.
         emit_invalid_record_to_error false
         <parse>
@@ -186,21 +187,31 @@ fluent-bit:
   config:
     outputs: |
       [OUTPUT]
-          Match *
-          Name forward
-          Host logging-fluentd
-          Port 24224
+        Match *
+        Name forward
+        Host logging-fluentd
+        Port 24224
+        Shared_Key cloudbender
+        Send_options true
+        Require_ack_response true
+
+    customParsers: |
+      [PARSER]
+        Name cri-log
+        Format regex
+        Regex ^(?<time>[^ ]+) (?<stream>stdout|stderr) (?<logtag>[^ ]*) (?<log>.*)$
+        Time_Key    time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L%z
 
     inputs: |
       [INPUT]
           Name tail
           Path /var/log/containers/*.log
-          Parser cri
+          Parser cri-log
           Tag kube.*
           Mem_Buf_Limit 16MB
           Skip_Long_Lines On
           Refresh_Interval 10
-          Exclude_Path *.gz,*.zip
           DB /var/log/flb_kube.db
           DB.Sync Normal
       [INPUT]
@@ -225,14 +236,14 @@ fluent-bit:
           Match kube.*
           Merge_Log On
           Keep_Log Off
-          K8S-Logging.Parser On
-          K8S-Logging.Exclude On
+          K8S-Logging.Parser Off
+          K8S-Logging.Exclude Off
 
-      [FILTER]
-          Name    lua
-          Match   kube.*
-          script  /fluent-bit/etc/functions.lua
-          call    dedot
+      #[FILTER]
+      #    Name    lua
+      #    Match   kube.*
+      #    script  /fluent-bit/etc/functions.lua
+      #    call    dedot
 
     service: |
       [SERVICE]
@@ -286,11 +297,11 @@ fluent-bit:
          local reassemble_key = tag
          -- if partial line, accumulate
          if record.logtag == 'P' then
-            reassemble_state[reassemble_key] = reassemble_state[reassemble_key] or "" .. record.message
+            reassemble_state[reassemble_key] = reassemble_state[reassemble_key] or "" .. record.log
             return -1, 0, 0
          end
          -- otherwise it's a full line, concatenate with accumulated partial lines if any
-         record.message = reassemble_state[reassemble_key] or "" .. (record.message or "")
+         record.log = reassemble_state[reassemble_key] or "" .. (record.log or "")
          reassemble_state[reassemble_key] = nil
          return 1, timestamp, record
       end
