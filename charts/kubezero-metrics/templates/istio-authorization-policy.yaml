@@ -24,9 +24,9 @@ spec:
         hosts: ["{{ .Values.grafana.istio.url }}"]
 {{- end }}
 {{- end }}
----
 {{- if .Values.prometheus.istio.enabled }}
 {{- if .Values.prometheus.istio.ipBlocks }}
+---
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:

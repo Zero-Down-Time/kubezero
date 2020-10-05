@@ -31,13 +31,14 @@ argo-cd:
 
   global:
     image:
-      tag: v1.7.5
+      tag: v1.7.7
 
   controller:
     args:
       statusProcessors: "4"
       operationProcessors: "2"
       appResyncPeriod: "300"
+    logFormat: json
 
     metrics:
       enabled: false
@@ -62,6 +63,7 @@ argo-cd:
         memory: 256Mi
 
   repoServer:
+    logFormat: json
     metrics:
       enabled: false
       serviceMonitor:
@@ -77,6 +79,7 @@ argo-cd:
       effect: NoSchedule
 
   server:
+    logFormat: json
     config:
       # argo-cd.server.config.url -- ArgoCD hostname to be exposed via Istio
       url: argocd.example.com
