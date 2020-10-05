@@ -24,7 +24,7 @@ spec:
       cluster.routing.allocation.awareness.attributes: zone
       {{- end }}
       transport.compress: true
-      node.processors: {{- default 1 .processors }}
+      node.processors: {{ default 1 .processors }}
     podTemplate:
       {{- if $.Values.es.s3Snapshot.iamrole }}
       metadata:
