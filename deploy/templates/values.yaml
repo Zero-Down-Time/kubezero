@@ -81,6 +81,10 @@ kubezero:
       aws-efs-csi-driver:
         nodeSelector:
           node.kubernetes.io/csi.efs.fs: {{ index .Values "aws-efs-csi-driver" "EfsId" }}
+      {{- with index .Values "aws-efs-csi-driver" "PersistentVolumes" }}
+      PersistentVolumes:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
       PersistentVolume:
         create: true
         EfsId: {{ index .Values "aws-efs-csi-driver" "EfsId" }}
