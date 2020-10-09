@@ -5,7 +5,20 @@ aws-efs-csi-driver:
 StorageClass:
   create: true
   default: false
-  
+
+#PersistentVolumes:
+#  - name: example-pv
+#    mountOptions:
+#    - tls
+#    volumeHandle: "<efs-id>:/path"
+#    claimRef:
+#      name: foo-pvc
+#      namespace: foo
+#
+#  - name: example-pv2
+#    volumeHandle: "<efs-id>:/path2"
+
+# Deprecated and removed with next release
 PersistentVolume:
   create: false
   EfsId: ""
