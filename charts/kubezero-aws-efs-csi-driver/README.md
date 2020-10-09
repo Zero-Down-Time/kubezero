@@ -1,6 +1,6 @@
 # kubezero-aws-efs-csi-driver
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
 
 KubeZero Umbrella Chart for aws-efs-csi-driver
 
@@ -19,7 +19,7 @@ KubeZero Umbrella Chart for aws-efs-csi-driver
 
 ## Requirements
 
-Kubernetes: `>=1.16.0-0`
+Kubernetes: `>=1.17.0-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
@@ -29,13 +29,20 @@ Kubernetes: `>=1.16.0-0`
 Optionally creates the *efs-cs* storage class.
 Could also be made the default storage class if requested.
 
+## Multiple PVs & PVCs backed by same EFS file system
+Details also see: [Reserve PV](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#reserving-a-persistentvolume)
+
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| PersistentVolume.EfsId | string | `""` |  |
-| PersistentVolume.Name | string | `""` |  |
-| PersistentVolume.create | bool | `false` |  |
+| PersistentVolumes[0].claimRef.name | string | `"foo-pvc"` |  |
+| PersistentVolumes[0].claimRef.namespace | string | `"foo"` |  |
+| PersistentVolumes[0].mountOptions[0] | string | `"tls"` |  |
+| PersistentVolumes[0].name | string | `"example-pv"` |  |
+| PersistentVolumes[0].volumeHandle | string | `"<efs-id>:/path"` |  |
+| PersistentVolumes[1].name | string | `"example-pv2"` |  |
+| PersistentVolumes[1].volumeHandle | string | `"<efs-id>:/path2"` |  |
 | StorageClass.create | bool | `true` |  |
 | StorageClass.default | bool | `false` |  |
 | aws-efs-csi-driver.nodeSelector | object | `{}` |  |
