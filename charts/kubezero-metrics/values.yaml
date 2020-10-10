@@ -148,7 +148,7 @@ kube-prometheus-stack:
 # Metrics adapter
 prometheus-adapter:
   prometheus:
-    url: http://metrics-prometheus-operato-prometheus
+    url: http://metrics-kube-prometheus-st-prometheus
   tolerations:
   - key: node-role.kubernetes.io/master
     effect: NoSchedule
