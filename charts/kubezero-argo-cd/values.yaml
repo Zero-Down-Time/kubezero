@@ -48,16 +48,10 @@ argo-cd:
         additionalLabels:
           release: metrics
 
-    # controller to masters
-    nodeSelector:
-      node-role.kubernetes.io/master: ""
-    tolerations:
-    - key: node-role.kubernetes.io/master
-      effect: NoSchedule
     resources:
-      limits:
+      # limits:
         # cpu: 500m
-        memory: 1536Mi
+        # memory: 2048Mi
       requests:
         cpu: 100m
         memory: 256Mi
@@ -71,12 +65,6 @@ argo-cd:
         namespace: monitoring
         additionalLabels:
           release: metrics
-
-    nodeSelector:
-      node-role.kubernetes.io/master: ""
-    tolerations:
-    - key: node-role.kubernetes.io/master
-      effect: NoSchedule
 
   server:
     logFormat: json
@@ -123,18 +111,10 @@ argo-cd:
 
     extraArgs:
     - --insecure
-    nodeSelector:
-      node-role.kubernetes.io/master: ""
-    tolerations:
-    - key: node-role.kubernetes.io/master
-      effect: NoSchedule
 
-  redis:
-    nodeSelector:
-      node-role.kubernetes.io/master: ""
-    tolerations:
-    - key: node-role.kubernetes.io/master
-      effect: NoSchedule
+  # redis:
+  # We might want to try to keep redis close to the controller
+  #   affinity:
 
   dex:
     enabled: false
