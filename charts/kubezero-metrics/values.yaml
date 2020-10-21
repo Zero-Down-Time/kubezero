@@ -11,7 +11,7 @@ prometheus:
     url: ""
     gateway: istio-system/ingressgateway
 
-prometheus-operator:
+kube-prometheus-stack:
   defaultRules:
     create: true
 
@@ -60,9 +60,9 @@ prometheus-operator:
   prometheusOperator:
     enabled: true
     #image:
-    #  tag: v0.41.0
+    #  tag: v0.42.1
     #prometheusConfigReloaderImage:
-    #  tag: v0.41.0
+    #  tag: v0.42.1
 
     # Run on controller nodes
     tolerations:
@@ -148,7 +148,7 @@ prometheus-operator:
 # Metrics adapter
 prometheus-adapter:
   prometheus:
-    url: http://metrics-prometheus-operato-prometheus
+    url: http://metrics-kube-prometheus-st-prometheus
   tolerations:
   - key: node-role.kubernetes.io/master
     effect: NoSchedule
@@ -160,8 +160,8 @@ prometheus-adapter:
     default: false
     resource:
       cpu:
-        containerQuery: sum(irate(container_cpu_usage_seconds_total{<<.LabelMatchers>>,container!="POD",container!="",pod!=""}[5m])) by (<<.GroupBy>>)
-        nodeQuery: sum(1 - irate(node_cpu_seconds_total{mode="idle"}[5m]) * on(namespace, pod) group_left(node) node_namespace_pod:kube_pod_info:{<<.LabelMatchers>>}) by (<<.GroupBy>>)
+        containerQuery: sum(irate(container_cpu_usage_seconds_total{<<.LabelMatchers>>,container!="POD",container!="",pod!=""}[3m])) by (<<.GroupBy>>)
+        nodeQuery: sum(1 - irate(node_cpu_seconds_total{mode="idle"}[3m]) * on(namespace, pod) group_left(node) node_namespace_pod:kube_pod_info:{<<.LabelMatchers>>}) by (<<.GroupBy>>)
         resources:
           overrides:
             node:
@@ -183,4 +183,4 @@ prometheus-adapter:
             pod:
               resource: pod
         containerLabel: container
-      window: 5m
+      window: 3m
