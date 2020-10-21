@@ -31,5 +31,5 @@ spec:
   http:
   - route:
     - destination:
-        host: metrics-prometheus-operato-prometheus
+        host: metrics-kube-prometheus-st-prometheus
 {{- end }}
