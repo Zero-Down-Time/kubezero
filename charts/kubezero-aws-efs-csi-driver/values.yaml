@@ -19,7 +19,7 @@ StorageClass:
 #    volumeHandle: "<efs-id>:/path2"
 
 # Deprecated and removed with next release
-PersistentVolume:
-  create: false
-  EfsId: ""
-  Name: ""
+# PersistentVolume:
+#   create: false
+#   EfsId: ""
+#   Name: ""
