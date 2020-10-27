@@ -19,7 +19,7 @@ KubeZero Umbrella Chart for aws-efs-csi-driver
 
 ## Requirements
 
-Kubernetes: `>=1.17.0-0`
+Kubernetes: `>=1.16.0-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
@@ -36,13 +36,6 @@ Details also see: [Reserve PV](https://kubernetes.io/docs/concepts/storage/persi
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| PersistentVolumes[0].claimRef.name | string | `"foo-pvc"` |  |
-| PersistentVolumes[0].claimRef.namespace | string | `"foo"` |  |
-| PersistentVolumes[0].mountOptions[0] | string | `"tls"` |  |
-| PersistentVolumes[0].name | string | `"example-pv"` |  |
-| PersistentVolumes[0].volumeHandle | string | `"<efs-id>:/path"` |  |
-| PersistentVolumes[1].name | string | `"example-pv2"` |  |
-| PersistentVolumes[1].volumeHandle | string | `"<efs-id>:/path2"` |  |
 | StorageClass.create | bool | `true` |  |
 | StorageClass.default | bool | `false` |  |
 | aws-efs-csi-driver.nodeSelector | object | `{}` |  |

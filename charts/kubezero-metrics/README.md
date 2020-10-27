@@ -1,6 +1,6 @@
 # kubezero-metrics
 
-![Version: 0.1.4](https://img.shields.io/badge/Version-0.1.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for prometheus-operator
 
@@ -18,8 +18,8 @@ Kubernetes: `>= 1.16.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://kubernetes-charts.storage.googleapis.com/ | prometheus-adapter | 2.5.0 |
-| https://kubernetes-charts.storage.googleapis.com/ | prometheus-operator | 9.3.1 |
+| https://prometheus-community.github.io/helm-charts | kube-prometheus-stack | 10.0.1 |
+| https://prometheus-community.github.io/helm-charts | prometheus-adapter | 2.7.0 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## Values
@@ -30,12 +30,70 @@ Kubernetes: `>= 1.16.0`
 | grafana.istio.gateway | string | `"istio-system/ingressgateway"` |  |
 | grafana.istio.ipBlocks | list | `[]` |  |
 | grafana.istio.url | string | `""` |  |
+| kube-prometheus-stack.alertmanager.enabled | bool | `false` |  |
+| kube-prometheus-stack.coreDns.enabled | bool | `true` |  |
+| kube-prometheus-stack.defaultRules.create | bool | `true` |  |
+| kube-prometheus-stack.grafana.enabled | bool | `true` |  |
+| kube-prometheus-stack.grafana.initChownData.enabled | bool | `false` |  |
+| kube-prometheus-stack.grafana.persistence.enabled | bool | `true` |  |
+| kube-prometheus-stack.grafana.persistence.size | string | `"4Gi"` |  |
+| kube-prometheus-stack.grafana.persistence.storageClassName | string | `"ebs-sc-gp2-xfs"` |  |
+| kube-prometheus-stack.grafana.plugins[0] | string | `"grafana-piechart-panel"` |  |
+| kube-prometheus-stack.grafana.service.portName | string | `"http-grafana"` |  |
+| kube-prometheus-stack.grafana.testFramework.enabled | bool | `false` |  |
+| kube-prometheus-stack.kubeApiServer.enabled | bool | `true` |  |
+| kube-prometheus-stack.kubeControllerManager.enabled | bool | `true` |  |
+| kube-prometheus-stack.kubeControllerManager.service.port | int | `10257` |  |
+| kube-prometheus-stack.kubeControllerManager.service.targetPort | int | `10257` |  |
+| kube-prometheus-stack.kubeControllerManager.serviceMonitor.https | bool | `true` |  |
+| kube-prometheus-stack.kubeControllerManager.serviceMonitor.insecureSkipVerify | bool | `true` |  |
+| kube-prometheus-stack.kubeDns.enabled | bool | `false` |  |
+| kube-prometheus-stack.kubeEtcd.enabled | bool | `true` |  |
+| kube-prometheus-stack.kubeEtcd.service.port | int | `2381` |  |
+| kube-prometheus-stack.kubeEtcd.service.targetPort | int | `2381` |  |
+| kube-prometheus-stack.kubeProxy.enabled | bool | `true` |  |
+| kube-prometheus-stack.kubeScheduler.enabled | bool | `true` |  |
+| kube-prometheus-stack.kubeScheduler.service.port | int | `10259` |  |
+| kube-prometheus-stack.kubeScheduler.service.targetPort | int | `10259` |  |
+| kube-prometheus-stack.kubeScheduler.serviceMonitor.https | bool | `true` |  |
+| kube-prometheus-stack.kubeScheduler.serviceMonitor.insecureSkipVerify | bool | `true` |  |
+| kube-prometheus-stack.kubeStateMetrics.enabled | bool | `true` |  |
+| kube-prometheus-stack.kubelet.enabled | bool | `true` |  |
+| kube-prometheus-stack.kubelet.serviceMonitor.cAdvisor | bool | `true` |  |
+| kube-prometheus-stack.nodeExporter.enabled | bool | `true` |  |
+| kube-prometheus-stack.nodeExporter.serviceMonitor.relabelings[0].action | string | `"replace"` |  |
+| kube-prometheus-stack.nodeExporter.serviceMonitor.relabelings[0].regex | string | `"^(.*)$"` |  |
+| kube-prometheus-stack.nodeExporter.serviceMonitor.relabelings[0].replacement | string | `"$1"` |  |
+| kube-prometheus-stack.nodeExporter.serviceMonitor.relabelings[0].separator | string | `";"` |  |
+| kube-prometheus-stack.nodeExporter.serviceMonitor.relabelings[0].sourceLabels[0] | string | `"__meta_kubernetes_pod_node_name"` |  |
+| kube-prometheus-stack.nodeExporter.serviceMonitor.relabelings[0].targetLabel | string | `"node"` |  |
+| kube-prometheus-stack.prometheus.enabled | bool | `true` |  |
+| kube-prometheus-stack.prometheus.prometheusSpec.portName | string | `"http-prometheus"` |  |
+| kube-prometheus-stack.prometheus.prometheusSpec.resources.limits.cpu | string | `"1000m"` |  |
+| kube-prometheus-stack.prometheus.prometheusSpec.resources.limits.memory | string | `"3Gi"` |  |
+| kube-prometheus-stack.prometheus.prometheusSpec.resources.requests.cpu | string | `"500m"` |  |
+| kube-prometheus-stack.prometheus.prometheusSpec.resources.requests.memory | string | `"1Gi"` |  |
+| kube-prometheus-stack.prometheus.prometheusSpec.retention | string | `"8d"` |  |
+| kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.accessModes[0] | string | `"ReadWriteOnce"` |  |
+| kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage | string | `"16Gi"` |  |
+| kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.storageClassName | string | `"ebs-sc-gp2-xfs"` |  |
+| kube-prometheus-stack.prometheusOperator.admissionWebhooks.enabled | bool | `false` |  |
+| kube-prometheus-stack.prometheusOperator.createCustomResource | bool | `true` |  |
+| kube-prometheus-stack.prometheusOperator.enabled | bool | `true` |  |
+| kube-prometheus-stack.prometheusOperator.manageCrds | bool | `false` |  |
+| kube-prometheus-stack.prometheusOperator.namespaces.additional[0] | string | `"kube-system"` |  |
+| kube-prometheus-stack.prometheusOperator.namespaces.additional[1] | string | `"logging"` |  |
+| kube-prometheus-stack.prometheusOperator.namespaces.releaseNamespace | bool | `true` |  |
+| kube-prometheus-stack.prometheusOperator.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
+| kube-prometheus-stack.prometheusOperator.tlsProxy.enabled | bool | `false` |  |
+| kube-prometheus-stack.prometheusOperator.tolerations[0].effect | string | `"NoSchedule"` |  |
+| kube-prometheus-stack.prometheusOperator.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | prometheus-adapter.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
-| prometheus-adapter.prometheus.url | string | `"http://metrics-prometheus-operato-prometheus"` |  |
+| prometheus-adapter.prometheus.url | string | `"http://metrics-kube-prometheus-st-prometheus"` |  |
 | prometheus-adapter.rules.default | bool | `false` |  |
 | prometheus-adapter.rules.resource.cpu.containerLabel | string | `"container"` |  |
-| prometheus-adapter.rules.resource.cpu.containerQuery | string | `"sum(irate(container_cpu_usage_seconds_total{<<.LabelMatchers>>,container!=\"POD\",container!=\"\",pod!=\"\"}[5m])) by (<<.GroupBy>>)"` |  |
-| prometheus-adapter.rules.resource.cpu.nodeQuery | string | `"sum(1 - irate(node_cpu_seconds_total{mode=\"idle\"}[5m]) * on(namespace, pod) group_left(node) node_namespace_pod:kube_pod_info:{<<.LabelMatchers>>}) by (<<.GroupBy>>)"` |  |
+| prometheus-adapter.rules.resource.cpu.containerQuery | string | `"sum(irate(container_cpu_usage_seconds_total{<<.LabelMatchers>>,container!=\"POD\",container!=\"\",pod!=\"\"}[3m])) by (<<.GroupBy>>)"` |  |
+| prometheus-adapter.rules.resource.cpu.nodeQuery | string | `"sum(1 - irate(node_cpu_seconds_total{mode=\"idle\"}[3m]) * on(namespace, pod) group_left(node) node_namespace_pod:kube_pod_info:{<<.LabelMatchers>>}) by (<<.GroupBy>>)"` |  |
 | prometheus-adapter.rules.resource.cpu.resources.overrides.namespace.resource | string | `"namespace"` |  |
 | prometheus-adapter.rules.resource.cpu.resources.overrides.node.resource | string | `"node"` |  |
 | prometheus-adapter.rules.resource.cpu.resources.overrides.pod.resource | string | `"pod"` |  |
@@ -45,67 +103,9 @@ Kubernetes: `>= 1.16.0`
 | prometheus-adapter.rules.resource.memory.resources.overrides.namespace.resource | string | `"namespace"` |  |
 | prometheus-adapter.rules.resource.memory.resources.overrides.node.resource | string | `"node"` |  |
 | prometheus-adapter.rules.resource.memory.resources.overrides.pod.resource | string | `"pod"` |  |
-| prometheus-adapter.rules.resource.window | string | `"5m"` |  |
+| prometheus-adapter.rules.resource.window | string | `"3m"` |  |
 | prometheus-adapter.tolerations[0].effect | string | `"NoSchedule"` |  |
 | prometheus-adapter.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
-| prometheus-operator.alertmanager.enabled | bool | `false` |  |
-| prometheus-operator.coreDns.enabled | bool | `true` |  |
-| prometheus-operator.defaultRules.create | bool | `true` |  |
-| prometheus-operator.grafana.enabled | bool | `true` |  |
-| prometheus-operator.grafana.initChownData.enabled | bool | `false` |  |
-| prometheus-operator.grafana.persistence.enabled | bool | `true` |  |
-| prometheus-operator.grafana.persistence.size | string | `"4Gi"` |  |
-| prometheus-operator.grafana.persistence.storageClassName | string | `"ebs-sc-gp2-xfs"` |  |
-| prometheus-operator.grafana.plugins[0] | string | `"grafana-piechart-panel"` |  |
-| prometheus-operator.grafana.service.portName | string | `"http-grafana"` |  |
-| prometheus-operator.grafana.testFramework.enabled | bool | `false` |  |
-| prometheus-operator.kubeApiServer.enabled | bool | `true` |  |
-| prometheus-operator.kubeControllerManager.enabled | bool | `true` |  |
-| prometheus-operator.kubeControllerManager.service.port | int | `10257` |  |
-| prometheus-operator.kubeControllerManager.service.targetPort | int | `10257` |  |
-| prometheus-operator.kubeControllerManager.serviceMonitor.https | bool | `true` |  |
-| prometheus-operator.kubeControllerManager.serviceMonitor.insecureSkipVerify | bool | `true` |  |
-| prometheus-operator.kubeDns.enabled | bool | `false` |  |
-| prometheus-operator.kubeEtcd.enabled | bool | `true` |  |
-| prometheus-operator.kubeEtcd.service.port | int | `2381` |  |
-| prometheus-operator.kubeEtcd.service.targetPort | int | `2381` |  |
-| prometheus-operator.kubeProxy.enabled | bool | `true` |  |
-| prometheus-operator.kubeScheduler.enabled | bool | `true` |  |
-| prometheus-operator.kubeScheduler.service.port | int | `10259` |  |
-| prometheus-operator.kubeScheduler.service.targetPort | int | `10259` |  |
-| prometheus-operator.kubeScheduler.serviceMonitor.https | bool | `true` |  |
-| prometheus-operator.kubeScheduler.serviceMonitor.insecureSkipVerify | bool | `true` |  |
-| prometheus-operator.kubeStateMetrics.enabled | bool | `true` |  |
-| prometheus-operator.kubelet.enabled | bool | `true` |  |
-| prometheus-operator.kubelet.serviceMonitor.cAdvisor | bool | `true` |  |
-| prometheus-operator.nodeExporter.enabled | bool | `true` |  |
-| prometheus-operator.nodeExporter.serviceMonitor.relabelings[0].action | string | `"replace"` |  |
-| prometheus-operator.nodeExporter.serviceMonitor.relabelings[0].regex | string | `"^(.*)$"` |  |
-| prometheus-operator.nodeExporter.serviceMonitor.relabelings[0].replacement | string | `"$1"` |  |
-| prometheus-operator.nodeExporter.serviceMonitor.relabelings[0].separator | string | `";"` |  |
-| prometheus-operator.nodeExporter.serviceMonitor.relabelings[0].sourceLabels[0] | string | `"__meta_kubernetes_pod_node_name"` |  |
-| prometheus-operator.nodeExporter.serviceMonitor.relabelings[0].targetLabel | string | `"node"` |  |
-| prometheus-operator.prometheus.enabled | bool | `true` |  |
-| prometheus-operator.prometheus.prometheusSpec.portName | string | `"http-prometheus"` |  |
-| prometheus-operator.prometheus.prometheusSpec.resources.limits.cpu | string | `"1000m"` |  |
-| prometheus-operator.prometheus.prometheusSpec.resources.limits.memory | string | `"3Gi"` |  |
-| prometheus-operator.prometheus.prometheusSpec.resources.requests.cpu | string | `"500m"` |  |
-| prometheus-operator.prometheus.prometheusSpec.resources.requests.memory | string | `"1Gi"` |  |
-| prometheus-operator.prometheus.prometheusSpec.retention | string | `"8d"` |  |
-| prometheus-operator.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.accessModes[0] | string | `"ReadWriteOnce"` |  |
-| prometheus-operator.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage | string | `"16Gi"` |  |
-| prometheus-operator.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.storageClassName | string | `"ebs-sc-gp2-xfs"` |  |
-| prometheus-operator.prometheusOperator.admissionWebhooks.enabled | bool | `false` |  |
-| prometheus-operator.prometheusOperator.createCustomResource | bool | `true` |  |
-| prometheus-operator.prometheusOperator.enabled | bool | `true` |  |
-| prometheus-operator.prometheusOperator.manageCrds | bool | `false` |  |
-| prometheus-operator.prometheusOperator.namespaces.additional[0] | string | `"kube-system"` |  |
-| prometheus-operator.prometheusOperator.namespaces.additional[1] | string | `"logging"` |  |
-| prometheus-operator.prometheusOperator.namespaces.releaseNamespace | bool | `true` |  |
-| prometheus-operator.prometheusOperator.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
-| prometheus-operator.prometheusOperator.tlsProxy.enabled | bool | `false` |  |
-| prometheus-operator.prometheusOperator.tolerations[0].effect | string | `"NoSchedule"` |  |
-| prometheus-operator.prometheusOperator.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | prometheus.istio.enabled | bool | `false` |  |
 | prometheus.istio.gateway | string | `"istio-system/ingressgateway"` |  |
 | prometheus.istio.url | string | `""` |  |
