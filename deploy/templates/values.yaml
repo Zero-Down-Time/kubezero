@@ -87,7 +87,7 @@ kubezero:
       PersistentVolumes:
       {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if index .Values "aws-efs-csi-driver" "PersistentVolume" }}
+      {{- if index .Values "aws-efs-csi-driver" "EfsId" }}
       PersistentVolume:
         create: true
         EfsId: {{ index .Values "aws-efs-csi-driver" "EfsId" }}
