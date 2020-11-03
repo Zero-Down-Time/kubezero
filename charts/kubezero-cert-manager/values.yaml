@@ -9,7 +9,7 @@ clusterIssuer: {}
 #         hostedZoneID: 1234567890
 
 localCA:
-  enabled: true
+  enabled: false
   # If selfsigning is false you must provide the ca key and crt below
   selfsigning: true
   #ca:
