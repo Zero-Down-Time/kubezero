@@ -1,0 +1,22 @@
+{{- if .Values.istio.enabled }}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: redis
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kubezero-lib.labels" . | indent 4 }}
+spec:
+  hosts:
+  - {{ .Values.istio.url }}
+  gateways:
+  - {{ .Values.istio.gateway }}
+  tcp:
+  - match:
+    - port: {{ default 6379 .Values.redis.redisPort }}
+    route:
+    - destination:
+        host: redis-headless
+        port:
+          number: {{ default 6379 .Values.redis.redisPort }}
+{{- end }}

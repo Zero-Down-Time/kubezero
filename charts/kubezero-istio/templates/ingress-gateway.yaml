@@ -1,4 +1,5 @@
-apiVersion: networking.istio.io/v1alpha3
+{{- if .Values.ingress.public.enabled }}
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: ingressgateway
@@ -28,10 +29,10 @@ spec:
       privateKey: /etc/istio/ingressgateway-certs/tls.key
       serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
       credentialName: public-ingress-cert
-
+{{- end }}
 {{- if .Values.ingress.private.enabled }}
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: private-ingressgateway
@@ -84,4 +85,16 @@ spec:
       privateKey: /etc/istio/ingressgateway-certs/tls.key
       serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
       credentialName: public-ingress-cert
+  - port:
+      number: 6379
+      name: redis
+      protocol: TCP
+    hosts:
+    {{- toYaml .Values.ingress.dnsNames | nindent 4 }}
+  - port:
+      number: 6380
+      name: redis-1
+      protocol: TCP
+    hosts:
+    {{- toYaml .Values.ingress.dnsNames | nindent 4 }}
 {{- end }}

@@ -1,6 +1,6 @@
 # kubezero-kiam
 
-![Version: 0.2.11](https://img.shields.io/badge/Version-0.2.11-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.6](https://img.shields.io/badge/AppVersion-3.6-informational?style=flat-square)
+![Version: 0.2.12](https://img.shields.io/badge/Version-0.2.12-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.6](https://img.shields.io/badge/AppVersion-3.6-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Kiam
 
@@ -18,7 +18,7 @@ Kubernetes: `>= 1.16.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://uswitch.github.io/kiam-helm-charts/charts/ | kiam | 5.8.1 |
+| https://uswitch.github.io/kiam-helm-charts/charts/ | kiam | 5.9.0 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## KubeZero default configuration
@@ -47,8 +47,8 @@ By default all access to the meta-data service is blocked, expect for:
 | kiam.agent.gatewayTimeoutCreation | string | `"5s"` |  |
 | kiam.agent.host.interface | string | `"cali+"` |  |
 | kiam.agent.host.iptables | bool | `false` |  |
-| kiam.agent.image.tag | string | `"v3.6"` |  |
-| kiam.agent.log.level | string | `"warn"` |  |
+| kiam.agent.log.level | string | `"info"` |  |
+| kiam.agent.priorityClassName | string | `"system-node-critical"` |  |
 | kiam.agent.prometheus.servicemonitor.enabled | bool | `false` |  |
 | kiam.agent.prometheus.servicemonitor.interval | string | `"30s"` |  |
 | kiam.agent.prometheus.servicemonitor.labels.release | string | `"metrics"` |  |
@@ -69,9 +69,9 @@ By default all access to the meta-data service is blocked, expect for:
 | kiam.server.assumeRoleArn | string | `""` | kiam server IAM role to assume, required as we run the agents next to the servers normally, eg. arn:aws:iam::123456789012:role/kiam-server-role |
 | kiam.server.deployment.enabled | bool | `true` |  |
 | kiam.server.deployment.replicas | int | `1` |  |
-| kiam.server.image.tag | string | `"v3.6"` |  |
-| kiam.server.log.level | string | `"warn"` |  |
+| kiam.server.log.level | string | `"info"` |  |
 | kiam.server.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
+| kiam.server.priorityClassName | string | `"system-cluster-critical"` |  |
 | kiam.server.prometheus.servicemonitor.enabled | bool | `false` |  |
 | kiam.server.prometheus.servicemonitor.interval | string | `"30s"` |  |
 | kiam.server.prometheus.servicemonitor.labels.release | string | `"metrics"` |  |

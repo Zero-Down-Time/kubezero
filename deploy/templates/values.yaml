@@ -134,6 +134,11 @@ kubezero:
   logging:
     enabled: {{ .Values.logging.enabled }}
     values:
+      {{- with index .Values "logging" "eck-operator" }}
+      eck-operator:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
       {{- if .Values.logging.elastic_password }}
       elastic_password: {{ .Values.logging.elastic_password }}
       {{- end }}

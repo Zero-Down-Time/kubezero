@@ -1,6 +1,6 @@
 # kubezero-calico
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v3.16.1](https://img.shields.io/badge/AppVersion-v3.16.1-informational?style=flat-square)
+![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v3.16.5](https://img.shields.io/badge/AppVersion-v3.16.5-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Calico
 
@@ -47,7 +47,6 @@ The setup is based on the upstream calico-vxlan config from
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | image.tag | string | `""` |  |
-| installCRDs | bool | `false` |  |
 | loglevel | string | `"Warning"` |  |
 | mtu | int | `8941` |  |
 | network | string | `"vxlan"` |  |

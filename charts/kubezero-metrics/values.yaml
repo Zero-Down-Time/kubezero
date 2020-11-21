@@ -59,10 +59,6 @@ kube-prometheus-stack:
 
   prometheusOperator:
     enabled: true
-    #image:
-    #  tag: v0.42.1
-    #prometheusConfigReloaderImage:
-    #  tag: v0.42.1
 
     # Run on controller nodes
     tolerations:
@@ -71,23 +67,19 @@ kube-prometheus-stack:
     nodeSelector:
       node-role.kubernetes.io/master: ""
 
-    # Argo takes care of CRDs
-    manageCrds: false
-    createCustomResource: true
-
-    # Operator has TLS support starting 0.39, but chart does not support CAConfig and operator flags yet
-    # see: https://github.com/coreos/prometheus-operator/blob/master/Documentation/user-guides/webhook.md#deploying-the-admission-webhook
-    # Until then we disable them as the patching interferes with Argo anyways
-    tlsProxy:
-      enabled: false
-    admissionWebhooks:
-      enabled: false
-
     namespaces:
       releaseNamespace: true
       additional:
         - kube-system
         - logging
+
+    admissionWebhooks:
+      patch:
+        tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+        nodeSelector:
+          node-role.kubernetes.io/master: ""
 
   nodeExporter:
     enabled: true
@@ -141,12 +133,21 @@ kube-prometheus-stack:
     testFramework:
       enabled: false
 
+  # Assign state metrics to control plane
+  kube-state-metrics:
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    nodeSelector:
+      node-role.kubernetes.io/master: ""
+
   # Todo
   alertmanager:
     enabled: false
 
 # Metrics adapter
 prometheus-adapter:
+  enabled: true
   prometheus:
     url: http://metrics-kube-prometheus-st-prometheus
   tolerations:

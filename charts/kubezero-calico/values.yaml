@@ -1,5 +1,3 @@
-installCRDs: false
-
 image:
   tag: ""
 

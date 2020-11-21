@@ -17,34 +17,45 @@ localCA:
   #  crt: <pem-crt-material>
 
 cert-manager:
-  installCRDs: true
+  enabled: true
+
+  global:
+    leaderElection:
+      namespace: "cert-manager"
+
+  podAnnotations: {}
+  #   iam.amazonaws.com/role: ""
+
   tolerations:
   - key: node-role.kubernetes.io/master
     effect: NoSchedule
   nodeSelector:
     node-role.kubernetes.io/master: ""
+
   ingressShim:
     defaultIssuerName: letsencrypt-dns-prod
     defaultIssuerKind: ClusterIssuer
+
   webhook:
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
     nodeSelector:
       node-role.kubernetes.io/master: ""
+
   cainjector:
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
     nodeSelector:
       node-role.kubernetes.io/master: ""
+
   extraArgs:
     - "--dns01-recursive-nameservers-only"
     # When this flag is enabled, secrets will be automatically removed when the certificate resource is deleted
     # - --enable-certificate-owner-ref=true
+
   prometheus:
     servicemonitor:
       enabled: false
   # cert-manager.podAnnotations -- "iam.amazonaws.com/roleIAM:" role ARN the cert-manager might use via kiam eg."arn:aws:iam::123456789012:role/certManagerRoleArn"
-  podAnnotations: {}
-  #   iam.amazonaws.com/role: ""
