@@ -12,7 +12,6 @@ spec:
   sourceRepos:
   - '*'
 
-  # Only permit applications to deploy to the guestbook namespace in the same cluster
   destinations:
   - namespace: argocd
     server: https://kubernetes.default.svc

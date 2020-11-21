@@ -6,6 +6,8 @@ ingress:
   autoscaleEnabled: false
   replicaCount: 2
   type: NodePort
+  public:
+    enabled: true
   private:
     enabled: true
     nodeSelector: "31080_31443_31671_31672_31224"
@@ -13,5 +15,6 @@ ingress:
     - "*"
 
 istio-operator:
+  operatorNamespace: istio-system
   hub: docker.io/istio
-  tag: 1.7.3
+  tag: 1.7.4

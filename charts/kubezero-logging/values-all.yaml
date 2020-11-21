@@ -5,10 +5,10 @@
 # This is for backwards compatibility with older zdt-logging setup
 fullnameOverride: logging
 
-# Version for ElasticSearch and Kibana have to match so we define it at top-level
-version: 7.6.0
-
 elastic_password: "dsfsfs" # super_secret_elastic_password
+
+eck-operator:
+  enabled: true
 
 es:
   nodeSets:

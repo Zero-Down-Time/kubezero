@@ -1,6 +1,6 @@
 # kubezero-cert-manager
 
-![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.4.1](https://img.shields.io/badge/Version-0.4.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for cert-manager
 
@@ -18,7 +18,7 @@ Kubernetes: `>= 1.16.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://charts.jetstack.io | cert-manager | 1.0.3 |
+| https://charts.jetstack.io | cert-manager | 1.0.4 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## AWS - IAM Role
@@ -38,10 +38,10 @@ If your resolvers need additional sercrets like CloudFlare API tokens etc. make 
 | cert-manager.cainjector.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
 | cert-manager.cainjector.tolerations[0].effect | string | `"NoSchedule"` |  |
 | cert-manager.cainjector.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| cert-manager.enabled | bool | `true` |  |
 | cert-manager.extraArgs[0] | string | `"--dns01-recursive-nameservers-only"` |  |
 | cert-manager.ingressShim.defaultIssuerKind | string | `"ClusterIssuer"` |  |
 | cert-manager.ingressShim.defaultIssuerName | string | `"letsencrypt-dns-prod"` |  |
-| cert-manager.installCRDs | bool | `true` |  |
 | cert-manager.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
 | cert-manager.podAnnotations | object | `{}` | "iam.amazonaws.com/roleIAM:" role ARN the cert-manager might use via kiam eg."arn:aws:iam::123456789012:role/certManagerRoleArn" |
 | cert-manager.prometheus.servicemonitor.enabled | bool | `false` |  |
@@ -51,5 +51,5 @@ If your resolvers need additional sercrets like CloudFlare API tokens etc. make 
 | cert-manager.webhook.tolerations[0].effect | string | `"NoSchedule"` |  |
 | cert-manager.webhook.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | clusterIssuer | object | `{}` |  |
-| localCA.enabled | bool | `true` |  |
+| localCA.enabled | bool | `false` |  |
 | localCA.selfsigning | bool | `true` |  |

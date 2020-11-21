@@ -39,12 +39,15 @@ metrics:
 
 logging:
   enabled: false
+  eck-operator:
+    enabled: false
   fluentd:
-   enabled: false
+    enabled: false
   fluent-bit:
-   enabled: false
+    enabled: false
 
 argo-cd:
+  enabled: false
   server: {}
   istio:
     enabled: true

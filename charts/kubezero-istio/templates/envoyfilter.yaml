@@ -1,3 +1,4 @@
+{{- if .Values.ingress.public.enabled }}
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
@@ -30,6 +31,7 @@ spec:
             name: 5
             int_value: 60
             state: STATE_LISTENING
+{{- end }}
 
 {{- if .Values.ingress.private.enabled }}
 ---

@@ -1,6 +1,6 @@
 # kubezero-istio
 
-![Version: 0.3.4](https://img.shields.io/badge/Version-0.3.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.7.3](https://img.shields.io/badge/AppVersion-1.7.3-informational?style=flat-square)
+![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.7.4](https://img.shields.io/badge/AppVersion-1.7.4-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Istio
 
@@ -34,10 +34,11 @@ Kubernetes: `>= 1.16.0`
 | ingress.dnsNames[0] | string | `"*"` |  |
 | ingress.private.enabled | bool | `true` |  |
 | ingress.private.nodeSelector | string | `"31080_31443_31671_31672_31224"` |  |
+| ingress.public.enabled | bool | `true` |  |
 | ingress.replicaCount | int | `2` |  |
 | ingress.type | string | `"NodePort"` |  |
 | istio-operator.hub | string | `"docker.io/istio"` |  |
-| istio-operator.tag | string | `"1.7.3"` |  |
+| istio-operator.tag | string | `"1.7.4"` |  |
 | istiod.autoscaleEnabled | bool | `false` |  |
 | istiod.replicaCount | int | `1` |  |
 

@@ -120,6 +120,16 @@ spec:
           {{- if eq .Values.ingress.type "NodePort" }}
           nodePort: 31672
           {{- end }}
+        - name: redis
+          port: 6379
+          {{- if eq .Values.ingress.type "NodePort" }}
+          nodePort: 31379
+          {{- end }}
+        - name: redis-1
+          port: 6380
+          {{- if eq .Values.ingress.type "NodePort" }}
+          nodePort: 31380
+          {{- end }}
 
     global:
       jwtPolicy: first-party-jwt
