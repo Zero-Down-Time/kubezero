@@ -295,7 +295,6 @@ fluent-bit:
 
   serviceMonitor:
     enabled: true
-    namespace: monitoring
     selector:
       release: metrics
 
