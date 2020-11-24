@@ -21,4 +21,4 @@ dependencies:
   - name: istio-private-ingress
     version: 1.1.0
     condition: istio-private-ingress.enabled
-kubeVersion: ">= 1.17.0"
+kubeVersion: ">= 1.16.0"
