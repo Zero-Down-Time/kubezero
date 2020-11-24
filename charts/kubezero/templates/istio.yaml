@@ -12,4 +12,9 @@
     jsonPointers:
     - /webhooks/0/clientConfig/caBundle
     - /webhooks/0/failurePolicy
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: istio-system
 {{- end }}

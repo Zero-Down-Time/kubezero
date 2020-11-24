@@ -1,20 +1,43 @@
-istiod:
-  autoscaleEnabled: false
-  replicaCount: 1
-
-ingress:
-  autoscaleEnabled: false
-  replicaCount: 2
-  type: NodePort
-  public:
-    enabled: true
-  private:
-    enabled: true
-    nodeSelector: "31080_31443_31671_31672_31224"
-  dnsNames:
-    - "*"
-
-istio-operator:
-  operatorNamespace: istio-system
+global:
   hub: docker.io/istio
-  tag: 1.7.4
+  tag: 1.8.0
+
+  logAsJson: true
+  jwtPolicy: first-party-jwt
+
+  defaultPodDisruptionBudget:
+    enabled: false
+
+  priorityClassName: "system-cluster-critical"
+
+istio-discovery:
+  pilot:
+    autoscaleEnabled: false
+    replicaCount: 1
+
+    # Not implemented, monkey patched in the chart itself
+    nodeSelector:
+      node-role.kubernetes.io/master: ""
+    tolerations:
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/master
+
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+#   env:
+#     PILOT_ENABLE_MYSQL_FILTER: true
+#     PILOT_ENABLE_REDIS_FILTER: true
+#     PILOT_HTTP10: true
+
+  telemetry:
+    enabled: false
+
+  meshConfig:
+    accessLogFile: /dev/stdout
+    accessLogEncoding: 'JSON'
+    h2UpgradePolicy: 'DO_NOT_UPGRADE'
+    tcpKeepalive:
+      interval: 30s
+      time: 60s

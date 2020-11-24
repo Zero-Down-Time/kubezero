@@ -23,10 +23,10 @@ cert-manager:
   enabled: false
   namespace: cert-manager
 
-local-volume-provisioner:
+kiam:
   enabled: false
 
-kiam:
+local-volume-provisioner:
   enabled: false
 
 aws-ebs-csi-driver:
@@ -37,6 +37,11 @@ aws-efs-csi-driver:
 
 istio:
   enabled: false
+  namespace: istio-system
+
+istio-ingress:
+  enabled: false
+  namespace: istio-ingress
 
 metrics:
   enabled: false
@@ -45,3 +50,7 @@ metrics:
 logging:
   enabled: false
   namespace: logging
+
+argo-cd:
+  enabled: false
+  namespace: argocd

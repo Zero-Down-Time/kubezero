@@ -1,6 +1,6 @@
 # kubezero-logging
 
-![Version: 0.4.1](https://img.shields.io/badge/Version-0.4.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.2.1](https://img.shields.io/badge/AppVersion-1.2.1-informational?style=flat-square)
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.3.0](https://img.shields.io/badge/AppVersion-1.3.0-informational?style=flat-square)
 
 KubeZero Umbrella Chart for complete EFK stack
 
@@ -18,6 +18,7 @@ Kubernetes: `>= 1.16.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
+| https://helm.elastic.co | eck-operator | 1.3.0 |
 | https://kubernetes-charts.storage.googleapis.com/ | fluentd | 2.5.1 |
 | https://zero-down-time.github.io/kubezero/ | fluent-bit | 0.7.2 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
@@ -56,6 +57,10 @@ Kubernetes: `>= 1.16.0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| eck-operator.enabled | bool | `false` |  |
+| eck-operator.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
+| eck-operator.tolerations[0].effect | string | `"NoSchedule"` |  |
+| eck-operator.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | elastic_password | string | `""` |  |
 | es.nodeSets | list | `[]` |  |
 | es.prometheus | bool | `false` |  |
@@ -93,7 +98,6 @@ Kubernetes: `>= 1.16.0`
 | fluentd.metrics.enabled | bool | `false` |  |
 | fluentd.metrics.serviceMonitor.additionalLabels.release | string | `"metrics"` |  |
 | fluentd.metrics.serviceMonitor.enabled | bool | `true` |  |
-| fluentd.metrics.serviceMonitor.namespace | string | `"monitoring"` |  |
 | fluentd.output.host | string | `"logging-es-http"` |  |
 | fluentd.plugins.enabled | bool | `false` |  |
 | fluentd.plugins.pluginsList | string | `nil` |  |
@@ -109,7 +113,7 @@ Kubernetes: `>= 1.16.0`
 | kibana.istio.enabled | bool | `false` |  |
 | kibana.istio.gateway | string | `"istio-system/ingressgateway"` |  |
 | kibana.istio.url | string | `""` |  |
-| version | string | `"7.8.1"` |  |
+| version | string | `"7.10.0"` |  |
 
 ## Resources:
 

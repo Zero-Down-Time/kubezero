@@ -30,11 +30,12 @@ Kubernetes: `>= 1.16.0`
 | redis.master.persistence.enabled | bool | `false` |  |
 | redis.metrics.enabled | bool | `false` |  |
 | redis.metrics.serviceMonitor.enabled | bool | `false` |  |
-| redis.metrics.serviceMonitor.namespace | string | `"monitoring"` |  |
 | redis.metrics.serviceMonitor.selector.release | string | `"metrics"` |  |
+| redis.redisPort | int | `6379` |  |
 | redis.usePassword | bool | `false` |  |
 
 # Dashboards
+https://grafana.com/grafana/dashboards/11835
 
 ## Redis
 

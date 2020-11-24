@@ -24,6 +24,8 @@ Kubernetes: `>= 1.16.0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| argo-cd.enabled | bool | `false` |  |
+| argo-cd.namespace | string | `"argocd"` |  |
 | aws-ebs-csi-driver.enabled | bool | `false` |  |
 | aws-efs-csi-driver.enabled | bool | `false` |  |
 | calico.enabled | bool | `false` |  |
@@ -34,7 +36,10 @@ Kubernetes: `>= 1.16.0`
 | global.defaultSource.pathPrefix | string | `""` |  |
 | global.defaultSource.repoURL | string | `"https://github.com/zero-down-time/kubezero"` |  |
 | global.defaultSource.targetRevision | string | `"HEAD"` |  |
+| istio-ingress.enabled | bool | `false` |  |
+| istio-ingress.namespace | string | `"istio-ingress"` |  |
 | istio.enabled | bool | `false` |  |
+| istio.namespace | string | `"istio-system"` |  |
 | kiam.enabled | bool | `false` |  |
 | local-volume-provisioner.enabled | bool | `false` |  |
 | logging.enabled | bool | `false` |  |

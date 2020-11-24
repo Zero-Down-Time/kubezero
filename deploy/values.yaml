@@ -9,7 +9,6 @@ calico:
 
 cert-manager:
   enabled: true
-  ready: true
   IamArn: ""
 
 aws-ebs-csi-driver:
@@ -21,16 +20,20 @@ aws-efs-csi-driver:
 
 kiam:
   enabled: true
-  ready: true
   IamArn: ""
 
 istio:
-  ready: true
   enabled: false
+
+istio-ingress:
+  enabled: false
+  public:
+    enabled: false
+  private:
+    enabled: false
 
 metrics:
   enabled: false
-  ready: true
   istio:
     grafana:
       enabled: false
@@ -50,5 +53,5 @@ argo-cd:
   enabled: false
   server: {}
   istio:
-    enabled: true
-    gateway: istio-system/private-ingressgateway
+    enabled: false
+    gateway: istio-ingress/private-ingressgateway

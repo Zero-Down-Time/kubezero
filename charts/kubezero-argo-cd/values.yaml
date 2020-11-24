@@ -44,7 +44,6 @@ argo-cd:
       enabled: false
       serviceMonitor:
         enabled: true
-        namespace: monitoring
         additionalLabels:
           release: metrics
 
@@ -62,7 +61,6 @@ argo-cd:
       enabled: false
       serviceMonitor:
         enabled: true
-        namespace: monitoring
         additionalLabels:
           release: metrics
 
@@ -105,7 +103,6 @@ argo-cd:
       enabled: false
       serviceMonitor:
         enabled: true
-        namespace: monitoring
         additionalLabels:
           release: metrics
 
@@ -119,9 +116,9 @@ argo-cd:
   dex:
     enabled: false
 
-  istio:
-    # argo-cd.istio.enabled -- Deploy Istio VirtualService to expose ArgoCD
-    enabled: false
-    # argo-cd.istio.gateway -- Name of the Istio gateway to add the VirtualService to
-    gateway: istio-system/ingressgateway
-    ipBlocks: []
+istio:
+  # istio.enabled -- Deploy Istio VirtualService to expose ArgoCD
+  enabled: false
+  # istio.gateway -- Name of the Istio gateway to add the VirtualService to
+  gateway: istio-ingress/ingressgateway
+  ipBlocks: []
