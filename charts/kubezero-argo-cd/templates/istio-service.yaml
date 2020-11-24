@@ -1,4 +1,4 @@
-{{- if index .Values "argo-cd" "istio" "enabled" }}
+{{- if .Values.istio.enabled }}
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
@@ -7,7 +7,7 @@ metadata:
 {{ include "kubezero-lib.labels" . | indent 4 }}
 spec:
   gateways:
-  - {{ index .Values "argo-cd" "istio" "gateway" }}
+  - {{ .Values.istio.gateway }}
   hosts:
   - {{ index .Values "argo-cd" "server" "config" "url" }}
   http:
@@ -18,13 +18,13 @@ spec:
           prefix: argocd-client
     route:
     - destination:
-        host: {{ .Release.Name }}-argocd-server
+        host: argocd-server
         port:
           number: 443
   - name: http
     route:
     - destination:
-        host: {{ .Release.Name }}-argocd-server
+        host: argocd-server
         port:
           number: 80
 {{- end }}

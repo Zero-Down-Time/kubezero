@@ -15,7 +15,7 @@ TMPDIR=$(mktemp -d kubezero.XXX)
 helm template $DEPLOY_DIR -f values.yaml -f cloudbender.yaml > $TMPDIR/kubezero.yaml
 
 if [ ${ARTIFACTS[0]} == "all" ]; then
-  ARTIFACTS=($(yq r -p p $TMPDIR/kubezero.yaml "kubezero.*.enabled" | awk -F "." '{print $2}'))
+  ARTIFACTS=($(yq r -p p $TMPDIR/kubezero.yaml "*.enabled" | awk -F "." '{print $1}'))
 fi
 
 # Update only if we use upstream
@@ -82,9 +82,9 @@ function delete() {
 function is_enabled() {
   local chart=$1
 
-  enabled=$(yq r $TMPDIR/kubezero.yaml kubezero.${chart}.enabled)
+  enabled=$(yq r $TMPDIR/kubezero.yaml ${chart}.enabled)
   if [ "$enabled" == "true" ]; then
-    yq r $TMPDIR/kubezero.yaml kubezero.${chart}.values > $TMPDIR/values.yaml
+    yq r $TMPDIR/kubezero.yaml ${chart}.values > $TMPDIR/values.yaml
     return 0
   fi
   return 1
@@ -216,9 +216,6 @@ function istio() {
     deploy $chart $release $namespace -f $TMPDIR/values.yaml
 
   elif [ $task == "delete" ]; then
-    for i in $(kubectl get istiooperators -A -o name); do
-      kubectl delete $i -n istio-system
-    done
     delete $chart $release $namespace -f $TMPDIR/values.yaml
     kubectl delete ns istio-system
 
@@ -227,6 +224,25 @@ function istio() {
     helm template $(chart_location $chart) --namespace $namespace --name-template $release --include-crds > $TMPDIR/helm-crds.yaml
     diff -e $TMPDIR/helm-no-crds.yaml $TMPDIR/helm-crds.yaml | head -n-1 | tail -n+2 > $TMPDIR/crds.yaml
     kubectl apply -f $TMPDIR/crds.yaml
+  fi
+}
+
+#################
+# Istio Ingress #
+#################
+function istio-ingress() {
+  local chart="kubezero-istio-ingress"
+  local release="istio"
+  local namespace="istio-ingress"
+
+  local task=$1
+
+  if [ $task == "deploy" ]; then
+    deploy $chart $release $namespace -f $TMPDIR/values.yaml
+
+  elif [ $task == "delete" ]; then
+    delete $chart $release $namespace -f $TMPDIR/values.yaml
+    kubectl delete ns istio-ingress
   fi
 }
 
@@ -282,6 +298,35 @@ function logging() {
   #  helm template $(chart_location $chart) --namespace $namespace --name-template $release --include-crds > $TMPDIR/helm-crds.yaml
   #  diff -e $TMPDIR/helm-no-crds.yaml $TMPDIR/helm-crds.yaml | head -n-1 | tail -n+2 > $TMPDIR/crds.yaml
   #  kubectl apply -f $TMPDIR/crds.yaml
+  fi
+}
+
+
+##########
+# ArgoCD #
+##########
+function argo-cd() {
+  local chart="kubezero-argo-cd"
+  local release="argocd"
+  local namespace="argocd"
+
+  local task=$1
+
+  if [ $task == "deploy" ]; then
+    deploy $chart $release $namespace -f $TMPDIR/values.yaml
+
+    # Install the kubezero app of apps
+    deploy kubezero kubezero argocd -f $TMPDIR/kubezero.yaml
+
+  elif [ $task == "delete" ]; then
+    delete $chart $release $namespace -f $TMPDIR/values.yaml
+    kubectl delete ns argocd
+
+  elif [ $task == "crds" ]; then
+    helm template $(chart_location $chart) --namespace $namespace --name-template $release --skip-crds > $TMPDIR/helm-no-crds.yaml
+    helm template $(chart_location $chart) --namespace $namespace --name-template $release --include-crds > $TMPDIR/helm-crds.yaml
+    diff -e $TMPDIR/helm-no-crds.yaml $TMPDIR/helm-crds.yaml | head -n-1 | tail -n+2 > $TMPDIR/crds.yaml
+    kubectl apply -f $TMPDIR/crds.yaml
   fi
 }
 

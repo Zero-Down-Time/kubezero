@@ -40,10 +40,11 @@ If your resolvers need additional sercrets like CloudFlare API tokens etc. make 
 | cert-manager.cainjector.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | cert-manager.enabled | bool | `true` |  |
 | cert-manager.extraArgs[0] | string | `"--dns01-recursive-nameservers-only"` |  |
+| cert-manager.global.leaderElection.namespace | string | `"cert-manager"` |  |
 | cert-manager.ingressShim.defaultIssuerKind | string | `"ClusterIssuer"` |  |
 | cert-manager.ingressShim.defaultIssuerName | string | `"letsencrypt-dns-prod"` |  |
 | cert-manager.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
-| cert-manager.podAnnotations | object | `{}` | "iam.amazonaws.com/roleIAM:" role ARN the cert-manager might use via kiam eg."arn:aws:iam::123456789012:role/certManagerRoleArn" |
+| cert-manager.podAnnotations | object | `{}` |  |
 | cert-manager.prometheus.servicemonitor.enabled | bool | `false` |  |
 | cert-manager.tolerations[0].effect | string | `"NoSchedule"` |  |
 | cert-manager.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |

@@ -1,0 +1,101 @@
+{{- if and (index .Values "istio-ingress" "enabled") (index .Values "istio-ingress" "dnsNames") }}
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: ingressgateway
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kubezero-lib.labels" . | indent 4 }}
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP2
+    hosts:
+    {{- toYaml (index .Values "istio-ingress" "dnsNames") | nindent 4 }}
+    tls:
+      httpsRedirect: true
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    {{- toYaml (index .Values "istio-ingress" "dnsNames") | nindent 4 }}
+    tls:
+      mode: SIMPLE
+      privateKey: /etc/istio/ingressgateway-certs/tls.key
+      serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
+      credentialName: public-ingress-cert
+{{- end }}
+
+{{- if and (index .Values "istio-private-ingress" "enabled") (index .Values "istio-private-ingress" "dnsNames") }}
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: private-ingressgateway
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kubezero-lib.labels" . | indent 4 }}
+spec:
+  selector:
+    istio: private-ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP2
+    hosts:
+    {{- toYaml (index .Values "istio-private-ingress" "dnsNames") | nindent 4 }}
+    tls:
+      httpsRedirect: true
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    {{- toYaml (index .Values "istio-private-ingress" "dnsNames") | nindent 4 }}
+    tls:
+      mode: SIMPLE
+      privateKey: /etc/istio/ingressgateway-certs/tls.key
+      serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
+      credentialName: public-ingress-cert
+  - port:
+      number: 5672
+      name: amqp
+      protocol: TCP
+    hosts:
+    {{- toYaml (index .Values "istio-private-ingress" "dnsNames") | nindent 4 }}
+  - port:
+      number: 5671
+      name: amqps
+      protocol: TCP
+    hosts:
+    {{- toYaml (index .Values "istio-private-ingress" "dnsNames") | nindent 4 }}
+  - port:
+      number: 24224
+      name: fluentd-forward
+      protocol: TLS
+    hosts:
+    {{- toYaml (index .Values "istio-private-ingress" "dnsNames") | nindent 4 }}
+    tls:
+      mode: SIMPLE
+      privateKey: /etc/istio/ingressgateway-certs/tls.key
+      serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
+      credentialName: public-ingress-cert
+  - port:
+      number: 6379
+      name: redis
+      protocol: TCP
+    hosts:
+    {{- toYaml (index .Values "istio-private-ingress" "dnsNames") | nindent 4 }}
+  - port:
+      number: 6380
+      name: redis-1
+      protocol: TCP
+    hosts:
+    {{- toYaml (index .Values "istio-private-ingress" "dnsNames") | nindent 4 }}
+{{- end }}

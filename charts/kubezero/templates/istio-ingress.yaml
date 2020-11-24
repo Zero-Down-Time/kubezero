@@ -1,0 +1,8 @@
+{{- if index .Values "istio-ingress" "enabled" }}
+{{ include "kubezero-app.app" . }}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: istio-ingress
+{{- end }}

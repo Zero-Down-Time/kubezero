@@ -1,0 +1,16 @@
+diff --git a/charts/kubezero-istio/charts/istio-discovery/templates/deployment.yaml b/charts/kubezero-istio/charts/istio-discovery/templates/deployment.yaml
+index e4a983a..ba586de 100644
+--- a/charts/kubezero-istio/charts/istio-discovery/templates/deployment.yaml
++++ b/charts/kubezero-istio/charts/istio-discovery/templates/deployment.yaml
+@@ -59,6 +59,11 @@ spec:
+ {{- end }}
+       securityContext:
+         fsGroup: 1337
++      nodeSelector:
++        node-role.kubernetes.io/master: ""
++      tolerations:
++      - effect: NoSchedule
++        key: node-role.kubernetes.io/master
+       containers:
+         - name: discovery
+ {{- if contains "/" .Values.pilot.image }}
