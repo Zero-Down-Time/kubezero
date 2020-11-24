@@ -222,7 +222,7 @@ logging:
 
     fluent-bit:
       enabled: {{ index .Values.logging "fluent-bit" "enabled" }}
-      metrics:
+      serviceMonitor:
         enabled: {{ .Values.metrics.enabled }}
       {{- if index .Values.logging "fluent-bit" "config" }}
       config:

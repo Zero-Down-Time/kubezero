@@ -12,6 +12,12 @@
     jsonPointers:
     - /webhooks/0/clientConfig/caBundle
     - /webhooks/0/failurePolicy
+  - group: admissionregistration.k8s.io
+    kind: MutatingWebhookConfiguration
+    jsonPointers:
+    - /webhooks/0/clientConfig/caBundle
+    - /webhooks/0/failurePolicy
+
 ---
 apiVersion: v1
 kind: Namespace

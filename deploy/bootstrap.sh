@@ -232,7 +232,7 @@ function istio() {
 #################
 function istio-ingress() {
   local chart="kubezero-istio-ingress"
-  local release="istio"
+  local release="istio-ingress"
   local namespace="istio-ingress"
 
   local task=$1
@@ -284,7 +284,7 @@ function logging() {
   local task=$1
 
   if [ $task == "deploy" ]; then
-    deploy $chart $release $namespace -f $TMPDIR/values.yaml
+    deploy $chart $release $namespace -a "monitoring.coreos.com/v1" -f $TMPDIR/values.yaml
 
     kubectl annotate --overwrite namespace logging 'iam.amazonaws.com/permitted=.*ElasticSearchSnapshots.*'
 
