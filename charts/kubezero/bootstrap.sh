@@ -3,7 +3,7 @@ set -ex
 
 ACTION=$1
 ARTIFACTS=("$2")
-VALUES=$3
+CLUSTER=$3
 LOCATION=${4:-""}
 
 DEPLOY_DIR=$( dirname $( realpath $0 ))
@@ -11,9 +11,12 @@ which yq || { echo "yq not found!"; exit 1; }
 
 TMPDIR=$(mktemp -d kubezero.XXX)
 
+function join { local IFS="$1"; shift; echo "$*"; }
+
 # First lets generate kubezero.yaml
-# This will be stored as secret during the initial kubezero chart install
-helm template $DEPLOY_DIR -f $VALUES -f cloudbender.yaml --set argo=false > $TMPDIR/kubezero.yaml
+# Add all yaml files in $CLUSTER
+VALUES="$(find $CLUSTER -name '*.yaml' | tr '\n' ',')"
+helm template $DEPLOY_DIR -f ${VALUES%%,} --set argo=false > $TMPDIR/kubezero.yaml
 
 if [ ${ARTIFACTS[0]} == "all" ]; then
   ARTIFACTS=($(yq r -p p $TMPDIR/kubezero.yaml "*.enabled" | awk -F "." '{print $1}'))

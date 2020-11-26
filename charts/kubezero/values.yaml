@@ -1,7 +1,7 @@
 argo: {}
 
 global:
-  argo:
+  kubezero:
     server: https://kubernetes.default.svc
     repoURL: https://github.com/zero-down-time/kubezero
     targetRevision: HEAD
