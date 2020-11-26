@@ -1,4 +1,5 @@
 {{- define "cert-manager-values" }}
+
 localCA:
   enabled: true
 {{ with index .Values "cert-manager" "IamArn" }}
@@ -14,10 +15,7 @@ clusterIssuer:
 
 {{- end }}
 
-
 {{- define "cert-manager-argo" }}
-{{- end }}
-
 {{- end }}
 
 {{ include "kubezero-app.app" . }}
