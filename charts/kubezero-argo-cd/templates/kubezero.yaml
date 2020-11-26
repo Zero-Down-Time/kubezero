@@ -1,3 +1,4 @@
+{{- if .Values.kubezero.enabled }}
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
@@ -33,3 +34,32 @@ spec:
   clusterResourceWhitelist:
   - group: '*'
     kind: '*'
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kubezero
+  namespace: argocd
+  labels:
+{{ include "kubezero-lib.labels" . | indent 4 }}
+spec:
+  project: kubezero
+  source:
+    repoURL: {{ .Values.kubezero.repoURL }}
+    targetRevision: {{ .Values.kubezero.targetRevision }}
+    path: {{ .Values.kubezero.path }}
+
+    helm:
+      valueFiles:
+      {{- toYaml .Values.kubezero.valuesFiles | nindent 6 }}
+
+  destination:
+    server: {{ .Values.kubezero.server }}
+    namespace: argocd
+
+  {{- with .Values.kubezero.syncPolicy }}
+  syncPolicy:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}

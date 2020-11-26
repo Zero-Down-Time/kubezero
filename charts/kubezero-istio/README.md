@@ -16,7 +16,7 @@ Installs the Istio control plane
 
 ## Requirements
 
-Kubernetes: `>= 1.17.0`
+Kubernetes: `>= 1.16.0`
 
 | Repository | Name | Version |
 |------------|------|---------|

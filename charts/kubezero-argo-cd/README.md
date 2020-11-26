@@ -14,7 +14,7 @@ KubeZero ArgoCD Helm chart to install ArgoCD itself and the KubeZero ArgoCD Appl
 
 ## Requirements
 
-Kubernetes: `>= 1.17.0`
+Kubernetes: `>= 1.16.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
@@ -52,10 +52,12 @@ Kubernetes: `>= 1.17.0`
 | istio.enabled | bool | `false` | Deploy Istio VirtualService to expose ArgoCD |
 | istio.gateway | string | `"istio-ingress/ingressgateway"` | Name of the Istio gateway to add the VirtualService to |
 | istio.ipBlocks | list | `[]` |  |
-| kubezero.global.defaultDestination | object | `{"server":"https://kubernetes.default.svc"}` | Destination cluster |
-| kubezero.global.defaultSource.pathPrefix | string | `""` | optional path prefix within repoURL to support eg. remote subtrees |
-| kubezero.global.defaultSource.repoURL | string | `"https://github.com/zero-down-time/kubezero"` | default repository for argocd applications |
-| kubezero.global.defaultSource.targetRevision | string | `"HEAD"` | default tracking of repoURL |
+| kubezero.enabled | bool | `false` |  |
+| kubezero.path | string | `"charts/kubezero"` | path within repoURL |
+| kubezero.repoURL | string | `"https://github.com/zero-down-time/kubezero"` | repository for kubezero argo applications |
+| kubezero.server | string | `"https://kubernetes.default.svc"` | destination cluster |
+| kubezero.targetRevision | string | `"HEAD"` | git branch to track |
+| kubezero.valuesFiles[0] | string | `"values.yaml"` |  |
 
 ## Resources
 - https://argoproj.github.io/argo-cd/operator-manual/metrics/

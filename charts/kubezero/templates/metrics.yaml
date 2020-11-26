@@ -1,21 +1,42 @@
-{{- if index .Values "metrics" "enabled" }}
-{{ include "kubezero-app.app" . }}
+{{- define "metrics-values" }}
+
+{{- if .Values.metrics.istio.grafana.enabled }}
+grafana:
+  istio:
+    {{- with .Values.metrics.istio.grafana }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+{{- end }}
+{{- if .Values.metrics.istio.prometheus.enabled }}
+prometheus:
+  istio:
+    {{- with .Values.metrics.istio.prometheus }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+{{- end }}
+{{- if index .Values "metrics" "kube-prometheus-stack" }}
+kube-prometheus-stack:
+  {{- with index .Values "metrics" "kube-prometheus-stack" }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+{{- end }}
+
+{{- end }}
+
+
+{{- define "metrics-argo" }}
 
   ignoreDifferences:
   - group: admissionregistration.k8s.io
     kind: ValidatingWebhookConfiguration
     jsonPointers:
-    - /webhooks/0/clientConfig/caBundle
     - /webhooks/0/failurePolicy
   - group: admissionregistration.k8s.io
     kind: MutatingWebhookConfiguration
     jsonPointers:
-    - /webhooks/0/clientConfig/caBundle
     - /webhooks/0/failurePolicy
 
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: monitoring
 {{- end }}
+
+
+{{ include "kubezero-app.app" . }}

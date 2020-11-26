@@ -1,0 +1,19 @@
+{{- if not .Values.argo }}
+
+{{- $artifacts := list "calico" "cert-manager" "kiam" "aws-ebs-csi-driver" "aws-efs-csi-driver" "local-volume-provisioner" "istio" "istio-ingress" "metrics" "logging" "argo-cd" }}
+
+{{- if .Values.global }}
+global:
+  {{- toYaml .Values.global | nindent 2 }}
+{{- end }}
+
+{{- range $artifacts }}
+{{- if index $.Values . }}
+{{ . }}:
+  enabled: {{ index $.Values . "enabled" }}
+  values:
+    {{- include (print . "-values") $ | nindent 4 }}
+{{- end }}
+{{- end }}
+ 
+{{- end }}

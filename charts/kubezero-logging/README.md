@@ -74,7 +74,6 @@ Kubernetes: `>= 1.16.0`
 | fluent-bit.config.service | string | `"[SERVICE]\n    Flush 1\n    Daemon Off\n    Log_Level warn\n    Parsers_File parsers.conf\n    Parsers_File custom_parsers.conf\n    HTTP_Server On\n    HTTP_Listen 0.0.0.0\n    HTTP_Port 2020\n"` |  |
 | fluent-bit.enabled | bool | `false` |  |
 | fluent-bit.serviceMonitor.enabled | bool | `true` |  |
-| fluent-bit.serviceMonitor.namespace | string | `"monitoring"` |  |
 | fluent-bit.serviceMonitor.selector.release | string | `"metrics"` |  |
 | fluent-bit.test.enabled | bool | `false` |  |
 | fluent-bit.tolerations[0].effect | string | `"NoSchedule"` |  |
