@@ -1,5 +1,11 @@
-{{- if .Values.istio.enabled }}
-{{ include "kubezero-app.app" . }}
+{{- define "istio-values" }}
+istio-discovery:
+  pilot:
+    replicaCount: {{ ternary 2 1 .Values.HighAvailableControlplane }}
+{{- end }}
+
+
+{{- define "istio-argo" }}
 
   ignoreDifferences:
   - group: apiextensions.k8s.io
@@ -17,10 +23,6 @@
     jsonPointers:
     - /webhooks/0/clientConfig/caBundle
     - /webhooks/0/failurePolicy
-
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: istio-system
 {{- end }}
+
+{{ include "kubezero-app.app" . }}

@@ -16,7 +16,7 @@ Installs Istio Ingress Gateways, requires kubezero-istio to be installed !
 
 ## Requirements
 
-Kubernetes: `>= 1.17.0`
+Kubernetes: `>= 1.16.0`
 
 | Repository | Name | Version |
 |------------|------|---------|

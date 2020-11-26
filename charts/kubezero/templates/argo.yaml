@@ -1,0 +1,31 @@
+{{- define "argo-cd-values" }}
+argo-cd:
+  controller:
+    metrics:
+      enabled: {{ .Values.metrics.enabled }}
+  repoServer:
+    metrics:
+      enabled: {{ .Values.metrics.enabled }}
+  server:
+    metrics:
+      enabled: {{ .Values.metrics.enabled }}
+    {{- with index .Values "argo-cd" "server" }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with index .Values "argo-cd" "configs" }}
+  configs:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- if and ( index .Values "argo-cd" "istio" "enabled" ) .Values.istio.enabled }}
+istio:
+  {{- with index .Values "argo-cd" "istio" }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+{{- end }}
+
+{{- with index .Values "argo-cd" "kubezero" }}
+kubezero:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+
+{{- end }}

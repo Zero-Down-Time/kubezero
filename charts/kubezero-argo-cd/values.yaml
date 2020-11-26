@@ -1,24 +1,35 @@
+# Configure app of apps
 kubezero:
-  global:
-    # kubezero.global.defaultDestination -- Destination cluster
-    defaultDestination:
-      server: https://kubernetes.default.svc
+  enabled: false
 
-    # This repoURL is used a base for all the repoURLs applications
-    # Setting this to a eg. private git repo incl. the use of pathPrefix allows kubezero to be
-    # integrated into any repository as a git subtree if for example public internet access is unavailable
-    defaultSource:
-      # kubezero.global.defaultSource.repoURL -- default repository for argocd applications
-      repoURL: https://github.com/zero-down-time/kubezero
-      # kubezero.global.defaultSource.targetRevision -- default tracking of repoURL
-      targetRevision: HEAD
-      # kubezero.global.defaultSource.pathPrefix -- optional path prefix within repoURL to support eg. remote subtrees
-      pathPrefix: ''
+  # kubezero.server -- destination cluster
+  server: https://kubernetes.default.svc
 
-    # syncPolicy, details see: https://argoproj.github.io/argo-cd/user-guide/auto_sync
-    #syncPolicy:
-    #  automated:
-    #    prune: true
+  # This repoURL is used a base for all the repoURLs applications
+  # Setting this to a eg. private git repo incl. the use of pathPrefix allows kubezero to be
+  # integrated into any repository as a git subtree if for example public internet access is unavailable
+  # kubezero.repoURL -- repository for kubezero argo applications
+  repoURL: https://github.com/zero-down-time/kubezero
+  # kubezero.targetRevision -- git branch to track
+  targetRevision: HEAD
+  # kubezero.path -- path within repoURL
+  path: 'charts/kubezero'
+
+  # syncPolicy, details see: https://argoproj.github.io/argo-cd/user-guide/auto_sync
+  #syncPolicy:
+  #  automated:
+  #    prune: true
+
+  valuesFiles:
+  - values.yaml
+
+# Support for Istio Ingress for ArgoCD
+istio:
+  # istio.enabled -- Deploy Istio VirtualService to expose ArgoCD
+  enabled: false
+  # istio.gateway -- Name of the Istio gateway to add the VirtualService to
+  gateway: istio-ingress/ingressgateway
+  ipBlocks: []
 
 argo-cd:
   installCRDs: false
@@ -70,6 +81,9 @@ argo-cd:
       # argo-cd.server.config.url -- ArgoCD hostname to be exposed via Istio
       url: argocd.example.com
 
+      #repositories: |
+      #  - url: https://zero-down-time.github.io/kubezero.git
+
       resource.customizations: |
         cert-manager.io/Certificate:
           # Lua script for customizing the health status assessment
@@ -115,10 +129,3 @@ argo-cd:
 
   dex:
     enabled: false
-
-istio:
-  # istio.enabled -- Deploy Istio VirtualService to expose ArgoCD
-  enabled: false
-  # istio.gateway -- Name of the Istio gateway to add the VirtualService to
-  gateway: istio-ingress/ingressgateway
-  ipBlocks: []
