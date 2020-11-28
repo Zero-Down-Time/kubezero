@@ -3,13 +3,13 @@ grafana:
     enabled: false
     ipBlocks: []
     url: ""
-    gateway: istio-system/ingressgateway
+    gateway: istio-ingress/ingressgateway
 
 prometheus:
   istio:
     enabled: false
     url: ""
-    gateway: istio-system/ingressgateway
+    gateway: istio-ingress/ingressgateway
 
 kube-prometheus-stack:
   defaultRules:
@@ -132,10 +132,6 @@ kube-prometheus-stack:
       enabled: false
     testFramework:
       enabled: false
-    # Missing default in prometheus-stack
-    sidecar:
-      notifiers:
-        enabled: false
 
   # Assign state metrics to control plane
   kube-state-metrics:
