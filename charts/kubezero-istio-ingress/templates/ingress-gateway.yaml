@@ -28,7 +28,7 @@ spec:
       mode: SIMPLE
       privateKey: /etc/istio/ingressgateway-certs/tls.key
       serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
-      credentialName: public-ingress-cert
+      credentialName: ingress-cert
 {{- end }}
 
 {{- if and (index .Values "istio-private-ingress" "enabled") (index .Values "istio-private-ingress" "dnsNames") }}
@@ -62,7 +62,7 @@ spec:
       mode: SIMPLE
       privateKey: /etc/istio/ingressgateway-certs/tls.key
       serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
-      credentialName: public-ingress-cert
+      credentialName: private-ingress-cert
   - port:
       number: 5672
       name: amqp
@@ -85,7 +85,7 @@ spec:
       mode: SIMPLE
       privateKey: /etc/istio/ingressgateway-certs/tls.key
       serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
-      credentialName: public-ingress-cert
+      credentialName: private-ingress-cert
   - port:
       number: 6379
       name: redis

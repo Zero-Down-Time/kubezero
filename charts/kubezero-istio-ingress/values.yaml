@@ -11,6 +11,8 @@ global:
   defaultPodDisruptionBudget:
     enabled: false
 
+  arch:
+    amd64: 2
 
 istio-ingress:
   enabled: false

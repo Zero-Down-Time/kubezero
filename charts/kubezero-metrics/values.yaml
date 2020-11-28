@@ -132,6 +132,10 @@ kube-prometheus-stack:
       enabled: false
     testFramework:
       enabled: false
+    # Missing default in prometheus-stack
+    sidecar:
+      notifiers:
+        enabled: false
 
   # Assign state metrics to control plane
   kube-state-metrics:

@@ -30,4 +30,4 @@ cp -r istio-${ISTIO_VERSION}/manifests/charts/gateways/istio-ingress ../kubezero
 sed -i -e 's/name: istio-ingress/name: istio-private-ingress/' ../kubezero-istio-ingress/charts/istio-private-ingress/Chart.yaml
 
 # Get matching istioctl
-# [ -x istioctl ] && [ "$(./istioctl version --remote=false)" == $ISTIO_VERSION ] || { curl -sL https://github.com/istio/istio/releases/download/${ISTIO_VERSION}/istioctl-${ISTIO_VERSION}-linux-amd64.tar.gz | tar xz; chmod +x istioctl; }
+[ -x istioctl ] && [ "$(./istioctl version --remote=false)" == $ISTIO_VERSION ] || { curl -sL https://github.com/istio/istio/releases/download/${ISTIO_VERSION}/istioctl-${ISTIO_VERSION}-linux-amd64.tar.gz | tar xz; chmod +x istioctl; }
