@@ -1,6 +1,6 @@
 {{- if not .Values.argo }}
 
-{{- $artifacts := list "calico" "cert-manager" "kiam" "aws-ebs-csi-driver" "aws-efs-csi-driver" "local-volume-provisioner" "istio" "istio-ingress" "metrics" "logging" "argo-cd" }}
+{{- $artifacts := list "calico" "cert-manager" "kiam" "aws-ebs-csi-driver" "aws-efs-csi-driver" "local-volume-provisioner" "local-path-provisioner" "istio" "istio-ingress" "metrics" "logging" "argo-cd" }}
 
 {{- if .Values.global }}
 global:
@@ -11,6 +11,8 @@ global:
 {{- if index $.Values . }}
 {{ . }}:
   enabled: {{ index $.Values . "enabled" }}
+  namespace: {{ default "kube-system" ( index $.Values . "namespace" ) }}
+  crds: {{ default false ( index $.Values . "crds" ) }}
   values:
     {{- include (print . "-values") $ | nindent 4 }}
 {{- end }}

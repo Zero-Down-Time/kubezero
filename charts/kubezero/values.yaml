@@ -9,16 +9,21 @@ global:
 
 calico:
   enabled: false
+  crds: true
   retain: true
 
 cert-manager:
   enabled: false
+  crds: true
   namespace: cert-manager
 
 kiam:
   enabled: false
 
 local-volume-provisioner:
+  enabled: false
+
+local-path-provisioner:
   enabled: false
 
 aws-ebs-csi-driver:
@@ -29,6 +34,7 @@ aws-efs-csi-driver:
 
 istio:
   enabled: false
+  crds: true
   namespace: istio-system
 
 istio-ingress:
@@ -37,14 +43,15 @@ istio-ingress:
 
 metrics:
   enabled: false
+  crds: true
   namespace: monitoring
 
 logging:
   enabled: false
+  crds: true
   namespace: logging
 
 argo-cd:
   enabled: false
+  crds: true
   namespace: argocd
-  istio:
-    enabled: false

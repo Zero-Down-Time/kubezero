@@ -1,0 +1,7 @@
+{{- define "local-path-provisioner-values" }}
+{{- end }}
+
+{{- define "local-path-provisioner-argo" }}
+{{- end }}
+
+{{ include "kubezero-app.app" . }}

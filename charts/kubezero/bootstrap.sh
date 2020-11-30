@@ -6,18 +6,19 @@ ARTIFACTS=("$2")
 CLUSTER=$3
 LOCATION=${4:-""}
 
+API_VERSIONS="-a monitoring.coreos.com/v1"
+
 DEPLOY_DIR=$( dirname $( realpath $0 ))
 which yq || { echo "yq not found!"; exit 1; }
 
 TMPDIR=$(mktemp -d kubezero.XXX)
-
-function join { local IFS="$1"; shift; echo "$*"; }
 
 # First lets generate kubezero.yaml
 # Add all yaml files in $CLUSTER
 VALUES="$(find $CLUSTER -name '*.yaml' | tr '\n' ',')"
 helm template $DEPLOY_DIR -f ${VALUES%%,} --set argo=false > $TMPDIR/kubezero.yaml
 
+# Resolve all the all enabled artifacts in order of their appearance
 if [ ${ARTIFACTS[0]} == "all" ]; then
   ARTIFACTS=($(yq r -p p $TMPDIR/kubezero.yaml "*.enabled" | awk -F "." '{print $1}'))
 fi
@@ -49,44 +50,76 @@ function chart_location() {
 }
 
 
-function _helm() {
-  local action=$1
-  local chart=$2
-  local release=$3
-  local namespace=$4
-  shift 4
+# make sure namespace exists prior to calling helm as the create-namespace options doesn't work
+function create_ns() {
+  local namespace=$1
+  kubectl get ns $namespace || kubectl create ns $namespace
+}
 
-  helm template $(chart_location $chart) --namespace $namespace --name-template $release --skip-crds $@ > $TMPDIR/helm.yaml
 
-  if [ $action == "apply" ]; then
-    # make sure namespace exists prior to calling helm as the create-namespace options doesn't work
-    kubectl get ns $namespace || kubectl create ns $namespace
-  fi
+# delete non kube-system ns
+function delete_ns() {
+  local namespace=$1
+  [ "$namespace" != "kube-system" ] && kubectl delete ns $namespace
+}
+
+
+# Extract crds via helm calls and apply delta=crds only
+function _crds() {
+    helm template $(chart_location $chart) --namespace $namespace --name-template $release --skip-crds > $TMPDIR/helm-no-crds.yaml
+    helm template $(chart_location $chart) --namespace $namespace --name-template $release --include-crds > $TMPDIR/helm-crds.yaml
+    diff -e $TMPDIR/helm-no-crds.yaml $TMPDIR/helm-crds.yaml | head -n-1 | tail -n+2 > $TMPDIR/crds.yaml
+    kubectl apply -f $TMPDIR/crds.yaml
+}
+
+
+# helm template | kubectl apply -f -
+# confine to one namespace if possible
+function apply(){
+  helm template $(chart_location $chart) --namespace $namespace --name-template $release --skip-crds -f $TMPDIR/values.yaml $API_VERSIONS $@ > $TMPDIR/helm.yaml
 
   # If resources are out of the single $namespace, apply without restrictions
   nr_ns=$(grep -e '^  namespace:' $TMPDIR/helm.yaml  | sed "s/\"//g" | sort | uniq | wc -l)
   if [ $nr_ns -gt 1 ]; then
-    kubectl $action -f $TMPDIR/helm.yaml
+    kubectl $action -f $TMPDIR/helm.yaml && rc=$? || rc=$?
   else
-    kubectl $action --namespace $namespace -f $TMPDIR/helm.yaml
+    kubectl $action --namespace $namespace -f $TMPDIR/helm.yaml && rc=$? || rc=$?
   fi
 }
 
 
-function deploy() {
-  _helm apply $@
-}
+function _helm() {
+  local action=$1
 
+  local chart="kubezero-$2"
+  local release=$2
+  local namespace=$(get_namespace $2)
 
-function delete() {
-  _helm delete $@
+  if [ $action == "crds" ]; then
+    _crds
+  else
+
+    # namespace must exist prior to apply
+    [ $action == "apply" ] && create_ns $namespace
+
+    # Optional pre hook
+    declare -F ${release}-pre && ${release}-pre
+
+    apply
+
+    # Optional post hook
+    declare -F ${release}-post && ${release}-post
+
+    # Delete dedicated namespace if not kube-system
+    [ $action == "delete" ] && delete_ns $namespace
+  fi
 }
 
 
 function is_enabled() {
   local chart=$1
+  local enabled=$(yq r $TMPDIR/kubezero.yaml ${chart}.enabled)
 
-  enabled=$(yq r $TMPDIR/kubezero.yaml ${chart}.enabled)
   if [ "$enabled" == "true" ]; then
     yq r $TMPDIR/kubezero.yaml ${chart}.values > $TMPDIR/values.yaml
     return 0
@@ -95,262 +128,84 @@ function is_enabled() {
 }
 
 
-##########
-# Calico #
-##########
-function calico() {
-  local chart="kubezero-calico"
-  local release="calico"
-  local namespace="kube-system"
+function has_crds() {
+  local chart=$1
+  local enabled=$(yq r $TMPDIR/kubezero.yaml ${chart}.crds)
 
-  local task=$1
+  [ "$enabled" == "true" ] && return 0
+  return 1
+}
 
-  if [ $task == "deploy" ]; then
-    deploy $chart $release $namespace -f $TMPDIR/values.yaml && rc=$? || rc=$?
-    kubectl apply -f $TMPDIR/helm.yaml
-  # Don't delete the only CNI
-  #elif [ $task == "delete" ]; then
-  #  delete $chart $release $namespace -f $TMPDIR/values.yaml
-  elif [ $task == "crds" ]; then
-    helm template $(chart_location $chart) --namespace $namespace --name-template $release --skip-crds > $TMPDIR/helm-no-crds.yaml
-    helm template $(chart_location $chart) --namespace $namespace --name-template $release --include-crds > $TMPDIR/helm-crds.yaml
-    diff -e $TMPDIR/helm-no-crds.yaml $TMPDIR/helm-crds.yaml | head -n-1 | tail -n+2 > $TMPDIR/crds.yaml
-    kubectl apply -f $TMPDIR/crds.yaml
-  fi
+
+function get_namespace() {
+  local namespace=$(yq r $TMPDIR/kubezero.yaml ${1}.namespace)
+  [ -z "$namespace" ] && echo "kube-system" || echo $namespace
 }
 
 
 ################
 # cert-manager #
 ################
-function cert-manager() {
-  local chart="kubezero-cert-manager"
-  local release="cert-manager"
-  local namespace="cert-manager"
+function cert-manager-post() {
+  # If any error occurs, wait for initial webhook deployment and try again
+  # see: https://cert-manager.io/docs/concepts/webhook/#webhook-connection-problems-shortly-after-cert-manager-installation
 
-  local task=$1
-
-  if [ $task == "deploy" ]; then
-    deploy $chart $release $namespace -f $TMPDIR/values.yaml && rc=$? || rc=$?
-
-    # If any error occurs, wait for initial webhook deployment and try again
-    # see: https://cert-manager.io/docs/concepts/webhook/#webhook-connection-problems-shortly-after-cert-manager-installation
-    if [ $rc -ne 0 ]; then
-      wait_for "kubectl get deployment -n $namespace cert-manager-webhook"
-      kubectl rollout status deployment -n $namespace cert-manager-webhook
-      wait_for 'kubectl get validatingwebhookconfigurations -o yaml | grep "caBundle: LS0"'
-      deploy $chart $release $namespace -f $TMPDIR/values.yaml
-    fi
-
-    wait_for "kubectl get ClusterIssuer -n $namespace kubezero-local-ca-issuer"
-    kubectl wait --timeout=180s --for=condition=Ready -n $namespace ClusterIssuer/kubezero-local-ca-issuer
-
-  elif [ $task == "delete" ]; then
-    delete $chart $release $namespace -f $TMPDIR/values.yaml
-    kubectl delete ns $namespace
-
-  elif [ $task == "crds" ]; then
-    helm template $(chart_location $chart) --namespace $namespace --name-template $release --skip-crds --set cert-manager.installCRDs=false > $TMPDIR/helm-no-crds.yaml
-    helm template $(chart_location $chart) --namespace $namespace --name-template $release --include-crds --set cert-manager.installCRDs=true > $TMPDIR/helm-crds.yaml
-    diff -e $TMPDIR/helm-no-crds.yaml $TMPDIR/helm-crds.yaml | head -n-1 | tail -n+2 > $TMPDIR/crds.yaml
-    kubectl apply -f $TMPDIR/crds.yaml
+  if [ $rc -ne 0 ]; then
+    wait_for "kubectl get deployment -n $namespace cert-manager-webhook"
+    kubectl rollout status deployment -n $namespace cert-manager-webhook
+    wait_for 'kubectl get validatingwebhookconfigurations -o yaml | grep "caBundle: LS0"'
+    apply
   fi
+
+  wait_for "kubectl get ClusterIssuer -n $namespace kubezero-local-ca-issuer"
+  kubectl wait --timeout=180s --for=condition=Ready -n $namespace ClusterIssuer/kubezero-local-ca-issuer
 }
 
 
 ########
 # Kiam #
 ########
-function kiam() {
-  local chart="kubezero-kiam"
-  local release="kiam"
-  local namespace="kube-system"
-
-  local task=$1
-
-  if [ $task == "deploy" ]; then
-    # Certs only first
-    deploy $chart $release $namespace --set kiam.enabled=false
-    kubectl wait --timeout=120s --for=condition=Ready -n kube-system Certificate/kiam-server
-
-    # Make sure kube-system and cert-manager are allowed to kiam
-    kubectl annotate --overwrite namespace kube-system 'iam.amazonaws.com/permitted=.*'
-    kubectl annotate --overwrite namespace cert-manager 'iam.amazonaws.com/permitted=.*CertManagerRole.*'
-
-    # Get kiam rolled out and make sure it is working
-    deploy $chart $release $namespace -f $TMPDIR/values.yaml
-    wait_for 'kubectl get daemonset -n kube-system kiam-agent'
-    kubectl rollout status daemonset -n kube-system kiam-agent
-
-  elif [ $task == "delete" ]; then
-    delete $chart $release $namespace -f $TMPDIR/values.yaml
-  fi
+function kiam-pre() {
+  # Certs only first
+  apply --set kiam.enabled=false
+  kubectl wait --timeout=120s --for=condition=Ready -n kube-system Certificate/kiam-server
 }
 
+function kiam-post() {
+  wait_for 'kubectl get daemonset -n kube-system kiam-agent'
+  kubectl rollout status daemonset -n kube-system kiam-agent
 
-#######
-# EBS #
-#######
-function aws-ebs-csi-driver() {
-  local chart="kubezero-aws-ebs-csi-driver"
-  local release="aws-ebs-csi-driver"
-  local namespace="kube-system"
-
-  local task=$1
-
-  if [ $task == "deploy" ]; then
-    deploy $chart $release $namespace -f $TMPDIR/values.yaml
-  elif [ $task == "delete" ]; then
-    delete $chart $release $namespace -f $TMPDIR/values.yaml
-  fi
-}
-
-
-#########
-# Istio #
-#########
-function istio() {
-  local chart="kubezero-istio"
-  local release="istio"
-  local namespace="istio-system"
-
-  local task=$1
-
-  if [ $task == "deploy" ]; then
-    deploy $chart $release $namespace -f $TMPDIR/values.yaml
-
-  elif [ $task == "delete" ]; then
-    delete $chart $release $namespace -f $TMPDIR/values.yaml
-    kubectl delete ns istio-system
-
-  elif [ $task == "crds" ]; then
-    helm template $(chart_location $chart) --namespace $namespace --name-template $release --skip-crds > $TMPDIR/helm-no-crds.yaml
-    helm template $(chart_location $chart) --namespace $namespace --name-template $release --include-crds > $TMPDIR/helm-crds.yaml
-    diff -e $TMPDIR/helm-no-crds.yaml $TMPDIR/helm-crds.yaml | head -n-1 | tail -n+2 > $TMPDIR/crds.yaml
-    kubectl apply -f $TMPDIR/crds.yaml
-  fi
-}
-
-#################
-# Istio Ingress #
-#################
-function istio-ingress() {
-  local chart="kubezero-istio-ingress"
-  local release="istio-ingress"
-  local namespace="istio-ingress"
-
-  local task=$1
-
-  if [ $task == "deploy" ]; then
-    deploy $chart $release $namespace -f $TMPDIR/values.yaml
-
-  elif [ $task == "delete" ]; then
-    delete $chart $release $namespace -f $TMPDIR/values.yaml
-    kubectl delete ns istio-ingress
-  fi
-}
-
-
-###########
-# Metrics #
-###########
-function metrics() {
-  local chart="kubezero-metrics"
-  local release="metrics"
-  local namespace="monitoring"
-
-  local task=$1
-
-  if [ $task == "deploy" ]; then
-    deploy $chart $release $namespace -f $TMPDIR/values.yaml
-
-  elif [ $task == "delete" ]; then
-    delete $chart $release $namespace -f $TMPDIR/values.yaml
-    kubectl delete ns monitoring
-
-  elif [ $task == "crds" ]; then
-    helm template $(chart_location $chart) --namespace $namespace --name-template $release --skip-crds > $TMPDIR/helm-no-crds.yaml
-    helm template $(chart_location $chart) --namespace $namespace --name-template $release --include-crds > $TMPDIR/helm-crds.yaml
-    diff -e $TMPDIR/helm-no-crds.yaml $TMPDIR/helm-crds.yaml | head -n-1 | tail -n+2 > $TMPDIR/crds.yaml
-    kubectl apply -f $TMPDIR/crds.yaml
-  fi
+  # Make sure kube-system and cert-manager are allowed to kiam
+  kubectl annotate --overwrite namespace kube-system 'iam.amazonaws.com/permitted=.*'
+  kubectl annotate --overwrite namespace cert-manager 'iam.amazonaws.com/permitted=.*CertManagerRole.*'
 }
 
 
 ###########
 # Logging #
 ###########
-function logging() {
-  local chart="kubezero-logging"
-  local release="logging"
-  local namespace="logging"
-
-  local task=$1
-
-  if [ $task == "deploy" ]; then
-    deploy $chart $release $namespace -a "monitoring.coreos.com/v1" -f $TMPDIR/values.yaml
-
-    kubectl annotate --overwrite namespace logging 'iam.amazonaws.com/permitted=.*ElasticSearchSnapshots.*'
-
-  elif [ $task == "delete" ]; then
-    delete $chart $release $namespace -f $TMPDIR/values.yaml
-    kubectl delete ns logging
-
-  # Doesnt work right now due to V2 Helm implementation of the eck-operator-crd chart
-  #elif [ $task == "crds" ]; then
-  #  helm template $(chart_location $chart) --namespace $namespace --name-template $release --skip-crds > $TMPDIR/helm-no-crds.yaml
-  #  helm template $(chart_location $chart) --namespace $namespace --name-template $release --include-crds > $TMPDIR/helm-crds.yaml
-  #  diff -e $TMPDIR/helm-no-crds.yaml $TMPDIR/helm-crds.yaml | head -n-1 | tail -n+2 > $TMPDIR/crds.yaml
-  #  kubectl apply -f $TMPDIR/crds.yaml
-  fi
-}
-
-
-##########
-# ArgoCD #
-##########
-function argo-cd() {
-  local chart="kubezero-argo-cd"
-  local release="argocd"
-  local namespace="argocd"
-
-  local task=$1
-
-  if [ $task == "deploy" ]; then
-    deploy $chart $release $namespace -f $TMPDIR/values.yaml
-
-    # Install the kubezero app of apps
-    # deploy kubezero kubezero $namespace -f $TMPDIR/kubezero.yaml
-
-  elif [ $task == "delete" ]; then
-    delete $chart $release $namespace -f $TMPDIR/values.yaml
-    kubectl delete ns argocd
-
-  elif [ $task == "crds" ]; then
-    helm template $(chart_location $chart) --namespace $namespace --name-template $release --skip-crds > $TMPDIR/helm-no-crds.yaml
-    helm template $(chart_location $chart) --namespace $namespace --name-template $release --include-crds > $TMPDIR/helm-crds.yaml
-    diff -e $TMPDIR/helm-no-crds.yaml $TMPDIR/helm-crds.yaml | head -n-1 | tail -n+2 > $TMPDIR/crds.yaml
-    kubectl apply -f $TMPDIR/crds.yaml
-  fi
+function logging-post() {
+  kubectl annotate --overwrite namespace logging 'iam.amazonaws.com/permitted=.*ElasticSearchSnapshots.*'
 }
 
 
 ## MAIN ##
 if [ $1 == "deploy" ]; then
   for t in ${ARTIFACTS[@]}; do
-    is_enabled $t && $t deploy
+    is_enabled $t && _helm apply $t
   done
 
+# If artifact enabled and has crds install
 elif [ $1 == "crds" ]; then
   for t in ${ARTIFACTS[@]}; do
-    is_enabled $t && $t crds
+    is_enabled $t && has_crds $t && _helm crds $t
   done
 
 # Delete in reverse order, continue even if errors
 elif [ $1 == "delete" ]; then
   set +e
   for (( idx=${#ARTIFACTS[@]}-1 ; idx>=0 ; idx-- )) ; do
-    is_enabled ${ARTIFACTS[idx]} && ${ARTIFACTS[idx]} delete
+    is_enabled ${ARTIFACTS[idx]} && _helm delete ${ARTIFACTS[idx]}
   done
 fi
 
