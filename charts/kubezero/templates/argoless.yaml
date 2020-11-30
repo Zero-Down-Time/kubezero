@@ -1,6 +1,6 @@
 {{- if not .Values.argo }}
 
-{{- $artifacts := list "calico" "cert-manager" "kiam" "aws-ebs-csi-driver" "aws-efs-csi-driver" "local-volume-provisioner" "local-path-provisioner" "istio" "istio-ingress" "metrics" "logging" "argo-cd" }}
+{{- $artifacts := list "calico" "cert-manager" "kiam" "aws-ebs-csi-driver" "aws-efs-csi-driver" "local-volume-provisioner" "local-path-provisioner" "istio" "istio-ingress" "metrics" "logging" "argocd" }}
 
 {{- if .Values.global }}
 global:

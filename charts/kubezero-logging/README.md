@@ -20,7 +20,7 @@ Kubernetes: `>= 1.16.0`
 |------------|------|---------|
 | https://helm.elastic.co | eck-operator | 1.3.0 |
 | https://kubernetes-charts.storage.googleapis.com/ | fluentd | 2.5.1 |
-| https://zero-down-time.github.io/kubezero/ | fluent-bit | 0.7.2 |
+| https://zero-down-time.github.io/kubezero/ | fluent-bit | 0.7.10 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## Changes from upstream

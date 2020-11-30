@@ -18,7 +18,7 @@ Kubernetes: `>= 1.16.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://prometheus-community.github.io/helm-charts | kube-prometheus-stack | 11.1.1 |
+| https://prometheus-community.github.io/helm-charts | kube-prometheus-stack | 12.2.4 |
 | https://prometheus-community.github.io/helm-charts | prometheus-adapter | 2.7.1 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
@@ -27,7 +27,7 @@ Kubernetes: `>= 1.16.0`
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | grafana.istio.enabled | bool | `false` |  |
-| grafana.istio.gateway | string | `"istio-system/ingressgateway"` |  |
+| grafana.istio.gateway | string | `"istio-ingress/ingressgateway"` |  |
 | grafana.istio.ipBlocks | list | `[]` |  |
 | grafana.istio.url | string | `""` |  |
 | kube-prometheus-stack.alertmanager.enabled | bool | `false` |  |
@@ -109,7 +109,7 @@ Kubernetes: `>= 1.16.0`
 | prometheus-adapter.tolerations[0].effect | string | `"NoSchedule"` |  |
 | prometheus-adapter.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | prometheus.istio.enabled | bool | `false` |  |
-| prometheus.istio.gateway | string | `"istio-system/ingressgateway"` |  |
+| prometheus.istio.gateway | string | `"istio-ingress/ingressgateway"` |  |
 | prometheus.istio.url | string | `""` |  |
 
 # Dashboards
