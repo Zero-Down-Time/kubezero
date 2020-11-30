@@ -1,4 +1,4 @@
-{{- define "argo-cd-values" }}
+{{- define "argocd-values" }}
 argo-cd:
   controller:
     metrics:
@@ -9,21 +9,21 @@ argo-cd:
   server:
     metrics:
       enabled: {{ .Values.metrics.enabled }}
-    {{- with index .Values "argo-cd" "server" }}
+    {{- with index .Values "argocd" "server" }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
-  {{- with index .Values "argo-cd" "configs" }}
+  {{- with index .Values "argocd" "configs" }}
   configs:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-{{- if and ( index .Values "argo-cd" "istio" "enabled" ) .Values.istio.enabled }}
+{{- if and ( index .Values "argocd" "istio" "enabled" ) .Values.istio.enabled }}
 istio:
-  {{- with index .Values "argo-cd" "istio" }}
+  {{- with index .Values "argocd" "istio" }}
   {{- toYaml . | nindent 2 }}
   {{- end }}
 {{- end }}
 
-{{- with index .Values "argo-cd" "kubezero" }}
+{{- with index .Values "argocd" "kubezero" }}
 kubezero:
   {{- toYaml . | nindent 2 }}
 {{- end }}

@@ -28,6 +28,7 @@ Kubernetes: `>= 1.16.0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| global.arch.amd64 | int | `2` |  |
 | global.defaultPodDisruptionBudget.enabled | bool | `false` |  |
 | global.hub | string | `"docker.io/istio"` |  |
 | global.jwtPolicy | string | `"first-party-jwt"` |  |

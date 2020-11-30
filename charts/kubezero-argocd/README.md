@@ -1,4 +1,4 @@
-# kubezero-argo-cd
+# kubezero-argocd
 
 ![Version: 0.6.1](https://img.shields.io/badge/Version-0.6.1-informational?style=flat-square)
 

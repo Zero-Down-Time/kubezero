@@ -1,8 +1,8 @@
-# kubezero-local-volume-provisioner
+# kubezero-local-path-provisioner
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.3.4](https://img.shields.io/badge/AppVersion-2.3.4-informational?style=flat-square)
+![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.18](https://img.shields.io/badge/AppVersion-0.0.18-informational?style=flat-square)
 
-KubeZero Umbrella Chart for local-static-provisioner
+KubeZero Umbrella Chart for local-path-provisioner
 
 Provides persistent volumes backed by local volumes, eg. additional SSDs or spindles.
 
@@ -26,11 +26,13 @@ Kubernetes: `>= 1.16.0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| local-static-provisioner.classes[0].hostDir | string | `"/mnt/disks"` |  |
-| local-static-provisioner.classes[0].name | string | `"local-sc-xfs"` |  |
-| local-static-provisioner.common.namespace | string | `"kube-system"` |  |
-| local-static-provisioner.daemonset.nodeSelector."node.kubernetes.io/localVolume" | string | `"present"` |  |
-| local-static-provisioner.prometheus.operator.enabled | bool | `false` |  |
+| local-path-provisioner.nodePathMap[0].node | string | `"DEFAULT_PATH_FOR_NON_LISTED_NODES"` |  |
+| local-path-provisioner.nodePathMap[0].paths[0] | string | `"/opt/local-path-provisioner"` |  |
+| local-path-provisioner.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
+| local-path-provisioner.storageClass.create | bool | `true` |  |
+| local-path-provisioner.storageClass.defaultClass | bool | `false` |  |
+| local-path-provisioner.tolerations[0].effect | string | `"NoSchedule"` |  |
+| local-path-provisioner.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 
 ## KubeZero default configuration
 

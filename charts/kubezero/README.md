@@ -2,7 +2,7 @@
 
 ![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
-KubeZero ArgoCD Application - Root App of Apps chart of KubeZero
+KubeZero - Bootstrap and ArgoCD Root App of Apps chart
 
 **Homepage:** <https://kubezero.com>
 
@@ -24,27 +24,38 @@ Kubernetes: `>= 1.16.0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| argo-cd.enabled | bool | `false` |  |
-| argo-cd.namespace | string | `"argocd"` |  |
+| HighAvailableControlplane | bool | `false` |  |
+| argo | object | `{}` |  |
+| argocd.crds | bool | `true` |  |
+| argocd.enabled | bool | `false` |  |
+| argocd.istio.enabled | bool | `false` |  |
+| argocd.namespace | string | `"argocd"` |  |
 | aws-ebs-csi-driver.enabled | bool | `false` |  |
 | aws-efs-csi-driver.enabled | bool | `false` |  |
+| calico.crds | bool | `true` |  |
 | calico.enabled | bool | `false` |  |
 | calico.retain | bool | `true` |  |
+| cert-manager.crds | bool | `true` |  |
 | cert-manager.enabled | bool | `false` |  |
 | cert-manager.namespace | string | `"cert-manager"` |  |
-| global.defaultDestination.server | string | `"https://kubernetes.default.svc"` |  |
-| global.defaultSource.pathPrefix | string | `""` |  |
-| global.defaultSource.repoURL | string | `"https://github.com/zero-down-time/kubezero"` |  |
-| global.defaultSource.targetRevision | string | `"HEAD"` |  |
+| global.kubezero.pathPrefix | string | `""` |  |
+| global.kubezero.repoURL | string | `"https://github.com/zero-down-time/kubezero"` |  |
+| global.kubezero.server | string | `"https://kubernetes.default.svc"` |  |
+| global.kubezero.targetRevision | string | `"HEAD"` |  |
 | istio-ingress.enabled | bool | `false` |  |
 | istio-ingress.namespace | string | `"istio-ingress"` |  |
+| istio.crds | bool | `true` |  |
 | istio.enabled | bool | `false` |  |
 | istio.namespace | string | `"istio-system"` |  |
 | kiam.enabled | bool | `false` |  |
+| local-path-provisioner.enabled | bool | `false` |  |
 | local-volume-provisioner.enabled | bool | `false` |  |
 | logging.enabled | bool | `false` |  |
 | logging.namespace | string | `"logging"` |  |
+| metrics.crds | bool | `true` |  |
 | metrics.enabled | bool | `false` |  |
+| metrics.istio.grafana | object | `{}` |  |
+| metrics.istio.prometheus | object | `{}` |  |
 | metrics.namespace | string | `"monitoring"` |  |
 
 ----------------------------------------------
