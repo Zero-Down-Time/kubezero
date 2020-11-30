@@ -1,4 +1,13 @@
 {{- define "local-path-provisioner-values" }}
+local-path-provisioner:
+{{- with index .Values "local-path-provisioner" "storageClass" }}
+  storageClass:
+    {{- toYaml . | nindent 4 }}
+{{- end }}
+{{- with index .Values "local-path-provisioner" "nodePathMap" }}
+  nodePathMap:
+    {{- toYaml . | nindent 4 }}
+{{- end }}
 {{- end }}
 
 {{- define "local-path-provisioner-argo" }}

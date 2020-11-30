@@ -53,7 +53,9 @@ function chart_location() {
 # make sure namespace exists prior to calling helm as the create-namespace options doesn't work
 function create_ns() {
   local namespace=$1
-  kubectl get ns $namespace || kubectl create ns $namespace
+  if [ "$namespace" != "kube-system" ]; then
+    kubectl get ns $namespace || kubectl create ns $namespace
+  fi
 }
 
 
@@ -66,8 +68,8 @@ function delete_ns() {
 
 # Extract crds via helm calls and apply delta=crds only
 function _crds() {
-    helm template $(chart_location $chart) --namespace $namespace --name-template $release --skip-crds > $TMPDIR/helm-no-crds.yaml
-    helm template $(chart_location $chart) --namespace $namespace --name-template $release --include-crds > $TMPDIR/helm-crds.yaml
+    helm template $(chart_location $chart) --namespace $namespace --name-template $release --skip-crds --set ${release}.installCRDs=false > $TMPDIR/helm-no-crds.yaml
+    helm template $(chart_location $chart) --namespace $namespace --name-template $release --include-crds --set ${release}.installCRDs=true > $TMPDIR/helm-crds.yaml
     diff -e $TMPDIR/helm-no-crds.yaml $TMPDIR/helm-crds.yaml | head -n-1 | tail -n+2 > $TMPDIR/crds.yaml
     kubectl apply -f $TMPDIR/crds.yaml
 }
@@ -113,6 +115,8 @@ function _helm() {
     # Delete dedicated namespace if not kube-system
     [ $action == "delete" ] && delete_ns $namespace
   fi
+
+  return 0
 }
 
 
