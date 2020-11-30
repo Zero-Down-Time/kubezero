@@ -7,6 +7,8 @@ global:
     targetRevision: HEAD
     pathPrefix: ''
 
+HighAvailableControlplane: false
+
 calico:
   enabled: false
   crds: true
@@ -45,6 +47,9 @@ metrics:
   enabled: false
   crds: true
   namespace: monitoring
+  istio:
+    grafana: {}
+    prometheus: {}
 
 logging:
   enabled: false
@@ -55,3 +60,5 @@ argo-cd:
   enabled: false
   crds: true
   namespace: argocd
+  istio:
+    enabled: false
