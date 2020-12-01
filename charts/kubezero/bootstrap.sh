@@ -2,7 +2,7 @@
 set -ex
 
 ACTION=$1
-ARTIFACTS=("$2")
+ARTIFACTS=($(echo $2 | tr "," "\n"))
 CLUSTER=$3
 LOCATION=${4:-""}
 
@@ -99,10 +99,9 @@ function _helm() {
 
   if [ $action == "crds" ]; then
     _crds
-  else
-
+  elif [ $action == "apply" ]; then
     # namespace must exist prior to apply
-    [ $action == "apply" ] && create_ns $namespace
+    create_ns $namespace
 
     # Optional pre hook
     declare -F ${release}-pre && ${release}-pre
@@ -112,8 +111,11 @@ function _helm() {
     # Optional post hook
     declare -F ${release}-post && ${release}-post
 
+  elif [ $action == "delete" ]; then
+    apply
+
     # Delete dedicated namespace if not kube-system
-    [ $action == "delete" ] && delete_ns $namespace
+    delete_ns $namespace
   fi
 
   return 0
