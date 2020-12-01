@@ -1,18 +1,44 @@
 # Upgrade to KubeZero V2(Argoless)
 
-- disable all auto-sync in argo !! ( remove auto-sync from old values.yaml and run deploy one last time ) or disable manual via Argo UI starting with Kubezero app itself
+## ArgoCD prep
+- disable all auto-sync and "prune" feature to prevent that namespaces defined in previous apps get removed
+  - either remove auto-sync from old values.yaml and run deploy one last time, trigger kubezero sync !
+  - or disable manual via Argo UI starting with Kubezero app itself
 
 - uninstall argo helm chart
   `helm uninstall kubezero -n argocd`
+- remove all "argocd.argoproj.io/instance" labels from namespaces to prevent namespace removal later on
+  `scripts/remove_argo_ns.sh`
 
 - migrate values.yaml to new structure, adapt as needed
-- update new central kubezero location in git and merge cluster configs
+  & update new central kubezero location in git and merge cluster configs
 
 - Upgrade control plane nodes / worker nodes
 
 - upgrade all crds
-- upgrade calico,cert-manager,kiam,csi drivers
-- Istio: 
+  `./bootstrap.sh crds all clusters/$CLUSTER ../../../kubezero/charts`
+
+- upgrade base artifacts
+  `./bootstrap.sh deploy calico,cert-manager,kiam,aws-ebs-csi-driver,aws-efs-csi-driver clusters/$CLUSTER ../../../kubezero/charts`
+
+- Istio, due to changes of the ingress namespace we need brief downtime
+DOWNTIME STARTS !
+  - delete istio operators, to remove all pieces, remove operator itself
+   `./scripts/delete_istio_17.sh`
+  - deploy istio and istio-ingress via bootstrap.sh
+  `./bootstrap.sh deploy all clusters/$CLUSTER ../../../kubezero/charts`
+  - patch all VirtualServices via script to new namespace
+  `./scripts/patch_vs.sh`
+DOWNTIME ENDS !
+
+- upgrade all artifacts
+  `./bootstrap.sh deploy all clusters/$CLUSTER ../../../kubezero/charts`
+
+- push kubezero cluster config
+- verify argocd incl. kubezero app
+- verify all argo apps
+- verify all the things
+
 
 ## High level / Admin changes
 - ArgoCD is now optional
@@ -50,6 +76,6 @@
 ### Istio
 - operator removed, deployment migrated to helm, cleanups
 - version bump to 1.8
-- no more policy by default
+- no more policy pod by default
 - all ingress in dedicated new namespace istio-ingress as well as dedicated helm chart
 - set priorty class
