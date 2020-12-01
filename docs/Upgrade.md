@@ -1,44 +1,61 @@
 # Upgrade to KubeZero V2(Argoless)
 
-## ArgoCD prep
-- disable all auto-sync and "prune" feature to prevent that namespaces defined in previous apps get removed
+## (optional) Upgrade control plane nodes / worker nodes
+- Set kube version in the controller config to eg. `1.18`  
+- Update kube-controller and worker stacks with latest CFN code
+
+- terminate controller node(s)
+- once all controller nodes successfully upgraded replace worker nodes in a rolling fashion via. drain / terminate / rinse-repeat
+
+## ArgoCD
+- disable all auto-sync and "prune" features to prevent that eg. namespaces from previous apps get removed
   - either remove auto-sync from old values.yaml and run deploy one last time, trigger kubezero sync !
   - or disable manual via Argo UI starting with Kubezero app itself
 
-- uninstall argo helm chart
-  `helm uninstall kubezero -n argocd`
-- remove all "argocd.argoproj.io/instance" labels from namespaces to prevent namespace removal later on
-  `scripts/remove_argo_ns.sh`
+- uninstall argo helm chart:  
+`helm uninstall kubezero -n argocd`
 
+- remove all "argocd.argoproj.io/instance" labels from namespaces to prevent namespace removal later on:  
+  `./scripts/remove_argo_ns.sh`
+
+## KubeZero - Part 1
 - migrate values.yaml to new structure, adapt as needed
   & update new central kubezero location in git and merge cluster configs
 
-- Upgrade control plane nodes / worker nodes
-
-- upgrade all crds
+- upgrade all CRDs:  
   `./bootstrap.sh crds all clusters/$CLUSTER ../../../kubezero/charts`
 
-- upgrade base artifacts
+- upgrade first components:  
   `./bootstrap.sh deploy calico,cert-manager,kiam,aws-ebs-csi-driver,aws-efs-csi-driver clusters/$CLUSTER ../../../kubezero/charts`
 
+## Istio - Brief DOWNTIME STARTS !
 - Istio, due to changes of the ingress namespace we need brief downtime
-DOWNTIME STARTS !
+
   - delete istio operators, to remove all pieces, remove operator itself
    `./scripts/delete_istio_17.sh`
   - deploy istio and istio-ingress via bootstrap.sh
   `./bootstrap.sh deploy all clusters/$CLUSTER ../../../kubezero/charts`
   - patch all VirtualServices via script to new namespace
   `./scripts/patch_vs.sh`
-DOWNTIME ENDS !
 
-- upgrade all artifacts
+!! DOWNTIME ENDS !!
+
+## KubeZero - Part 2
+
+- push kubezero & cluster config to git
+
+- upgrade all remaining components and install new ArgoCD:  
   `./bootstrap.sh deploy all clusters/$CLUSTER ../../../kubezero/charts`
 
-- push kubezero cluster config
+## Verification / Tests
 - verify argocd incl. kubezero app
-- verify all argo apps
+- verify all argo apps status
+
 - verify all the things
 
+
+
+# Changelog
 
 ## High level / Admin changes
 - ArgoCD is now optional
