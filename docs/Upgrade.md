@@ -34,7 +34,7 @@
   - delete istio operators, to remove all pieces, remove operator itself
    `./scripts/delete_istio_17.sh`
   - deploy istio and istio-ingress via bootstrap.sh
-  `./bootstrap.sh deploy all clusters/$CLUSTER ../../../kubezero/charts`
+  `./bootstrap.sh deploy istio,istio-ingress clusters/$CLUSTER ../../../kubezero/charts`
   - patch all VirtualServices via script to new namespace
   `./scripts/patch_vs.sh`
 
@@ -58,20 +58,33 @@
 # Changelog
 
 ## High level / Admin changes
-- ArgoCD is now optional
-- ArgoCD is NOT required nor used during initial cluster bootstrap
-- the initial bootstrap script now uses the same config as ArgoCD later on
-- the initial bootstrap is WAY faster and re-try safe
+- ArgoCD is now optional and NOT required nor used during initial cluster bootstrap
+- the bootstrap process now uses the same config and templates as the optional ArgoCD applications later on
+- the bootstrap is can now be restarted at any time and considerably faster
+- the top level KubeZero config for the ArgoCD app-of-apps is now also maintained via the gitops workflow. Changes can be applied by a simple git push rather than manual scripts
 
 ## Individual changes
 
+### Calico
+- version bump
+
 ### Cert-manager
-- local issuer is now a cluster issuer
-- all resources moved to cert-manager namespace
+- local issuers are now cluster issuer to allow them being used across namespaces
+- all cert-manager resources moved into the cert-manager namespace
+- version bump to 1.10
 
 ### Kiam
-- check certs and function due to cert-manager changes
-- set priorty class
+- set priorty class to cluster essential
+- certificates are now issued by the cluster issuer
+
+### EBS / EFS
+- version bump
+
+### Istio
+- istio operator removed, deployment migrated to helm, various cleanups
+- version bump to 1.8
+- all ingress resources are now in the dedicated new namespace istio-ingress ( deployed via separate kubezero chart istio-ingress)
+- set priorty class of ingress components to cluster essential
 
 ### Logging
 - ES/Kibana version bump, new ECK operator
@@ -80,19 +93,7 @@
 - version bump, new app of app architecure
 
 ### Metrics
-- version bumps
-- all servicemonitor resources are now in the same namespaces as the apps
-- check all metrics still work
-
-### Calico
 - version bump
+- all servicemonitor resources are now in the same namespaces as the respective apps to avoid namespace spanning deployments
 
-### EBS
-- version bump
 
-### Istio
-- operator removed, deployment migrated to helm, cleanups
-- version bump to 1.8
-- no more policy pod by default
-- all ingress in dedicated new namespace istio-ingress as well as dedicated helm chart
-- set priorty class
