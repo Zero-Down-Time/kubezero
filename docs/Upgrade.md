@@ -28,8 +28,8 @@
 - upgrade first components:  
   `./bootstrap.sh deploy calico,cert-manager,kiam,aws-ebs-csi-driver,aws-efs-csi-driver clusters/$CLUSTER ../../../kubezero/charts`
 
-## Istio - Brief DOWNTIME STARTS !
-- Istio, due to changes of the ingress namespace we need brief downtime
+## Istio
+Due to changes of the ingress namespace resource the upgrade will cause a brief (~3-5 min) ingress service interruption !  
 
   - delete istio operators, to remove all pieces, remove operator itself
    `./scripts/delete_istio_17.sh`
@@ -38,7 +38,7 @@
   - patch all VirtualServices via script to new namespace
   `./scripts/patch_vs.sh`
 
-!! DOWNTIME ENDS !!
+Ingress service interruption ends.
 
 ## KubeZero - Part 2
 
