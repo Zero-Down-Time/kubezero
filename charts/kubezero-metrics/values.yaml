@@ -181,15 +181,18 @@ istio:
     ipBlocks: []
     url: ""
     gateway: istio-ingress/ingressgateway
+    destination: metrics-grafana
 
   prometheus:
     enabled: false
     ipBlocks: []
     url: ""
     gateway: istio-ingress/ingressgateway
+    destination: metrics-kube-prometheus-st-prometheus
 
   alertmanager:
     enabled: false
     ipBlocks: []
     url: ""
     gateway: istio-ingress/ingressgateway
+    destination: metrics-kube-prometheus-st-alertmanager

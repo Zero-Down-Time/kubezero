@@ -10,13 +10,13 @@ metadata:
 {{ include "kubezero-lib.labels" $ | indent 4 }}
 spec:
   hosts:
-  - {{ index $service.url }}
+  - {{ $service.url }}
   gateways:
-  - {{ index $service.gateway }}
+  - {{ $service.gateway }}
   http:
   - route:
     - destination:
-        host: metrics-{{- $name }}
+        host: {{ $service.destination }}
 ---
 {{- end }}
 
