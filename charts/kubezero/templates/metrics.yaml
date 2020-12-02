@@ -1,18 +1,8 @@
 {{- define "metrics-values" }}
 
-{{- if .Values.metrics.istio.grafana.enabled }}
-grafana:
-  istio:
-    {{- with .Values.metrics.istio.grafana }}
-    {{- toYaml . | nindent 4 }}
-    {{- end }}
-{{- end }}
-{{- if .Values.metrics.istio.prometheus.enabled }}
-prometheus:
-  istio:
-    {{- with .Values.metrics.istio.prometheus }}
-    {{- toYaml . | nindent 4 }}
-    {{- end }}
+{{- with .Values.metrics.istio }}
+istio:
+ {{- toYaml . | nindent 2 }}
 {{- end }}
 {{- if index .Values "metrics" "kube-prometheus-stack" }}
 kube-prometheus-stack:

@@ -57,6 +57,9 @@ Ingress service interruption ends.
 
 # Changelog
 
+## Kubernetes 1.18
+https://sysdig.com/blog/whats-new-kubernetes-1-18/
+
 ## High level / Admin changes
 - ArgoCD is now optional and NOT required nor used during initial cluster bootstrap
 - the bootstrap process now uses the same config and templates as the optional ArgoCD applications later on
