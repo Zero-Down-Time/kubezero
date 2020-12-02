@@ -1,16 +1,3 @@
-grafana:
-  istio:
-    enabled: false
-    ipBlocks: []
-    url: ""
-    gateway: istio-ingress/ingressgateway
-
-prometheus:
-  istio:
-    enabled: false
-    url: ""
-    gateway: istio-ingress/ingressgateway
-
 kube-prometheus-stack:
   defaultRules:
     create: true
@@ -144,6 +131,8 @@ kube-prometheus-stack:
   # Todo
   alertmanager:
     enabled: false
+    alertmanagerSpec:
+      logFormat: json
 
 # Metrics adapter
 prometheus-adapter:
@@ -185,3 +174,22 @@ prometheus-adapter:
               resource: pod
         containerLabel: container
       window: 3m
+
+istio:
+  grafana:
+    enabled: false
+    ipBlocks: []
+    url: ""
+    gateway: istio-ingress/ingressgateway
+
+  prometheus:
+    enabled: false
+    ipBlocks: []
+    url: ""
+    gateway: istio-ingress/ingressgateway
+
+  alertmanager:
+    enabled: false
+    ipBlocks: []
+    url: ""
+    gateway: istio-ingress/ingressgateway
