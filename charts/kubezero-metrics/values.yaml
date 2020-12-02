@@ -46,6 +46,7 @@ kube-prometheus-stack:
 
   prometheusOperator:
     enabled: true
+    logFormat: json
 
     # Run on controller nodes
     tolerations:
@@ -85,6 +86,7 @@ kube-prometheus-stack:
     prometheusSpec:
       retention: 8d
       portName: http-prometheus
+      logFormat: json
 
       resources:
         requests:
