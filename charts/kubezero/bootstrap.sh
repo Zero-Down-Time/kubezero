@@ -10,6 +10,9 @@ API_VERSIONS="-a monitoring.coreos.com/v1"
 
 DEPLOY_DIR=$( dirname $( realpath $0 ))
 which yq || { echo "yq not found!"; exit 1; }
+which helm || { echo "helm not found!"; exit 1; }
+helm_version=$(helm version --short)
+echo $helm_version | grep -qe "^v3.[3-9]" || { echo "Helm version >= 3.3 required!"; exit 1; }
 
 TMPDIR=$(mktemp -d kubezero.XXX)
 
