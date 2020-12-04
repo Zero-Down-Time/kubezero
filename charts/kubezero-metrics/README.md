@@ -1,6 +1,6 @@
 # kubezero-metrics
 
-![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for prometheus-operator
 
@@ -18,7 +18,7 @@ Kubernetes: `>= 1.16.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://prometheus-community.github.io/helm-charts | kube-prometheus-stack | 12.2.4 |
+| https://prometheus-community.github.io/helm-charts | kube-prometheus-stack | 12.3.0 |
 | https://prometheus-community.github.io/helm-charts | prometheus-adapter | 2.7.1 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
@@ -26,10 +26,22 @@ Kubernetes: `>= 1.16.0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| grafana.istio.enabled | bool | `false` |  |
-| grafana.istio.gateway | string | `"istio-ingress/ingressgateway"` |  |
-| grafana.istio.ipBlocks | list | `[]` |  |
-| grafana.istio.url | string | `""` |  |
+| istio.alertmanager.destination | string | `"metrics-kube-prometheus-st-alertmanager"` |  |
+| istio.alertmanager.enabled | bool | `false` |  |
+| istio.alertmanager.gateway | string | `"istio-ingress/ingressgateway"` |  |
+| istio.alertmanager.ipBlocks | list | `[]` |  |
+| istio.alertmanager.url | string | `""` |  |
+| istio.grafana.destination | string | `"metrics-grafana"` |  |
+| istio.grafana.enabled | bool | `false` |  |
+| istio.grafana.gateway | string | `"istio-ingress/ingressgateway"` |  |
+| istio.grafana.ipBlocks | list | `[]` |  |
+| istio.grafana.url | string | `""` |  |
+| istio.prometheus.destination | string | `"metrics-kube-prometheus-st-prometheus"` |  |
+| istio.prometheus.enabled | bool | `false` |  |
+| istio.prometheus.gateway | string | `"istio-ingress/ingressgateway"` |  |
+| istio.prometheus.ipBlocks | list | `[]` |  |
+| istio.prometheus.url | string | `""` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.logFormat | string | `"json"` |  |
 | kube-prometheus-stack.alertmanager.enabled | bool | `false` |  |
 | kube-prometheus-stack.coreDns.enabled | bool | `true` |  |
 | kube-prometheus-stack.defaultRules.create | bool | `true` |  |
@@ -71,6 +83,7 @@ Kubernetes: `>= 1.16.0`
 | kube-prometheus-stack.nodeExporter.serviceMonitor.relabelings[0].sourceLabels[0] | string | `"__meta_kubernetes_pod_node_name"` |  |
 | kube-prometheus-stack.nodeExporter.serviceMonitor.relabelings[0].targetLabel | string | `"node"` |  |
 | kube-prometheus-stack.prometheus.enabled | bool | `true` |  |
+| kube-prometheus-stack.prometheus.prometheusSpec.logFormat | string | `"json"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.portName | string | `"http-prometheus"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.resources.limits.memory | string | `"3Gi"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.resources.requests.cpu | string | `"500m"` |  |
@@ -83,6 +96,7 @@ Kubernetes: `>= 1.16.0`
 | kube-prometheus-stack.prometheusOperator.admissionWebhooks.patch.tolerations[0].effect | string | `"NoSchedule"` |  |
 | kube-prometheus-stack.prometheusOperator.admissionWebhooks.patch.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | kube-prometheus-stack.prometheusOperator.enabled | bool | `true` |  |
+| kube-prometheus-stack.prometheusOperator.logFormat | string | `"json"` |  |
 | kube-prometheus-stack.prometheusOperator.namespaces.additional[0] | string | `"kube-system"` |  |
 | kube-prometheus-stack.prometheusOperator.namespaces.additional[1] | string | `"logging"` |  |
 | kube-prometheus-stack.prometheusOperator.namespaces.releaseNamespace | bool | `true` |  |
@@ -108,9 +122,6 @@ Kubernetes: `>= 1.16.0`
 | prometheus-adapter.rules.resource.window | string | `"3m"` |  |
 | prometheus-adapter.tolerations[0].effect | string | `"NoSchedule"` |  |
 | prometheus-adapter.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
-| prometheus.istio.enabled | bool | `false` |  |
-| prometheus.istio.gateway | string | `"istio-ingress/ingressgateway"` |  |
-| prometheus.istio.url | string | `""` |  |
 
 # Dashboards
 

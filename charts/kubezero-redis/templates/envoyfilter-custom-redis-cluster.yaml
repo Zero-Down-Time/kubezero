@@ -1,0 +1,36 @@
+{{- if index .Values "redis-cluster" "enabled" }}
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: {{ .Release.Namespace }}-{{ .Release.Name }}-redis-cluster
+  namespace: istio-ingress
+spec:
+  configPatches:
+  - applyTo: CLUSTER
+    patch:
+      operation: INSERT_FIRST
+      value:
+        name: "{{ .Release.Namespace }}-{{ .Release.Name }}-redis-cluster"
+        connect_timeout: 0.5s
+        lb_policy: CLUSTER_PROVIDED
+        load_assignment:
+          cluster_name: {{ .Release.Namespace }}-{{ .Release.Name }}-redis-cluster
+          endpoints:
+          - lb_endpoints:
+            {{- $count := index .Values "redis-cluster" "cluster" "nodes" | int }}{{ range $i, $v := until $count }}
+            - endpoint:
+                address:
+                  socket_address:
+                    address: {{ $.Release.Name }}-{{ $i }}.{{ $.Release.Name }}-headless.{{ $.Release.Namespace }}.svc.cluster.local
+                    port_value: {{ index $.Values "redis-cluster" "redisPort" }}
+            {{- end }}
+        cluster_type:
+          name: envoy.clusters.redis
+          typed_config:
+            "@type": type.googleapis.com/google.protobuf.Struct
+            value:
+              cluster_refresh_rate: 5s
+              cluster_refresh_timeout: 3s
+              redirect_refresh_interval: 5s
+              redirect_refresh_threshold: 5
+{{- end }}

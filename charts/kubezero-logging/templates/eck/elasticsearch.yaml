@@ -48,6 +48,9 @@ spec:
         {{- end }}
         containers:
         - name: elasticsearch
+          securityContext:
+            capabilities:
+              add: ["SYS_CHROOT"]
           resources:
             requests:
               cpu: {{ default "200m" .cpu_request }}
