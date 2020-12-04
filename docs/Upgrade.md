@@ -44,6 +44,9 @@ Ingress service interruption ends.
 
 - push kubezero & cluster config to git
 
+- if logging incl. ElasticSearch is installed remove the old ECK operator first:  
+  `./scripts/remove_old_eck.sh`
+
 - upgrade all remaining components and install new ArgoCD:  
   `./bootstrap.sh deploy all clusters/$CLUSTER ../../../kubezero/charts`
 
