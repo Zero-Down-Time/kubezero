@@ -4,7 +4,7 @@ apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
   name: {{ .Release.Namespace }}-redis-deny-not-in-ipblocks
-  namespace: istio-system
+  namespace: {{ .Release.Namespace }}
   labels:
 {{ include "kubezero-lib.labels" . | indent 4 }}
 spec:

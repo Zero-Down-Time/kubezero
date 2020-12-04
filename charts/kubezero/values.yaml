@@ -53,7 +53,7 @@ metrics:
 
 logging:
   enabled: false
-  # crds: true
+  crds: true
   namespace: logging
 
 argocd:

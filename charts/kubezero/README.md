@@ -50,6 +50,7 @@ Kubernetes: `>= 1.16.0`
 | kiam.enabled | bool | `false` |  |
 | local-path-provisioner.enabled | bool | `false` |  |
 | local-volume-provisioner.enabled | bool | `false` |  |
+| logging.crds | bool | `true` |  |
 | logging.enabled | bool | `false` |  |
 | logging.namespace | string | `"logging"` |  |
 | metrics.crds | bool | `true` |  |

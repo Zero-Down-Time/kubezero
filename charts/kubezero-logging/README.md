@@ -57,7 +57,7 @@ Kubernetes: `>= 1.16.0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| eck-operator.enabled | bool | `false` |  |
+| eck-operator.enabled | bool | `true` |  |
 | eck-operator.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
 | eck-operator.tolerations[0].effect | string | `"NoSchedule"` |  |
 | eck-operator.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |

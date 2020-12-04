@@ -2,7 +2,7 @@
 # fullnameOverride: ""
 
 eck-operator:
-  enabled: false
+  enabled: true
   tolerations:
   - key: node-role.kubernetes.io/master
     effect: NoSchedule

@@ -101,7 +101,9 @@ function _helm() {
   local namespace=$(get_namespace $2)
 
   if [ $action == "crds" ]; then
-    _crds
+    declare -F ${release}-crds && ${release}-crds
+    declare -F ${release}-crds || _crds
+
   elif [ $action == "apply" ]; then
     # namespace must exist prior to apply
     create_ns $namespace
@@ -193,6 +195,13 @@ function kiam-post() {
 ###########
 # Logging #
 ###########
+# eck operator still doesnt support helm v3 so we have to toggle settings in the eck subchart
+function logging-crds() {
+  helm template $(chart_location $chart) --namespace $namespace --name-template $release --skip-crds --set eck-operator.installCRDs=false > $TMPDIR/helm-no-crds.yaml
+  helm template $(chart_location $chart) --namespace $namespace --name-template $release --include-crds --set eck-operator.installCRDs=true > $TMPDIR/helm-crds.yaml
+  diff -e $TMPDIR/helm-no-crds.yaml $TMPDIR/helm-crds.yaml | head -n-1 | tail -n+2 > $TMPDIR/crds.yaml
+  kubectl apply -f $TMPDIR/crds.yaml
+}
 function logging-post() {
   kubectl annotate --overwrite namespace logging 'iam.amazonaws.com/permitted=.*ElasticSearchSnapshots.*'
 }
