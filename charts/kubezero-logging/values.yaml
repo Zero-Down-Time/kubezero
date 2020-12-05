@@ -3,6 +3,7 @@
 
 eck-operator:
   enabled: true
+  installCRDs: false
   tolerations:
   - key: node-role.kubernetes.io/master
     effect: NoSchedule
