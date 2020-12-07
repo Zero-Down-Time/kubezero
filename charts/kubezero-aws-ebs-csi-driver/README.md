@@ -23,6 +23,7 @@ Kubernetes: `>= 1.16.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
+| https://kubernetes-sigs.github.io/aws-ebs-csi-driver | aws-ebs-csi-driver | 0.6.1 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## IAM Role
