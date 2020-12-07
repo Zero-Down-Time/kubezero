@@ -2,7 +2,7 @@
 # fullnameOverride: ""
 
 eck-operator:
-  enabled: true
+  enabled: false
   installCRDs: false
   tolerations:
   - key: node-role.kubernetes.io/master

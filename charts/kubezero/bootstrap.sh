@@ -71,10 +71,10 @@ function delete_ns() {
 
 # Extract crds via helm calls and apply delta=crds only
 function _crds() {
-    helm template $(chart_location $chart) --namespace $namespace --name-template $release --skip-crds --set ${release}.installCRDs=false > $TMPDIR/helm-no-crds.yaml
-    helm template $(chart_location $chart) --namespace $namespace --name-template $release --include-crds --set ${release}.installCRDs=true > $TMPDIR/helm-crds.yaml
-    diff -e $TMPDIR/helm-no-crds.yaml $TMPDIR/helm-crds.yaml | head -n-1 | tail -n+2 > $TMPDIR/crds.yaml
-    kubectl apply -f $TMPDIR/crds.yaml
+  helm template $(chart_location $chart) --namespace $namespace --name-template $release --skip-crds --set ${release}.installCRDs=false > $TMPDIR/helm-no-crds.yaml
+  helm template $(chart_location $chart) --namespace $namespace --name-template $release --include-crds --set ${release}.installCRDs=true > $TMPDIR/helm-crds.yaml
+  diff -e $TMPDIR/helm-no-crds.yaml $TMPDIR/helm-crds.yaml | head -n-1 | tail -n+2 > $TMPDIR/crds.yaml
+  [ -s $TMPDIR/crds.yaml ] && kubectl apply -f $TMPDIR/crds.yaml
 }
 
 
@@ -200,7 +200,7 @@ function logging-crds() {
   helm template $(chart_location $chart) --namespace $namespace --name-template $release --skip-crds --set eck-operator.installCRDs=false > $TMPDIR/helm-no-crds.yaml
   helm template $(chart_location $chart) --namespace $namespace --name-template $release --include-crds --set eck-operator.installCRDs=true > $TMPDIR/helm-crds.yaml
   diff -e $TMPDIR/helm-no-crds.yaml $TMPDIR/helm-crds.yaml | head -n-1 | tail -n+2 > $TMPDIR/crds.yaml
-  kubectl apply -f $TMPDIR/crds.yaml
+  [ -s $TMPDIR/crds.yaml ] && kubectl apply -f $TMPDIR/crds.yaml
 }
 function logging-post() {
   kubectl annotate --overwrite namespace logging 'iam.amazonaws.com/permitted=.*ElasticSearchSnapshots.*'
