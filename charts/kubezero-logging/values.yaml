@@ -76,7 +76,6 @@ fluentd:
       enabled: true
       additionalLabels:
         release: metrics
-      # namespace: monitoring
 
   output:
     # Default should be "logging-kubezero-logging-es-http" if fullnameOverride is NOT used
@@ -144,7 +143,7 @@ fluentd:
         remove_keys id
 
         # KubeZero pipeline incl. GeoIP etc.
-        # pipeline fluentd
+        pipeline fluentd
 
         host "#{ENV['OUTPUT_HOST']}"
         port "#{ENV['OUTPUT_PORT']}"
