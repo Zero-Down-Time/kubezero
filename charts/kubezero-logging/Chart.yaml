@@ -26,9 +26,9 @@ dependencies:
     version: 2.5.1
     repository: https://kubernetes-charts.storage.googleapis.com/
     condition: fluentd.enabled
-  - name: fluent-bit
-    version: 0.7.10
-    repository: https://zero-down-time.github.io/kubezero/
+#  - name: fluent-bit
+#    version: 0.7.10
+#    repository: https://zero-down-time.github.io/kubezero/
     # repository: https://fluent.github.io/helm-charts
-    condition: fluent-bit.enabled
+#    condition: fluent-bit.enabled
 kubeVersion: ">= 1.16.0"

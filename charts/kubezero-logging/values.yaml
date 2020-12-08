@@ -193,105 +193,21 @@ fluent-bit:
     enabled: false
 
   config:
-    outputs: |
-      [OUTPUT]
-          Match *
-          Name forward
-          Host logging-fluentd
-          Port 24224
-          Shared_Key cloudbender
-          Send_options true
-          Require_ack_response true
+    outputs: {}
+    output:
+      host: logging-fluentd
+      sharedKey: cloudbender
+      tls: false
 
-    customParsers: |
-      [PARSER]
-          Name cri-log
-          Format regex
-          Regex ^(?<time>[^ ]+) (?<stream>stdout|stderr) (?<logtag>[^ ]*) (?<log>.*)$
-          Time_Key    time
-          Time_Format %Y-%m-%dT%H:%M:%S.%L%z
+    input:
+      memBufLimit: 16MB
+      refreshInterval: 10
 
-    inputs: |
-      [INPUT]
-          Name tail
-          Path /var/log/containers/*.log
-          Parser cri-log
-          Tag cri.*
-          Mem_Buf_Limit 16MB
-          Skip_Long_Lines On
-          Refresh_Interval 10
-          DB /var/log/flb_kube.db
-          DB.Sync Normal
+    logLevel: warn
+    flushInterval: 1
 
-    filters: |
-      [FILTER]
-          Name    lua
-          Match   cri.*
-          script  /fluent-bit/etc/functions.lua
-          call    reassemble_cri_logs
-
-      [FILTER]
-          Name kubernetes
-          Match cri.*
-          Merge_Log On
-          Merge_Log_Key kube
-          Kube_Tag_Prefix cri.var.log.containers.
-          Keep_Log Off
-          K8S-Logging.Parser Off
-          K8S-Logging.Exclude Off
-
-      [FILTER]
-          Name rewrite_tag
-          Match cri.*
-          Emitter_Name kube_tag_rewriter
-          Rule logtag F kube.$kubernetes['namespace_name'].$kubernetes['container_name'] false
-
-      [FILTER]
-          Name    lua
-          Match   kube.*
-          script  /fluent-bit/etc/functions.lua
-          call    nest_k8s_ns
-
-    service: |
-      [SERVICE]
-          Flush 1
-          Daemon Off
-          Log_Level warn
-          Parsers_File parsers.conf
-          Parsers_File custom_parsers.conf
-          HTTP_Server On
-          HTTP_Listen 0.0.0.0
-          HTTP_Port 2020
-
-    lua: |
-      local reassemble_state = {}
-
-      function reassemble_cri_logs(tag, timestamp, record)
-         local reassemble_key = tag
-         if record.logtag == 'P' then
-            reassemble_state[reassemble_key] = reassemble_state[reassemble_key] or "" .. record.log
-            return -1, 0, 0
-         end
-         record.log = reassemble_state[reassemble_key] or "" .. (record.log or "")
-         reassemble_state[reassemble_key] = nil
-         return 1, timestamp, record
-      end
-
-      function nest_k8s_ns(tag, timestamp, record)
-          if not record['kubernetes']['namespace_name'] then
-              return 0, 0, 0
-          end
-          new_record = {}
-          for key, val in pairs(record) do
-              if key == 'kube' then
-                  new_record[key] = {}
-                  new_record[key][record['kubernetes']['namespace_name']] = record[key]
-              else
-                  new_record[key] = record[key]
-              end
-          end
-          return 1, timestamp, new_record
-      end
+    #extraRecords:
+    #  source.clustername: MyKubeCluster
 
   serviceMonitor:
     enabled: true
