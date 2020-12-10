@@ -193,7 +193,6 @@ fluent-bit:
     enabled: false
 
   config:
-    outputs: {}
     output:
       host: logging-fluentd
       sharedKey: cloudbender

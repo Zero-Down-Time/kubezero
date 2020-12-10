@@ -93,7 +93,10 @@ https://sysdig.com/blog/whats-new-kubernetes-1-18/
 - set priorty class of ingress components to cluster essential
 
 ### Logging
-- ES/Kibana version bump, new ECK operator
+- ES/Kibana version bump to 7.10  
+- ECK operator is now installed on demand in logging ns
+- Custom event fields configurable via new fluent-bit chart    
+  e.g. clustername could be added to each event allowing easy filtering in case multiple clusters stream events into a single central ES cluster
 
 ### ArgoCD
 - version bump, new app of app architecure
