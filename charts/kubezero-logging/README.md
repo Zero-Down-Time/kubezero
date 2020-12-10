@@ -18,7 +18,7 @@ Kubernetes: `>= 1.16.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://helm.elastic.co | eck-operator | 1.3.0 |
+| https://helm.elastic.co | eck-operator | 1.3.1 |
 | https://kubernetes-charts.storage.googleapis.com/ | fluentd | 2.5.1 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
@@ -73,7 +73,6 @@ Kubernetes: `>= 1.16.0`
 | fluent-bit.config.output.host | string | `"logging-fluentd"` |  |
 | fluent-bit.config.output.sharedKey | string | `"cloudbender"` |  |
 | fluent-bit.config.output.tls | bool | `false` |  |
-| fluent-bit.config.outputs | object | `{}` |  |
 | fluent-bit.enabled | bool | `false` |  |
 | fluent-bit.serviceMonitor.enabled | bool | `true` |  |
 | fluent-bit.serviceMonitor.selector.release | string | `"metrics"` |  |

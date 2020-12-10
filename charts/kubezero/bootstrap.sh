@@ -197,8 +197,8 @@ function kiam-post() {
 ###########
 # eck operator still doesnt support helm v3 so we have to toggle settings in the eck subchart
 function logging-crds() {
-  helm template $(chart_location $chart) --namespace $namespace --name-template $release --skip-crds --set eck-operator.installCRDs=false > $TMPDIR/helm-no-crds.yaml
-  helm template $(chart_location $chart) --namespace $namespace --name-template $release --include-crds --set eck-operator.installCRDs=true > $TMPDIR/helm-crds.yaml
+  helm template $(chart_location $chart) --namespace $namespace --name-template $release --skip-crds -f $TMPDIR/values.yaml --set eck-operator.installCRDs=false > $TMPDIR/helm-no-crds.yaml
+  helm template $(chart_location $chart) --namespace $namespace --name-template $release --include-crds -f $TMPDIR/values.yaml --set eck-operator.installCRDs=true > $TMPDIR/helm-crds.yaml
   diff -e $TMPDIR/helm-no-crds.yaml $TMPDIR/helm-crds.yaml | head -n-1 | tail -n+2 > $TMPDIR/crds.yaml
   [ -s $TMPDIR/crds.yaml ] && kubectl apply -f $TMPDIR/crds.yaml
 }
