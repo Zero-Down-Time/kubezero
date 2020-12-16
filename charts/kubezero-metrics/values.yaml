@@ -134,6 +134,7 @@ kube-prometheus-stack:
   alertmanager:
     enabled: false
     alertmanagerSpec:
+      # externalUrl:
       logFormat: json
 
 # Metrics adapter

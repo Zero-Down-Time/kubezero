@@ -1,6 +1,6 @@
 # kubezero-istio-ingress
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.8.0](https://img.shields.io/badge/AppVersion-1.8.0-informational?style=flat-square)
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.8.1](https://img.shields.io/badge/AppVersion-1.8.1-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Istio based Ingress
 
@@ -34,7 +34,7 @@ Kubernetes: `>= 1.16.0`
 | global.jwtPolicy | string | `"first-party-jwt"` |  |
 | global.logAsJson | bool | `true` |  |
 | global.priorityClassName | string | `"system-cluster-critical"` |  |
-| global.tag | string | `"1.8.0"` |  |
+| global.tag | string | `"1.8.1"` |  |
 | istio-ingress.dnsNames | list | `[]` |  |
 | istio-ingress.enabled | bool | `false` |  |
 | istio-ingress.gateways.istio-ingressgateway.autoscaleEnabled | bool | `false` |  |
