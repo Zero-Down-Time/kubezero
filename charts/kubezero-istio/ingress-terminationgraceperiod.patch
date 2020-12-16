@@ -1,0 +1,12 @@
+diff --git a/charts/kubezero-istio-ingress/charts/istio-ingress/templates/deployment.yaml b/charts/kubezero-istio-ingress/charts/istio-ingress/templates/deployment.yaml
+index b69da65..b5137a4 100644
+--- a/charts/kubezero-istio-ingress/charts/istio-ingress/templates/deployment.yaml
++++ b/charts/kubezero-istio-ingress/charts/istio-ingress/templates/deployment.yaml
+@@ -63,6 +63,7 @@ spec:
+ {{- if .Values.global.priorityClassName }}
+       priorityClassName: "{{ .Values.global.priorityClassName }}"
+ {{- end }}
++      terminationGracePeriodSeconds: 90
+ {{- if .Values.global.proxy.enableCoreDump }}
+       initContainers:
+         - name: enable-core-dump

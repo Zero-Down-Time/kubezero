@@ -1,7 +1,7 @@
 # Make sure these values match kuberzero-istio !!!
 global:
   hub: docker.io/istio
-  tag: 1.8.0
+  tag: 1.8.1
 
   logAsJson: true
   jwtPolicy: first-party-jwt
@@ -53,7 +53,7 @@ istio-ingress:
         port: 443
         targetPort: 8443
         nodePort: 30443
-        
+
   dnsNames: []
 # - '*.example.com'
 

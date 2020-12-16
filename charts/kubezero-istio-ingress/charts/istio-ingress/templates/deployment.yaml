@@ -63,6 +63,7 @@ spec:
 {{- if .Values.global.priorityClassName }}
       priorityClassName: "{{ .Values.global.priorityClassName }}"
 {{- end }}
+      terminationGracePeriodSeconds: 90
 {{- if .Values.global.proxy.enableCoreDump }}
       initContainers:
         - name: enable-core-dump
