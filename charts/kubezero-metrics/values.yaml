@@ -87,6 +87,7 @@ kube-prometheus-stack:
       retention: 8d
       portName: http-prometheus
       logFormat: json
+      # externalUrl:
 
       resources:
         requests:
