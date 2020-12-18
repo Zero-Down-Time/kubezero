@@ -17,7 +17,8 @@ dependencies:
     repository: https://zero-down-time.github.io/kubezero/
   - name: kube-prometheus-stack
     version: 12.8.0
-    repository: https://prometheus-community.github.io/helm-charts
+    # Switch back to upstream once all alerts are fixed eg. etcd gpcr
+    # repository: https://prometheus-community.github.io/helm-charts
   - name: prometheus-adapter
     version: 2.10.1
     repository: https://prometheus-community.github.io/helm-charts
