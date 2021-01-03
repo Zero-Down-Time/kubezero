@@ -8,7 +8,7 @@ all: update
 
 
 clean:
-	rm -f kubezero*.tgz
+	rm -f kube*.tgz
 
 update:
 	./script/update_helm.sh
