@@ -41,6 +41,7 @@ apiServer:
     audit-log-maxbackup: "3"
     tls-cipher-suites: "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384"
     admission-control-config-file: /etc/kubernetes/apiserver/admission-configuration.yaml
+    authentication-token-webhook-config-file: /etc/kubernetes/apiserver/aws-iam-authenticator.yaml
     enable-admission-plugins: NodeRestriction,EventRateLimit
     {{- if .Values.clusterHighAvailable }}
     goaway-chance: ".001"
