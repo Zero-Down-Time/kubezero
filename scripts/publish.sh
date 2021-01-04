@@ -28,7 +28,8 @@ do
     fi
 
     echo "Processing $dir"
-    helm lint $dir && helm --debug package $dir
+    helm lint $dir || true
+    helm --debug package $dir
 done
 
 cp $SRCROOT/*.tgz output/
