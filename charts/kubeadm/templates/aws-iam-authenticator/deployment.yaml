@@ -151,3 +151,14 @@ spec:
       - name: state
         hostPath:
           path: /var/aws-iam-authenticator/
+---
+apiVersion: iamauthenticator.k8s.aws/v1alpha1
+kind: IAMIdentityMapping
+metadata:
+  name: kubernetes-admin
+spec:
+  # Arn of the User or Role to be allowed to authenticate
+  arn: {{ .Values.kubeAdminRole }}
+  username: kubernetes-admin
+  groups:
+  - system:masters

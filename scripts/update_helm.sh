@@ -13,6 +13,7 @@ do
     then
         echo "Processing chart dependencies"
         rm -rf $dir/tmpcharts
+        rm -rf $dir/charts/*.tgz
         helm dependency update --skip-refresh $dir
     fi
 
