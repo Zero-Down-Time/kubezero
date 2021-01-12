@@ -13,6 +13,15 @@ All chosen components are 100% organic OpenSource.
 - Minimal custom code
 - Work within each community / give back
 
+# Version / Support Matrix
+
+| KubeZero \ Kubernetes Version          | v1.17 | v1.18 | v1.19 | v1.20+| EOL         |
+|----------------------------------------|-------|-------|-------|-------|-------------|
+| master branch                          | no    | yes   | beta  | no    |             |
+| stable branch                          | yes   | no    | no    | no    |             |
+| v2.18.0                                | no    | yes   | no    | no    | 30 Apr 2021 |
+| v1                                     | yes   | no    | no    | no    | 30 Jan 2021 |
+
 
 ## General
 - Container runtime cri-o rather than Docker for improved security and performance
