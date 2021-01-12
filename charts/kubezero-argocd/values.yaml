@@ -1,0 +1,131 @@
+# Configure app of apps
+kubezero:
+  enabled: false
+
+  # kubezero.server -- destination cluster
+  server: https://kubernetes.default.svc
+
+  # This repoURL is used a base for all the repoURLs applications
+  # Setting this to a eg. private git repo incl. the use of pathPrefix allows kubezero to be
+  # integrated into any repository as a git subtree if for example public internet access is unavailable
+  # kubezero.repoURL -- repository for kubezero argo applications
+  repoURL: https://github.com/zero-down-time/kubezero
+  # kubezero.targetRevision -- git branch to track
+  targetRevision: HEAD
+  # kubezero.path -- path within repoURL
+  path: 'charts/kubezero'
+
+  # syncPolicy, details see: https://argoproj.github.io/argo-cd/user-guide/auto_sync
+  #syncPolicy:
+  #  automated:
+  #    prune: true
+
+  valuesFiles:
+  - values.yaml
+
+# Support for Istio Ingress for ArgoCD
+istio:
+  # istio.enabled -- Deploy Istio VirtualService to expose ArgoCD
+  enabled: false
+  # istio.gateway -- Name of the Istio gateway to add the VirtualService to
+  gateway: istio-ingress/ingressgateway
+  ipBlocks: []
+
+argo-cd:
+  installCRDs: false
+
+  #configs:
+  #  secret:
+  #    `htpasswd -nbBC 10 "" $ARGO_PWD | tr -d ':\n' | sed 's/$2y/$2a/'`
+  #    argocdServerAdminPassword: "$2a$10$ivKzaXVxMqdeDSfS3nqi1Od3iDbnL7oXrixzDfZFRHlXHnAG6LydG"
+  #    argocdServerAdminPasswordMtime: "2020-04-24T15:33:09BST"
+
+  global:
+    image:
+      tag: v1.7.10
+
+  controller:
+    args:
+      statusProcessors: "8"
+      operationProcessors: "4"
+      appResyncPeriod: "300"
+    logFormat: json
+
+    metrics:
+      enabled: false
+      serviceMonitor:
+        enabled: true
+        additionalLabels:
+          release: metrics
+
+    resources:
+      # limits:
+        # cpu: 500m
+        # memory: 2048Mi
+      requests:
+        cpu: 100m
+        memory: 256Mi
+
+  repoServer:
+    logFormat: json
+    metrics:
+      enabled: false
+      serviceMonitor:
+        enabled: true
+        additionalLabels:
+          release: metrics
+
+  server:
+    logFormat: json
+    config:
+      # argo-cd.server.config.url -- ArgoCD hostname to be exposed via Istio
+      url: argocd.example.com
+
+      #repositories: |
+      #  - url: https://zero-down-time.github.io/kubezero.git
+
+      resource.customizations: |
+        cert-manager.io/Certificate:
+          # Lua script for customizing the health status assessment
+          health.lua: |
+            hs = {}
+            if obj.status ~= nil then
+              if obj.status.conditions ~= nil then
+                for i, condition in ipairs(obj.status.conditions) do
+                  if condition.type == "Ready" and condition.status == "False" then
+                    hs.status = "Degraded"
+                    hs.message = condition.message
+                    return hs
+                  end
+                  if condition.type == "Ready" and condition.status == "True" then
+                    hs.status = "Healthy"
+                    hs.message = condition.message
+                    return hs
+                  end
+                end
+              end
+            end
+            hs.status = "Progressing"
+            hs.message = "Waiting for certificate"
+            return hs
+
+    # Rename former https port to grpc, works with istio + insecure
+    service:
+      servicePortHttpsName: grpc
+
+    metrics:
+      enabled: false
+      serviceMonitor:
+        enabled: true
+        additionalLabels:
+          release: metrics
+
+    extraArgs:
+    - --insecure
+
+  # redis:
+  # We might want to try to keep redis close to the controller
+  #   affinity:
+
+  dex:
+    enabled: false

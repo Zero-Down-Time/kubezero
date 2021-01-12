@@ -1,0 +1,13 @@
+apiVersion: v2
+name: kubeadm
+description: KubeZero Kubeadm golden config
+type: application
+version: 1.18.14
+home: https://kubezero.com
+icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
+keywords:
+  - kubezero
+  - kubeadm
+maintainers:
+  - name: Quarky9
+kubeVersion: ">= 1.16.0"

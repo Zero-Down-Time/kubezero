@@ -1,0 +1,36 @@
+{{- define "istio-ingress-values" }}
+{{- if index .Values "istio-ingress" "public" }}
+istio-ingress:
+  enabled: {{ index .Values "istio-ingress" "public" "enabled" }}
+  {{- with index .Values "istio-ingress" "public" "gateway" }}
+  gateways:
+    istio-ingressgateway:
+      {{- toYaml . | nindent 6 }}
+  {{- end }}
+  {{- with index .Values "istio-ingress" "public" "dnsNames" }}
+  dnsNames:
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+{{- end }}
+
+{{- if index .Values "istio-ingress" "private" }}
+istio-private-ingress:
+  enabled: {{ index .Values "istio-ingress" "private" "enabled" }}
+  {{- with index .Values "istio-ingress" "private" "gateway" }}
+  gateways:
+    istio-ingressgateway:
+      {{- toYaml . | nindent 6 }}
+  {{- end }}
+  {{- with index .Values "istio-ingress" "private" "dnsNames" }}
+  dnsNames:
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+{{- end }}
+
+{{- end }}
+
+
+{{- define "istio-ingress-argo" }}
+{{- end }}
+
+{{ include "kubezero-app.app" . }}

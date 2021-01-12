@@ -5,6 +5,22 @@ metadata:
   name: ebs-sc-gp2-xfs
   labels:
 {{ include "kubezero-lib.labels" . | indent 4 }}
+provisioner: ebs.csi.aws.com
+volumeBindingMode: WaitForFirstConsumer
+parameters:
+  csi.storage.k8s.io/fstype: xfs
+  type: gp2
+  encrypted: "true"
+{{- if index .Values "aws-ebs-csi-driver" "enableVolumeResizing" }}
+allowVolumeExpansion: true
+{{- end }}
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: ebs-sc-gp3-xfs
+  labels:
+{{ include "kubezero-lib.labels" . | indent 4 }}
   {{- if .Values.StorageClass.default }}
   annotations:
     storageclass.kubernetes.io/is-default-class: "true"
@@ -13,7 +29,7 @@ provisioner: ebs.csi.aws.com
 volumeBindingMode: WaitForFirstConsumer
 parameters:
   csi.storage.k8s.io/fstype: xfs
-  type: gp2
+  type: gp3
   encrypted: "true"
 {{- if index .Values "aws-ebs-csi-driver" "enableVolumeResizing" }}
 allowVolumeExpansion: true

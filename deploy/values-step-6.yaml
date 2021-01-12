@@ -1,6 +1,0 @@
-metrics:
-  enabled: true
-  ready: false
-
-logging:
-  enabled: false

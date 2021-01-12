@@ -1,3 +1,14 @@
-{{- if index .Values "aws-ebs-csi-driver" "enabled" }}
-{{ include "kubezero-app.app" . }}
+{{- define "aws-ebs-csi-driver-values" }}
+aws-ebs-csi-driver:
+  replicaCount: {{ ternary 2 1 .Values.HighAvailableControlplane }}
+  podAnnotations:
+    iam.amazonaws.com/role: {{ index .Values "aws-ebs-csi-driver" "IamArn" | quote }}
+  extraVolumeTags:
+    Name: {{ .Values.ClusterName }}
 {{- end }}
+
+
+{{- define "aws-ebs-csi-driver-argo" }}
+{{- end }}
+
+{{ include "kubezero-app.app" . }}

@@ -1,32 +1,31 @@
-global:
-  defaultDestination:
-    server: https://kubernetes.default.svc
+argo: {}
 
-  # This repoURL is used a base for all the repoURLs applications
-  # Setting this to a eg. private git repo incl. the use of pathPrefix allows kubezero to be
-  # integrated into any repository as a git subtree if for example public internet access is unavailable
-  defaultSource:
-    # defaultSource.repoURL -- default repository for argocd applications
+global:
+  kubezero:
+    server: https://kubernetes.default.svc
     repoURL: https://github.com/zero-down-time/kubezero
-    # defaultSource.targetRevision -- default tracking of repoURL
     targetRevision: HEAD
-    # defaultSource.pathPrefix -- optional path prefix within repoURL to support eg. remote subtrees
     pathPrefix: ''
 
-platform: aws
+HighAvailableControlplane: false
 
 calico:
   enabled: false
+  crds: true
   retain: true
 
 cert-manager:
   enabled: false
+  crds: true
   namespace: cert-manager
+
+kiam:
+  enabled: false
 
 local-volume-provisioner:
   enabled: false
 
-kiam:
+local-path-provisioner:
   enabled: false
 
 aws-ebs-csi-driver:
@@ -37,11 +36,29 @@ aws-efs-csi-driver:
 
 istio:
   enabled: false
+  crds: true
+  namespace: istio-system
+
+istio-ingress:
+  enabled: false
+  namespace: istio-ingress
 
 metrics:
   enabled: false
+  crds: true
   namespace: monitoring
+  istio:
+    grafana: {}
+    prometheus: {}
 
 logging:
   enabled: false
+  crds: true
   namespace: logging
+
+argocd:
+  enabled: false
+  crds: true
+  namespace: argocd
+  istio:
+    enabled: false

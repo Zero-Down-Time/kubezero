@@ -1,5 +1,88 @@
-{{- if index .Values "logging" "enabled" }}
-{{ include "kubezero-app.app" . }}
+{{- define "logging-values" }}
+{{- if or .Values.logging.es .Values.logging.kibana }}
+eck-operator:
+  enabled: true
+  {{- with index .Values "logging" "eck-operator" }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+{{- end }}
+
+{{- if .Values.logging.elastic_password }}
+elastic_password: {{ .Values.logging.elastic_password }}
+{{- end }}
+
+{{- if .Values.logging.version }}
+version: {{ .Values.logging.version }}
+{{- end }}
+
+{{- if .Values.logging.fullnameOverride }}
+fullnameOverride: {{ .Values.logging.fullnameOverride }}
+{{- end }}
+
+{{- if .Values.logging.es }}
+es:
+  {{- if .Values.logging.es.nodeSets }}
+  nodeSets:
+  {{- with .Values.logging.es.nodeSets }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+  {{- end }}
+  prometheus: {{ .Values.metrics.enabled }}
+
+  {{- if .Values.logging.es.s3Snapshot }}
+  s3Snapshot:
+    {{- with .Values.logging.es.s3Snapshot }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{- if .Values.logging.kibana }}
+kibana:
+  {{- with .Values.logging.kibana }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+{{- end }}
+
+{{- if .Values.logging.fluentd }}
+fluentd:
+  enabled: {{ .Values.logging.fluentd.enabled }}
+  metrics:
+    enabled: {{ .Values.metrics.enabled }}
+  url: {{ .Values.logging.fluentd.url }}
+  {{- if .Values.logging.fluentd.output }}
+  output:
+    host: {{ .Values.logging.fluentd.output.host }}
+  {{- end }}
+  {{- if .Values.logging.fluentd.extraEnvVars }}
+  extraEnvVars:
+    {{- toYaml .Values.logging.fluentd.extraEnvVars | nindent 8 }}
+  {{- end }}
+  {{- if and .Values.logging.fluentd.istio .Values.istio.enabled }}
+  istio:
+    {{- with .Values.logging.fluentd.istio }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{- if index .Values "logging" "fluent-bit" }}
+fluent-bit:
+  enabled: {{ index .Values.logging "fluent-bit" "enabled" }}
+  serviceMonitor:
+    enabled: {{ .Values.metrics.enabled }}
+  {{- if index .Values.logging "fluent-bit" "config" }}
+  config:
+    {{- with index .Values.logging "fluent-bit" "config" }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{- end }}
+
+
+{{- define "logging-argo" }}
 
   ignoreDifferences:
   - group: admissionregistration.k8s.io
@@ -12,15 +95,11 @@
     - /webhooks/4/clientConfig/caBundle
     - /webhooks/5/clientConfig/caBundle
     - /webhooks/6/clientConfig/caBundle
+    - /webhooks/7/clientConfig/caBundle
   - group: apiextensions.k8s.io
     kind: CustomResourceDefinition
     jsonPointers:
     - /status
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: logging
-  annotations:
-    iam.amazonaws.com/permitted: ".*ElasticSearchSnapshots.*"
 {{- end }}
+
+{{ include "kubezero-app.app" . }}

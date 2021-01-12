@@ -1,5 +1,11 @@
-{{- if .Values.calico.enabled }}
-{{ include "kubezero-app.app" . }}
+{{- define "calico-values" }}
+network: {{ default "vxlan" .Values.calico.network }}
+mtu: {{ default "8941" .Values.calico.mtu }}
+prometheus: {{ .Values.metrics.enabled }}
+{{- end }}
+
+
+{{- define "calico-argo" }}
 
   ignoreDifferences:
   - group: apiextensions.k8s.io
@@ -7,3 +13,5 @@
     jsonPointers:
     - /status
 {{- end }}
+
+{{ include "kubezero-app.app" . }}

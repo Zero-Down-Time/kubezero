@@ -1,13 +1,21 @@
-{{- if index .Values "cert-manager" "enabled" }}
-{{ include "kubezero-app.app" . }}
+{{- define "cert-manager-values" }}
 
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: cert-manager
-{{- if index .Values "kiam" "enabled" }}
-  annotations:
-    iam.amazonaws.com/permitted: ".*CertManagerRole.*"
+localCA:
+  enabled: true
+{{ with index .Values "cert-manager" "IamArn" }}
+cert-manager:
+  podAnnotations:
+    iam.amazonaws.com/role: "{{ . }}"
 {{- end }}
+
+{{- with index .Values "cert-manager" "clusterIssuer" }}
+clusterIssuer:
+  {{- . | toYaml | nindent 2 }}
 {{- end }}
+
+{{- end }}
+
+{{- define "cert-manager-argo" }}
+{{- end }}
+
+{{ include "kubezero-app.app" . }}

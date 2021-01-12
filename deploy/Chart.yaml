@@ -1,6 +1,0 @@
-apiVersion: v2
-name: deploy
-description: "This chart is only used to generate the values.yaml for KubeZero !! Once something like https://github.com/helm/helm/pull/6876 gets merged this will be removed !"
-type: application
-version: 0.0.1
-appVersion: 1.16.0

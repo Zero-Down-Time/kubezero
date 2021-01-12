@@ -1,3 +1,7 @@
-{{- if index .Values "local-volume-provisioner" "enabled" }}
-{{ include "kubezero-app.app" . }}
+{{- define "local-volume-provisioner-values" }}
 {{- end }}
+
+{{- define "local-volume-provisioner-argo" }}
+{{- end }}
+
+{{ include "kubezero-app.app" . }}

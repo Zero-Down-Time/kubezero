@@ -1,12 +1,13 @@
-{{- if .Values.grafana.istio.enabled }}
-{{- if .Values.grafana.istio.ipBlocks }}
+{{- range $name, $service := .Values.istio }}
+
+{{- if and $service.enabled $service.ipBlocks }}
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
-  name: grafana-deny-not-in-ipblocks
+  name: {{ $name }}-deny-not-in-ipblocks
   namespace: istio-system
   labels:
-{{ include "kubezero-lib.labels" . | indent 4 }}
+{{ include "kubezero-lib.labels" $ | indent 4 }}
 spec:
   selector:
     matchLabels:
@@ -16,38 +17,10 @@ spec:
   - from:
     - source:
         notIpBlocks:
-        {{- with .Values.grafana.istio.ipBlocks }}
-        {{- . | toYaml | nindent 8 }}
-        {{- end }}
+        {{- toYaml $service.ipBlocks | nindent 8 }}
     to:
     - operation:
-        hosts: ["{{ .Values.grafana.istio.url }}"]
-{{- end }}
-{{- end }}
-{{- if .Values.prometheus.istio.enabled }}
-{{- if .Values.prometheus.istio.ipBlocks }}
+        hosts: ["{{ $service.url }}"]
 ---
-apiVersion: security.istio.io/v1beta1
-kind: AuthorizationPolicy
-metadata:
-  name: prometheus-deny-not-in-ipblocks
-  namespace: istio-system
-  labels:
-{{ include "kubezero-lib.labels" . | indent 4 }}
-spec:
-  selector:
-    matchLabels:
-      app: istio-ingressgateway
-  action: DENY
-  rules:
-  - from:
-    - source:
-        notIpBlocks:
-        {{- with .Values.prometheus.istio.ipBlocks }}
-        {{- . | toYaml | nindent 8 }}
-        {{- end }}
-    to:
-    - operation:
-        hosts: ["{{ .Values.prometheus.istio.url }}"]
 {{- end }}
 {{- end }}

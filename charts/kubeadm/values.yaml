@@ -1,0 +1,11 @@
+clusterVersion: 1.18.0
+clusterName: pleasechangeme
+apiEndpoint: kube-api.changeme.org:6443
+etcdExtraArgs: {}
+  # Enable for > 1.18
+  # unsafe-no-fsync: "true"
+apiExtraArgs: {}
+clusterHighAvailable: false
+allEtcdEndpoints: ""
+joinToken: ""
+caCertHash: ""
