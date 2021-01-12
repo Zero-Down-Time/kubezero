@@ -1,3 +1,20 @@
-{{- if index .Values "kiam" "enabled" }}
-{{ include "kubezero-app.app" . }}
+{{- define "kiam-values" }}
+kiam:
+  server:
+    assumeRoleArn: "{{ .Values.kiam.IamArn }}"
+    deployment:
+      replicas: {{ ternary 2 1 .Values.HighAvailableControlplane }}
+    prometheus:
+      servicemonitor:
+        enabled: {{ .Values.metrics.enabled }}
+  agent:
+    prometheus:
+      servicemonitor:
+        enabled: {{ .Values.metrics.enabled }}
 {{- end }}
+
+
+{{- define "kiam-argo" }}
+{{- end }}
+
+{{ include "kubezero-app.app" . }}

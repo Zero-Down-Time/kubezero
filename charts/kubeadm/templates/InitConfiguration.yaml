@@ -1,0 +1,12 @@
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: InitConfiguration
+metadata:
+  name: kubezero-initconfiguration
+localAPIEndpoint:
+  bindPort: {{ regexSplit ":" .Values.apiEndpoint -1 | last }}
+nodeRegistration:
+  ignorePreflightErrors:
+  - Swap
+  - DirAvailable--var-lib-etcd
+  kubeletExtraArgs:
+    node-labels: {{ .Values.nodeLabels | quote }}

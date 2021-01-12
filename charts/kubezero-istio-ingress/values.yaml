@@ -1,0 +1,122 @@
+# Make sure these values match kuberzero-istio !!!
+global:
+  hub: docker.io/istio
+  tag: 1.8.1
+
+  logAsJson: true
+  jwtPolicy: first-party-jwt
+
+  priorityClassName: "system-cluster-critical"
+
+  defaultPodDisruptionBudget:
+    enabled: false
+
+  arch:
+    amd64: 2
+
+istio-ingress:
+  enabled: false
+
+  gateways:
+    istio-ingressgateway:
+      autoscaleEnabled: false
+      replicaCount: 1
+      resources:
+        requests:
+          memory: 64Mi
+        limits:
+          # cpu: 100m
+          memory: 256Mi
+      externalTrafficPolicy: Local
+      podAntiAffinityLabelSelector:
+      - key: app
+        operator: In
+        topologyKey: kubernetes.io/hostname
+        values: istio-ingressgateway
+      type: NodePort
+      env:
+        TERMINATION_DRAIN_DURATION_SECONDS: '"60"'
+        # ISTIO_META_HTTP10: '"1"'
+
+      # The node selector is normally the list of nodeports, see CloudBender
+      nodeSelector:
+        node.kubernetes.io/ingress.public: "30080_30443"
+      ports:
+      - name: http-status
+        port: 15021
+        nodePort: 30021
+      - name: http2
+        port: 80
+        targetPort: 8080
+        nodePort: 30080
+      - name: https
+        port: 443
+        targetPort: 8443
+        nodePort: 30443
+
+  dnsNames: []
+# - '*.example.com'
+
+istio-private-ingress:
+  enabled: false
+
+  gateways:
+    istio-ingressgateway:
+      # name and labels make the ingress private 
+      name: istio-private-ingressgateway
+      labels:
+        app: istio-private-ingressgateway
+        istio: private-ingressgateway
+
+      autoscaleEnabled: false
+      replicaCount: 1
+      resources:
+        requests:
+          cpu: 100m
+          memory: 64Mi
+        limits:
+          # cpu: 100m
+          memory: 256Mi
+      externalTrafficPolicy: Local
+      podAntiAffinityLabelSelector:
+      - key: app
+        operator: In
+        topologyKey: kubernetes.io/hostname
+        values: istio-private-ingressgateway
+      type: NodePort
+      env:
+        TERMINATION_DRAIN_DURATION_SECONDS: '"60"'
+        # ISTIO_META_HTTP10: '"1"'
+
+      nodeSelector:
+        node.kubernetes.io/ingress.private: "31080_31443"
+        #nodeSelector: "31080_31443_31671_31672_31224"
+
+      ports:
+      - name: http-status
+        port: 15021
+        nodePort: 31021
+      - name: http2
+        port: 80
+        targetPort: 8080
+        nodePort: 31080
+      - name: https
+        port: 443
+        targetPort: 8443
+        nodePort: 31443
+      #- name: fluentd-forward
+      #  port: 24224
+      #  nodePort: 31224
+      #- name: amqps
+      #  port: 5671
+      #  nodePort: 31671
+      #- name: amqp
+      #  port: 5672
+      #  nodePort: 31672
+      #- name: redis
+      #  port: 6379
+      #  nodePort: 31379
+
+  dnsNames: []
+# - '*.example.com'
+

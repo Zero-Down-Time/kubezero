@@ -3,8 +3,6 @@ annotateKubeSystemNameSpace: false
 kiam:
   enabled: true
   server:
-    image:
-      tag: "v3.6"
     # kiam.server.assumeRoleArn --  kiam server IAM role to assume, required as we run the agents next to the servers normally, eg. arn:aws:iam::123456789012:role/kiam-server-role
     assumeRoleArn: ''
     useHostNetwork: true
@@ -33,6 +31,7 @@ kiam:
       effect: NoSchedule
     nodeSelector:
       node-role.kubernetes.io/master: ""
+    priorityClassName: system-cluster-critical
     prometheus:
       servicemonitor:
         enabled: false
@@ -40,11 +39,9 @@ kiam:
         labels:
           release: metrics
     log:
-      level: warn
+      level: info
 
   agent:
-    image:
-      tag: "v3.6"
     gatewayTimeoutCreation: "5s"
     updateStrategy: RollingUpdate
     # IP tables set on each node at boot, see CloudBender
@@ -68,6 +65,7 @@ kiam:
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
+    priorityClassName: system-node-critical
     prometheus:
       servicemonitor:
         enabled: false
@@ -75,7 +73,7 @@ kiam:
         labels:
           release: metrics
     log:
-      level: warn
+      level: info
   #  extraEnv:
   #  - name: GRPC_GO_LOG_SEVERITY_LEVEL
   #    value: "info"

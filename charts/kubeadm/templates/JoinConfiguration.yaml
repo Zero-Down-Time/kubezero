@@ -1,0 +1,18 @@
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: JoinConfiguration
+metadata:
+  name: kubezero-joinconfiguration
+discovery:
+  bootstrapToken:
+    apiServerEndpoint: {{ .Values.apiEndpoint }}
+    token: {{ .Values.joinToken }}
+    caCertHashes:
+    - "{{ .Values.caCertHash }}"
+nodeRegistration:
+  ignorePreflightErrors:
+  - DirAvailable--var-lib-etcd
+  - Swap
+controlPlane:
+  localAPIEndpoint:
+    advertiseAddress: {{ .Values.ipAddress }}
+    bindPort: {{ regexSplit ":" .Values.apiEndpoint -1 | last }}

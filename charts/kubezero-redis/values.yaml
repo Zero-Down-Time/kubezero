@@ -1,0 +1,50 @@
+redis:
+  enabled: false
+
+  redisPort: 6379
+
+  cluster:
+    slaveCount: 0
+  
+  usePassword: false
+  
+  master:
+    persistence:
+      enabled: false
+#   resources:
+#     requests:
+#       memory: 256Mi
+#       cpu: 100m
+  
+  metrics:
+    enabled: false
+    serviceMonitor:
+      enabled: false
+      selector:
+        release: metrics
+#   extraArgs:
+#     redis.addr: "redis://localhost:6379"
+
+
+redis-cluster:
+  enabled: false
+
+  redisPort: 6379
+  usePassword: false
+
+  cluster:
+    nodes: 2
+    replicas: 1
+
+  metrics:
+    enabled: false
+    serviceMonitor:
+      enabled: false
+      selector:
+        release: metrics
+
+  persistence:
+    enabled: false
+
+istio:
+  enabled: false

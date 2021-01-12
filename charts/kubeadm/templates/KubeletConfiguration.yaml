@@ -1,0 +1,19 @@
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+metadata:
+  name: kubezero-kubeletconfiguration
+failSwapOn: false
+hairpinMode: hairpin-veth
+resolvConf: /run/systemd/resolve/resolv.conf
+protectKernelDefaults: true
+eventRecordQPS: 0
+# Breaks kubelet at boot time
+# tlsCertFile: /var/lib/kubelet/pki/kubelet.crt
+# tlsPrivateKeyFile: /var/lib/kubelet/pki/kubelet.key
+tlsCipherSuites: [TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_GCM_SHA256]
+featureGates:
+  # Default anyways but make kube-bench happy
+  RotateKubeletServerCertificate: true
+  CSIMigration: true
+  CSIMigrationAWS: true
+  CSIMigrationAWSComplete: true

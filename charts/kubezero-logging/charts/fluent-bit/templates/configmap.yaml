@@ -1,0 +1,15 @@
+{{- if (empty .Values.existingConfigMap) -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "fluent-bit.fullname" . }}
+  labels:
+    {{- include "fluent-bit.labels" . | nindent 4 }}
+data:
+  custom_parsers.conf: |
+    {{ tpl (.Files.Get "conf/custom_parsers.conf") . | nindent 4 }}
+  fluent-bit.conf: |
+    {{ tpl (.Files.Get "conf/fluent-bit.conf") . | nindent 4 }}
+  functions.lua: |
+    {{ tpl (.Files.Get "conf/functions.lua") . | nindent 4 }}
+{{- end -}}

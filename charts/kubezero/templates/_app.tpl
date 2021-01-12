@@ -1,7 +1,7 @@
 {{- define "kubezero-app.app" }}
 {{- $name := regexReplaceAll "kubezero/templates/([a-z-]*)..*" .Template.Name "${1}" }}
-{{- $my_values := index .Values $name "values" }}
 
+{{- if and .Values.argo ( index .Values $name "enabled" ) }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -17,21 +17,23 @@ spec:
   project: kubezero
 
   source:
-    repoURL: {{ .Values.global.defaultSource.repoURL }}
-    targetRevision: {{ .Values.global.defaultSource.targetRevision }}
-    path: {{ .Values.global.defaultSource.pathPrefix}}charts/kubezero-{{ $name }}
-    {{- if $my_values }}
+    repoURL: {{ .Values.global.kubezero.repoURL }}
+    targetRevision: {{ .Values.global.kubezero.targetRevision }}
+    path: {{ .Values.global.kubezero.pathPrefix}}charts/kubezero-{{ $name }}
     helm:
       values: |
-{{- toYaml $my_values | nindent 8 }}
-    {{- end }}
+{{- include (print $name "-values") $ | nindent 8 }}
 
   destination:
-    server: {{ .Values.global.defaultDestination.server }}
+    server: {{ .Values.global.kubezero.server }}
     namespace: {{ default "kube-system" ( index .Values $name "namespace" ) }}
 
-  {{- if .Values.global.syncPolicy }}
+  {{- with .Values.global.kubezero.syncPolicy }}
   syncPolicy:
-    {{- toYaml .Values.global.syncPolicy | nindent 4 }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
+
+{{- include (print $name "-argo") $ }}
+{{- end }}
+
 {{- end }}

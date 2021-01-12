@@ -1,6 +1,0 @@
-resources:
-- all-in-one.yaml
-
-# map operator to controller nodes
-patchesStrategicMerge:
-- map-operator.yaml

@@ -1,0 +1,13 @@
+apiVersion: eventratelimit.admission.k8s.io/v1alpha1
+kind: Configuration
+metadata:
+  name: kubezero-eventratelimits
+limits:
+- type: Namespace
+  qps: 50
+  burst: 100
+  cacheSize: 20
+- type: User
+  qps: 10
+  burst: 50
+  cacheSize: 20

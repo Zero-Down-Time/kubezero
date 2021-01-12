@@ -3,11 +3,11 @@
 
 # KubeZero / Local cluster CA
 # The resources are serialized via waves in Argo
-apiVersion: cert-manager.io/v1alpha2
-kind: Issuer
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
 metadata:
   name: kubezero-selfsigning-issuer
-  namespace: kube-system
+  namespace: {{ .Release.Namespace }}
   labels:
 {{ include "kubezero-lib.labels" . | indent 4 }}
   annotations:
@@ -15,11 +15,11 @@ metadata:
 spec:
   selfSigned: {}
 ---
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: kubezero-local-ca
-  namespace: kube-system
+  namespace: {{ .Release.Namespace }}
   labels:
 {{ include "kubezero-lib.labels" . | indent 4 }}
   annotations:
@@ -30,6 +30,7 @@ spec:
   isCA: true
   issuerRef:
     name: kubezero-selfsigning-issuer
+    kind: ClusterIssuer
   usages:
   - "any"
 ---
@@ -39,7 +40,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: kubezero-ca-tls
-  namespace: kube-system
+  namespace: {{ .Release.Namespace }}
   labels:
 {{ include "kubezero-lib.labels" . | indent 4 }}
 data:
@@ -48,11 +49,11 @@ data:
 ---
 {{- end }}
 
-apiVersion: cert-manager.io/v1alpha2
-kind: Issuer
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
 metadata:
   name: kubezero-local-ca-issuer
-  namespace: kube-system
+  namespace: {{ .Release.Namespace }}
   labels:
 {{ include "kubezero-lib.labels" . | indent 4 }}
   annotations:

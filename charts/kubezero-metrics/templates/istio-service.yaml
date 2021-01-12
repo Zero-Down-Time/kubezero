@@ -1,35 +1,23 @@
-{{- if .Values.grafana.istio.enabled }}
+{{- range $name, $service := .Values.istio }}
+
+{{- if $service.enabled }}
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: grafana
+  name: {{ $name }}
+  namespace: {{ $.Release.Namespace }}
   labels:
-{{ include "kubezero-lib.labels" . | indent 4 }}
+{{ include "kubezero-lib.labels" $ | indent 4 }}
 spec:
   hosts:
-  - {{ .Values.grafana.istio.url }}
+  - {{ $service.url }}
   gateways:
-  - {{ .Values.grafana.istio.gateway }}
+  - {{ $service.gateway }}
   http:
   - route:
     - destination:
-        host: metrics-grafana
-{{- end }}
-{{- if .Values.prometheus.istio.enabled }}
+        host: {{ $service.destination }}
 ---
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
-metadata:
-  name: prometheus
-  labels:
-{{ include "kubezero-lib.labels" . | indent 4 }}
-spec:
-  hosts:
-  - {{ .Values.prometheus.istio.url }}
-  gateways:
-  - {{ .Values.prometheus.istio.gateway }}
-  http:
-  - route:
-    - destination:
-        host: metrics-kube-prometheus-st-prometheus
+{{- end }}
+
 {{- end }}

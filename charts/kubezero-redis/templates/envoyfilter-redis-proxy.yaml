@@ -1,0 +1,35 @@
+{{- if index .Values "redis-cluster" "enabled" }}
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: {{ .Release.Namespace }}-{{ .Release.Name }}-redis-proxy
+  namespace: istio-ingress
+spec:
+  workloadSelector:
+    labels:
+      istio: private-ingressgateway
+  configPatches:
+  - applyTo: NETWORK_FILTER
+    match:
+      context: GATEWAY
+      listener:
+        name: 0.0.0.0_{{ index .Values "redis-cluster" "redisPort" }}
+        filterChain:
+          filter:
+            name: "envoy.filters.network.tcp_proxy"
+    patch:
+      operation: REPLACE
+      value:
+        name: envoy.redis_proxy
+        typed_config:
+          "@type": type.googleapis.com/envoy.config.filter.network.redis_proxy.v2.RedisProxy
+          stat_prefix: redis_stats
+          prefix_routes:
+            catch_all_route:
+              cluster: {{ .Release.Namespace }}-{{ .Release.Name }}-redis-cluster
+          settings:
+            op_timeout: 5s
+            enable_redirection: true
+            enable_command_stats: true
+            read_policy: PREFER_REPLICA
+{{- end }}

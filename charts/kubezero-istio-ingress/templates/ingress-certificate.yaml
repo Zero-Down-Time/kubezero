@@ -1,0 +1,35 @@
+{{- if index .Values "istio-ingress" "dnsNames" }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ingress-cert
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kubezero-lib.labels" . | indent 4 }}
+spec:
+  secretName: ingress-cert
+  issuerRef:
+    name: letsencrypt-dns-prod
+    kind: ClusterIssuer
+  dnsNames:
+{{ toYaml (index .Values "istio-ingress" "dnsNames") | indent 4 }}
+{{- end }}
+
+{{- if index .Values "istio-private-ingress" "dnsNames" }}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: private-ingress-cert
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kubezero-lib.labels" . | indent 4 }}
+spec:
+  secretName: private-ingress-cert
+  issuerRef:
+    name: letsencrypt-dns-prod
+    kind: ClusterIssuer
+  dnsNames:
+{{ toYaml (index .Values "istio-private-ingress" "dnsNames") | indent 4 }}
+{{- end }}
+
