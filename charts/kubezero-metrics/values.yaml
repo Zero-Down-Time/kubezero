@@ -141,7 +141,7 @@ kube-prometheus-stack:
 # Metrics adapter
 prometheus-adapter:
   enabled: true
-  loglevel: 1
+  logLevel: 1
   prometheus:
     url: http://metrics-kube-prometheus-st-prometheus
   tolerations:
