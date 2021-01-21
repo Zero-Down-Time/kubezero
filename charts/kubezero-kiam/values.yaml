@@ -48,7 +48,7 @@ kiam:
     host:
       iptables: false
       interface: "cali+"
-    whiteListRouteRegexp: '^/latest/(meta-data/instance-id|dynamic)'
+    allowRouteRegexp: '^/latest/(meta-data/instance-id|dynamic)'
     sslCertHostPath: /etc/ssl/certs
     tlsSecret: kiam-agent-tls
     tlsCerts:
