@@ -1,6 +1,6 @@
 # kubezero-metrics
 
-![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for prometheus-operator
 
@@ -18,8 +18,8 @@ Kubernetes: `>= 1.16.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://prometheus-community.github.io/helm-charts | kube-prometheus-stack | 12.3.0 |
-| https://prometheus-community.github.io/helm-charts | prometheus-adapter | 2.7.1 |
+|  | kube-prometheus-stack | 12.8.0 |
+| https://prometheus-community.github.io/helm-charts | prometheus-adapter | 2.10.1 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## Values
@@ -104,6 +104,7 @@ Kubernetes: `>= 1.16.0`
 | kube-prometheus-stack.prometheusOperator.tolerations[0].effect | string | `"NoSchedule"` |  |
 | kube-prometheus-stack.prometheusOperator.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | prometheus-adapter.enabled | bool | `true` |  |
+| prometheus-adapter.logLevel | int | `1` |  |
 | prometheus-adapter.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
 | prometheus-adapter.prometheus.url | string | `"http://metrics-kube-prometheus-st-prometheus"` |  |
 | prometheus-adapter.rules.default | bool | `false` |  |

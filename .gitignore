@@ -1,7 +1,6 @@
 # Vim
 *.swp
 
-output
 .vscode
 .DS_Store
 .idea
