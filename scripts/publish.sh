@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eux
+set -eu
 
 CHARTS=${1:-'.*'}
 # all credits go to the argoproj Helm guys https://github.com/argoproj/argo-helm
@@ -7,9 +7,14 @@ CHARTS=${1:-'.*'}
 SRCROOT="$(cd "$(dirname "$0")/.." && pwd)"
 GIT_PUSH=${GIT_PUSH:-true}
 
-rm -rf $SRCROOT/output && git clone -b gh-pages ssh://git@git.zero-downtime.net:22000/ZeroDownTime/KubeZero.git $SRCROOT/output
+[ "$(git branch --show-current)" == "stable" ] || { echo "Helm packages should only be built from stable branch !"; exit 1; }
+
+TMPDIR=$(mktemp -d kubezero-repo.XXX)
+mkdir -p $TMPDIR/stage
+
+git clone -b gh-pages ssh://git@git.zero-downtime.net:22000/ZeroDownTime/KubeZero.git $TMPDIR/repo
 # Reset all
-# rm -rf $SRCROOT/output/*tgz $SRCROOT/output/index.yaml
+# rm -rf $TMPDIR/repo/*tgz $TMPDIR/repo/index.yaml
 
 helm repo add argoproj https://argoproj.github.io/argo-helm
 helm repo add jetstack https://charts.jetstack.io
@@ -29,15 +34,21 @@ do
 
     echo "Processing $dir"
     helm lint $dir || true
-    helm --debug package $dir
+    helm --debug package -d $TMPDIR/stage $dir
 done
 
-cp $SRCROOT/*.tgz output/
-cd $SRCROOT/output && helm repo index .
+# Do NOT overwrite existing charts
+cp -n $TMPDIR/stage/*.tgz $TMPDIR/repo
 
-cd $SRCROOT/output && git status
+cd $TMPDIR/repo
+
+helm repo index .
+git status
 
 if [ "$GIT_PUSH" == "true" ]
 then
-    cd $SRCROOT/output && git add . && git commit -m "Publish charts" && git push ssh://git@git.zero-downtime.net:22000/ZeroDownTime/KubeZero.git gh-pages
+    git add . && git commit -m "Publish charts" && git push ssh://git@git.zero-downtime.net:22000/ZeroDownTime/KubeZero.git gh-pages
 fi
+
+cd -
+rm -rf $TMPDIR
