@@ -1,4 +1,2 @@
-# Ignore sub-charts
-charts/*/charts/*
-charts/kubezero-lib
-deploy
+# Only our own charts, see Makefile
+charts/
