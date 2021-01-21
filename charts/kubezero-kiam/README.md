@@ -1,6 +1,6 @@
 # kubezero-kiam
 
-![Version: 0.2.12](https://img.shields.io/badge/Version-0.2.12-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.6](https://img.shields.io/badge/AppVersion-3.6-informational?style=flat-square)
+![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.0](https://img.shields.io/badge/AppVersion-4.0-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Kiam
 
@@ -18,7 +18,7 @@ Kubernetes: `>= 1.16.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://uswitch.github.io/kiam-helm-charts/charts/ | kiam | 5.9.0 |
+| https://uswitch.github.io/kiam-helm-charts/charts/ | kiam | 6.0.0 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## KubeZero default configuration
@@ -75,7 +75,7 @@ By default all access to the meta-data service is blocked, expect for:
 | kiam.server.prometheus.servicemonitor.enabled | bool | `false` |  |
 | kiam.server.prometheus.servicemonitor.interval | string | `"30s"` |  |
 | kiam.server.prometheus.servicemonitor.labels.release | string | `"metrics"` |  |
-| kiam.server.resources.limits.cpu | string | `"100m"` |  |
+| kiam.server.resources.limits.cpu | string | `"300m"` |  |
 | kiam.server.resources.limits.memory | string | `"50Mi"` |  |
 | kiam.server.resources.requests.cpu | string | `"100m"` |  |
 | kiam.server.resources.requests.memory | string | `"50Mi"` |  |

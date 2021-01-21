@@ -10,6 +10,12 @@ kube-prometheus-stack:
   {{- toYaml . | nindent 2 }}
   {{- end }}
 {{- end }}
+{{- if index .Values "metrics" "prometheus-adapter" }}
+prometheus-adapter:
+  {{- with index .Values "metrics" "prometheus-adapter" }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+{{- end }}
 
 {{- end }}
 
