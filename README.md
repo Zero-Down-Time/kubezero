@@ -1,17 +1,16 @@
 KubeZero - Zero Down Time Kubernetes platform
 ========================
-KubeZero is a pre-configured collection of components deployed onto a bare Kubernetes cluster.
-All chosen components are 100% organic OpenSource.
+KubeZero is a Kubernetes distribution providing an opinionated, pre-configured container platform  
+incl. various addons and services.
 
 # Design goals
 
 - Cloud provider agnostic, bare-metal / self-hosted possible
-- No vendor lock in
-- No closed source solutions
+- No vendor lock in, most components are optional and could be exchanged
+- Organic OpenSource / open and permissive licenses over closed-source solutions
 - No premium services / subscriptions required
-- Staying to upstream projects as close as possible
-- Minimal custom code
-- Work within each community / give back
+- Staying and contributing back to upstream projects as much as possible
+
 
 # Version / Support Matrix
 
@@ -31,13 +30,15 @@ All chosen components are 100% organic OpenSource.
 - support for single node control plane for small clusters / test environments to reduce costs
 - access to control plane from within the VPC only by default ( VPN access required for Admin tasks )
 - controller nodes are used for various platform admin controllers / operators to reduce costs and noise on worker nodes
-- integrated ArgoCD Gitops controller
+
+## GitOps
+- full ArgoCD support and integration (optional)
 
 ## AWS IAM access control
 - Kiam allowing IAM roles per pod
 - IAM roles are assumed / requested and cached on controller nodes for improved security
-- blocking access to meta-data service on all nodes
-- IAM roles are maintained/ automated and tracked via CFN templates
+- access to meta-data services is blocked / controlled on all nodes
+- core IAM roles are maintained via CFN templates
 
 ## Network
 - Calico using VxLAN incl. increased MTU
@@ -66,7 +67,7 @@ All chosen components are 100% organic OpenSource.
 
 ## Logging
 - all container logs are enhanced with Kubernetes metadata to provide context for each message
-- flexible ElasticSearch setup via ECK operator to ease maintenance and reduce required admin knowledge, incl automated backups to S3
-- Kibana allowing easy search and dashboards for all logs, incl. pre configured index templates and index management to reduce costs
-- fluentd central log ingress service allowing additional parsing and queuing to improved reliability
+- flexible ElasticSearch setup, leveraging the ECK operator, for easy maintenance & minimal admin knowledge required, incl. automated backups to S3
+- Kibana allowing easy search and dashboards for all logs, incl. pre configured index templates and index management
+- central fluentd service providing queuing during highload as well as additional parsing options
 - lightweight fluent-bit agents on each node requiring minimal resources forwarding logs secure via SSL to fluentd
