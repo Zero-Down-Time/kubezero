@@ -21,10 +21,14 @@ incl. various addons and services.
 | v2.18.0                                | no    | yes   | no    | no    | 30 Apr 2021 |
 | v1                                     | yes   | no    | no    | no    | 30 Jan 2021 |
 
+# Architecure
+![aws_architecture](docs/aws_architecture.png)
 
-## General
-- Container runtime cri-o rather than Docker for improved security and performance
 
+# Components
+
+## Container runtime
+- cri-o rather than Docker for improved security and performance
 
 ## Control plane
 - support for single node control plane for small clusters / test environments to reduce costs
