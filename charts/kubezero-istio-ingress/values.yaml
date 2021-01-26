@@ -1,7 +1,7 @@
 # Make sure these values match kuberzero-istio !!!
 global:
   hub: docker.io/istio
-  tag: 1.8.1
+  tag: 1.8.2
 
   logAsJson: true
   jwtPolicy: first-party-jwt
