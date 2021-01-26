@@ -27,3 +27,17 @@ Something along the lines of https://github.com/onfido/k8s-cleanup which doesnt 
 ## Resources
 - https://docs.google.com/spreadsheets/d/1WPHt0gsb7adVzY3eviMK2W8LejV0I5m_Zpc8tMzl_2w/edit#gid=0
 - https://github.com/ishantanu/awesome-kubectl-plugins
+
+## Update Api-server config
+Add the following extraArgs to the ClusterConfiguration configMap in the kube-system namespace:
+`kubectl edit -n kube-system cm kubeadm-config`
+
+```
+        oidc-issuer-url: "https://accounts.google.com"
+        oidc-client-id: "<CLIENT_ID from Google>"
+        oidc-username-claim: "email"
+        oidc-groups-claim: "groups"
+```
+
+## Resources
+- https://kubernetes.io/docs/reference/access-authn-authz/authentication/
