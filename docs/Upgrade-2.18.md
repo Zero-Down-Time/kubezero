@@ -31,11 +31,11 @@
 ## Istio
 Due to changes of the ingress namespace resource the upgrade will cause a brief (~3-5 min) ingress service interruption !  
 
-  - delete istio operators, to remove all pieces, remove operator itself
+  - delete istio operators, to remove all pieces, remove operator itself  
    `./scripts/delete_istio_17.sh`
-  - deploy istio and istio-ingress via bootstrap.sh
+  - deploy istio and istio-ingress via bootstrap.sh  
   `./bootstrap.sh deploy istio,istio-ingress clusters/$CLUSTER ../../../kubezero/charts`
-  - patch all VirtualServices via script to new namespace
+  - patch all VirtualServices via script to new namespace  
   `./scripts/patch_vs.sh`
 
 Ingress service interruption ends.

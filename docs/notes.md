@@ -17,7 +17,8 @@ In order to change the instance type or in genernal replace worker nodes do:
 * Make sure there is enough capacity in the cluster to handle all pods being evicted for the node
 
 * `kubectl drain --ignore-daemonsets node_name`  
-will evict all pods except DaemonSets. In case there are pods with local storage review each affected pod. After being sure no important data will be lost add `--delete-local-data` to the original command above and try again.
+will evict all pods except DaemonSets. In case there are pods with local storage review each affected pod.    
+After being sure no important data will be lost add `--delete-local-data` to the original command above and try again.
 
 * Terminate instance matching *node_name*
 
@@ -35,15 +36,15 @@ See: https://github.com/kubernetes-sigs/krew for details
 List of awesome plugins: https://github.com/ishantanu/awesome-kubectl-plugins
 
 ### kubelogin
-To login / authenticate against an openID provider like Google install the kubelogin plugin.
+To login / authenticate against an openID provider like Google install the kubelogin plugin.  
 See: https://github.com/int128/kubelogin
 
 Make sure to adjust your kubeconfig files accordingly !
 
 ### kauthproxy
-Easiest way to access the Kubernetes dashboard, if installed in the targeted cluster, is to use the kauthproxy plugin.
+Easiest way to access the Kubernetes dashboard, if installed in the targeted cluster, is to use the kauthproxy plugin.  
 See: https://github.com/int128/kauthproxy  
+
 Once installed simply execute:  
 `kubectl auth-proxy -n kubernetes-dashboard https://kubernetes-dashboard.svc`  
 and access the dashboard via the automatically opened browser window.
-# api-server OAuth configuration
