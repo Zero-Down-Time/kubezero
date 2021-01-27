@@ -1,13 +1,12 @@
 KubeZero - Zero Down Time Kubernetes platform
 ========================
-KubeZero is a Kubernetes distribution providing an opinionated, pre-configured container platform  
-incl. various addons and services.
+KubeZero is a Kubernetes distribution providing an integrated container platform so you can focus on your applications.
 
-# Design goals
+# Design philosophy
 
-- Cloud provider agnostic, bare-metal / self-hosted possible
+- Cloud provider agnostic, bare-metal/self-hosted
 - No vendor lock in, most components are optional and could be exchanged
-- Organic OpenSource / open and permissive licenses over closed-source solutions
+- Organic Open Source / open and permissive licenses over closed-source solutions
 - No premium services / subscriptions required
 - Staying and contributing back to upstream projects as much as possible
 

@@ -7,7 +7,7 @@ FILES ?= distfiles.txt
 all: update
 
 update:
-	./script/update_helm.sh
+	./scripts/update_helm.sh
 
 docs:
 	for c in charts/*; do \
@@ -15,3 +15,6 @@ docs:
 		[[ $$c =~ "kubeadm" ]] && continue ; \
 		helm-docs -c $$c ; \
 	done
+
+publish:
+	./scripts/publish.sh
