@@ -11,6 +11,8 @@ etcd:
   local:
     extraArgs:
       listen-metrics-urls: "http://0.0.0.0:2381"
+      unsafe-no-fsync: "true"
+      logger: "zap"
       {{- with .Values.etcdExtraArgs }}
       {{- toYaml . | nindent 6 }}
       {{- end }}
@@ -20,20 +22,20 @@ controllerManager:
     bind-address: 0.0.0.0
     terminated-pod-gc-threshold: "300"
     leader-elect: {{ .Values.clusterHighAvailable | quote }}
-    # Default anyways but make kube-bench happy
-    feature-gates: "RotateKubeletServerCertificate=true"
+    logging-format: json
 scheduler:
   extraArgs:
     profiling: "false"
     bind-address: 0.0.0.0
     leader-elect: {{ .Values.clusterHighAvailable | quote }}
+    logging-format: json
 apiServer:
   certSANs:
   - {{ regexSplit ":" .Values.apiEndpoint -1 | first }}
   extraArgs:
     etcd-servers: {{ .Values.allEtcdEndpoints }}
     profiling: "false"
-    feature-gates: "CSIMigration=true,CSIMigrationAWS=true,CSIMigrationAWSComplete=true"
+    feature-gates: "CSIMigrationAWS=true,CSIMigrationAWSComplete=true,DefaultPodTopologySpread=true"
     audit-log-path: "/var/log/kubernetes/audit.log"
     audit-policy-file: /etc/kubernetes/apiserver/audit-policy.yaml
     audit-log-maxage: "7"
@@ -46,6 +48,7 @@ apiServer:
     {{- if .Values.clusterHighAvailable }}
     goaway-chance: ".001"
     {{- end }}
+    logging-format: json
     {{- with .Values.apiExtraArgs }}
     {{- toYaml . | nindent 4 }}
     {{- end }}

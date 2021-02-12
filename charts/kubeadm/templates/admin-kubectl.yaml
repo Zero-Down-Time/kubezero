@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Config
+clusters:
+- cluster:
+    server: https://{{ .Values.apiEndpoint }}
+  name: {{ .Values.clusterName }}
+contexts:
+- context:
+    cluster: {{ .Values.clusterName }}
+    user: kubernetes-admin
+  name: kubernetes-admin@{{ .Values.clusterName }}
+current-context: kubernetes-admin@{{ .Values.clusterName }}
+preferences: {}
+users:
+- name: kubernetes-admin
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1alpha1
+      command: aws-iam-authenticator
+      args:
+        - "token"
+        - "-i"
+        - "{{ .Values.clusterName }}"
+        - "-r"
+        - "{{ .Values.kubeAdminRole }}"
