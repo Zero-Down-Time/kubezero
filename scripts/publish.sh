@@ -2,12 +2,13 @@
 set -eu
 
 CHARTS=${1:-'.*'}
+FORCE=${2:-''}
 # all credits go to the argoproj Helm guys https://github.com/argoproj/argo-helm
 
 SRCROOT="$(cd "$(dirname "$0")/.." && pwd)"
 GIT_PUSH=${GIT_PUSH:-true}
 
-[ "$(git branch --show-current)" == "stable" ] || { echo "Helm packages should only be built from stable branch !"; exit 1; }
+[[ "$(git branch --show-current)" == "stable" || -n "$FORCE" ]] || { echo "Helm packages should only be built from stable branch !"; exit 1; }
 
 TMPDIR=$(mktemp -d kubezero-repo.XXX)
 mkdir -p $TMPDIR/stage
@@ -38,7 +39,11 @@ do
 done
 
 # Do NOT overwrite existing charts
-cp -n $TMPDIR/stage/*.tgz $TMPDIR/repo
+if [ -n "$FORCE" ]; then
+  cp $TMPDIR/stage/*.tgz $TMPDIR/repo
+else
+  cp -n $TMPDIR/stage/*.tgz $TMPDIR/repo
+fi
 
 cd $TMPDIR/repo
 

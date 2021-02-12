@@ -1,0 +1,34 @@
+# Controller role which is more or less cluster-admin once enrolled
+apiVersion: iamauthenticator.k8s.aws/v1alpha1
+kind: IAMIdentityMapping
+metadata:
+  name: kubezero-controllers
+spec:
+  arn: {{ .Values.ControllerIamRole }}
+  username: kubezero-controller
+  groups:
+  - system:masters
+
+---
+# Worker role to eg. delete former self etc.
+apiVersion: iamauthenticator.k8s.aws/v1alpha1
+kind: IAMIdentityMapping
+metadata:
+  name: kubezero-workers
+spec:
+  arn: {{ .Values.WorkerIamRole }}
+  username: kubezero-worker
+  groups:
+  - system:masters
+
+---
+# Admin Role for remote access
+apiVersion: iamauthenticator.k8s.aws/v1alpha1
+kind: IAMIdentityMapping
+metadata:
+  name: kubernetes-admin
+spec:
+  arn: {{ .Values.kubeAdminRole }}
+  username: kubernetes-admin
+  groups:
+  - system:masters

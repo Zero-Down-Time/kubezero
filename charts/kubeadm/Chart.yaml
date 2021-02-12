@@ -2,7 +2,7 @@ apiVersion: v2
 name: kubeadm
 description: KubeZero Kubeadm golden config
 type: application
-version: 1.18.14
+version: 1.19.7
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
