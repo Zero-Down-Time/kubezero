@@ -22,5 +22,5 @@ featureGates:
   CSIMigrationAWSComplete: true
 {{- end }}
 kubeReserved:
-  cpu=50m
-  memory=128m
+  cpu: 50m
+  memory: 128m
