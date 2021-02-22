@@ -10,7 +10,7 @@ networking:
 etcd:
   local:
     extraArgs:
-      listen-metrics-urls: "http://0.0.0.0:2381"
+      listen-metrics-urls: "http://{{ .Values.listenAddress }}:2381"
       unsafe-no-fsync: "true"
       logger: "zap"
       {{- with .Values.etcdExtraArgs }}
@@ -19,14 +19,14 @@ etcd:
 controllerManager:
   extraArgs:
     profiling: "false"
-    bind-address: 0.0.0.0
+    bind-address: {{ .Values.listenAddress }}
     terminated-pod-gc-threshold: "300"
     leader-elect: {{ .Values.clusterHighAvailable | quote }}
     logging-format: json
 scheduler:
   extraArgs:
     profiling: "false"
-    bind-address: 0.0.0.0
+    bind-address: {{ .Values.listenAddress }}
     leader-elect: {{ .Values.clusterHighAvailable | quote }}
     logging-format: json
 apiServer:
@@ -35,7 +35,6 @@ apiServer:
   extraArgs:
     etcd-servers: {{ .Values.allEtcdEndpoints }}
     profiling: "false"
-    feature-gates: "CSIMigrationAWS=true,CSIMigrationAWSComplete=true,DefaultPodTopologySpread=true"
     audit-log-path: "/var/log/kubernetes/audit.log"
     audit-policy-file: /etc/kubernetes/apiserver/audit-policy.yaml
     audit-log-maxage: "7"
@@ -43,7 +42,12 @@ apiServer:
     audit-log-maxbackup: "3"
     tls-cipher-suites: "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384"
     admission-control-config-file: /etc/kubernetes/apiserver/admission-configuration.yaml
+    {{- if eq .Values.platform "aws" }}
     authentication-token-webhook-config-file: /etc/kubernetes/apiserver/aws-iam-authenticator.yaml
+    feature-gates: "CSIMigrationAWS=true,CSIMigrationAWSComplete=true,DefaultPodTopologySpread=true"
+    {{- else }}
+    feature-gates: "DefaultPodTopologySpread=true"
+    {{- end }}
     enable-admission-plugins: NodeRestriction,EventRateLimit
     {{- if .Values.clusterHighAvailable }}
     goaway-chance: ".001"

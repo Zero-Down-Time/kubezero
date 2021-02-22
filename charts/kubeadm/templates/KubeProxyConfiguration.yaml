@@ -2,5 +2,5 @@ apiVersion: kubeproxy.config.k8s.io/v1alpha1
 kind: KubeProxyConfiguration
 metadata:
   name: kubezero-kubeproxyconfiguration
-metricsBindAddress: "0.0.0.0:10249"
+metricsBindAddress: "{{ .Values.listenAddress }}:10249"
 mode: ""
