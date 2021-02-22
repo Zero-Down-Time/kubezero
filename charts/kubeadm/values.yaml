@@ -1,7 +1,13 @@
 clusterVersion: 1.19.0
+listenAddress: 0.0.0.0
 clusterName: pleasechangeme
 apiEndpoint: kube-api.changeme.org:6443
 etcdExtraArgs: {}
 apiExtraArgs: {}
 clusterHighAvailable: false
 allEtcdEndpoints: ""
+# supported values aws,bare-metal
+platform: "aws"
+# Set to false for openrc, eg. on Gentoo or Alpine
+systemd: true
+protectKernelDefaults: true

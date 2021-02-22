@@ -1,3 +1,4 @@
+{{- if eq .Values.platform "aws" }}
 apiVersion: v1
 kind: Config
 clusters:
@@ -23,3 +24,4 @@ users:
         - "{{ .Values.clusterName }}"
         - "-r"
         - "{{ .Values.kubeAdminRole }}"
+{{- end }}
