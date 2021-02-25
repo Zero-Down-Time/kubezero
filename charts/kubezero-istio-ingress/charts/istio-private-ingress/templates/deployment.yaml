@@ -41,6 +41,7 @@ spec:
         istio.io/rev: {{ .Values.revision | default "default" }}
         install.operator.istio.io/owning-resource: {{ .Values.ownerName | default "unknown" }}
         operator.istio.io/component: "IngressGateways"
+        sidecar.istio.io/inject: "false"
       annotations:
         {{- if .Values.meshConfig.enablePrometheusMerge }}
         prometheus.io/port: "15020"
@@ -100,12 +101,6 @@ spec:
             {{- range $key, $val := $gateway.ports }}
             - containerPort: {{ $val.targetPort | default $val.port }}
               protocol: {{ $val.protocol | default "TCP" }}
-            {{- end }}
-            {{- if $.Values.global.meshExpansion.enabled }}
-            {{- range $key, $val := $gateway.meshExpansionPorts }}
-            - containerPort: {{ $val.targetPort | default $val.port }}
-              protocol: {{ $val.protocol | default "TCP" }}
-            {{- end }}
             {{- end }}
             - containerPort: 15090
               protocol: TCP
@@ -220,6 +215,10 @@ spec:
           - name: TRUST_DOMAIN
             value: "{{ .Values.global.trustDomain | default (index .Values.meshConfig "trustDomain") }}"
           {{- end }}
+          {{- if not $gateway.runAsRoot }}
+          - name: ISTIO_META_UNPRIVILEGED_POD
+            value: "true"
+          {{- end }}
           {{- range $key, $val := $gateway.env }}
           - name: {{ $key }}
             value: {{ $val }}
@@ -228,10 +227,10 @@ spec:
           - name: {{ $key }}
             value: "{{ $value }}"
           {{- end }}
-          {{ $network_set := index $gateway.env "ISTIO_META_NETWORK" }}
+          {{- $network_set := index $gateway.env "ISTIO_META_NETWORK" }}
           {{- if and (not $network_set) .Values.global.network }}
           - name: ISTIO_META_NETWORK
-            value: {{ .Values.global.network }}
+            value: "{{ .Values.global.network }}"
           {{- end }}
 {{- if $gateway.podAnnotations }}
           - name: "ISTIO_METAJSON_ANNOTATIONS"
@@ -254,8 +253,6 @@ spec:
             mountPath: /var/run/secrets/tokens
             readOnly: true
 {{- end }}
-          - name: gatewaysdsudspath
-            mountPath: /var/run/ingress_gateway
           {{- if .Values.global.mountMtlsCerts }}
           # Use the key and cert mounted to /etc/certs/ for the in-cluster mTLS communications.
           - name: istio-certs
@@ -296,9 +293,17 @@ spec:
             - path: "annotations"
               fieldRef:
                 fieldPath: metadata.annotations
+            - path: "cpu-limit"
+              resourceFieldRef:
+                containerName: istio-proxy
+                resource: limits.cpu
+                divisor: 1m
+            - path: "cpu-request"
+              resourceFieldRef:
+                containerName: istio-proxy
+                resource: requests.cpu
+                divisor: 1m
       - name: istio-envoy
-        emptyDir: {}
-      - name: gatewaysdsudspath
         emptyDir: {}
       - name: istio-data
         emptyDir: {}
@@ -335,7 +340,7 @@ spec:
           optional: true
       {{- end }}
       affinity:
-      {{- include "nodeaffinity" (dict "global" .Values.global "nodeSelector" $gateway.nodeSelector) | indent 6 }}
+{{ include "nodeaffinity" (dict "global" .Values.global "nodeSelector" $gateway.nodeSelector) | trim | indent 8 }}
       {{- include "podAntiAffinity" $gateway | indent 6 }}
 {{- if $gateway.tolerations }}
       tolerations:
