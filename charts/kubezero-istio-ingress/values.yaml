@@ -45,17 +45,17 @@ istio-ingress:
       - name: status-port
         port: 15021
         nodePort: 30021
-        protocol: http
+        protocol: TCP
       - name: http2
         port: 80
         targetPort: 8080
         nodePort: 30080
-        protocol: http2
+        protocol: TCP
       - name: https
         port: 443
         targetPort: 8443
         nodePort: 30443
-        protocol: https
+        protocol: TCP
      ## multi-cluster - disabled on public LBs
      #- name: tcp-istiod
      #  port: 15012
@@ -111,17 +111,17 @@ istio-private-ingress:
       - name: status-port
         port: 15021
         nodePort: 31021
-        protocol: http
+        protocol: TCP
       - name: http2
         port: 80
         targetPort: 8080
         nodePort: 31080
-        protocol: http2
+        protocol: TCP
       - name: https
         port: 443
         targetPort: 8443
         nodePort: 31443
-        protocol: https
+        protocol: TCP
       # multi-cluster
       - name: tcp-istiod
         port: 15012
