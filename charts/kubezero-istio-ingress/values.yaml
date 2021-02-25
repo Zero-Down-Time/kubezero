@@ -1,7 +1,7 @@
 # Make sure these values match kuberzero-istio !!!
 global:
-  hub: docker.io/istio
-  tag: 1.8.2
+  #hub: docker.io/istio
+  #tag: 1.9.0
 
   logAsJson: true
   jwtPolicy: first-party-jwt
@@ -42,17 +42,32 @@ istio-ingress:
       nodeSelector:
         node.kubernetes.io/ingress.public: "30080_30443"
       ports:
-      - name: http-status
+      - name: status-port
         port: 15021
         nodePort: 30021
+        protocol: http
       - name: http2
         port: 80
         targetPort: 8080
         nodePort: 30080
+        protocol: http2
       - name: https
         port: 443
         targetPort: 8443
         nodePort: 30443
+        protocol: https
+     ## multi-cluster - disabled on public LBs
+     #- name: tcp-istiod
+     #  port: 15012
+     #  targetPort: 15012
+     #  nodePort: 30012
+     #  protocol: TCP
+     ## multi-cluster sni east-west
+     #- name: tls
+     #  port: 15443
+     #  targetPort: 15443
+     #  nodePort: 30044
+     #  protocol: TCP
 
   dnsNames: []
 # - '*.example.com'
@@ -93,17 +108,32 @@ istio-private-ingress:
         #nodeSelector: "31080_31443_31671_31672_31224"
 
       ports:
-      - name: http-status
+      - name: status-port
         port: 15021
         nodePort: 31021
+        protocol: http
       - name: http2
         port: 80
         targetPort: 8080
         nodePort: 31080
+        protocol: http2
       - name: https
         port: 443
         targetPort: 8443
         nodePort: 31443
+        protocol: https
+      # multi-cluster
+      - name: tcp-istiod
+        port: 15012
+        targetPort: 15012
+        nodePort: 31012
+        protocol: TCP
+      # multi-cluster sni east-west
+      - name: tls
+        port: 15443
+        targetPort: 15443
+        nodePort: 31044
+        protocol: TCP
       #- name: fluentd-forward
       #  port: 24224
       #  nodePort: 31224
