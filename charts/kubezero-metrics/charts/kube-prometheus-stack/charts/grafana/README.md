@@ -16,7 +16,7 @@ _See [helm repo](https://helm.sh/docs/helm/helm_repo/) for command documentation
 To install the chart with the release name `my-release`:
 
 ```console
-helm install --name my-release grafana/grafana
+helm install my-release grafana/grafana
 ```
 
 ## Uninstalling the Chart
@@ -42,6 +42,10 @@ This version requires Helm >= 2.12.0.
 
 You have to add --force to your helm upgrade command as the labels of the chart have changed.
 
+### To 6.0.0
+
+This version requires Helm >= 3.1.0.
+
 ## Configuration
 
 | Parameter                                 | Description                                   | Default                                                 |
@@ -55,7 +59,7 @@ You have to add --force to your helm upgrade command as the labels of the chart 
 | `securityContext`                         | Deployment securityContext                    | `{"runAsUser": 472, "runAsGroup": 472, "fsGroup": 472}`  |
 | `priorityClassName`                       | Name of Priority Class to assign pods         | `nil`                                                   |
 | `image.repository`                        | Image repository                              | `grafana/grafana`                                       |
-| `image.tag`                               | Image tag (`Must be >= 5.0.0`)                | `7.0.3`                                                 |
+| `image.tag`                               | Image tag (`Must be >= 5.0.0`)                | `7.4.2`                                                 |
 | `image.sha`                               | Image sha (optional)                          | `17cbd08b9515fda889ca959e9d72ee6f3327c8f1844a3336dfd952134f38e2fe` |
 | `image.pullPolicy`                        | Image pull policy                             | `IfNotPresent`                                          |
 | `image.pullSecrets`                       | Image pull secrets                            | `{}`                                                    |
@@ -96,6 +100,8 @@ You have to add --force to your helm upgrade command as the labels of the chart 
 | `persistence.annotations`                 | PersistentVolumeClaim annotations             | `{}`                                                    |
 | `persistence.finalizers`                  | PersistentVolumeClaim finalizers              | `[ "kubernetes.io/pvc-protection" ]`                    |
 | `persistence.subPath`                     | Mount a sub dir of the persistent volume      | `nil`                                                   |
+| `persistence.inMemory.enabled`            | If persistence is not enabled, whether to mount the local storage in-memory to improve performance | `false`                                                   |
+| `persistence.inMemory.sizeLimit`          | SizeLimit for the in-memory local storage     | `nil`                                                   |
 | `initChownData.enabled`                   | If false, don't reset data ownership at startup | true                                                  |
 | `initChownData.image.repository`          | init-chown-data container image repository    | `busybox`                                               |
 | `initChownData.image.tag`                 | init-chown-data container image tag           | `1.31.1`                                                |
@@ -126,8 +132,8 @@ You have to add --force to your helm upgrade command as the labels of the chart 
 | `podAnnotations`                          | Pod annotations                               | `{}`                                                    |
 | `podLabels`                               | Pod labels                                    | `{}`                                                    |
 | `podPortName`                             | Name of the grafana port on the pod           | `grafana`                                               |
-| `sidecar.image.repository`                | Sidecar image repository                      | `kiwigrid/k8s-sidecar`                                  |
-| `sidecar.image.tag`                       | Sidecar image tag                             | `1.1.0`                                                 |
+| `sidecar.image.repository`                | Sidecar image repository                      | `quay.io/kiwigrid/k8s-sidecar`                          |
+| `sidecar.image.tag`                       | Sidecar image tag                             | `1.10.6`                                                |
 | `sidecar.image.sha`                       | Sidecar image sha (optional)                  | `""`                                                    |
 | `sidecar.imagePullPolicy`                 | Sidecar image pull policy                     | `IfNotPresent`                                          |
 | `sidecar.resources`                       | Sidecar resources                             | `{}`                                                    |
@@ -144,14 +150,16 @@ You have to add --force to your helm upgrade command as the labels of the chart 
 | `sidecar.dashboards.watchMethod`          | Method to use to detect ConfigMap changes. With WATCH the sidecar will do a WATCH requests, with SLEEP it will list all ConfigMaps, then sleep for 60 seconds. | `WATCH` |
 | `sidecar.skipTlsVerify`                   | Set to true to skip tls verification for kube api calls | `nil`                                         |
 | `sidecar.dashboards.label`                | Label that config maps with dashboards should have to be added | `grafana_dashboard`                                |
+| `sidecar.dashboards.labelValue`                | Label value that config maps with dashboards should have to be added | `nil`                                |
 | `sidecar.dashboards.folder`               | Folder in the pod that should hold the collected dashboards (unless `sidecar.dashboards.defaultFolderName` is set). This path will be mounted. | `/tmp/dashboards`    |
 | `sidecar.dashboards.folderAnnotation`     | The annotation the sidecar will look for in configmaps to override the destination folder for files | `nil`                                                  |
 | `sidecar.dashboards.defaultFolderName`    | The default folder name, it will create a subfolder under the `sidecar.dashboards.folder` and put dashboards in there instead | `nil`                                |
 | `sidecar.dashboards.searchNamespace`      | If specified, the sidecar will search for dashboard config-maps inside this namespace. Otherwise the namespace in which the sidecar is running will be used. It's also possible to specify ALL to search in all namespaces | `nil`                                |
 | `sidecar.datasources.enabled`             | Enables the cluster wide search for datasources and adds/updates/deletes them in grafana |`false`       |
 | `sidecar.datasources.label`               | Label that config maps with datasources should have to be added | `grafana_datasource`                               |
+| `sidecar.datasources.labelValue`                | Label value that config maps with datasources should have to be added | `nil`                                |
 | `sidecar.datasources.searchNamespace`     | If specified, the sidecar will search for datasources config-maps inside this namespace. Otherwise the namespace in which the sidecar is running will be used. It's also possible to specify ALL to search in all namespaces | `nil`                               |
-| `sidecar.notifiers.enabled`               | Enables the cluster wide search for notifiers and adds/updates/deletes them in grafana |`false`       |
+| `sidecar.notifiers.enabled`               | Enables the cluster wide search for notifiers and adds/updates/deletes them in grafana | `false`        |
 | `sidecar.notifiers.label`                 | Label that config maps with notifiers should have to be added | `grafana_notifier`                               |
 | `sidecar.notifiers.searchNamespace`       | If specified, the sidecar will search for notifiers config-maps (or secrets) inside this namespace. Otherwise the namespace in which the sidecar is running will be used. It's also possible to specify ALL to search in all namespaces | `nil`                               |
 | `smtp.existingSecret`                     | The name of an existing secret containing the SMTP credentials. | `""`                                  |
@@ -173,9 +181,9 @@ You have to add --force to your helm upgrade command as the labels of the chart 
 | `rbac.extraClusterRoleRules`              | Additional rules to add to the ClusterRole    | []                                                      |
 | `command`                     | Define command to be executed by grafana container at startup  | `nil`                                              |
 | `testFramework.enabled`                   | Whether to create test-related resources      | `true`                                                  |
-| `testFramework.image`                     | `test-framework` image repository.            | `bats/bats`                                        |
-| `testFramework.tag`                       | `test-framework` image tag.                   | `v1.1.0`                                                 |
-| `testFramework.imagePullPolicy`           | `test-framework` image pull policy.           | `IfNotPresent`                                             |
+| `testFramework.image`                     | `test-framework` image repository.            | `bats/bats`                                             |
+| `testFramework.tag`                       | `test-framework` image tag.                   | `v1.1.0`                                                |
+| `testFramework.imagePullPolicy`           | `test-framework` image pull policy.           | `IfNotPresent`                                          |
 | `testFramework.securityContext`           | `test-framework` securityContext              | `{}`                                                    |
 | `downloadDashboards.env`                  | Environment variables to be passed to the `download-dashboards` container | `{}`                        |
 | `downloadDashboards.resources`            | Resources of `download-dashboards` container  | `{}`                                                    |
@@ -188,6 +196,8 @@ You have to add --force to your helm upgrade command as the labels of the chart 
 | `serviceMonitor.namespace`                | Namespace this servicemonitor is installed in |                                                         |
 | `serviceMonitor.interval`                 | How frequently Prometheus should scrape       | `1m`                                                    |
 | `serviceMonitor.path`                     | Path to scrape                                | `/metrics`                                              |
+| `serviceMonitor.scheme`                   | Scheme to use for metrics scraping            | `http`                                                  |
+| `serviceMonitor.tlsConfig`                | TLS configuration block for the endpoint      | `{}`                                                    |
 | `serviceMonitor.labels`                   | Labels for the servicemonitor passed to Prometheus Operator      |  `{}`                                |
 | `serviceMonitor.scrapeTimeout`            | Timeout after which the scrape is ended       | `30s`                                                   |
 | `serviceMonitor.relabelings`              | MetricRelabelConfigs to apply to samples before ingestion.  | `[]`                                      |
@@ -198,6 +208,7 @@ You have to add --force to your helm upgrade command as the labels of the chart 
 | `imageRenderer.image.sha`                  | image-renderer Image sha (optional)                                                | `""`                             |
 | `imageRenderer.image.pullPolicy`           | image-renderer ImagePullPolicy                                                     | `Always`                         |
 | `imageRenderer.env`                        | extra env-vars for image-renderer                                                  | `{}`                             |
+| `imageRenderer.serviceAccountName`         | image-renderer deployment serviceAccountName                                       | `""`                             |
 | `imageRenderer.securityContext`            | image-renderer deployment securityContext                                          | `{}`                             |
 | `imageRenderer.hostAliases`                | image-renderer deployment Host Aliases                                             | `[]`                             |
 | `imageRenderer.priorityClassName`          | image-renderer deployment priority class                                           | `''`                             |
@@ -311,35 +322,18 @@ If the parameter `sidecar.datasources.enabled` is set, an init container is depl
 pod. This container lists all secrets (or configmaps, though not recommended) in the cluster and
 filters out the ones with a label as defined in `sidecar.datasources.label`. The files defined in
 those secrets are written to a folder and accessed by grafana on startup. Using these yaml files,
-the data sources in grafana can be imported. The secrets must be created before `helm install` so
-that the datasources init container can list the secrets.
+the data sources in grafana can be imported. 
 
 Secrets are recommended over configmaps for this usecase because datasources usually contain private
 data like usernames and passwords. Secrets are the more appropriate cluster resource to manage those.
 
-Example datasource config adapted from [Grafana](http://docs.grafana.org/administration/provisioning/#example-datasource-config-file):
+Example values to add a datasource adapted from [Grafana](http://docs.grafana.org/administration/provisioning/#example-datasource-config-file):
 
 ```yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: sample-grafana-datasource
-  labels:
-     grafana_datasource: "1"
-type: Opaque
-stringData:
-  datasource.yaml: |-
-    # config file version
-    apiVersion: 1
-
-    # list of datasources that should be deleted from the database
-    deleteDatasources:
-      - name: Graphite
-        orgId: 1
-
-    # list of datasources to insert/update depending
-    # whats available in the database
-    datasources:
+datasources:
+ datasources.yaml:
+   apiVersion: 1
+   datasources:
       # <string, required> name of the datasource. Required
     - name: Graphite
       # <string, required> datasource type. Required
@@ -379,7 +373,6 @@ stringData:
       version: 1
       # <bool> allow users to edit datasources from the UI.
       editable: false
-
 ```
 
 ## Sidecar for notifiers
@@ -483,6 +476,24 @@ Include in the `extraSecretMounts` configuration flag:
      defaultMode: 0440
      mountPath: /etc/secrets/auth_generic_oauth
      readOnly: true
+```
+
+### extraSecretMounts using a Container Storage Interface (CSI) provider
+
+This example uses a CSI driver e.g. retrieving secrets using [Azure Key Vault Provider](https://github.com/Azure/secrets-store-csi-driver-provider-azure)
+
+```yaml
+- extraSecretMounts:
+  - name: secrets-store-inline
+    mountPath: /run/secrets
+    readOnly: true
+    csi:
+      driver: secrets-store.csi.k8s.io
+      readOnly: true
+      volumeAttributes:
+        secretProviderClass: "my-provider"
+      nodePublishSecretRef:
+        name: akv-creds
 ```
 
 ## Image Renderer Plug-In
