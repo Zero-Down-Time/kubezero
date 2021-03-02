@@ -26,7 +26,7 @@ aws-ebs-csi-driver:
       cpu: 5m
       memory: 24Mi
     limits:
-      cpu: 20m
+      cpu: 50m
       memory: 40Mi
 
   storageClasses:
