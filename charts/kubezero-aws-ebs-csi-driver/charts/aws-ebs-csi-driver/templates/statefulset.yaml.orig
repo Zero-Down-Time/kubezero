@@ -49,7 +49,7 @@ spec:
             value: {{ .Values.proxy.no_proxy | quote }}
 {{- end }}
           args:
-            - --v={{ .Values.logLevel }}
+            - --v=5
             - --leader-election=false
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:

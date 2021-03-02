@@ -21,6 +21,14 @@ aws-ebs-csi-driver:
   extraVolumeTags: {}
   #  Name: KubeZero-Cluster
 
+  resources:
+    requests:
+      cpu: 5m
+      memory: 24Mi
+    limits:
+      cpu: 20m
+      memory: 40Mi
+
   storageClasses:
   - name: ebs-sc-gp2-xfs
     volumeBindingMode: WaitForFirstConsumer

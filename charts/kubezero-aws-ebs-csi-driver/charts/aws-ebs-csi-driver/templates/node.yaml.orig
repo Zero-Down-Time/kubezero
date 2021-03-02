@@ -55,7 +55,7 @@ spec:
             - --volume-attach-limit={{ .Values.volumeAttachLimit }}
             {{- end }}
             - --logtostderr
-            - --v={{ .Values.logLevel }}
+            - --v=5
           env:
             - name: CSI_ENDPOINT
               value: unix:/csi/csi.sock
@@ -101,7 +101,7 @@ spec:
           args:
             - --csi-address=$(ADDRESS)
             - --kubelet-registration-path=$(DRIVER_REG_SOCK_PATH)
-            - --v={{ .Values.logLevel }}
+            - --v=5
           lifecycle:
             preStop:
               exec:
