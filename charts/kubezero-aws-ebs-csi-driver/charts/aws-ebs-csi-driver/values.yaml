@@ -35,6 +35,10 @@ snapshotController:
   repository: k8s.gcr.io/sig-storage/snapshot-controller
   tag: "v3.0.3"
 
+proxy: {}
+#  http_proxy:
+#  no_proxy:
+
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
@@ -71,6 +75,20 @@ nodeSelector: {}
 tolerateAllTaints: true
 tolerations: []
 affinity: {}
+
+# TSCs without the label selector stanza
+#
+# Example:
+#
+# topologySpreadConstraints:
+#  - maxSkew: 1
+#    topologyKey: topology.kubernetes.io/zone
+#    whenUnsatisfiable: ScheduleAnyway
+#  - maxSkew: 1
+#    topologyKey: kubernetes.io/hostname
+#    whenUnsatisfiable: ScheduleAnyway
+
+topologySpreadConstraints: []
 
 # Extra volume tags to attach to each dynamically provisioned volume.
 # ---

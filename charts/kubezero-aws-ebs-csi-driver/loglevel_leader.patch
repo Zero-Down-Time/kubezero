@@ -89,15 +89,6 @@ diff -rtub aws-ebs-csi-driver/templates/statefulset.yaml /tmp/aws-ebs-csi-driver
              - --leader-election=false
        {{- if .Values.imagePullSecrets }}
        imagePullSecrets:
-diff -rtub aws-ebs-csi-driver/templates/storageclass.yaml /tmp/aws-ebs-csi-driver/templates/storageclass.yaml
---- aws-ebs-csi-driver/templates/storageclass.yaml	2021-02-23 18:54:24.000000000 +0100
-+++ /tmp/aws-ebs-csi-driver/templates/storageclass.yaml	2021-02-24 17:43:46.866722719 +0100
-@@ -1,4 +1,5 @@
- {{- range .Values.storageClasses }}
-+---
- kind: StorageClass
- apiVersion: storage.k8s.io/v1
- metadata:
 diff -rtub aws-ebs-csi-driver/values.yaml /tmp/aws-ebs-csi-driver/values.yaml
 --- aws-ebs-csi-driver/values.yaml	2021-02-23 18:54:24.000000000 +0100
 +++ /tmp/aws-ebs-csi-driver/values.yaml	2021-02-24 18:41:15.513545244 +0100
