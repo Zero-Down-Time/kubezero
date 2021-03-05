@@ -22,6 +22,9 @@ cert-manager:
 kiam:
   enabled: false
 
+aws-node-termination-handler:
+  enabled: false
+
 local-volume-provisioner:
   enabled: false
 

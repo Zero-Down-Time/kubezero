@@ -16,12 +16,13 @@ eventRecordQPS: 0
 # tlsCertFile: /var/lib/kubelet/pki/kubelet.crt
 # tlsPrivateKeyFile: /var/lib/kubelet/pki/kubelet.key
 tlsCipherSuites: [TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_GCM_SHA256]
-{{- if eq .Values.platform "aws" }}
 featureGates:
+  CustomCPUCFSQuotaPeriod: true
+{{- if eq .Values.platform "aws" }}
   CSIMigrationAWS: true
   CSIMigrationAWSComplete: true
-  CustomCPUCFSQuotaPeriod: true
 {{- end }}
 kubeReserved:
   cpu: 50m
   memory: 128m
+# cpuCFSQuotaPeriod: 10ms
