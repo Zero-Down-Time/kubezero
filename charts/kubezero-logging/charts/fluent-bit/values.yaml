@@ -6,13 +6,17 @@ kind: DaemonSet
 # replicaCount -- Only applicable if kind=Deployment
 replicaCount: 1
 
-test:
-  enabled: true
-
 image:
   repository: fluent/fluent-bit
   pullPolicy: Always
   # tag:
+
+testFramework:
+  enabled: false
+  image:
+    repository: busybox
+    pullPolicy: Always
+    tag: latest
 
 imagePullSecrets: []
 nameOverride: ""
@@ -32,7 +36,16 @@ podSecurityPolicy:
 podSecurityContext:
   {}
   # fsGroup: 2000
-
+dnsConfig: {}
+  # nameservers:
+  #   - 1.2.3.4
+  # searches:
+  #   - ns1.svc.cluster-domain.example
+  #   - my.dns.search.suffix
+  # options:
+  #   - name: ndots
+#     value: "2"
+#   - name: edns0
 securityContext:
   {}
   # capabilities:
@@ -60,6 +73,38 @@ serviceMonitor:
   # scrapeTimeout: 10s
   # selector:
   #  prometheus: my-prometheus
+
+prometheusRule:
+  enabled: false
+  # namespace: ""
+  # additionnalLabels: {}
+  # rules:
+  # - alert: NoOutputBytesProcessed
+  #   expr: rate(fluentbit_output_proc_bytes_total[5m]) == 0
+  #   annotations:
+  #     message: |
+  #       Fluent Bit instance {{ $labels.instance }}'s output plugin {{ $labels.name }} has not processed any
+  #       bytes for at least 15 minutes.
+  #     summary: No Output Bytes Processed
+  #   for: 15m
+  #   labels:
+  #     severity: critical
+
+dashboards:
+  enabled: false
+  labelKey: grafana_dashboard
+  annotations: {}
+
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
 
 resources:
   {}
@@ -104,5 +149,74 @@ updateStrategy: {}
 # Make use of a pre-defined configmap instead of the one templated here
 existingConfigMap: ""
 
-## https://docs.fluentbit.io/manual/administration/configuring-fluent-bit
-config: {}
+networkPolicy:
+  enabled: false
+  # ingress:
+  #   from: []
+
+luaScripts: {}
+
+## https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/configuration-file
+config:
+  service: |
+    [SERVICE]
+        Flush 1
+        Daemon Off
+        Log_Level info
+        Parsers_File parsers.conf
+        Parsers_File custom_parsers.conf
+        HTTP_Server On
+        HTTP_Listen 0.0.0.0
+        HTTP_Port {{ .Values.service.port }}
+
+  ## https://docs.fluentbit.io/manual/pipeline/inputs
+  inputs: |
+    [INPUT]
+        Name tail
+        Path /var/log/containers/*.log
+        Parser docker
+        Tag kube.*
+        Mem_Buf_Limit 5MB
+        Skip_Long_Lines On
+
+    [INPUT]
+        Name systemd
+        Tag host.*
+        Systemd_Filter _SYSTEMD_UNIT=kubelet.service
+        Read_From_Tail On
+
+  ## https://docs.fluentbit.io/manual/pipeline/filters
+  filters: |
+    [FILTER]
+        Name kubernetes
+        Match kube.*
+        Merge_Log On
+        Keep_Log Off
+        K8S-Logging.Parser On
+        K8S-Logging.Exclude On
+
+  ## https://docs.fluentbit.io/manual/pipeline/outputs
+  outputs: |
+    [OUTPUT]
+        Name es
+        Match kube.*
+        Host elasticsearch-master
+        Logstash_Format On
+        Retry_Limit False
+
+    [OUTPUT]
+        Name es
+        Match host.*
+        Host elasticsearch-master
+        Logstash_Format On
+        Logstash_Prefix node
+        Retry_Limit False
+
+  ## https://docs.fluentbit.io/manual/pipeline/parsers
+  customParsers: |
+    [PARSER]
+        Name docker_no_time
+        Format json
+        Time_Keep Off
+        Time_Key time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L
