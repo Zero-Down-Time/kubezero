@@ -39,6 +39,12 @@ spec:
       tolerations:
         {{- if .Values.node.tolerateAllTaints }}
         - operator: Exists
+        {{- else }}
+        - key: CriticalAddonsOnly
+          operator: Exists
+        - operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 300
         {{- end }}
         {{- with .Values.node.tolerations }}
 {{ toYaml . | indent 8 }}
@@ -102,10 +108,6 @@ spec:
             - --csi-address=$(ADDRESS)
             - --kubelet-registration-path=$(DRIVER_REG_SOCK_PATH)
             - --v={{ .Values.logLevel }}
-          lifecycle:
-            preStop:
-              exec:
-                command: ["/bin/sh", "-c", "rm -rf /registration/ebs.csi.aws.com-reg.sock /csi/csi.sock"]
           env:
             - name: ADDRESS
               value: /csi/csi.sock
