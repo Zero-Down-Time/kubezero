@@ -10,4 +10,4 @@ keywords:
   - kubeadm
 maintainers:
   - name: Quarky9
-kubeVersion: ">= 1.16.0"
+kubeVersion: ">= 1.18.0"
