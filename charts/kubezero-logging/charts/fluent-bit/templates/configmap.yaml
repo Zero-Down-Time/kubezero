@@ -7,9 +7,10 @@ metadata:
     {{- include "fluent-bit.labels" . | nindent 4 }}
 data:
   custom_parsers.conf: |
-    {{ tpl (.Files.Get "conf/custom_parsers.conf") . | nindent 4 }}
+    {{- (tpl .Values.config.customParsers $) | nindent 4 }}
   fluent-bit.conf: |
-    {{ tpl (.Files.Get "conf/fluent-bit.conf") . | nindent 4 }}
-  functions.lua: |
-    {{ tpl (.Files.Get "conf/functions.lua") . | nindent 4 }}
+    {{- (tpl .Values.config.service $)  | nindent 4 }}
+    {{- (tpl .Values.config.inputs $)  | nindent 4 }}
+    {{- (tpl .Values.config.filters $)  | nindent 4 }}
+    {{- (tpl .Values.config.outputs $)  | nindent 4 }}
 {{- end -}}

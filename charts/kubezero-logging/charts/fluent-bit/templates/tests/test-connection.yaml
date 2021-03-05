@@ -1,4 +1,4 @@
-{{- if .Values.test.enabled }}
+{{- if .Values.testFramework.enabled }}
 apiVersion: v1
 kind: Pod
 metadata:
@@ -10,8 +10,13 @@ metadata:
 spec:
   containers:
     - name: wget
-      image: busybox
+      image: "{{ .Values.testFramework.image.repository }}:{{ .Values.testFramework.image.tag }}"
+      imagePullPolicy: {{ .Values.testFramework.image.pullPolicy }}
       command: ['wget']
       args: ['{{ include "fluent-bit.fullname" . }}:{{ .Values.service.port }}']
+  {{- with .Values.imagePullSecrets }}
+  imagePullSecrets:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   restartPolicy: Never
 {{- end }}

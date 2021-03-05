@@ -12,10 +12,7 @@ spec:
   {{- range .Values.es.nodeSets }}
   - name: {{ .name }}
     config:
-      node.master: true
-      node.data: true
-      node.ingest: true
-      node.ml: false
+      node.roles: [ master, data, ingest ]
       {{- if $.Values.es.prometheus }}
       prometheus.indices: false
       {{- end }}
@@ -24,7 +21,10 @@ spec:
       cluster.routing.allocation.awareness.attributes: zone
       {{- end }}
       transport.compress: true
-      node.processors: {{ default 1 .processors }}
+      {{- if .processors }}
+      node.processors: {{ .processors }}
+      {{- end }}
+      indices.memory.index_buffer_size: "30%"
     podTemplate:
       {{- if $.Values.es.s3Snapshot.iamrole }}
       metadata:
@@ -51,18 +51,14 @@ spec:
           securityContext:
             capabilities:
               add: ["SYS_CHROOT"]
-          resources:
-            requests:
-              cpu: {{ default "200m" .cpu_request }}
-              memory: {{ default ( mul 2 ( default "2" .jvm_heap ) ) .memory_request }}Gi
-            limits:
-              {{- if .cpu_limit }}
-              cpu: {{ .cpu_limit }}
-              {{- end }}
-              memory: {{ default ( mul 2 ( default "2" .jvm_heap ) ) .memory_limit }}Gi
+          {{- with .resources }}
+          resources: {{ toYaml . | nindent 12 }}
+          {{- end }}
+          {{- if .jvm_heap }}
           env:
           - name: ES_JAVA_OPTS
-            value: -Xms{{ default "2" .jvm_heap }}g -Xmx{{ default "2" .jvm_heap }}g
+            value: -Xms{{ .jvm_heap }}g -Xmx{{ .jvm_heap }}g
+          {{- end }}
         affinity:
           podAntiAffinity:
             requiredDuringSchedulingIgnoredDuringExecution:

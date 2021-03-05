@@ -1,0 +1,37 @@
+Binary files charts/fluent-bit/.values.yaml.swp and charts/fluent-bit.zdt/.values.yaml.swp differ
+diff -rtubN charts/fluent-bit/Chart.yaml charts/fluent-bit.zdt/Chart.yaml
+--- charts/fluent-bit/Chart.yaml	2021-02-23 14:58:39.000000000 +0100
++++ charts/fluent-bit.zdt/Chart.yaml	2021-03-05 14:48:07.082648075 +0100
+@@ -1,7 +1,7 @@
+ annotations:
+   artifacthub.io/changes: |
+     - add custom annotations on dashboards configmap
+-apiVersion: v1
++apiVersion: v2
+ appVersion: 1.7.1
+ description: Fast and lightweight log processor and forwarder or Linux, OSX and BSD family operating systems.
+ home: https://fluentbit.io/
+diff -rtubN charts/fluent-bit/templates/tests/test-connection.yaml charts/fluent-bit.zdt/templates/tests/test-connection.yaml
+--- charts/fluent-bit/templates/tests/test-connection.yaml	2021-02-23 14:58:39.000000000 +0100
++++ charts/fluent-bit.zdt/templates/tests/test-connection.yaml	2021-03-05 14:51:34.749324131 +0100
+@@ -1,3 +1,4 @@
++{{- if .Values.testFramework.enabled }}
+ apiVersion: v1
+ kind: Pod
+ metadata:
+@@ -18,3 +19,4 @@
+     {{- toYaml . | nindent 4 }}
+   {{- end }}
+   restartPolicy: Never
++{{- end }}
+diff -rtubN charts/fluent-bit/values.yaml charts/fluent-bit.zdt/values.yaml
+--- charts/fluent-bit/values.yaml	2021-02-23 14:58:39.000000000 +0100
++++ charts/fluent-bit.zdt/values.yaml	2021-03-05 14:50:40.652655018 +0100
+@@ -12,6 +12,7 @@
+   # tag:
+ 
+ testFramework:
++  enabled: false
+   image:
+     repository: busybox
+     pullPolicy: Always
