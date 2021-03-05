@@ -5,8 +5,13 @@ local-static-provisioner:
   - name: local-sc-xfs
     hostDir: /mnt/disks
   daemonset:
-    nodeSelector:
-      node.kubernetes.io/localVolume: present
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: node.kubernetes.io/localVolumes
+              operator: Exists
   prometheus:
     operator:
       enabled: false

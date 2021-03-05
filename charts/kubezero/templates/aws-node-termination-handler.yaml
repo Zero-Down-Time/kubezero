@@ -1,0 +1,17 @@
+{{- define "aws-node-termination-handler-values" }}
+
+aws-node-termination-handler:
+{{- with index .Values "aws-node-termination-handler" "queueURL" }}
+  queueURL: "{{ . }}"
+{{- end }}
+{{ with index .Values "aws-node-termination-handler" "IamArn" }}
+  podAnnotations:
+    iam.amazonaws.com/role: "{{ . }}"
+{{- end }}
+
+{{- end }}
+
+{{- define "aws-node-termination-handler-argo" }}
+{{- end }}
+
+{{ include "kubezero-app.app" . }}
