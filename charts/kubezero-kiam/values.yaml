@@ -22,10 +22,10 @@ kiam:
     resources:
      requests:
        memory: "50Mi"
-       cpu: "100m"
+       cpu: "50m"
      limits:
        memory: "50Mi"
-       cpu: "300m"
+       # cpu: "300m"
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
@@ -61,7 +61,7 @@ kiam:
        cpu: "50m"
      limits:
        memory: "20Mi"
-       cpu: "50m"
+       # cpu: "50m"
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
