@@ -65,9 +65,6 @@ containers:
     {{- if eq .Values.kind "DaemonSet" }}
       - name: varlog
         mountPath: /var/log
-      - name: varlibdockercontainers
-        mountPath: /var/lib/docker/containers
-        readOnly: true
       - name: etcmachineid
         mountPath: /etc/machine-id
         readOnly: true
@@ -88,9 +85,6 @@ volumes:
   - name: varlog
     hostPath:
       path: /var/log
-  - name: varlibdockercontainers
-    hostPath:
-      path: /var/lib/docker/containers
   - name: etcmachineid
     hostPath:
       path: /etc/machine-id
