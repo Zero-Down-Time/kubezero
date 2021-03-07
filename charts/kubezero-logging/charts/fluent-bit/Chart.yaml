@@ -2,7 +2,7 @@ annotations:
   artifacthub.io/changes: |
     - add custom annotations on dashboards configmap
 apiVersion: v2
-appVersion: 1.7.1
+appVersion: 1.7.2
 description: Fast and lightweight log processor and forwarder or Linux, OSX and BSD family operating systems.
 home: https://fluentbit.io/
 icon: https://fluentbit.io/assets/img/logo1-default.png
