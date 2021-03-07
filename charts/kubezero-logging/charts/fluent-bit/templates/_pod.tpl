@@ -13,6 +13,8 @@ securityContext:
 dnsConfig:
   {{- toYaml . | nindent 2 }}
 {{- end }}
+hostNetwork: true
+dnsPolicy: ClusterFirstWithHostNet
 containers:
   - name: {{ .Chart.Name }}
     securityContext:
