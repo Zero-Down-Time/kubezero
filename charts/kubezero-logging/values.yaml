@@ -258,8 +258,8 @@ fluent-bit:
           Keep_Log Off
           K8S-Logging.Parser Off
           K8S-Logging.Exclude Off
-          Use_Kubelet true
-          Kubelet_Port 10250
+          #Use_Kubelet true
+          #Kubelet_Port 10250
 
       {{- if index .Values "config" "extraRecords" }}
 
