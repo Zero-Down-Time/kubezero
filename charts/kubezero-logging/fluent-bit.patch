@@ -19,8 +19,8 @@ diff -tubNr charts/fluent-bit/templates/_pod.tpl charts/fluent-bit.zdt/templates
  dnsConfig:
    {{- toYaml . | nindent 2 }}
  {{- end }}
-+hostNetwork: true
-+dnsPolicy: ClusterFirstWithHostNet
++#hostNetwork: true
++#dnsPolicy: ClusterFirstWithHostNet
  containers:
    - name: {{ .Chart.Name }}
      securityContext:
