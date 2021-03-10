@@ -181,14 +181,14 @@ fluentd:
           <buffer tag>
             @type file_single
             path /var/log/fluentd-buffers/kubernetes.system.buffer
-            chunk_limit_size 16MB
+            chunk_limit_size 8MB
             total_limit_size 4GB
             flush_mode interval
             flush_thread_count 4
             flush_interval 5s
             flush_at_shutdown true
             retry_type exponential_backoff
-            retry_timeout 60m
+            retry_timeout 300m
             overflow_action drop_oldest_chunk
             disable_chunk_backup true
           </buffer>
