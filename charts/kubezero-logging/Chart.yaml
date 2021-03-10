@@ -23,7 +23,7 @@ dependencies:
     repository: https://helm.elastic.co
     condition: eck-operator.enabled
   - name: fluentd
-    version: 2.5.3
+    version: 0.2.2
     condition: fluentd.enabled
   - name: fluent-bit
     version: 0.12.3

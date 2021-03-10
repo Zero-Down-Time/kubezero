@@ -1,12 +1,13 @@
-apiVersion: v1
-description: DEPRECATED A Fluentd Elasticsearch Helm chart for Kubernetes.
-icon: https://raw.githubusercontent.com/fluent/fluentd-docs/master/public/logo/Fluentd_square.png
-name: fluentd
-version: 2.5.3
-appVersion: v2.4.0
+apiVersion: v2
+appVersion: v1.12.0
+description: A Helm chart for Kubernetes
 home: https://www.fluentd.org/
+icon: https://www.fluentd.org/assets/img/miscellany/fluentd-logo_2x.png
+maintainers:
+- email: eduardo@treasure-data.com
+  name: edsiper
+name: fluentd
 sources:
-- https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch/fluentd-es-image
-- https://quay.io/repository/coreos/fluentd-kubernetes
-- https://github.com/coreos/fluentd-kubernetes-daemonset
-- https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html
+- https://github.com/fluent/fluentd/
+- https://github.com/fluent/fluentd-kubernetes-daemonset
+version: 0.2.2

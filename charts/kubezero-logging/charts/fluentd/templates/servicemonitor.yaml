@@ -1,33 +1,35 @@
-{{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
+{{- if and ( .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" ) .Values.metrics.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "fluentd.fullname" . }}
-  {{- if .Values.metrics.serviceMonitor.namespace }}
-  namespace: {{ .Values.metrics.serviceMonitor.namespace }}
+  name: {{ template "fluentd.fullname" . }}
+  {{- with .Values.metrics.serviceMonitor.namespace }}
+  namespace: {{ . }}
   {{- end }}
   labels:
-    app: {{ template "fluentd.name" . }}
-    chart: {{ template "fluentd.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
-    {{- if .Values.metrics.serviceMonitor.additionalLabels }}
-{{ toYaml .Values.metrics.serviceMonitor.additionalLabels | indent 4 }}
+    {{- include "fluentd.labels" . | nindent 4 }}
+    {{- with .Values.metrics.serviceMonitor.additionalLabels }}
+    {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
   endpoints:
     - port: metrics
-      {{- if .Values.metrics.serviceMonitor.interval }}
-      interval: {{ .Values.metrics.serviceMonitor.interval }}
+      path: /metrics
+      {{- with .Values.metrics.serviceMonitor.interval }}
+      interval: {{ . }}
       {{- end }}
-      {{- if .Values.metrics.serviceMonitor.scrapeTimeout }}
-      scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
+      {{- with .Values.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ . }}
       {{- end }}
+  {{- if .Values.metrics.serviceMonitor.namespaceSelector }}
+  namespaceSelector:
+    {{ toYaml .Values.metrics.serviceMonitor.namespaceSelector | indent 4 -}}
+  {{ else }}
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace }}
+  {{- end }}
   selector:
     matchLabels:
-      app: {{ include "fluentd.name" . }}
-      release: {{ .Release.Name }}
+      {{- include "fluentd.selectorLabels" . | nindent 6 }}
 {{- end }}
