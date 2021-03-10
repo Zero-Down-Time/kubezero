@@ -1,5 +1,3 @@
-argo: {}
-
 global:
   kubezero:
     server: https://kubernetes.default.svc
@@ -65,3 +63,5 @@ argocd:
   namespace: argocd
   istio:
     enabled: false
+
+argo: {}

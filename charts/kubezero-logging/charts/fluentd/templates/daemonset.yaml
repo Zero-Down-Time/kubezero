@@ -1,20 +1,18 @@
-{{- if eq .Values.kind "Deployment" }}
+{{- if eq .Values.kind "DaemonSet" }}
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
   name: {{ include "fluentd.fullname" . }}
   labels:
     {{- include "fluentd.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       {{- include "fluentd.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/fluentd-configurations-cm.yaml") . | sha256sum }}
       {{- with .Values.podAnnotations }}
+      annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:

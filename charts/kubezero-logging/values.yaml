@@ -39,27 +39,16 @@ kibana:
 fluentd:
   enabled: false
   image:
-    repository: quay.io/fluentd_elasticsearch/fluentd
-    tag: v2.9.0
+    repository: fluent/fluentd-kubernetes-daemonset
+    tag: v1.12-debian-elasticsearch7-1
   istio:
     enabled: false
 
-  # broken as of 2.5.1 ;-(
-  # useStatefulSet: true
-  replicaCount: 2
+  kind: Deployment
+  replicaCount: 1
 
-  plugins:
-    enabled: false
-    pluginsList:
-    #- fluent-plugin-detect-exceptions
-    #- fluent-plugin-s3
-    #- fluent-plugin-grok-parser
-
-  #persistence:
-  #  enabled: true
-  #  storageClass: "ebs-sc-gp2-xfs"
-  #  accessMode: ReadWriteOnce
-  #  size: 4Gi
+  #plugins:
+  #- fluent-plugin-s3
 
   service:
     ports:
@@ -71,11 +60,36 @@ fluentd:
       containerPort: 9880
 
   metrics:
-    enabled: false
     serviceMonitor:
-      enabled: true
+      enabled: false
       additionalLabels:
         release: metrics
+
+  dashboards:
+    enabled: false
+
+  # No need for docker nor /var/log
+  volumes:
+  - name: etcfluentd-main
+    configMap:
+      name: fluentd-main
+      defaultMode: 0777
+  - name: etcfluentd-config
+    configMap:
+      name: fluentd-config
+      defaultMode: 0777
+  volumeMounts:
+  - name: etcfluentd-main
+    mountPath: /etc/fluent
+  - name: etcfluentd-config
+    mountPath: /etc/fluent/config.d/
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 256Mi
+    limits:
+      memory: 1024Mi
 
   output:
     # Default should be "logging-kubezero-logging-es-http" if fullnameOverride is NOT used
@@ -83,112 +97,103 @@ fluentd:
 
   shared_key: "cloudbender"
 
-  env:
-    OUTPUT_USER: elastic
-    OUTPUT_SSL_VERIFY: "false"
+  #  OUTPUT_USER: elastic
+  #  OUTPUT_SSL_VERIFY: "false"
 
+  env:
+  - name: "FLUENTD_CONF"
+    value: "../../etc/fluent/fluent.conf"
   # Same here the secret names change if fullnameOverride is not used !!
-  extraEnvVars:
   - name: OUTPUT_PASSWORD
     valueFrom:
       secretKeyRef:
         name: logging-es-elastic-user
         key: elastic
-  - name: FLUENTD_SHARED_KEY
-    valueFrom:
-      secretKeyRef:
-        name: logging-fluentd-secret
-        key: shared_key
 
-  configMaps:
-    general.conf: |
-      <label @FLUENT_LOG>
-        <match **>
-          @type null
-        </match>
-      </label>
+  fileConfigs:
+    00_system.conf: |-
+      <system>
+        workers 2
+      </system>
+    01_sources.conf: |-
       <source>
         @type http
+        @label @KUBERNETES
         port 9880
         bind 0.0.0.0
         keepalive_timeout 30
       </source>
-      <source>
-        @type monitor_agent
-        bind 0.0.0.0
-        port 24220
-        tag fluentd.monitor.metrics
-      </source>
 
-    forward-input.conf: |
       <source>
         @type forward
+        @label @KUBERNETES
         port 24224
         bind 0.0.0.0
-        skip_invalid_event true
+        # skip_invalid_event true
         send_keepalive_packet true
         <security>
           self_hostname "#{ENV['HOSTNAME']}"
-          shared_key "#{ENV['FLUENTD_SHARED_KEY']}"
+          shared_key {{ .Values.shared_key }}
         </security>
       </source>
 
-    output.conf: |
-      <match **>
-        @id elasticsearch
-        @type elasticsearch
-        @log_level info
-        include_tag_key true
-        id_key id
-        remove_keys id
+    02_filters.conf: |-
+      <label @KUBERNETES>
+        # prevent log feedback loops eg. ES has issues etc.
+        # discard logs from our own pods
+        <match kube.logging.fluentd>
+          @type relabel
+          @label @FLUENT_LOG
+        </match>
 
-        # KubeZero pipeline incl. GeoIP etc.
-        pipeline fluentd
+        <match **>
+          @type relabel
+          @label @DISPATCH
+        </match>
+      </label>
 
-        hosts "#{ENV['OUTPUT_HOST']}"
-        port "#{ENV['OUTPUT_PORT']}"
-        scheme "#{ENV['OUTPUT_SCHEME']}"
-        ssl_version "#{ENV['OUTPUT_SSL_VERSION']}"
-        ssl_verify "#{ENV['OUTPUT_SSL_VERIFY']}"
-        user "#{ENV['OUTPUT_USER']}"
-        password "#{ENV['OUTPUT_PASSWORD']}"
+    04_outputs.conf: |-
+      <label @OUTPUT>
+        <match **>
+          @id elasticsearch
+          @type elasticsearch
+          @log_level info
+          include_tag_key true
+          id_key id
+          remove_keys id
 
-        log_es_400_reason
-        logstash_format true
-        reconnect_on_error true
-        reload_on_failure true
-        request_timeout 60s
-        suppress_type_name true
+          # KubeZero pipeline incl. GeoIP etc.
+          pipeline fluentd
 
-        <buffer tag>
-          @type file_single
-          path /var/log/fluentd-buffers/kubernetes.system.buffer
-          chunk_limit_size 16MB
-          total_limit_size 4GB
-          flush_mode interval
-          flush_thread_count 4
-          flush_interval 5s
-          flush_at_shutdown true
-          retry_type exponential_backoff
-          retry_timeout 60m
-          overflow_action drop_oldest_chunk
-          disable_chunk_backup true
-        </buffer>
-      </match>
+          hosts "{{ .Values.output.host }}"
+          port 9200
+          scheme http
+          user elastic
+          password "#{ENV['OUTPUT_PASSWORD']}"
 
-    filter.conf: |
-      <filter disabled.kube.**>
-        @type parser
-        key_name message
-        remove_key_name_field true
-        reserve_data true
-        reserve_time true
-        # inject_key_prefix message_json.
-        emit_invalid_record_to_error false
-        <parse>
-          @type json
-        </parse>
-      </filter>
+          log_es_400_reason
+          logstash_format true
+          reconnect_on_error true
+          reload_on_failure true
+          request_timeout 60s
+          suppress_type_name true
+
+          <buffer tag>
+            @type file_single
+            path /var/log/fluentd-buffers/kubernetes.system.buffer
+            chunk_limit_size 16MB
+            total_limit_size 4GB
+            flush_mode interval
+            flush_thread_count 4
+            flush_interval 5s
+            flush_at_shutdown true
+            retry_type exponential_backoff
+            retry_timeout 60m
+            overflow_action drop_oldest_chunk
+            disable_chunk_backup true
+          </buffer>
+        </match>
+      </label>
 
 fluent-bit:
   enabled: false
@@ -213,7 +218,7 @@ fluent-bit:
       refreshInterval: 10
 
     logLevel: warn
-    flushInterval: 1
+    flushInterval: 5
 
     #extraRecords:
     #  source.clustername: MyKubeCluster

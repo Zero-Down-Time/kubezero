@@ -47,8 +47,10 @@ kibana:
 {{- if .Values.logging.fluentd }}
 fluentd:
   enabled: {{ .Values.logging.fluentd.enabled }}
+  replicaCount: {{ default 1 .Values.logging.fluentd.replicaCount }}
   metrics:
-    enabled: {{ .Values.metrics.enabled }}
+    serviceMonitor:
+      enabled: {{ .Values.metrics.enabled }}
   url: {{ .Values.logging.fluentd.url }}
   {{- if .Values.logging.fluentd.output }}
   output:

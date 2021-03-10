@@ -1,121 +1,176 @@
-# ⚠️ Repo Archive Notice
+# Fluentd Helm Chart
 
-As of Nov 13, 2020, charts in this repo will no longer be updated.
-For more information, see the Helm Charts [Deprecation and Archive Notice](https://github.com/helm/charts#%EF%B8%8F-deprecation-and-archive-notice), and [Update](https://helm.sh/blog/charts-repo-deprecation/).
+[Fluentd](https://www.fluentd.org/) is an open source data collector for unified logging layer. Fluentd allows you to unify data collection and consumption for a better use and understanding of data.
 
-# fluentd
+## Installation
 
-[Fluentd](https://www.fluentd.org/) collects events from various data sources and writes them to files, RDBMS, NoSQL, IaaS, SaaS, Hadoop and so on. Fluentd helps you unify your logging infrastructure (Learn more about the Unified Logging Layer).
+To add the `fluent` helm repo, run:
 
-## DEPRECATION NOTICE
-
-This chart is deprecated and no longer supported.
-
-## TL;DR;
-
-```console
-$ helm install stable/fluentd
+```sh
+helm repo add fluent https://fluent.github.io/helm-charts
+helm repo update
 ```
 
-## Introduction
+To install a release named `fluentd`, run:
 
-This chart bootstraps an fluentd deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
-
-## Installing the Chart
-
-To install the chart with the release name `my-release`:
-
-```console
-$ helm install stable/fluentd --name my-release
+```sh
+helm install fluentd fluent/fluentd
 ```
 
-The command deploys fluentd on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+## Chart Values
 
-## Uninstalling the Chart
-
-To uninstall/delete the `my-release` deployment:
-
-```console
-$ helm delete my-release
+```sh
+helm show values fluent/fluentd
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+## Value Details
 
-## Autoscaling
+### default-volumes
 
-By enabling autoscaling the chart will use statefulset with hpa instead of deployment with PVC.
-Please be noted to [statefulset limitation](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#limitations)
-The autoscaling is disabled by default for backward compatibility
+The default configurations bellow are required for the fluentd pod to be able to read the hosts container logs. The second section is responsible for  allowing the user to load the "extra" configMaps either defined by the `fileConfigs` contained objects or, in addition, loaded externally and indicated by `configMapConfigs`.
 
-## Configuration
-
-The following table lists the configurable parameters of the fluentd chart and their default values.
-
-Parameter | Description | Default
---- | --- | ---
-`useStatefulSet` | Deploy as a StatefulSet regardless of whether autoscaling is enabled | `nil`
-`affinity` | node/pod affinities | `{}`
-`configMaps` | Fluentd configuration | See [values.yaml](values.yaml)
-`output.host` | output host | `elasticsearch-client.default.svc.cluster.local`
-`output.port` | output port | `9200`
-`output.scheme` | output scheme | `http`
-`output.sslVersion` | output ssl version | `TLSv1`
-`output.buffer_chunk_limit` | output buffer chunk limit | `2M`
-`output.buffer_queue_limit` | output buffer queue limit | `8`
-`deployment.labels` | Additional labels for pods | `{}`
-`image.pullPolicy` | Image pull policy | `IfNotPresent`
-`image.repository` | Image repository | `gcr.io/google-containers/fluentd-elasticsearch`
-`image.tag` | Image tag | `v2.4.0`
-`imagePullSecrets` | Specify image pull secrets | `nil` (does not add image pull secrets to deployed pods)
-`extraEnvVars` | Adds additional environment variables to the deployment (in yaml syntax) | `{}` See [values.yaml](values.yaml)
-`extraVolumeMounts` | Mount extra volumes (in yaml syntax) | `` See [values.yaml](values.yaml)
-`extraVolumes` | Extra volumes (in yaml syntax) | `` See [values.yaml](values.yaml)
-`ingress.enabled` | enable ingress | `false`
-`ingress.labels` | list of labels for the ingress rule | See [values.yaml](values.yaml)
-`ingress.annotations` | list of annotations for the ingress rule | `kubernetes.io/ingress.class: nginx` See [values.yaml](values.yaml)
-`ingress.hosts` | host definition for ingress | See [values.yaml](values.yaml)
-`ingress.tls` | tls rules for ingress | See [values.yaml](values.yaml)
-`nodeSelector` | node labels for pod assignment | `{}`
-`replicaCount` | desired number of pods | `1` ???
-`resources` | pod resource requests & limits | `{}`
-`plugins.enabled` | Enable Plugins Installation | `false`
-`plugins.pluginsList` | List of plugins to install | `[]`
-`rbac.create` | Specifies whether RBAC resources should be created | `true`
-`serviceAccount.create` | Specifies whether a service account should be created. | `true`
-`serviceAccount.name` | Name of the service account.
-`priorityClassName` | priorityClassName | `nil`
-`service.loadBalancerIP` | If `service.type` is `LoadBalancer` set custom IP load balancer IP address | `nil`
-`service.ports` | port definition for the service | See [values.yaml](values.yaml)
-`service.type` | type of service | `ClusterIP`
-`service.annotations` | list of annotations for the service | `{}`
-`tolerations` | List of node taints to tolerate | `[]`
-`persistence.enabled` | Enable buffer persistence | `false`
-`persistence.accessMode` | Access mode for buffer persistence | `ReadWriteOnce`
-`persistence.size` | Volume size for buffer persistence | `10Gi`
-`autoscaling.enabled` | Set this to `true` to enable autoscaling | `false`
-`autoscaling.minReplicas` | Set minimum number of replicas | `2`
-`autoscaling.maxReplicas` | Set maximum number of replicas | `5`
-`autoscaling.metrics` | metrics used for autoscaling | See [values.yaml](values.yaml)
-`terminationGracePeriodSeconds` | Optional duration in seconds the pod needs to terminate gracefully | `30`
-`metrics.enabled`                         | Set this to `true` to enable Prometheus metrics HTTP endpoint                         | `false`
-`metrics.service.port`                    | Prometheus metrics HTTP endpoint port                                                 | `24231`
-`metrics.serviceMonitor.enabled`          | Set this to `true` to create ServiceMonitor for Prometheus operator                   | `false`
-`metrics.serviceMonitor.additionalLabels` | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus | `{}`
-`metrics.serviceMonitor.namespace`        | Optional namespace in which to create ServiceMonitor                                  | `nil`
-`metrics.serviceMonitor.interval`         | Scrape interval. If not set, the Prometheus default scrape interval is used           | `nil`
-`metrics.serviceMonitor.scrapeTimeout`    | Scrape timeout. If not set, the Prometheus default scrape timeout is used             | `nil`
-
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
-
-```console
-$ helm install stable/fluentd --name my-release \
-  --set=image.tag=v0.0.2,resources.limits.cpu=200m
+```yaml
+- name: varlog
+  hostPath:
+    path: /var/log
+- name: varlibdockercontainers
+  hostPath:
+    path: /var/lib/docker/containers
+---
+- name: etcfluentd-main
+  configMap:
+    name: fluentd-main
+    defaultMode: 0777
+- name: etcfluentd-config
+  configMap:
+    name: fluentd-config
+    defaultMode: 0777
 ```
 
-Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
+### default-volumeMounts
 
-```console
-$ helm install stable/fluentd --name my-release -f values.yaml
+The default configurations bellow are required for the fluentd pod to be able to read the hosts container logs. They should not be removed unless for some reason your container logs are accessible through a different path
+
+```yaml
+- name: varlog
+  mountPath: /var/log
+- name: varlibdockercontainers
+  mountPath: /var/lib/docker/containers
+  readOnly: true
 ```
 
-> **Tip**: You can use the default [values.yaml](values.yaml)
+The section bellow is responsible for allowing the user to load the "extra" configMaps either defined by the `fileConfigs` contained objects or otherwise load externally and indicated by `configMapConfigs`.
+
+```yaml
+- name: etcfluentd-main
+  mountPath: /etc/fluent
+- name: etcfluentd-config
+  mountPath: /etc/fluent/config.d/
+  ```
+
+### default-fluentdConfig
+
+The `fileConfigs` section is organized by sources -> filters -> destinations. Flow control must be configured using fluentd routing with tags or labels to guarantee that the configurations are executed as intended. Alternatively you can use numeration on your files to control the configurations loading order.
+
+```yaml
+01_sources.conf: |-
+  <source>
+    @type tail
+    @id in_tail_container_logs
+    @label @KUBERNETES
+    path /var/log/containers/*.log
+    pos_file /var/log/fluentd-containers.log.pos
+    tag kubernetes.*
+    read_from_head true
+    <parse>
+      @type multi_format
+      <pattern>
+        format json
+        time_key time
+        time_type string
+        time_format "%Y-%m-%dT%H:%M:%S.%NZ"
+        keep_time_key false
+      </pattern>
+      <pattern>
+        format regexp
+        expression /^(?<time>.+) (?<stream>stdout|stderr)( (.))? (?<log>.*)$/
+        time_format '%Y-%m-%dT%H:%M:%S.%NZ'
+        keep_time_key false
+      </pattern>
+    </parse>
+    emit_unmatched_lines true
+  </source>
+
+02_filters.conf: |-
+  <label @KUBERNETES>
+    <match kubernetes.var.log.containers.fluentd**>
+      @type relabel
+      @label @FLUENT_LOG
+    </match>
+
+    # <match kubernetes.var.log.containers.**_kube-system_**>
+    #   @type null
+    #   @id ignore_kube_system_logs
+    # </match>
+
+    <filter kubernetes.**>
+      @type record_transformer
+      enable_ruby
+      <record>
+        hostname ${record["kubernetes"]["host"]}
+        raw ${record["log"]}
+      </record>
+      remove_keys $.kubernetes.host,log
+    </filter>
+
+    <match **>
+      @type relabel
+      @label @DISPATCH
+    </match>
+  </label>
+
+03_dispatch.conf: |-
+  <label @DISPATCH>
+    <filter **>
+      @type prometheus
+      <metric>
+        name fluentd_input_status_num_records_total
+        type counter
+        desc The total number of incoming records
+        <labels>
+          tag ${tag}
+          hostname ${hostname}
+        </labels>
+      </metric>
+    </filter>
+
+    <match **>
+      @type relabel
+      @label @OUTPUT
+    </match>
+  </label>
+
+04_outputs.conf: |-
+  <label @OUTPUT>
+    <match **>
+      @type elasticsearch
+      host "elasticsearch-master"
+      port 9200
+      path ""
+      user elastic
+      password changeme
+    </match>
+  </label>
+```
+
+## Backwards Compatibility - v0.1.x
+
+The old fluentd chart used the ENV variables and the default fluentd container definitions to set-up automatically many aspects of fluentd. It is still possible to trigger this behaviour by removing this charts current `.Values.env` configuration and replace by:
+
+```yaml
+env:
+- name: FLUENT_ELASTICSEARCH_HOST
+  value: "elasticsearch-master"
+- name: FLUENT_ELASTICSEARCH_PORT
+  value: "9200"
+```

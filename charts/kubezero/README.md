@@ -1,6 +1,6 @@
 # kubezero
 
-![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.5.1](https://img.shields.io/badge/Version-0.5.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero - Bootstrap and ArgoCD Root App of Apps chart
 
@@ -14,7 +14,7 @@ KubeZero - Bootstrap and ArgoCD Root App of Apps chart
 
 ## Requirements
 
-Kubernetes: `>= 1.16.0`
+Kubernetes: `>= 1.18.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
@@ -32,6 +32,7 @@ Kubernetes: `>= 1.16.0`
 | argocd.namespace | string | `"argocd"` |  |
 | aws-ebs-csi-driver.enabled | bool | `false` |  |
 | aws-efs-csi-driver.enabled | bool | `false` |  |
+| aws-node-termination-handler.enabled | bool | `false` |  |
 | calico.crds | bool | `true` |  |
 | calico.enabled | bool | `false` |  |
 | calico.retain | bool | `true` |  |

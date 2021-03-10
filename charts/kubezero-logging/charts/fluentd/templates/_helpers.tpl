@@ -32,6 +32,26 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
+Common labels
+*/}}
+{{- define "fluentd.labels" -}}
+helm.sh/chart: {{ include "fluentd.chart" . }}
+{{ include "fluentd.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}
+
+{{/*
+Selector labels
+*/}}
+{{- define "fluentd.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "fluentd.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "fluentd.serviceAccountName" -}}
