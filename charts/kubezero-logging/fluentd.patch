@@ -1,3 +1,17 @@
+diff -tubrN charts/fluentd/templates/deployment.yaml charts/fluentd.zdt/templates/deployment.yaml
+--- charts/fluentd/templates/deployment.yaml	2021-02-12 18:13:04.000000000 +0100
++++ charts/fluentd.zdt/templates/deployment.yaml	2021-03-10 09:54:49.863586462 +0100
+@@ -12,8 +12,9 @@
+       {{- include "fluentd.selectorLabels" . | nindent 6 }}
+   template:
+     metadata:
+-      {{- with .Values.podAnnotations }}
+       annotations:
++        checksum/config: {{ include (print $.Template.BasePath "/fluentd-configurations-cm.yaml") . | sha256sum }}
++      {{- with .Values.podAnnotations }}
+         {{- toYaml . | nindent 8 }}
+       {{- end }}
+       labels:
 diff -tubrN charts/fluentd/templates/files.conf/systemd.yaml charts/fluentd.zdt/templates/files.conf/systemd.yaml
 --- charts/fluentd/templates/files.conf/systemd.yaml	2021-02-12 18:13:04.000000000 +0100
 +++ charts/fluentd.zdt/templates/files.conf/systemd.yaml	1970-01-01 01:00:00.000000000 +0100
@@ -87,7 +101,7 @@ diff -tubrN charts/fluentd/templates/files.conf/systemd.yaml charts/fluentd.zdt/
 -    </label>
 diff -tubrN charts/fluentd/templates/fluentd-configurations-cm.yaml charts/fluentd.zdt/templates/fluentd-configurations-cm.yaml
 --- charts/fluentd/templates/fluentd-configurations-cm.yaml	2021-02-12 18:13:04.000000000 +0100
-+++ charts/fluentd.zdt/templates/fluentd-configurations-cm.yaml	2021-03-09 17:00:50.318180593 +0100
++++ charts/fluentd.zdt/templates/fluentd-configurations-cm.yaml	2021-03-09 17:54:34.904992401 +0100
 @@ -7,7 +7,7 @@
  data:
  {{- range $key, $value := .Values.fileConfigs }}
@@ -99,7 +113,7 @@ diff -tubrN charts/fluentd/templates/fluentd-configurations-cm.yaml charts/fluen
  ---
 diff -tubrN charts/fluentd/templates/tests/test-connection.yaml charts/fluentd.zdt/templates/tests/test-connection.yaml
 --- charts/fluentd/templates/tests/test-connection.yaml	2021-02-12 18:13:04.000000000 +0100
-+++ charts/fluentd.zdt/templates/tests/test-connection.yaml	2021-03-09 17:02:56.061519591 +0100
++++ charts/fluentd.zdt/templates/tests/test-connection.yaml	2021-03-09 17:54:34.904992401 +0100
 @@ -1,3 +1,4 @@
 +{{- if .Values.testFramework.enabled }}
  apiVersion: v1
@@ -112,7 +126,7 @@ diff -tubrN charts/fluentd/templates/tests/test-connection.yaml charts/fluentd.z
 +{{- end }}
 diff -tubrN charts/fluentd/values.yaml charts/fluentd.zdt/values.yaml
 --- charts/fluentd/values.yaml	2021-02-12 18:13:04.000000000 +0100
-+++ charts/fluentd.zdt/values.yaml	2021-03-09 17:04:51.438191456 +0100
++++ charts/fluentd.zdt/values.yaml	2021-03-09 17:54:34.908325735 +0100
 @@ -12,6 +12,9 @@
    pullPolicy: "IfNotPresent"
    tag: ""
