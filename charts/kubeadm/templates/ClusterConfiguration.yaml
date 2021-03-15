@@ -11,8 +11,8 @@ etcd:
   local:
     extraArgs:
       listen-metrics-urls: "http://{{ .Values.listenAddress }}:2381"
-      unsafe-no-fsync: "true"
       logger: "zap"
+      log-level: "warn"
       {{- with .Values.etcdExtraArgs }}
       {{- toYaml . | nindent 6 }}
       {{- end }}
