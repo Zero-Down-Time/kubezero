@@ -482,7 +482,7 @@ spec:
             privileged: true
           resources:
             requests:
-              cpu: 250m
+              cpu: 50m
           livenessProbe:
             exec:
               command:
@@ -619,6 +619,9 @@ spec:
               command:
               - /usr/bin/check-status
               - -r
+          resources:
+            requests:
+              cpu: 50m
 
 ---
 

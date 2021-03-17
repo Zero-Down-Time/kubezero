@@ -2,7 +2,7 @@ apiVersion: v2
 name: kubezero-calico
 description: KubeZero Umbrella Chart for Calico
 type: application
-version: 0.2.1
+version: 0.2.2
 appVersion: v3.16.5
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png

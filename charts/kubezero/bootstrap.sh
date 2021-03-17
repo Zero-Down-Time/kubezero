@@ -15,6 +15,7 @@ helm_version=$(helm version --short)
 echo $helm_version | grep -qe "^v3.[3-9]" || { echo "Helm version >= 3.3 required!"; exit 1; }
 
 TMPDIR=$(mktemp -d kubezero.XXX)
+[ -z "$DEBUG" ] && trap 'rm -rf $TMPDIR' ERR EXIT
 
 # First lets generate kubezero.yaml
 # Add all yaml files in $CLUSTER
@@ -226,5 +227,3 @@ elif [ $1 == "delete" ]; then
     is_enabled ${ARTIFACTS[idx]} && _helm delete ${ARTIFACTS[idx]}
   done
 fi
-
-[ "$DEBUG" == "" ] && rm -rf $TMPDIR
