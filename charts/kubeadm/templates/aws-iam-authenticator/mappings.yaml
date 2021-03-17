@@ -3,25 +3,15 @@
 apiVersion: iamauthenticator.k8s.aws/v1alpha1
 kind: IAMIdentityMapping
 metadata:
-  name: kubezero-controllers
+  name: kubezero-worker-nodes
 spec:
-  arn: {{ .Values.ControllerIamRole }}
-  username: kubezero-controller
+  arn: {{ .Values.WorkerNodeRole }}
+  username: system:node:{{ "{{" }}EC2PrivateDNSName{{ "}}" }}
   groups:
+  # For now use masters, define properly with 1.20
   - system:masters
-
----
-# Worker role to eg. delete during terminate
-apiVersion: iamauthenticator.k8s.aws/v1alpha1
-kind: IAMIdentityMapping
-metadata:
-  name: kubezero-workers
-spec:
-  arn: {{ .Values.WorkerIamRole }}
-  username: kubezero-worker
-  groups:
-  - system:masters
-
+  - system:nodes
+  - system:bootstrappers
 ---
 # Admin Role for remote access
 apiVersion: iamauthenticator.k8s.aws/v1alpha1

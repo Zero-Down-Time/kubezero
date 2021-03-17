@@ -11,3 +11,7 @@ platform: "aws"
 # Set to false for openrc, eg. on Gentoo or Alpine
 systemd: true
 protectKernelDefaults: true
+
+WorkerNodeRole: "arn:aws:iam::000000000000:role/KubernetesNode"
+WorkerIamRole: "arn:aws:iam::000000000000:role/KubernetesNode"
+KubeAdminRole: "arn:aws:iam::000000000000:role/KubernetesNode"

@@ -12,7 +12,7 @@ etcd:
     extraArgs:
       listen-metrics-urls: "http://{{ .Values.listenAddress }}:2381"
       logger: "zap"
-      log-level: "warn"
+      # log-level: "warn"
       {{- with .Values.etcdExtraArgs }}
       {{- toYaml . | nindent 6 }}
       {{- end }}
@@ -50,7 +50,7 @@ apiServer:
     {{- end }}
     enable-admission-plugins: NodeRestriction,EventRateLimit
     {{- if .Values.clusterHighAvailable }}
-    goaway-chance: ".001"
+    # goaway-chance: ".001"
     {{- end }}
     logging-format: json
     {{- with .Values.apiExtraArgs }}
