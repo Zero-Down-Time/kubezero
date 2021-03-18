@@ -1,0 +1,7 @@
+spec:
+  containers:
+  - name: kube-apiserver
+    resources:
+      requests:
+        cpu: 250m
+        memory: 1Gi
