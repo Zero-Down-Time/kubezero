@@ -5,7 +5,8 @@ metadata:
 failSwapOn: false
 cgroupDriver: cgroupfs
 logging:
-  format: json
+  # We already have syslog-ng logging json
+  # format: json
 hairpinMode: hairpin-veth
 {{- if .Values.systemd }}
 resolvConf: /run/systemd/resolve/resolv.conf
@@ -22,7 +23,15 @@ featureGates:
   CSIMigrationAWS: true
   CSIMigrationAWSComplete: true
 {{- end }}
+# Minimal unit is 50m per pod
+podsPerCore: 20
+# Basic OS on Ubuntu 20.04 incl. crio
+systemReserved:
+  memory: 256Mi
+# This should be dynamic based on number of maxpods and available cores
+# https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-architecture#memory_cpu
+# Below are default minimal for 2 cores and minimum kubelet 
 kubeReserved:
-  cpu: 50m
-  memory: 128m
+  cpu: 70m
+  memory: 128Mi
 # cpuCFSQuotaPeriod: 10ms
