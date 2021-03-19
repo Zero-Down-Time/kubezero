@@ -18,8 +18,9 @@ es:
       size: 512Gi
       class: ebs-sc-gp2-xfs
     zone: us-west-2a
-    jvm_heap: 4
-    cpu_limit: 2
+    nodeAffinity:
+      key: kubezero
+      value: logging
   s3Snapshot:
     enabled: true
     iamrole: "dfsf" # INSERT_CLOUDFORMATION_OUTPUT_ElasticSearchSnapshots
@@ -27,6 +28,9 @@ es:
   prometheus: true
 
 kibana: 
+  nodeAffinity:
+    key: kubezero
+    value: logging
   istio:
     enabled: true
     url: kibana.example.com

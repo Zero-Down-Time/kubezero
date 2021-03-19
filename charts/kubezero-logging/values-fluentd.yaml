@@ -4,6 +4,17 @@ fluentd:
   metrics:
     enabled: true
 
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          preference:
+            matchExpressions:
+            - key: kubezero
+              operator: In
+              values:
+              - logging
+
   url: fluentd.example.com
   istio:
     enabled: true
