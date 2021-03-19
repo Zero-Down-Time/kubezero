@@ -18,7 +18,7 @@ spec:
       {{- end }}
       {{- if .zone }}
       node.attr.zone: {{ .zone }}
-      cluster.routing.allocation.awareness.attributes: zone
+      cluster.routing.allocation.awareness.attributes: k8s_node_name,zone
       {{- end }}
       transport.compress: true
       {{- if .processors }}
@@ -66,8 +66,9 @@ spec:
                 matchLabels:
                   elasticsearch.k8s.elastic.co/cluster-name: {{ template "kubezero-lib.fullname" $ }}
               topologyKey: kubernetes.io/hostname
-          {{- if .zone }}
+          {{- if or .zone .nodeAffinity }}
           nodeAffinity:
+            {{- if .zone }}
             requiredDuringSchedulingIgnoredDuringExecution:
               nodeSelectorTerms:
               - matchExpressions:
@@ -75,6 +76,17 @@ spec:
                   operator: In
                   values:
                   - {{ .zone }}
+            {{- end }}
+            {{- if .nodeAffinity }}
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 1
+                preference:
+                  matchExpressions:
+                  - key: {{ .nodeAffinity.key }}
+                    operator: In
+                    values:
+                    - {{ .nodeAffinity.value }}
+            {{- end }}
           {{- end }}
     count: {{ .count }}
     volumeClaimTemplates:

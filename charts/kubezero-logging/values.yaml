@@ -22,6 +22,9 @@ es:
   #    size: 16Gi
   #    class: local-sc-xfs
   #  zone: us-west-2a
+  #  nodeAffinity:
+  #    key: node label name
+  #    value: node label value
   s3Snapshot:
     enabled: false
     iamrole: "" # INSERT_CLOUDFORMATION_OUTPUT_ElasticSearchSnapshots
@@ -31,6 +34,9 @@ es:
 kibana:
   count: 1
   #servicename: kibana.example.com
+  #nodeAffinity:
+  #  key: node label name
+  #  value: node label value
   istio:
     enabled: false
     gateway: "istio-system/ingressgateway"
@@ -86,10 +92,10 @@ fluentd:
 
   resources:
     requests:
-      cpu: 50m
+      cpu: 200m
       memory: 256Mi
     limits:
-      memory: 1024Mi
+      memory: 512Mi
 
   output:
     # Default should be "logging-kubezero-logging-es-http" if fullnameOverride is NOT used
@@ -184,8 +190,8 @@ fluentd:
             chunk_limit_size 8MB
             total_limit_size 4GB
             flush_mode interval
-            flush_thread_count 4
-            flush_interval 5s
+            flush_thread_count 2
+            flush_interval 10s
             flush_at_shutdown true
             retry_type exponential_backoff
             retry_timeout 300m
@@ -206,6 +212,13 @@ fluent-bit:
   tolerations:
   - key: node-role.kubernetes.io/master
     effect: NoSchedule
+
+  resources:
+    requests:
+      cpu: 20m
+      memory: 16Mi
+    limits:
+      memory: 64Mi
 
   config:
     output:

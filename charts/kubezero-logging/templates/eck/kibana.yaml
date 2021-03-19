@@ -29,6 +29,19 @@ spec:
             cpu: 200m
           limits:
             memory: 2Gi
+      {{- if .Values.kibana.nodeAffinity }}
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              preference:
+                matchExpressions:
+                - key: {{ .Values.kibana.nodeAffinity.key }}
+                  operator: In
+                  values:
+                  - {{ .Values.kibana.nodeAffinity.value }}
+      {{- end }}
+
   http:
     tls:
       selfSignedCertificate:
