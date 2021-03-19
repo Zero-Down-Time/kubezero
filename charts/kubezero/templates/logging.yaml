@@ -44,25 +44,29 @@ kibana:
   {{- end }}
 {{- end }}
 
-{{- if .Values.logging.fluentd }}
+{{- with .Values.logging.fluentd }}
 fluentd:
-  enabled: {{ .Values.logging.fluentd.enabled }}
-  replicaCount: {{ default 1 .Values.logging.fluentd.replicaCount }}
+  enabled: {{ .enabled }}
+  replicaCount: {{ default 1 .replicaCount }}
   metrics:
     serviceMonitor:
-      enabled: {{ .Values.metrics.enabled }}
-  url: {{ .Values.logging.fluentd.url }}
-  {{- if .Values.logging.fluentd.output }}
+      enabled: {{ $.Values.metrics.enabled }}
+  url: {{ .url }}
+  {{- if .output }}
   output:
-    host: {{ .Values.logging.fluentd.output.host }}
+    host: {{ .output.host }}
   {{- end }}
-  {{- if .Values.logging.fluentd.extraEnvVars }}
+  {{- with .affinity }}
+  affinity:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- if .extraEnvVars }}
   extraEnvVars:
-    {{- toYaml .Values.logging.fluentd.extraEnvVars | nindent 8 }}
+    {{- toYaml .extraEnvVars | nindent 8 }}
   {{- end }}
-  {{- if and .Values.logging.fluentd.istio .Values.istio.enabled }}
+  {{- if and .istio $.Values.istio.enabled }}
   istio:
-    {{- with .Values.logging.fluentd.istio }}
+    {{- with .istio }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
   {{- end }}

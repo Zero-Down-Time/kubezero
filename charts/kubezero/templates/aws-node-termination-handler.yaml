@@ -1,9 +1,7 @@
 {{- define "aws-node-termination-handler-values" }}
 
 aws-node-termination-handler:
-{{- with index .Values "aws-node-termination-handler" "queueURL" }}
-  queueURL: "{{ . }}"
-{{- end }}
+  queueURL: "{{ index .Values "aws-node-termination-handler" "queueURL" }}"
 {{ with index .Values "aws-node-termination-handler" "IamArn" }}
   podAnnotations:
     iam.amazonaws.com/role: "{{ . }}"
