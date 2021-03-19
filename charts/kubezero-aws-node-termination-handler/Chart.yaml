@@ -1,15 +1,12 @@
 apiVersion: v2
 name: kubezero-aws-node-termination-handler
-description: Umbrella chart for all KubeZero AWS addons
+description: Umbrella chart for all aws-node-termination-handler
 type: application
-version: 0.1.1
+version: 0.1.2
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
   - kubezero
-  - kiam
-  - aws-ebs-csi-driver
-  - aws-efs-csi-driver
   - aws-node-termination-handler
 maintainers:
   - name: Quarky9

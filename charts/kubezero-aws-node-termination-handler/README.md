@@ -1,10 +1,8 @@
-# kubezero-local-volume-provisioner
+# kubezero-aws-node-termination-handler
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.3.4](https://img.shields.io/badge/AppVersion-2.3.4-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
-KubeZero Umbrella Chart for local-static-provisioner
-
-Provides persistent volumes backed by local volumes, eg. additional SSDs or spindles.
+Umbrella chart for all aws-node-termination-handler
 
 **Homepage:** <https://kubezero.com>
 
@@ -16,27 +14,35 @@ Provides persistent volumes backed by local volumes, eg. additional SSDs or spin
 
 ## Requirements
 
-Kubernetes: `>= 1.16.0`
+Kubernetes: `>= 1.18.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
+| https://aws.github.io/eks-charts | aws-node-termination-handler | >= 0.14.1 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| local-static-provisioner.classes[0].hostDir | string | `"/mnt/disks"` |  |
-| local-static-provisioner.classes[0].name | string | `"local-sc-xfs"` |  |
-| local-static-provisioner.common.namespace | string | `"kube-system"` |  |
-| local-static-provisioner.daemonset.nodeSelector."node.kubernetes.io/localVolume" | string | `"present"` |  |
-| local-static-provisioner.prometheus.operator.enabled | bool | `false` |  |
+| aws-node-termination-handler.deleteLocalData | bool | `true` |  |
+| aws-node-termination-handler.enablePrometheusServer | bool | `false` |  |
+| aws-node-termination-handler.enableSqsTerminationDraining | bool | `true` |  |
+| aws-node-termination-handler.jsonLogging | bool | `true` |  |
+| aws-node-termination-handler.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
+| aws-node-termination-handler.podMonitor.create | bool | `false` |  |
+| aws-node-termination-handler.podMonitor.labels.release | string | `"metrics"` |  |
+| aws-node-termination-handler.taintNode | bool | `true` |  |
+| aws-node-termination-handler.tolerations[0].effect | string | `"NoSchedule"` |  |
+| aws-node-termination-handler.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 
 ## KubeZero default configuration
 
-- add nodeSelector to only install on nodes actually having ephemeral local storage
-- provide matching storage class to expose mounted disks under `/mnt/disks`
+- enable SQS Mode
+- allow draining of localdata
+- enable prometheus
 
 ## Resources
 
-- https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner
+- https://github.com/aws/aws-node-termination-handler
+- https://github.com/aws/eks-charts/tree/master/stable/aws-node-termination-handler
