@@ -54,6 +54,12 @@ kube-prometheus-stack:
       effect: NoSchedule
     nodeSelector:
       node-role.kubernetes.io/master: ""
+    resources:
+      requests:
+        cpu: 20m
+        memory: 32Mi
+      limits:
+        memory: 64Mi
 
     namespaces:
       releaseNamespace: true
@@ -79,6 +85,10 @@ kube-prometheus-stack:
         targetLabel: node
         replacement: $1
         action: replace
+    resources:
+      requests:
+        cpu: 20m
+        memory: 16Mi
 
   prometheus:
     enabled: true
@@ -91,10 +101,10 @@ kube-prometheus-stack:
 
       resources:
         requests:
-          memory: "1Gi"
-          cpu: "500m"
+          memory: 512Mi
+          cpu: 500m
         limits:
-          memory: "3Gi"
+          memory: 3Gi
           # cpu: "1000m"
 
       storageSpec:
