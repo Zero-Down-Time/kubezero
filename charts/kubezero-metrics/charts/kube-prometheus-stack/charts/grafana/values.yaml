@@ -53,7 +53,7 @@ livenessProbe:
 
 image:
   repository: grafana/grafana
-  tag: 7.4.2
+  tag: 7.4.3
   sha: ""
   pullPolicy: IfNotPresent
 
@@ -92,6 +92,9 @@ extraEmptyDirMounts: []
   #   mountPath: /etc/grafana/provisioning/notifiers
 
 
+# Apply extra labels to common labels.
+extraLabels: {}
+
 ## Assign a PriorityClassName to pods if set
 # priorityClassName:
 
@@ -103,6 +106,7 @@ downloadDashboardsImage:
 
 downloadDashboards:
   env: {}
+  envFromSecret: ""
   resources: {}
 
 ## Pod Annotations
@@ -166,6 +170,10 @@ ingress:
     # kubernetes.io/tls-acme: "true"
   labels: {}
   path: /
+
+  # pathType is only for k8s > 1.19
+  pathType: Prefix
+
   hosts:
     - chart-example.local
   ## Extra paths to prepend to every host configuration. This is useful when working with annotation based services.
@@ -174,6 +182,16 @@ ingress:
   #   backend:
   #     serviceName: ssl-redirect
   #     servicePort: use-annotation
+  ## Or for k8s > 1.19
+  # - path: /*
+  #   pathType: Prefix
+  #   backend:
+  #     service:
+  #       name: ssl-redirect
+  #       port:
+  #         name: service
+
+
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
@@ -564,7 +582,7 @@ smtp:
 sidecar:
   image:
     repository: quay.io/kiwigrid/k8s-sidecar
-    tag: 1.10.6
+    tag: 1.10.7
     sha: ""
   imagePullPolicy: IfNotPresent
   resources: {}
@@ -671,6 +689,8 @@ imageRenderer:
     # image-renderer service port used by both service and deployment
     port: 8081
     targetPort: 8081
+  # In case a sub_path is used this needs to be added to the image renderer callback
+  grafanaSubPath: ""
   # name of the image-renderer port on the pod
   podPortName: http
   # number of image-renderer replica sets to keep

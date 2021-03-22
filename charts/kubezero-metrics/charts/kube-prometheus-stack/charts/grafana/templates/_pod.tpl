@@ -56,6 +56,11 @@ initContainers:
       - name: "{{ $key }}"
         value: "{{ $value }}"
 {{- end }}
+{{- if .Values.downloadDashboards.envFromSecret }}
+    envFrom:
+      - secretRef:
+          name: {{ tpl .Values.downloadDashboards.envFromSecret . }}
+{{- end }}
     volumeMounts:
       - name: config
         mountPath: "/etc/grafana/download_dashboards.sh"
@@ -345,7 +350,7 @@ containers:
       - name: GF_RENDERING_SERVER_URL
         value: http://{{ template "grafana.fullname" . }}-image-renderer.{{ template "grafana.namespace" . }}:{{ .Values.imageRenderer.service.port }}/render
       - name: GF_RENDERING_CALLBACK_URL
-        value: http://{{ template "grafana.fullname" . }}.{{ template "grafana.namespace" . }}:{{ .Values.service.port }}/
+        value: http://{{ template "grafana.fullname" . }}.{{ template "grafana.namespace" . }}:{{ .Values.service.port }}/{{ .Values.imageRenderer.grafanaSubPath }}
       {{ end }}
     {{- range $key, $value := .Values.envValueFrom }}
       - name: {{ $key | quote }}
