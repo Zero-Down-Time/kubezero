@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=13.13.0
+VERSION=14.3.0
 
 rm -rf charts/kube-prometheus-stack
 curl -L -s -o - https://github.com/prometheus-community/helm-charts/releases/download/kube-prometheus-stack-${VERSION}/kube-prometheus-stack-${VERSION}.tgz | tar xfz - -C charts
