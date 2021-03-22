@@ -3,12 +3,13 @@ aws-efs-csi-driver:
     # node.kubernetes.io/csi.efs.fs: EFS-FS_ID
   logLevel: 1
 
-  resources:
-    requests:
-      cpu: 20m
-      memory: 64Mi
-    limits:
-      memory: 128Mi
+  # Resources are currently not supported in the helm templates :-(
+  #resources:
+  #  requests:
+  #    cpu: 20m
+  #    memory: 64Mi
+  #  limits:
+  #    memory: 128Mi
 
 StorageClass:
   create: true
