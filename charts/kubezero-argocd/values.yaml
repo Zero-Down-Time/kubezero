@@ -42,7 +42,7 @@ argo-cd:
 
   global:
     image:
-      tag: v1.8.5
+      tag: v1.8.7
 
   controller:
     args:
