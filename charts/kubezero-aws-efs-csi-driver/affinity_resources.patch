@@ -1,6 +1,15 @@
+diff -tubNr charts/aws-efs-csi-driver/Chart.yaml charts/aws-efs-csi-driver.zdt/Chart.yaml
+--- charts/aws-efs-csi-driver/Chart.yaml	2021-03-19 00:22:54.000000000 +0100
++++ charts/aws-efs-csi-driver.zdt/Chart.yaml	2021-03-24 13:06:26.505763515 +0100
+@@ -15,4 +15,4 @@
+ name: aws-efs-csi-driver
+ sources:
+ - https://github.com/kubernetes-sigs/aws-efs-csi-driver
+-version: 1.2.1
++version: 9.99.9
 diff -tubNr charts/aws-efs-csi-driver/templates/node-daemonset.yaml charts/aws-efs-csi-driver.zdt/templates/node-daemonset.yaml
 --- charts/aws-efs-csi-driver/templates/node-daemonset.yaml	2021-03-19 00:22:54.000000000 +0100
-+++ charts/aws-efs-csi-driver.zdt/templates/node-daemonset.yaml	2021-03-24 12:20:11.369196706 +0100
++++ charts/aws-efs-csi-driver.zdt/templates/node-daemonset.yaml	2021-03-24 12:21:00.609194935 +0100
 @@ -40,15 +40,10 @@
          {{- with .Values.nodeSelector }}
          {{- . | toYaml | nindent 8 }}
@@ -33,7 +42,7 @@ diff -tubNr charts/aws-efs-csi-driver/templates/node-daemonset.yaml charts/aws-e
            args:
 diff -tubNr charts/aws-efs-csi-driver/values.yaml charts/aws-efs-csi-driver.zdt/values.yaml
 --- charts/aws-efs-csi-driver/values.yaml	2021-03-19 00:22:54.000000000 +0100
-+++ charts/aws-efs-csi-driver.zdt/values.yaml	2021-03-24 12:16:57.685870341 +0100
++++ charts/aws-efs-csi-driver.zdt/values.yaml	2021-03-24 12:21:00.609194935 +0100
 @@ -43,7 +43,15 @@
  
  tolerations: []
