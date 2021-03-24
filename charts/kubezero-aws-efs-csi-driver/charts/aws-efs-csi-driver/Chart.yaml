@@ -15,4 +15,4 @@ maintainers:
 name: aws-efs-csi-driver
 sources:
 - https://github.com/kubernetes-sigs/aws-efs-csi-driver
-version: 9999
+version: 9.99.9
