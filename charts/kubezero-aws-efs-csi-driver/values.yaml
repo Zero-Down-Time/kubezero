@@ -1,6 +1,4 @@
 aws-efs-csi-driver:
-  nodeSelector:  {}
-    # node.kubernetes.io/csi.efs.fs: EFS-FS_ID
   logLevel: 1
 
   resources:
