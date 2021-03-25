@@ -1,6 +1,6 @@
 # kubezero-istio
 
-![Version: 0.4.1](https://img.shields.io/badge/Version-0.4.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.8.1](https://img.shields.io/badge/AppVersion-1.8.1-informational?style=flat-square)
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.9.1](https://img.shields.io/badge/AppVersion-1.9.1-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Istio
 
@@ -16,12 +16,12 @@ Installs the Istio control plane
 
 ## Requirements
 
-Kubernetes: `>= 1.16.0`
+Kubernetes: `>= 1.18.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | base | 1.1.0 |
-|  | istio-discovery | 1.2.0 |
+|  | base | 1.9.1 |
+|  | istio-discovery | 1.9.1 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## Values
@@ -29,11 +29,9 @@ Kubernetes: `>= 1.16.0`
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | global.defaultPodDisruptionBudget.enabled | bool | `false` |  |
-| global.hub | string | `"docker.io/istio"` |  |
 | global.jwtPolicy | string | `"first-party-jwt"` |  |
 | global.logAsJson | bool | `true` |  |
 | global.priorityClassName | string | `"system-cluster-critical"` |  |
-| global.tag | string | `"1.8.0"` |  |
 | istio-discovery.meshConfig.accessLogEncoding | string | `"JSON"` |  |
 | istio-discovery.meshConfig.accessLogFile | string | `"/dev/stdout"` |  |
 | istio-discovery.meshConfig.h2UpgradePolicy | string | `"DO_NOT_UPGRADE"` |  |

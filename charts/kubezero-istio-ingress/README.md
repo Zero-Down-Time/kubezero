@@ -1,6 +1,6 @@
 # kubezero-istio-ingress
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.8.1](https://img.shields.io/badge/AppVersion-1.8.1-informational?style=flat-square)
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.9.1](https://img.shields.io/badge/AppVersion-1.9.1-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Istio based Ingress
 
@@ -16,12 +16,12 @@ Installs Istio Ingress Gateways, requires kubezero-istio to be installed !
 
 ## Requirements
 
-Kubernetes: `>= 1.16.0`
+Kubernetes: `>= 1.18.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | istio-ingress | 1.1.0 |
-|  | istio-private-ingress | 1.1.0 |
+|  | istio-ingress | 1.9.1 |
+|  | istio-private-ingress | 1.9.1 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## Values
@@ -30,11 +30,9 @@ Kubernetes: `>= 1.16.0`
 |-----|------|---------|-------------|
 | global.arch.amd64 | int | `2` |  |
 | global.defaultPodDisruptionBudget.enabled | bool | `false` |  |
-| global.hub | string | `"docker.io/istio"` |  |
 | global.jwtPolicy | string | `"first-party-jwt"` |  |
 | global.logAsJson | bool | `true` |  |
 | global.priorityClassName | string | `"system-cluster-critical"` |  |
-| global.tag | string | `"1.8.1"` |  |
 | istio-ingress.dnsNames | list | `[]` |  |
 | istio-ingress.enabled | bool | `false` |  |
 | istio-ingress.gateways.istio-ingressgateway.autoscaleEnabled | bool | `false` |  |
@@ -45,16 +43,19 @@ Kubernetes: `>= 1.16.0`
 | istio-ingress.gateways.istio-ingressgateway.podAntiAffinityLabelSelector[0].operator | string | `"In"` |  |
 | istio-ingress.gateways.istio-ingressgateway.podAntiAffinityLabelSelector[0].topologyKey | string | `"kubernetes.io/hostname"` |  |
 | istio-ingress.gateways.istio-ingressgateway.podAntiAffinityLabelSelector[0].values | string | `"istio-ingressgateway"` |  |
-| istio-ingress.gateways.istio-ingressgateway.ports[0].name | string | `"http-status"` |  |
+| istio-ingress.gateways.istio-ingressgateway.ports[0].name | string | `"status-port"` |  |
 | istio-ingress.gateways.istio-ingressgateway.ports[0].nodePort | int | `30021` |  |
 | istio-ingress.gateways.istio-ingressgateway.ports[0].port | int | `15021` |  |
+| istio-ingress.gateways.istio-ingressgateway.ports[0].protocol | string | `"TCP"` |  |
 | istio-ingress.gateways.istio-ingressgateway.ports[1].name | string | `"http2"` |  |
 | istio-ingress.gateways.istio-ingressgateway.ports[1].nodePort | int | `30080` |  |
 | istio-ingress.gateways.istio-ingressgateway.ports[1].port | int | `80` |  |
+| istio-ingress.gateways.istio-ingressgateway.ports[1].protocol | string | `"TCP"` |  |
 | istio-ingress.gateways.istio-ingressgateway.ports[1].targetPort | int | `8080` |  |
 | istio-ingress.gateways.istio-ingressgateway.ports[2].name | string | `"https"` |  |
 | istio-ingress.gateways.istio-ingressgateway.ports[2].nodePort | int | `30443` |  |
 | istio-ingress.gateways.istio-ingressgateway.ports[2].port | int | `443` |  |
+| istio-ingress.gateways.istio-ingressgateway.ports[2].protocol | string | `"TCP"` |  |
 | istio-ingress.gateways.istio-ingressgateway.ports[2].targetPort | int | `8443` |  |
 | istio-ingress.gateways.istio-ingressgateway.replicaCount | int | `1` |  |
 | istio-ingress.gateways.istio-ingressgateway.resources.limits.memory | string | `"256Mi"` |  |
@@ -73,17 +74,30 @@ Kubernetes: `>= 1.16.0`
 | istio-private-ingress.gateways.istio-ingressgateway.podAntiAffinityLabelSelector[0].operator | string | `"In"` |  |
 | istio-private-ingress.gateways.istio-ingressgateway.podAntiAffinityLabelSelector[0].topologyKey | string | `"kubernetes.io/hostname"` |  |
 | istio-private-ingress.gateways.istio-ingressgateway.podAntiAffinityLabelSelector[0].values | string | `"istio-private-ingressgateway"` |  |
-| istio-private-ingress.gateways.istio-ingressgateway.ports[0].name | string | `"http-status"` |  |
+| istio-private-ingress.gateways.istio-ingressgateway.ports[0].name | string | `"status-port"` |  |
 | istio-private-ingress.gateways.istio-ingressgateway.ports[0].nodePort | int | `31021` |  |
 | istio-private-ingress.gateways.istio-ingressgateway.ports[0].port | int | `15021` |  |
+| istio-private-ingress.gateways.istio-ingressgateway.ports[0].protocol | string | `"TCP"` |  |
 | istio-private-ingress.gateways.istio-ingressgateway.ports[1].name | string | `"http2"` |  |
 | istio-private-ingress.gateways.istio-ingressgateway.ports[1].nodePort | int | `31080` |  |
 | istio-private-ingress.gateways.istio-ingressgateway.ports[1].port | int | `80` |  |
+| istio-private-ingress.gateways.istio-ingressgateway.ports[1].protocol | string | `"TCP"` |  |
 | istio-private-ingress.gateways.istio-ingressgateway.ports[1].targetPort | int | `8080` |  |
 | istio-private-ingress.gateways.istio-ingressgateway.ports[2].name | string | `"https"` |  |
 | istio-private-ingress.gateways.istio-ingressgateway.ports[2].nodePort | int | `31443` |  |
 | istio-private-ingress.gateways.istio-ingressgateway.ports[2].port | int | `443` |  |
+| istio-private-ingress.gateways.istio-ingressgateway.ports[2].protocol | string | `"TCP"` |  |
 | istio-private-ingress.gateways.istio-ingressgateway.ports[2].targetPort | int | `8443` |  |
+| istio-private-ingress.gateways.istio-ingressgateway.ports[3].name | string | `"tcp-istiod"` |  |
+| istio-private-ingress.gateways.istio-ingressgateway.ports[3].nodePort | int | `31012` |  |
+| istio-private-ingress.gateways.istio-ingressgateway.ports[3].port | int | `15012` |  |
+| istio-private-ingress.gateways.istio-ingressgateway.ports[3].protocol | string | `"TCP"` |  |
+| istio-private-ingress.gateways.istio-ingressgateway.ports[3].targetPort | int | `15012` |  |
+| istio-private-ingress.gateways.istio-ingressgateway.ports[4].name | string | `"tls"` |  |
+| istio-private-ingress.gateways.istio-ingressgateway.ports[4].nodePort | int | `31044` |  |
+| istio-private-ingress.gateways.istio-ingressgateway.ports[4].port | int | `15443` |  |
+| istio-private-ingress.gateways.istio-ingressgateway.ports[4].protocol | string | `"TCP"` |  |
+| istio-private-ingress.gateways.istio-ingressgateway.ports[4].targetPort | int | `15443` |  |
 | istio-private-ingress.gateways.istio-ingressgateway.replicaCount | int | `1` |  |
 | istio-private-ingress.gateways.istio-ingressgateway.resources.limits.memory | string | `"256Mi"` |  |
 | istio-private-ingress.gateways.istio-ingressgateway.resources.requests.cpu | string | `"100m"` |  |

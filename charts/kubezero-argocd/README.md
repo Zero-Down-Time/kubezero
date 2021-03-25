@@ -1,6 +1,6 @@
 # kubezero-argocd
 
-![Version: 0.6.1](https://img.shields.io/badge/Version-0.6.1-informational?style=flat-square)
+![Version: 0.7.1](https://img.shields.io/badge/Version-0.7.1-informational?style=flat-square)
 
 KubeZero ArgoCD Helm chart to install ArgoCD itself and the KubeZero ArgoCD Application
 
@@ -14,11 +14,11 @@ KubeZero ArgoCD Helm chart to install ArgoCD itself and the KubeZero ArgoCD Appl
 
 ## Requirements
 
-Kubernetes: `>= 1.16.0`
+Kubernetes: `>= 1.18.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://argoproj.github.io/argo-helm | argo-cd | 2.9.5 |
+| https://argoproj.github.io/argo-helm | argo-cd | 2.17.4 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## Values
@@ -35,7 +35,7 @@ Kubernetes: `>= 1.16.0`
 | argo-cd.controller.resources.requests.cpu | string | `"100m"` |  |
 | argo-cd.controller.resources.requests.memory | string | `"256Mi"` |  |
 | argo-cd.dex.enabled | bool | `false` |  |
-| argo-cd.global.image.tag | string | `"v1.7.10"` |  |
+| argo-cd.global.image.tag | string | `"v1.8.7"` |  |
 | argo-cd.installCRDs | bool | `false` |  |
 | argo-cd.repoServer.logFormat | string | `"json"` |  |
 | argo-cd.repoServer.metrics.enabled | bool | `false` |  |
