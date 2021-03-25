@@ -1,6 +1,6 @@
 # kubezero-local-volume-provisioner
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.3.4](https://img.shields.io/badge/AppVersion-2.3.4-informational?style=flat-square)
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.3.4](https://img.shields.io/badge/AppVersion-2.3.4-informational?style=flat-square)
 
 KubeZero Umbrella Chart for local-static-provisioner
 
@@ -29,7 +29,8 @@ Kubernetes: `>= 1.16.0`
 | local-static-provisioner.classes[0].hostDir | string | `"/mnt/disks"` |  |
 | local-static-provisioner.classes[0].name | string | `"local-sc-xfs"` |  |
 | local-static-provisioner.common.namespace | string | `"kube-system"` |  |
-| local-static-provisioner.daemonset.nodeSelector."node.kubernetes.io/localVolume" | string | `"present"` |  |
+| local-static-provisioner.daemonset.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key | string | `"node.kubernetes.io/localVolumes"` |  |
+| local-static-provisioner.daemonset.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator | string | `"Exists"` |  |
 | local-static-provisioner.prometheus.operator.enabled | bool | `false` |  |
 
 ## KubeZero default configuration

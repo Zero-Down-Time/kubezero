@@ -1,6 +1,6 @@
 # kubezero-kiam
 
-![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.0](https://img.shields.io/badge/AppVersion-4.0-informational?style=flat-square)
+![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.0](https://img.shields.io/badge/AppVersion-4.0-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Kiam
 
@@ -14,7 +14,7 @@ KubeZero Umbrella Chart for Kiam
 
 ## Requirements
 
-Kubernetes: `>= 1.16.0`
+Kubernetes: `>= 1.18.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
@@ -44,6 +44,7 @@ By default all access to the meta-data service is blocked, expect for:
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | annotateKubeSystemNameSpace | bool | `false` |  |
+| kiam.agent.allowRouteRegexp | string | `"^/latest/(meta-data/instance-id|dynamic)"` |  |
 | kiam.agent.gatewayTimeoutCreation | string | `"5s"` |  |
 | kiam.agent.host.interface | string | `"cali+"` |  |
 | kiam.agent.host.iptables | bool | `false` |  |
@@ -52,7 +53,6 @@ By default all access to the meta-data service is blocked, expect for:
 | kiam.agent.prometheus.servicemonitor.enabled | bool | `false` |  |
 | kiam.agent.prometheus.servicemonitor.interval | string | `"30s"` |  |
 | kiam.agent.prometheus.servicemonitor.labels.release | string | `"metrics"` |  |
-| kiam.agent.resources.limits.cpu | string | `"50m"` |  |
 | kiam.agent.resources.limits.memory | string | `"20Mi"` |  |
 | kiam.agent.resources.requests.cpu | string | `"50m"` |  |
 | kiam.agent.resources.requests.memory | string | `"20Mi"` |  |
@@ -64,7 +64,6 @@ By default all access to the meta-data service is blocked, expect for:
 | kiam.agent.tolerations[0].effect | string | `"NoSchedule"` |  |
 | kiam.agent.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | kiam.agent.updateStrategy | string | `"RollingUpdate"` |  |
-| kiam.agent.whiteListRouteRegexp | string | `"^/latest/(meta-data/instance-id|dynamic)"` |  |
 | kiam.enabled | bool | `true` |  |
 | kiam.server.assumeRoleArn | string | `""` | kiam server IAM role to assume, required as we run the agents next to the servers normally, eg. arn:aws:iam::123456789012:role/kiam-server-role |
 | kiam.server.deployment.enabled | bool | `true` |  |
@@ -75,9 +74,8 @@ By default all access to the meta-data service is blocked, expect for:
 | kiam.server.prometheus.servicemonitor.enabled | bool | `false` |  |
 | kiam.server.prometheus.servicemonitor.interval | string | `"30s"` |  |
 | kiam.server.prometheus.servicemonitor.labels.release | string | `"metrics"` |  |
-| kiam.server.resources.limits.cpu | string | `"300m"` |  |
-| kiam.server.resources.limits.memory | string | `"50Mi"` |  |
-| kiam.server.resources.requests.cpu | string | `"100m"` |  |
+| kiam.server.resources.limits.memory | string | `"100Mi"` |  |
+| kiam.server.resources.requests.cpu | string | `"50m"` |  |
 | kiam.server.resources.requests.memory | string | `"50Mi"` |  |
 | kiam.server.service.port | int | `6444` |  |
 | kiam.server.service.targetPort | int | `6444` |  |
