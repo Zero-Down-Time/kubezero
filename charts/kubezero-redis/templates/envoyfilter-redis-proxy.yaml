@@ -31,5 +31,5 @@ spec:
             op_timeout: 5s
             enable_redirection: true
             enable_command_stats: true
-            read_policy: PREFER_REPLICA
+            read_policy: PREFER_MASTER
 {{- end }}
