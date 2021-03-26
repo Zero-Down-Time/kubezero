@@ -37,6 +37,9 @@ This change was required to enable node restrictions via the upstream aws-iam-au
   `./bootstrap.sh crds all clusters/$CLUSTER ../../../kubezero/charts`
 
 ### Components
+- delete old fluentd deployement because labels are immutable and they changed due to the migration to new upstream helm chart  
+`kubectl delete deployment logging-fluentd -n logging`
+
 `./bootstrap.sh deploy all clusters/$CLUSTER ../../../kubezero/charts`
 
 ## Upgrade - ArgoCD
