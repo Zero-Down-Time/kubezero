@@ -227,7 +227,7 @@ fluent-bit:
       tls: false
 
     input:
-      memBufLimit: 16MB
+      memBufLimit: 4MB
       refreshInterval: 10
 
     logLevel: warn
@@ -256,7 +256,7 @@ fluent-bit:
           DB /var/log/flb_kube.db
           DB.Sync Normal
           {{- with .Values.config.input }}
-          Mem_Buf_Limit {{ default "16MB" .memBufLimit }}
+          Mem_Buf_Limit {{ default "4MB" .memBufLimit }}
           Refresh_Interval {{ default 10 .refreshInterval }}
           {{- end }}
 

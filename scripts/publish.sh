@@ -11,7 +11,7 @@ GIT_PUSH=${GIT_PUSH:-true}
 [[ "$(git branch --show-current)" == "stable" || -n "$FORCE" ]] || { echo "Helm packages should only be built from stable branch !"; exit 1; }
 
 TMPDIR=$(mktemp -d kubezero-repo.XXX)
-mkdir -p $TMPDIR/stage
+mkdir -p $TMPDIR/stage && trap 'rm -rf $TMPDIR' ERR EXIT
 
 git clone -b gh-pages ssh://git@git.zero-downtime.net:22000/ZeroDownTime/KubeZero.git $TMPDIR/repo
 # Reset all
