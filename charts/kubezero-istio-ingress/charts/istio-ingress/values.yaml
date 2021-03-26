@@ -120,6 +120,9 @@ gateways:
     # whether to run the gateway in a privileged container
     runAsRoot: false
 
+    # The injection template to use for the gateway. If not set, no injection will be performed.
+    injectionTemplate: ""
+
 # Revision is set as 'version' label and part of the resource names when installing multiple control planes.
 revision: ""
 
@@ -171,7 +174,7 @@ global:
   hub: docker.io/istio
 
   # Default tag for Istio images.
-  tag: 1.9.1
+  tag: 1.9.2
 
   # Specify image pull policy if default behavior isn't desired.
   # Default behavior: latest images will be Always else IfNotPresent.
