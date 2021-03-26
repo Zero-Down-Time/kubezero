@@ -8,7 +8,7 @@
 set -e
 
 zero_commit='0000000000000000000000000000000000000000'
-msg_regex='^((fixup! |squash! )?(\w+)(?:\(([^\)\s]+)\))?: (.+))(?:\n|$){0,2}?((?:^.+(\n|$))+(?:\n|$){0,2}?)*((?:^.+(\n|$))+)*'
+msg_regex='^((fixup! |squash! )?(fix|feat|build|chore|ci|docs|style|refactor|perf|test)(?:\(([^\)\s]+)\))?: (.+))(?:\n|$){0,2}?((?:^.+(\n|$))+(?:\n|$){0,2}?)*((?:^.+(\n|$))+)*'
 
 while read -r oldrev newrev refname; do
   # Branch or tag got deleted, ignore the push
