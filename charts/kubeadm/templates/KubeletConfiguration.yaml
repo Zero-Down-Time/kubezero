@@ -17,12 +17,7 @@ eventRecordQPS: 0
 # tlsCertFile: /var/lib/kubelet/pki/kubelet.crt
 # tlsPrivateKeyFile: /var/lib/kubelet/pki/kubelet.key
 tlsCipherSuites: [TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_GCM_SHA256]
-featureGates:
-  CustomCPUCFSQuotaPeriod: true
-{{- if eq .Values.platform "aws" }}
-  CSIMigrationAWS: true
-  CSIMigrationAWSComplete: true
-{{- end }}
+featureGates: {{ include "kubeadm.featuregates" ( dict "return" "map" "platform" .Values.platform ) }}
 # Minimal unit is 50m per pod
 podsPerCore: 20
 # Basic OS on Ubuntu 20.04 incl. crio

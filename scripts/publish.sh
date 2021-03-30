@@ -52,7 +52,7 @@ git status
 
 if [ "$GIT_PUSH" == "true" ]
 then
-    git add . && git commit -m "Publish charts" && git push ssh://git@git.zero-downtime.net:22000/ZeroDownTime/KubeZero.git gh-pages
+    git add . && git commit -m "ci: Publish charts" && git push ssh://git@git.zero-downtime.net:22000/ZeroDownTime/KubeZero.git gh-pages
 fi
 
 cd -
