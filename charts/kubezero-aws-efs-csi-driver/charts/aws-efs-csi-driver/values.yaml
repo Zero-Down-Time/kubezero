@@ -11,8 +11,8 @@ image:
 
 sidecars:
   livenessProbeImage:
-    repository: public.ecr.aws/eks-distro/kubernetes-csi/livenessprobe
-    tag: v2.1.0-eks-1-18-1
+    repository: k8s.gcr.io/sig-storage/livenessprobe
+    tag: "v2.2.0"
   nodeDriverRegistrarImage:
     repository: public.ecr.aws/eks-distro/kubernetes-csi/node-driver-registrar
     tag: v2.0.1-eks-1-18-1
@@ -98,7 +98,7 @@ storageClasses: []
 #   - tls
 #   parameters:
 #     provisioningMode: efs-ap
-#     fileSystemId: fs-92107410
+#     fileSystemId: fs-1122aabb
 #     directoryPerms: "700"
 #     gidRangeStart: "1000"
 #     gidRangeEnd: "2000"
