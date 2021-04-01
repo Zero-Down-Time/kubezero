@@ -31,20 +31,20 @@ This change was required to enable node restrictions via the upstream aws-iam-au
   - Fluentd replicaCount default from 2 to 1
 
 ## Upgrade - Without ArgoCD
-### CRDs:
-( commands assume latest kubezero repository being checkout next to this git repository to deploy master / non-released version )
-  
-  `./bootstrap.sh crds all clusters/$CLUSTER ../../../kubezero/charts`
+1. Update CRDs of all enabled components:  
+  `./bootstrap.sh crds all clusters/$CLUSTER`
 
-### Components
+2. Prepare upgrade
 - delete old fluentd deployement because labels are immutable and they changed due to the migration to new upstream helm chart  
 `kubectl delete deployment logging-fluentd -n logging`
 
-`./bootstrap.sh deploy all clusters/$CLUSTER ../../../kubezero/charts`
+3. Upgrade all components  
+`./bootstrap.sh deploy all clusters/$CLUSTER`
 
 ## Upgrade - ArgoCD
-- push latest config to git repo
-- verify correct branch etc. ( argoless branch is retired ! )
+- ArgoCD needs to be upgraded first to support latest Helm chart requirements: `./bootstrap.sh deploy argocd clusters/$CLUSTER`
+- push latest cluster config to your git repo
+- verify correct branch etc. ( eg. argoless branch has been retired ! )
 - trigger sync in ArgoCD starting with the KubeZero root app  
 ( only if auto-sync is not enabled )
 
