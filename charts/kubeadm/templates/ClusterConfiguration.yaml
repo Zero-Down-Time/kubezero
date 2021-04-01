@@ -23,14 +23,14 @@ controllerManager:
     terminated-pod-gc-threshold: "300"
     leader-elect: {{ .Values.clusterHighAvailable | quote }}
     logging-format: json
-    feature-gates: "{{ include "kubeadm.featuregates" ( dict "return" "csv" "platform" .Values.platform ) | trimSuffix "," }}"
+    feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" "platform" .Values.platform ) | trimSuffix "," | quote }}
 scheduler:
   extraArgs:
     profiling: "false"
     bind-address: {{ .Values.listenAddress }}
     leader-elect: {{ .Values.clusterHighAvailable | quote }}
     logging-format: json
-    feature-gates: "{{ include "kubeadm.featuregates" ( dict "return" "csv" "platform" .Values.platform ) | trimSuffix "," }}"
+    feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" "platform" .Values.platform ) | trimSuffix "," | quote }}
 apiServer:
   certSANs:
   - {{ regexSplit ":" .Values.apiEndpoint -1 | first }}
@@ -47,10 +47,10 @@ apiServer:
     {{- if eq .Values.platform "aws" }}
     authentication-token-webhook-config-file: /etc/kubernetes/apiserver/aws-iam-authenticator.yaml
     {{- end }}
-    feature-gates: "{{ include "kubeadm.featuregates" ( dict "return" "csv" "platform" .Values.platform ) | trimSuffix "," }}"
+    feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" "platform" .Values.platform ) | trimSuffix "," | quote }}
     enable-admission-plugins: NodeRestriction,EventRateLimit
     {{- if .Values.clusterHighAvailable }}
-    # goaway-chance: ".001"
+    goaway-chance: ".001"
     {{- end }}
     logging-format: json
     {{- with .Values.apiExtraArgs }}
