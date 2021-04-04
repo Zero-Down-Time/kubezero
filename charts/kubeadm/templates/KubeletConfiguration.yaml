@@ -20,13 +20,16 @@ tlsCipherSuites: [TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES
 featureGates: {{ include "kubeadm.featuregates" ( dict "return" "map" "platform" .Values.platform ) }}
 # Minimal unit is 50m per pod
 podsPerCore: 20
+# cpuCFSQuotaPeriod: 10ms
 # Basic OS on Ubuntu 20.04 incl. crio
-systemReserved:
-  memory: 256Mi
+#systemReserved:
+#  memory: 256Mi
 # This should be dynamic based on number of maxpods and available cores
 # https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-architecture#memory_cpu
 # Below are default minimal for 2 cores and minimum kubelet 
 kubeReserved:
   cpu: 70m
-  memory: 128Mi
-# cpuCFSQuotaPeriod: 10ms
+#  memory: 128Mi
+# Lets use below to reserve memory for system processes as kubeReserved/sytemReserved doesnt go well with systemd it seems
+evictionHard:
+  memory.available: "484Mi"
