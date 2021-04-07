@@ -1,8 +1,8 @@
 annotations:
   artifacthub.io/changes: |
-    - add custom annotations on dashboards configmap
+    - Upgrade fluent-bit image to v1.7.3
 apiVersion: v2
-appVersion: 1.7.2
+appVersion: 1.7.3
 description: Fast and lightweight log processor and forwarder or Linux, OSX and BSD family operating systems.
 home: https://fluentbit.io/
 icon: https://fluentbit.io/assets/img/logo1-default.png
@@ -20,4 +20,4 @@ maintainers:
 name: fluent-bit
 sources:
 - https://github.com/fluent/fluent-bit/
-version: 0.12.3
+version: 0.15.4
