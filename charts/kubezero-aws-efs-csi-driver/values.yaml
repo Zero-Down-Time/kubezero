@@ -31,9 +31,3 @@ StorageClass:
 #
 #  - name: example-pv2
 #    volumeHandle: "<efs-id>:/path2"
-
-# Deprecated and removed with next release
-# PersistentVolume:
-#   create: false
-#   EfsId: ""
-#   Name: ""
