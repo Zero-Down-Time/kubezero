@@ -21,10 +21,10 @@ kiam:
     updateStrategy: RollingUpdate
     resources:
      requests:
-       memory: "50Mi"
+       memory: "64Mi"
        cpu: "50m"
      limits:
-       memory: "100Mi"
+       memory: "128Mi"
        # cpu: "300m"
     tolerations:
     - key: node-role.kubernetes.io/master
@@ -57,10 +57,10 @@ kiam:
       caFileName:   ca.crt
     resources:
      requests:
-       memory: "20Mi"
+       memory: "16Mi"
        cpu: "50m"
      limits:
-       memory: "20Mi"
+       memory: "64Mi"
        # cpu: "50m"
     tolerations:
     - key: node-role.kubernetes.io/master
