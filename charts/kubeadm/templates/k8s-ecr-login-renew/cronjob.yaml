@@ -1,0 +1,40 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  namespace: kube-system
+  name: ecr-renew
+  labels:
+    app: ecr-renew
+spec:
+  schedule: "0 */6 * * *"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          serviceAccountName: ecr-renew
+          containers:
+            - name: ecr-renew
+              image: nabsul/k8s-ecr-login-renew:v1.4
+              env:
+                - name: DOCKER_SECRET_NAME
+                  value: ecr-login
+                - name: TARGET_NAMESPACE
+                  value: "*"
+                - name: AWS_REGION
+                  valueFrom:
+                    secretKeyRef:
+                      name: ecr-renew-cred
+                      key: AWS_REGION
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: ecr-renew-cred
+                      key: AWS_ACCESS_KEY_ID
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: ecr-renew-cred
+                      key: AWS_SECRET_ACCESS_KEY
