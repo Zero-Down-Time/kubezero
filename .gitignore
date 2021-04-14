@@ -8,3 +8,4 @@
 
 # Breaks Helm V3 dependencies in Argo
 Chart.lock
+kubezero-repo.???
