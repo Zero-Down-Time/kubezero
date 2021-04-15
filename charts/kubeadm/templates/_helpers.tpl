@@ -2,17 +2,14 @@
 Feature gates for all control plane components
 */ -}}
 {{- define "kubeadm.featuregates" -}}
-{{- $gates := dict "DefaultPodTopologySpread" "true" "CustomCPUCFSQuotaPeriod" "true" "GenericEphemeralVolume" "true" }}
-{{- if eq .platform "aws" }}
-{{- $gates = merge $gates ( dict "CSIMigrationAWS" "true" "CSIMigrationAWSComplete" "true") }}
-{{- end }}
+{{- $gates := list "CustomCPUCFSQuotaPeriod" "GenericEphemeralVolume" "CSIMigrationAWSComplete" "CSIMigrationAzureDiskComplete" "CSIMigrationAzureFileComplete" "CSIMigrationGCEComplete" "CSIMigrationOpenStackComplete" "CSIMigrationvSphereComplete" }}
 {{- if eq .return "csv" }}
-{{- range $key, $val := $gates }}
-{{- $key }}={{- $val }},
+{{- range $key := $gates }}
+{{- $key }}=true,
 {{- end }}
 {{- else }}
-{{- range $key, $val := $gates }}
-  {{ $key }}: {{ $val }}
+{{- range $key := $gates }}
+  {{ $key }}: true
 {{- end }}
 {{- end }}
 {{- end -}}
