@@ -126,6 +126,8 @@ kube-prometheus-stack:
       enabled: true
       size: 4Gi
       storageClassName: ebs-sc-gp2-xfs
+    deploymentStrategy:
+      type: Recreate
     plugins:
     - grafana-piechart-panel
     service:
