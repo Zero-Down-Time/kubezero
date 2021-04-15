@@ -15,4 +15,4 @@ maintainers:
 name: kube-state-metrics
 sources:
 - https://github.com/kubernetes/kube-state-metrics/
-version: 2.13.0
+version: 2.13.2

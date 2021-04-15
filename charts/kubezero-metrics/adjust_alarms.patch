@@ -1,0 +1,66 @@
+diff -turN charts/kube-prometheus-stack/templates/prometheus/rules-1.14/etcd.yaml charts/kube-prometheus-stack.zdt/templates/prometheus/rules-1.14/etcd.yaml
+--- charts/kube-prometheus-stack/templates/prometheus/rules-1.14/etcd.yaml	2021-04-14 22:13:29.000000000 +0200
++++ charts/kube-prometheus-stack.zdt/templates/prometheus/rules-1.14/etcd.yaml	2021-04-15 14:43:03.074281889 +0200
+@@ -54,34 +54,6 @@
+ {{- if .Values.defaultRules.additionalRuleLabels }}
+ {{ toYaml .Values.defaultRules.additionalRuleLabels | indent 8 }}
+ {{- end }}
+-    - alert: etcdHighNumberOfFailedGRPCRequests
+-      annotations:
+-        message: 'etcd cluster "{{`{{`}} $labels.job {{`}}`}}": {{`{{`}} $value {{`}}`}}% of requests for {{`{{`}} $labels.grpc_method {{`}}`}} failed on etcd instance {{`{{`}} $labels.instance {{`}}`}}.'
+-      expr: |-
+-        100 * sum(rate(grpc_server_handled_total{job=~".*etcd.*", grpc_code!="OK"}[5m])) BY (job, instance, grpc_service, grpc_method)
+-          /
+-        sum(rate(grpc_server_handled_total{job=~".*etcd.*"}[5m])) BY (job, instance, grpc_service, grpc_method)
+-          > 1
+-      for: 10m
+-      labels:
+-        severity: warning
+-{{- if .Values.defaultRules.additionalRuleLabels }}
+-{{ toYaml .Values.defaultRules.additionalRuleLabels | indent 8 }}
+-{{- end }}
+-    - alert: etcdHighNumberOfFailedGRPCRequests
+-      annotations:
+-        message: 'etcd cluster "{{`{{`}} $labels.job {{`}}`}}": {{`{{`}} $value {{`}}`}}% of requests for {{`{{`}} $labels.grpc_method {{`}}`}} failed on etcd instance {{`{{`}} $labels.instance {{`}}`}}.'
+-      expr: |-
+-        100 * sum(rate(grpc_server_handled_total{job=~".*etcd.*", grpc_code!="OK"}[5m])) BY (job, instance, grpc_service, grpc_method)
+-          /
+-        sum(rate(grpc_server_handled_total{job=~".*etcd.*"}[5m])) BY (job, instance, grpc_service, grpc_method)
+-          > 5
+-      for: 5m
+-      labels:
+-        severity: critical
+-{{- if .Values.defaultRules.additionalRuleLabels }}
+-{{ toYaml .Values.defaultRules.additionalRuleLabels | indent 8 }}
+-{{- end }}
+     - alert: etcdGRPCRequestsSlow
+       annotations:
+         message: 'etcd cluster "{{`{{`}} $labels.job {{`}}`}}": gRPC requests to {{`{{`}} $labels.grpc_method {{`}}`}} are taking {{`{{`}} $value {{`}}`}}s on etcd instance {{`{{`}} $labels.instance {{`}}`}}.'
+diff -turN charts/kube-prometheus-stack/templates/prometheus/rules-1.14/node-exporter.yaml charts/kube-prometheus-stack.zdt/templates/prometheus/rules-1.14/node-exporter.yaml
+--- charts/kube-prometheus-stack/templates/prometheus/rules-1.14/node-exporter.yaml	2021-04-14 22:13:29.000000000 +0200
++++ charts/kube-prometheus-stack.zdt/templates/prometheus/rules-1.14/node-exporter.yaml	2021-04-15 14:49:41.614282790 +0200
+@@ -30,7 +30,7 @@
+         summary: Filesystem is predicted to run out of space within the next 24 hours.
+       expr: |-
+         (
+-          node_filesystem_avail_bytes{job="node-exporter",fstype!=""} / node_filesystem_size_bytes{job="node-exporter",fstype!=""} * 100 < 40
++          node_filesystem_avail_bytes{job="node-exporter",fstype!=""} / node_filesystem_size_bytes{job="node-exporter",fstype!=""} * 100 < 25
+         and
+           predict_linear(node_filesystem_avail_bytes{job="node-exporter",fstype!=""}[6h], 24*60*60) < 0
+         and
+@@ -48,7 +48,7 @@
+         summary: Filesystem is predicted to run out of space within the next 4 hours.
+       expr: |-
+         (
+-          node_filesystem_avail_bytes{job="node-exporter",fstype!=""} / node_filesystem_size_bytes{job="node-exporter",fstype!=""} * 100 < 15
++          node_filesystem_avail_bytes{job="node-exporter",fstype!=""} / node_filesystem_size_bytes{job="node-exporter",fstype!=""} * 100 < 10
+         and
+           predict_linear(node_filesystem_avail_bytes{job="node-exporter",fstype!=""}[6h], 4*60*60) < 0
+         and
+@@ -259,4 +259,4 @@
+ {{- if .Values.defaultRules.additionalRuleLabels }}
+ {{ toYaml .Values.defaultRules.additionalRuleLabels | indent 8 }}
+ {{- end }}
+-{{- end }}
+\ No newline at end of file
++{{- end }}
