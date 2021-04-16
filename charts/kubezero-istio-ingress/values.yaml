@@ -23,10 +23,11 @@ istio-ingress:
       replicaCount: 1
       resources:
         requests:
+          cpu: 50m
           memory: 64Mi
         limits:
           # cpu: 100m
-          memory: 256Mi
+          memory: 512Mi
       externalTrafficPolicy: Local
       podAntiAffinityLabelSelector:
       - key: app

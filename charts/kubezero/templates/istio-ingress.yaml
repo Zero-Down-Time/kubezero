@@ -1,4 +1,10 @@
 {{- define "istio-ingress-values" }}
+
+{{- with index .Values "istio-ingress" "global" }}
+global:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+
 {{- if index .Values "istio-ingress" "public" }}
 istio-ingress:
   enabled: {{ index .Values "istio-ingress" "public" "enabled" }}
