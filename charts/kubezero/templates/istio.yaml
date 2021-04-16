@@ -1,7 +1,15 @@
 {{- define "istio-values" }}
+
+{{- if .Values.HighAvailableControlplane }}
+global:
+  defaultPodDisruptionBudget:
+    enabled: true
+
 istio-discovery:
   pilot:
-    replicaCount: {{ ternary 2 1 .Values.HighAvailableControlplane }}
+    replicaCount: 2
+{{- end }}
+
 {{- end }}
 
 
