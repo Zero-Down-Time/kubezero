@@ -34,9 +34,6 @@ istio-ingress:
         topologyKey: kubernetes.io/hostname
         values: istio-ingressgateway
       type: NodePort
-      env:
-        TERMINATION_DRAIN_DURATION_SECONDS: '"60"'
-        # ISTIO_META_HTTP10: '"1"'
 
       # The node selector is normally the list of nodeports, see CloudBender
       nodeSelector:
@@ -99,9 +96,6 @@ istio-private-ingress:
         topologyKey: kubernetes.io/hostname
         values: istio-private-ingressgateway
       type: NodePort
-      env:
-        TERMINATION_DRAIN_DURATION_SECONDS: '"60"'
-        # ISTIO_META_HTTP10: '"1"'
 
       nodeSelector:
         node.kubernetes.io/ingress.private: "31080_31443"

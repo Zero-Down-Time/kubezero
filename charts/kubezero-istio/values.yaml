@@ -35,6 +35,10 @@ istio-discovery:
     enabled: false
 
   meshConfig:
+    defaultConfig:
+      terminationDrainDuration: 60s
+#     proxyMetadata:
+#       ISTIO_META_HTTP10: '"1"'
     accessLogFile: /dev/stdout
     accessLogEncoding: 'JSON'
     h2UpgradePolicy: 'DO_NOT_UPGRADE'
