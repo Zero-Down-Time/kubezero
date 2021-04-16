@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-export ISTIO_VERSION=1.9.2
+export ISTIO_VERSION=1.9.3
 
 if [ ! -d istio-$ISTIO_VERSION ]; then
   NAME="istio-$ISTIO_VERSION"
