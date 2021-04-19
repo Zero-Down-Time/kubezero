@@ -13,5 +13,5 @@ maintainers:
 dependencies:
   - name: gemini
     version: 0.0.6
-    repository: https://charts.fairwinds.com/stable
+    # repository: https://charts.fairwinds.com/stable
 kubeVersion: ">= 1.18.0"

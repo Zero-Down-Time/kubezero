@@ -23,6 +23,9 @@ kiam:
 aws-node-termination-handler:
   enabled: false
 
+timemachine:
+  enabled: false
+
 local-volume-provisioner:
   enabled: false
 
