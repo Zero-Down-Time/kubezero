@@ -1,0 +1,13 @@
+gemini:
+  #image:
+  #  tag: "0.1.1"
+
+  # verbosity: 1
+
+  resources:
+    requests:
+      memory: 64Mi
+      cpu: 50m
+    limits:
+      memory: 256Mi
+      cpu: 200m
