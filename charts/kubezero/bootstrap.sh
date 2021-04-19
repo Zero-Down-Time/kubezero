@@ -211,19 +211,19 @@ function logging-post() {
 ## MAIN ##
 if [ $1 == "deploy" ]; then
   for t in ${ARTIFACTS[@]}; do
-    is_enabled $t && _helm apply $t
+    is_enabled $t && _helm apply $t || true
   done
 
 # If artifact enabled and has crds install
 elif [ $1 == "crds" ]; then
   for t in ${ARTIFACTS[@]}; do
-    is_enabled $t && has_crds $t && _helm crds $t
+    is_enabled $t && has_crds $t && _helm crds $t || true
   done
 
 # Delete in reverse order, continue even if errors
 elif [ $1 == "delete" ]; then
   set +e
   for (( idx=${#ARTIFACTS[@]}-1 ; idx>=0 ; idx-- )) ; do
-    is_enabled ${ARTIFACTS[idx]} && _helm delete ${ARTIFACTS[idx]}
+    is_enabled ${ARTIFACTS[idx]} && _helm delete ${ARTIFACTS[idx]} || true
   done
 fi

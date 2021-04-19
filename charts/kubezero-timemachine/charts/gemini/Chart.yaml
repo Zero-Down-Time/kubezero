@@ -1,0 +1,9 @@
+apiVersion: v1
+appVersion: 0.1.0
+description: Automated backup and restore of PersistentVolumes using the VolumeSnapshot
+  API
+maintainers:
+- email: robertb@fairwinds.com
+  name: rbren
+name: gemini
+version: 0.0.6
