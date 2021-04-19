@@ -34,6 +34,7 @@ local-path-provisioner:
 
 aws-ebs-csi-driver:
   enabled: false
+  crds: true
 
 aws-efs-csi-driver:
   enabled: false
