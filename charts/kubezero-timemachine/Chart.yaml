@@ -1,0 +1,17 @@
+apiVersion: v2
+name: kubezero-timemachine
+description: KubeZero umbrella chart for all things backup
+type: application
+version: 0.1.0
+home: https://kubezero.com
+icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
+keywords:
+  - kubezero
+  - gemini
+maintainers:
+  - name: Quarky9
+dependencies:
+  - name: gemini
+    version: 0.0.6
+    repository: https://charts.fairwinds.com/stable
+kubeVersion: ">= 1.18.0"
