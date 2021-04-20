@@ -1,0 +1,47 @@
+diff -turN istio/manifests/charts/gateways/istio-ingress/templates/deployment.yaml istio.zdt/manifests/charts/gateways/istio-ingress/templates/deployment.yaml
+--- istio/manifests/charts/gateways/istio-ingress/templates/deployment.yaml	2021-04-11 01:57:29.000000000 +0200
++++ istio.zdt/manifests/charts/gateways/istio-ingress/templates/deployment.yaml	2021-04-20 12:20:04.401862116 +0200
+@@ -17,6 +17,8 @@
+ {{- if $gateway.replicaCount }}
+   replicas: {{ $gateway.replicaCount }}
+ {{- end }}
++  # Give the LB 120s to detect and take into service, should only be 40s by we are on AWS so ??
++  minReadySeconds: 120
+ {{- end }}
+   selector:
+     matchLabels:
+@@ -69,6 +71,7 @@
+ {{- if .Values.global.priorityClassName }}
+       priorityClassName: "{{ .Values.global.priorityClassName }}"
+ {{- end }}
++      terminationGracePeriodSeconds: 120
+ {{- if .Values.global.proxy.enableCoreDump }}
+       initContainers:
+         - name: enable-core-dump
+@@ -140,6 +143,11 @@
+             privileged: false
+             readOnlyRootFilesystem: true
+         {{- end }}
++          #This needs kube-proxy support coming with 1.22 hopefully, cilium ?
++          #lifecycle:
++          #  preStop:
++          #    exec:
++          #      command: ["/bin/sh","-c","sleep 30"]
+           readinessProbe:
+             failureThreshold: 30
+             httpGet:
+diff -turN istio/manifests/charts/istio-control/istio-discovery/templates/deployment.yaml istio.zdt/manifests/charts/istio-control/istio-discovery/templates/deployment.yaml
+--- istio/manifests/charts/istio-control/istio-discovery/templates/deployment.yaml	2021-04-11 01:57:29.000000000 +0200
++++ istio.zdt/manifests/charts/istio-control/istio-discovery/templates/deployment.yaml	2021-04-19 21:55:45.461749267 +0200
+@@ -60,6 +60,11 @@
+ {{- end }}
+       securityContext:
+         fsGroup: 1337
++      nodeSelector:
++        node-role.kubernetes.io/master: ""
++      tolerations:
++      - effect: NoSchedule
++        key: node-role.kubernetes.io/master
+       containers:
+         - name: discovery
+ {{- if contains "/" .Values.pilot.image }}
