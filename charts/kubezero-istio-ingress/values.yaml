@@ -21,6 +21,8 @@ istio-ingress:
     istio-ingressgateway:
       autoscaleEnabled: false
       replicaCount: 1
+      rollingMaxSurge: 1
+      rollingMaxUnavailable: 0
       resources:
         requests:
           cpu: 50m
@@ -35,9 +37,8 @@ istio-ingress:
         topologyKey: kubernetes.io/hostname
         values: istio-ingressgateway
       type: NodePort
-      env:
-        TERMINATION_DRAIN_DURATION_SECONDS: '"60"'
-        # ISTIO_META_HTTP10: '"1"'
+      #podAnnotations:
+      #  sidecar.istio.io/bootstrapOverride: istio-gateway-bootstrap-config
       # The node selector is normally the list of nodeports, see CloudBender
       nodeSelector:
         node.kubernetes.io/ingress.public: "30080_30443"
@@ -72,6 +73,11 @@ istio-ingress:
   dnsNames: []
 # - '*.example.com'
 
+  meshConfig:
+   defaultConfig:
+     proxyMetadata:
+       # ISTIO_META_HTTP10: 1
+
 istio-private-ingress:
   enabled: false
 
@@ -85,6 +91,8 @@ istio-private-ingress:
 
       autoscaleEnabled: false
       replicaCount: 1
+      rollingMaxSurge: 1
+      rollingMaxUnavailable: 0
       resources:
         requests:
           cpu: 50m
@@ -99,13 +107,9 @@ istio-private-ingress:
         topologyKey: kubernetes.io/hostname
         values: istio-private-ingressgateway
       type: NodePort
-      env:
-        TERMINATION_DRAIN_DURATION_SECONDS: '"60"'
-        # ISTIO_META_HTTP10: '"1"'
       nodeSelector:
         node.kubernetes.io/ingress.private: "31080_31443"
         #nodeSelector: "31080_31443_31671_31672_31224"
-
       ports:
       - name: status-port
         port: 15021
@@ -149,3 +153,7 @@ istio-private-ingress:
   dnsNames: []
 # - '*.example.com'
 
+  meshConfig:
+   defaultConfig:
+     proxyMetadata:
+       # ISTIO_META_HTTP10: 1

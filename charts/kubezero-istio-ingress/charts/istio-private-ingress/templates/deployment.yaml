@@ -17,6 +17,8 @@ spec:
 {{- if $gateway.replicaCount }}
   replicas: {{ $gateway.replicaCount }}
 {{- end }}
+  # Give the LB 120s to detect and take into service, should only be 40s by we are on AWS so ??
+  minReadySeconds: 120
 {{- end }}
   selector:
     matchLabels:
@@ -69,7 +71,7 @@ spec:
 {{- if .Values.global.priorityClassName }}
       priorityClassName: "{{ .Values.global.priorityClassName }}"
 {{- end }}
-      terminationGracePeriodSeconds: 90
+      terminationGracePeriodSeconds: 120
 {{- if .Values.global.proxy.enableCoreDump }}
       initContainers:
         - name: enable-core-dump
@@ -141,6 +143,11 @@ spec:
             privileged: false
             readOnlyRootFilesystem: true
         {{- end }}
+          #This needs kube-proxy support coming with 1.22 hopefully, cilium ?
+          #lifecycle:
+          #  preStop:
+          #    exec:
+          #      command: ["/bin/sh","-c","sleep 30"]
           readinessProbe:
             failureThreshold: 30
             httpGet:
