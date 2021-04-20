@@ -37,8 +37,17 @@ istio-ingress:
         topologyKey: kubernetes.io/hostname
         values: istio-ingressgateway
       type: NodePort
-      #podAnnotations:
-      #  sidecar.istio.io/bootstrapOverride: istio-gateway-bootstrap-config
+      podAnnotations:
+        proxy.istio.io/config: '{ "terminationDrainDuration": "20s" }'
+
+      # custom hardened bootstrap config
+      env:
+        ISTIO_BOOTSTRAP_OVERRIDE: /etc/istio/custom-bootstrap/custom_bootstrap.json
+      configVolumes:
+      - name: custom-bootstrap-volume
+        mountPath: /etc/istio/custom-bootstrap
+        configMapName: istio-gateway-bootstrap-config
+
       # The node selector is normally the list of nodeports, see CloudBender
       nodeSelector:
         node.kubernetes.io/ingress.public: "30080_30443"
@@ -107,6 +116,9 @@ istio-private-ingress:
         topologyKey: kubernetes.io/hostname
         values: istio-private-ingressgateway
       type: NodePort
+      podAnnotations:
+      #  sidecar.istio.io/bootstrapOverride: istio-gateway-bootstrap-config
+        proxy.istio.io/config: '{ "terminationDrainDuration": "20s" }'
       nodeSelector:
         node.kubernetes.io/ingress.private: "31080_31443"
         #nodeSelector: "31080_31443_31671_31672_31224"

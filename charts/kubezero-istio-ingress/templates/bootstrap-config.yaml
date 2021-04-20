@@ -1,6 +1,6 @@
 # https://www.envoyproxy.io/docs/envoy/v1.17.1/configuration/best_practices/edge#configuring-envoy-as-an-edge-proxy
 # https://github.com/istio/istio/issues/24715
-
+{{- if or (index .Values "istio-ingress" "enabled") (index .Values "istio-private-ingress" "enabled") }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -39,10 +39,21 @@ data:
           {
             "name": "envoy.resource_monitors.fixed_heap",
             "typed_config": {
-              "@type": "type.googleapis.com/envoy.extensions.resource_monitors.fixed_heap.v3.FixedHeapConfig",
+              "@type": "type.googleapis.com/envoy.config.resource_monitor.fixed_heap.v2alpha.FixedHeapConfig",
               "max_heap_size_bytes": 536870912
+            }
+          }
+        ]
+      },
+      "layeredRuntime": {
+        "layers": [
+          {
+            "name": "static_layer_0",
+            "staticLayer": {
+              "overload.global_downstream_max_connections": 50000
             }
           }
         ]
       }
     }
+{{- end }}
