@@ -194,6 +194,15 @@ function kiam-post() {
 
 
 ###########
+# Metrics #
+###########
+# Cleanup patch jobs from previous runs , ArgoCD does this automatically
+function metrics-pre() {
+  kubectl delete jobs --field-selector status.successful=1 -n monitoring
+}
+
+
+###########
 # Logging #
 ###########
 # eck operator still doesnt support helm v3 so we have to toggle settings in the eck subchart

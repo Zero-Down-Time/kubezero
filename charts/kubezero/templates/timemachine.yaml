@@ -1,8 +1,0 @@
-{{- define "timemachine-values" }}
-{{- end }}
-
-
-{{- define "timemachine-argo" }}
-{{- end }}
-
-{{ include "kubezero-app.app" . }}

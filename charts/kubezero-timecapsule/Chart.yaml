@@ -1,5 +1,5 @@
 apiVersion: v2
-name: kubezero-timemachine
+name: kubezero-timecapsule
 description: KubeZero umbrella chart for all things backup
 type: application
 version: 0.1.0
