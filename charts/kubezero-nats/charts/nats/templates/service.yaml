@@ -1,0 +1,38 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "nats.fullname" . }}
+  labels:
+    {{- include "nats.labels" . | nindent 4 }}
+  {{- if .Values.serviceAnnotations}}
+  annotations:
+  {{- range $key, $value := .Values.serviceAnnotations }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end }}
+  {{- end }}
+spec:
+  selector:
+    {{- include "nats.selectorLabels" . | nindent 4 }}
+  clusterIP: None
+  {{- if .Values.topologyKeys }}
+  topologyKeys:
+     {{- .Values.topologyKeys | toYaml | nindent 4 }}
+  {{- end }}
+  ports:
+  {{- if .Values.websocket.enabled }}
+  - name: websocket
+    port: {{ .Values.websocket.port }}
+  {{- end }}
+  - name: client
+    port: 4222
+  - name: cluster
+    port: 6222
+  - name: monitor
+    port: 8222
+  - name: metrics
+    port: 7777
+  - name: leafnodes
+    port: 7422
+  - name: gateways
+    port: 7522

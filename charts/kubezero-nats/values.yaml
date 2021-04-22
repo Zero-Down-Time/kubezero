@@ -1,0 +1,21 @@
+nats:
+  nats:
+    image: nats:2.2.1-alpine3.13
+
+    advertise: false
+
+    jetstream:
+      enabled: true
+
+      memStorage:
+       enabled: true
+       size: 128Mi
+
+  natsbox:
+    enabled: false
+
+  exporter:
+    serviceMonitor:
+      enabled: true
+      labels:
+        release: metrics
