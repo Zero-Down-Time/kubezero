@@ -1,0 +1,17 @@
+apiVersion: v2
+name: kubezero-nats
+description: KubeZero umbrella chart for NATS
+type: application
+version: 0.1.0
+home: https://kubezero.com
+icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
+keywords:
+  - kubezero
+  - nats
+maintainers:
+  - name: Quarky9
+dependencies:
+  - name: nats
+    version: 0.8.3
+    #repository: https://nats-io.github.io/k8s/helm/charts/
+kubeVersion: ">= 1.18.0"
