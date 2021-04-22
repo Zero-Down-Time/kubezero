@@ -1,3 +1,6 @@
+### TODO
+- https://istio.io/latest/docs/ops/configuration/security/harden-docker-images/
+
 #!/bin/bash
 set -ex
 

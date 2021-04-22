@@ -6,6 +6,8 @@ kind: ConfigMap
 metadata:
   name: istio-gateway-bootstrap-config
   namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kubezero-lib.labels" . | indent 4 }}
 data:
   custom_bootstrap.json: |
     {
