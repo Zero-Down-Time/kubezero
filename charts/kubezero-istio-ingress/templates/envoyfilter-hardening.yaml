@@ -4,6 +4,8 @@ kind: EnvoyFilter
 metadata:
   name: ingressgateway-hardening
   namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kubezero-lib.labels" . | indent 4 }}
 spec:
   configPatches:
   - applyTo: CLUSTER
