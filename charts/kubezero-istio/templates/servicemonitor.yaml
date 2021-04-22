@@ -1,0 +1,18 @@
+{{- if index .Values "istio-discovery" "telemetry" "enabled" }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: istio-component-monitor
+  namespace: istio-system
+  labels:
+    release: metrics
+spec:
+  jobLabel: istio
+  targetLabels: [app]
+  selector:
+    matchExpressions:
+    - {key: istio, operator: In, values: [pilot]}
+  endpoints:
+  - port: http-monitoring
+    interval: 30s
+{{- end }}

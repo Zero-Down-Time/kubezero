@@ -17,6 +17,9 @@ global:
 istio-ingress:
   enabled: false
 
+  telemetry:
+    enabled: false
+
   gateways:
     istio-ingressgateway:
       autoscaleEnabled: false
@@ -89,6 +92,9 @@ istio-ingress:
 
 istio-private-ingress:
   enabled: false
+
+  telemetry:
+    enabled: false
 
   gateways:
     istio-ingressgateway:
