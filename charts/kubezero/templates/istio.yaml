@@ -8,6 +8,9 @@ global:
 istio-discovery:
   pilot:
     replicaCount: 2
+
+  telemetry:
+    enabled: {{ .Values.metrics.enabled }}
 {{- end }}
 
 {{- end }}

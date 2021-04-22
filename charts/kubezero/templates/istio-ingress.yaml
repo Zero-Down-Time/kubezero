@@ -8,6 +8,8 @@ global:
 {{- if index .Values "istio-ingress" "public" }}
 istio-ingress:
   enabled: {{ index .Values "istio-ingress" "public" "enabled" }}
+  telemetry:
+    enabled: {{ .Values.metrics.enabled }}
   {{- with index .Values "istio-ingress" "public" "gateway" }}
   gateways:
     istio-ingressgateway:
@@ -22,6 +24,8 @@ istio-ingress:
 {{- if index .Values "istio-ingress" "private" }}
 istio-private-ingress:
   enabled: {{ index .Values "istio-ingress" "private" "enabled" }}
+  telemetry:
+    enabled: {{ .Values.metrics.enabled }}
   {{- with index .Values "istio-ingress" "private" "gateway" }}
   gateways:
     istio-ingressgateway:

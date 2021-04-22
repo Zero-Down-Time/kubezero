@@ -65,6 +65,8 @@ kube-prometheus-stack:
       releaseNamespace: true
       additional:
         - kube-system
+        - istio-system
+        - istio-ingress
         - logging
 
     admissionWebhooks:
