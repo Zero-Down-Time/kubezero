@@ -1,8 +1,8 @@
-### TODO
-- https://istio.io/latest/docs/ops/configuration/security/harden-docker-images/
-
 #!/bin/bash
 set -ex
+
+### TODO
+# - https://istio.io/latest/docs/ops/configuration/security/harden-docker-images/
 
 export ISTIO_VERSION=1.9.3
 
@@ -35,3 +35,6 @@ sed -i -e 's/name: istio-ingress/name: istio-private-ingress/' ../kubezero-istio
 
 # Get matching istioctl
 [ -x istioctl ] && [ "$(./istioctl version --remote=false)" == $ISTIO_VERSION ] || { curl -sL https://github.com/istio/istio/releases/download/${ISTIO_VERSION}/istioctl-${ISTIO_VERSION}-linux-amd64.tar.gz | tar xz; chmod +x istioctl; }
+
+# Fetch dashboards from Grafana.com and update ZDT CM
+../kubezero-metrics/sync_grafana_dashboards.py dashboards.yaml templates/grafana-dashboards.yaml

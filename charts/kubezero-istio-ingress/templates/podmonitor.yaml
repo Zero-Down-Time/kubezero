@@ -3,9 +3,9 @@ apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
   name: envoy-stats-monitor
-  namespace: istio-ingress
+  namespace: {{ .Release.Namespace }}
   labels:
-    release: metrics
+{{ include "kubezero-lib.labels" . | indent 4 }}
 spec:
   selector:
     matchExpressions:
@@ -13,7 +13,6 @@ spec:
   jobLabel: envoy-stats
   podMetricsEndpoints:
   - path: /stats/prometheus
-    interval: 30s
     relabelings:
     - action: keep
       sourceLabels: [__meta_kubernetes_pod_container_name]
