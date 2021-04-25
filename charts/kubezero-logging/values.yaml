@@ -205,7 +205,7 @@ fluent-bit:
   enabled: false
 
   serviceMonitor:
-    enabled: true
+    enabled: false
     selector:
       release: metrics
 
@@ -216,7 +216,7 @@ fluent-bit:
   resources:
     requests:
       cpu: 20m
-      memory: 16Mi
+      memory: 32Mi
     limits:
       memory: 64Mi
 
