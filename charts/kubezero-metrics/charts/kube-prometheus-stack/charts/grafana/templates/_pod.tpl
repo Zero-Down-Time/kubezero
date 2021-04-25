@@ -197,11 +197,16 @@ containers:
       - name: FOLDER_ANNOTATION
         value: "{{ .Values.sidecar.dashboards.folderAnnotation }}"
       {{- end }}
+      - name: SCRIPT
+        value: /opt/script.sh
     resources:
 {{ toYaml .Values.sidecar.resources | indent 6 }}
     volumeMounts:
       - name: sc-dashboard-volume
         mountPath: {{ .Values.sidecar.dashboards.folder | quote }}
+      - name: script-volume
+        mountPath: /opt/script.sh
+        subPath: script.sh
 {{- end}}
   - name: {{ .Chart.Name }}
     {{- if .Values.image.sha }}
