@@ -8,4 +8,4 @@ metadata:
 data:
   script.sh: |-
      #!/bin/sh
-     /bin/gunzip -k /tmp/dashboards/*/*.gz
+     /bin/gunzip -f -k /tmp/dashboards/*/*.gz

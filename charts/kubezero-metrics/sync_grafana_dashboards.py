@@ -13,6 +13,22 @@ config_file = sys.argv[1]
 configmap_file = sys.argv[2]
 
 
+def traverse_json(obj):
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            # CloudBender::StackRef
+            if k == "datasource" and v:
+                obj[k] = "$datasource"
+
+            if isinstance(v, dict) or isinstance(v, list):
+                traverse_json(v)
+
+    elif isinstance(obj, list):
+        for k in obj:
+            if isinstance(k, dict) or isinstance(k, list):
+                traverse_json(k)
+
+
 # read config file
 with open(config_file, 'r') as yaml_contents:
     config = yaml.safe_load(yaml_contents.read())
@@ -58,17 +74,18 @@ for b in config['dashboards']:
 
     obj = json.loads(raw_text)
 
-    # Customize each dashboard
+    # replace datasources
+    traverse_json(obj)
    
     # Set default tim in all charts to 1h
     obj['time'] = { "from": "now-1h", "to": "now" }
     obj['refresh'] = "30s"
 
+    # set tags
     if 'tags' in b:
       obj['tags'] = b['tags']
 
     text = json.dumps(obj, indent=2)
-    text = text.replace("{{", "{{`{{").replace("}}", "}}`}}").replace("{{`{{", "{{`{{`}}").replace("}}`}}", "{{`}}`}}")
 
     if 'gzip' in config and config['gzip']:
         # compress and base64 encode
@@ -83,6 +100,8 @@ for b in config['dashboards']:
 ''' % b
         configmap += textb64+'\n'
     else:
+        # encode otherwise helm will mess with raw json
+        text = text.replace("{{", "{{`{{").replace("}}", "}}`}}").replace("{{`{{", "{{`{{`}}").replace("}}`}}", "{{`}}`}}")
         text = textwrap.indent(text, ' '*4)
         configmap += '''  %(name)s.json:
 ''' % b
