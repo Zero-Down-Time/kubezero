@@ -19,4 +19,4 @@ name: grafana
 sources:
 - https://github.com/grafana/grafana
 type: application
-version: 6.7.4
+version: 6.8.0

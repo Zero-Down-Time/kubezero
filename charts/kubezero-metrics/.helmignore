@@ -21,3 +21,8 @@
 .idea/
 *.tmproj
 .vscode/
+
+README.md.gotmpl
+*.patch
+*.sh
+*.py

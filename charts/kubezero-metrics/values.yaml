@@ -1,4 +1,8 @@
 kube-prometheus-stack:
+  global:
+    rbac:
+      pspEnabled: false
+
   defaultRules:
     create: true
 
@@ -61,14 +65,6 @@ kube-prometheus-stack:
       limits:
         memory: 64Mi
 
-    namespaces:
-      releaseNamespace: true
-      additional:
-        - kube-system
-        - istio-system
-        - istio-ingress
-        - logging
-
     admissionWebhooks:
       patch:
         tolerations:
@@ -89,6 +85,8 @@ kube-prometheus-stack:
         action: replace
 
   prometheus-node-exporter:
+    rbac:
+      pspEnabled: false
     resources:
       requests:
         cpu: 20m
@@ -103,6 +101,10 @@ kube-prometheus-stack:
       logFormat: json
       # externalUrl:
 
+      # gather all monitors 
+      podMonitorSelectorNilUsesHelmValues: false
+      serviceMonitorSelectorNilUsesHelmValues: false
+
       resources:
         requests:
           memory: 512Mi
@@ -111,25 +113,66 @@ kube-prometheus-stack:
           memory: 3Gi
           # cpu: "1000m"
 
+      walCompression: true
       storageSpec:
         volumeClaimTemplate:
           spec:
-            storageClassName: ebs-sc-gp2-xfs
+            storageClassName: ebs-sc-gp3-xfs
             accessModes: ["ReadWriteOnce"]
             resources:
               requests:
                 storage: 16Gi
 
   # Custom Grafana tweaks
-  # - persistence, plugins, auth
   grafana:
     enabled: true
-    persistence:
-      enabled: true
-      size: 4Gi
-      storageClassName: ebs-sc-gp2-xfs
-    deploymentStrategy:
-      type: Recreate
+    rbac:
+      pspEnabled: false
+
+    grafana.ini:
+      server:
+        enable_gzip: true
+      analytics:
+        check_for_updates: false
+      security:
+        disable_gravatar: true
+        cookie_secure: true
+        strict_transport_security: true
+      #auth:
+      #  disable_login_form: true
+      #  disable_signout_menu: true
+      auth.anonymous:
+        enabled: true
+      dashboards:
+        min_refresh_interval: "30s"
+        # default_home_dashboard_path: 'dashboards/kubezero.json'
+      alerting:
+        enabled: false
+      date_formats:
+        default_timezone: UTC
+
+    sidecar:
+      # We require at least 1.12.0 for the SCRIPT and relative folder names
+      image:
+        tag: 1.12.0
+      dashboards:
+        searchNamespace: ALL
+        provider:
+          foldersFromFilesStructure: true
+    # For the gunzip script
+    extraContainerVolumes:
+    - name: script-volume
+      configMap:
+        name: script-configmap
+        defaultMode: 0777
+
+    #persistence:
+    #  enabled: true
+    #  size: 4Gi
+    #  storageClassName: ebs-sc-gp2-xfs
+    #deploymentStrategy:
+    #  type: Recreate
+
     plugins:
     - grafana-piechart-panel
     service:
@@ -141,6 +184,8 @@ kube-prometheus-stack:
 
   # Assign state metrics to control plane
   kube-state-metrics:
+    podSecurityPolicy:
+      enabled: false
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
