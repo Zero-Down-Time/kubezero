@@ -3,9 +3,9 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: istio-component-monitor
-  namespace: istio-system
+  namespace: {{ .Release.Namespace }}
   labels:
-    release: metrics
+{{ include "kubezero-lib.labels" . | indent 4 }}
 spec:
   jobLabel: istio
   targetLabels: [app]
@@ -14,5 +14,4 @@ spec:
     - {key: istio, operator: In, values: [pilot]}
   endpoints:
   - port: http-monitoring
-    interval: 30s
 {{- end }}
