@@ -1,9 +1,8 @@
 configmap: grafana-dashboards-kube-mixin
 gzip: true
-# folder: Istio
-
-# cd kube-mixin; for f in *.json; do echo "- name: ${f%%.json}" >> ../kube-mixin.yaml; echo "  url: file://kube-mixin/$f" >> ../kube-mixin.yaml; done; cd -
+folder: Kubernetes
 dashboards:
+# cd kube-mixin; for f in *.json; do echo "- name: ${f%%.json}" >> ../dashboards.yaml; echo "  url: file://kube-mixin/$f" >> ../dashboards.yaml; done; cd -
 - name: apiserver
   url: file://kube-mixin/apiserver.json
 - name: cluster-total

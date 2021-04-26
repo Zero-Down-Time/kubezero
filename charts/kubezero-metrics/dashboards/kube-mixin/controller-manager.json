@@ -1014,7 +1014,7 @@
       ]
    },
    "timezone": "UTC",
-   "title": "Kubernetes / Controller Manager",
+   "title": "Controller Manager",
    "uid": "72e0e05bef5099e5f049b05fdc429ed4",
    "version": 0
 }
