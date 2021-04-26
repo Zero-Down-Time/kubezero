@@ -52,10 +52,15 @@ Providing backup solutions for KubeZero clusters:
   `./bootstrap.sh crds all clusters/$CLUSTER`
 
 2. Prepare upgrade
-Remove legacy monitoring configmaps
-`kubectl delete cm -n monitoring -l grafana_dashboard=1`
-Remove previous Grafana stateful config
-`kubectl delete pvc metrics-grafana -n monitoring`
+- Remove legacy monitoring configmaps
+- Remove previous Grafana stateful config
+- Remove legacy Istio Enovyfilter
+
+```
+kubectl delete cm -n monitoring -l grafana_dashboard=1
+kubectl delete pvc metrics-grafana -n monitoring
+kubectl delete envoyfilter -A -l operator.istio.io/version=1.6.9
+```
 
 3. Upgrade all components  
 `./bootstrap.sh deploy all clusters/$CLUSTER`
