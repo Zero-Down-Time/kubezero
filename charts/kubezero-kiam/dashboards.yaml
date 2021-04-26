@@ -1,0 +1,7 @@
+configmap: grafana-dashboards-kiam
+gzip: true
+folder: AWS
+dashboards:
+- name: kiam
+  url: https://raw.githubusercontent.com/uswitch/kiam/master/docs/dashboard-prom.json
+  tags: ['AWS']
