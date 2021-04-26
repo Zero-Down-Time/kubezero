@@ -26,3 +26,4 @@ README.md.gotmpl
 *.patch
 *.sh
 *.py
+dashboards

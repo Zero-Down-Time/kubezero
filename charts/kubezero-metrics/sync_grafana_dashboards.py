@@ -18,7 +18,7 @@ def traverse_json(obj):
         for k, v in obj.items():
             # CloudBender::StackRef
             if k == "datasource" and v:
-                obj[k] = "$datasource"
+                obj[k] = "Prometheus"
 
             if isinstance(v, dict) or isinstance(v, list):
                 traverse_json(v)
@@ -66,11 +66,15 @@ else:
 '''
 
 for b in config['dashboards']:
-    response = requests.get(b['url'])
-    if response.status_code != 200:
-        print('Skipping the file, response code %s not equals 200' % response.status_code)
-        continue
-    raw_text = response.text
+    if not b['url'].startswith('file://'):
+        response = requests.get(b['url'])
+        if response.status_code != 200:
+            print('Skipping the file, response code %s not equals 200' % response.status_code)
+            continue
+        raw_text = response.text
+    else:
+        with open(b['url'].replace('file://', ''), 'r') as file_contents:
+            raw_text = file_contents.read()
 
     obj = json.loads(raw_text)
 
