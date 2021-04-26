@@ -1,4 +1,5 @@
 configmap: grafana-dashboards-kiam
+condition: '.Values.kiam.server.prometheus.servicemonitor.enabled'
 gzip: true
 folder: AWS
 dashboards:
