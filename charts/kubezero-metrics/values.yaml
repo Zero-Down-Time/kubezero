@@ -129,6 +129,8 @@ kube-prometheus-stack:
     rbac:
       pspEnabled: false
 
+    defaultDashboardsEnabled: false
+
     grafana.ini:
       server:
         enable_gzip: true
