@@ -2,6 +2,12 @@ configmap: grafana-dashboards-kube-mixin
 gzip: true
 folder: Kubernetes
 dashboards:
+- name: coreDNS
+  url: https://grafana.com/api/dashboards/12539/revisions/5/download
+  tags: ['kubernetes', 'DNS']
+- name: etcd
+  url: https://grafana.com/api/dashboards/3070/revisions/3/download
+  tags: ['kubernetes']
 # cd kube-mixin; for f in *.json; do echo "- name: ${f%%.json}" >> ../dashboards.yaml; echo "  url: file://kube-mixin/$f" >> ../dashboards.yaml; done; cd -
 - name: apiserver
   url: file://kube-mixin/apiserver.json
