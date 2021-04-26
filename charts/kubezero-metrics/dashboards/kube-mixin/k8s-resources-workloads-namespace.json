@@ -1870,7 +1870,7 @@
       ]
    },
    "timezone": "UTC",
-   "title": "Kubernetes / Compute Resources / Namespace (Workloads)",
+   "title": "Compute Resources / Namespace (Workloads)",
    "uid": "a87fb0d919ec0ea5f6543124e16c42a5",
    "version": 0
 }

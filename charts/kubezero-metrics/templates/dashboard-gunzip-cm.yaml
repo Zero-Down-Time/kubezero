@@ -8,4 +8,4 @@ metadata:
 data:
   script.sh: |-
      #!/bin/sh
-     /bin/gunzip -f -k /tmp/dashboards/*/*.gz
+     find /tmp/dashboards -name "*.gz" -exec gunzip -f -k {} \;
