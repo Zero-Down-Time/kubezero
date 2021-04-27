@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-%s" (include "kubezero-lib.fullname" $) "grafana-dashboards-zdt" | trunc 63 | trimSuffix "-" }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    grafana_dashboard: "1"
+{{ include "kubezero-lib.labels" . | indent 4 }}
+binaryData:
+  home.json.gz:
+    H4sIAAAAAAAC/9VVS2/UMBC+8yuMD6hI7e5mH63ghlohKkAUWopEWyFvPEmsdexgO93dVv3v2M7L2RQqbnDZ9XwzHs/jy8z9M4QwEUIaYpgUGr9G9xayIGfaWOnKS6hGvWZZMm5OhVVG+x1KiSFalioGq8BnSuZgMig1DmxAkCV3eqNKCPCM0UdQFktxLLlUzqFKl2Rvso+mUWR/Fot9FL0MXQuS+4ffdLmgF+gNB2V6IZht4e0o0dlSEkVxrXvw/zf298GZY6DM7ESLUwHmlFpElJxXiCJFdiElN6yw+MSDzJlMX/kzZ2Llqnp148WCCOC6rWtT1X71Gu9ekzDg9FiKhKVtc6orkJCSG9+yhyBDeQtK2YJWrzbZtf5SqzuTuu8rs+Is8LF2CcwDYNMkV8tbJw98+8QPW1EWfU550DbVgHDUws+vvp9coA8ylTd7mTGFfj0ex1SM7kDJAyrXwrAcRrbmY6I1GD1elUtwyjG3dw50Tjg/OJyPCpGia3xHzTV+eS2+AY8t+ZCR6L21/27t0UcwisUaPUdtHEEyufT0wzlRK/csHiRW8DJl4hKUtgk506PRYjRrfWAX6FtL+d3mOfw8Y4kZKoynFn5nQw381Ow0sDFVFHUM/xJRosUOU6LpE0yZPc6UlnE7X8nvyZNITkH5TzB8IyebUwO5M56F+M8SlHsfh93WmVy/A0KZSPVw6DjtF4gtQ/n2ksEa6OM250BU7KqREK4HSkOUeuymIelvqv0kw5qbQwqdNKNMD4nkxpyf5P8vmXrAH9g0/3s2AdCvirs6NeNnOHqYoLAZbXI+nAptBz4QA9qgxE4AZMuJlnY+DXshYK3rPtjfah8oSBRoVwg8m1T9wzrOICcdFaZHFWy2vO6pWlWWPVLYoZEX3K4+kQ63eLfXXGKdPqmGFhZyfRBldczYyBrDvWsFi1egust2bVMQPZY3Cf1gdsqrWxLsOqtcBAyNJoEwC4Uo786L4ByFwmwSarLuPA3OUb3db5q8bBI/OipcPflK6PgwdBy+Mp2HAu3ORzSMdzeWZtR3he0V+04Kr18qudZWWSuCtYGOZbGt8NJ/Afjw8ydIF68+3lXobUuh+bOHXxBMSbrqCQAA

@@ -1,0 +1,5 @@
+configmap: grafana-dashboards-zdt
+gzip: true
+dashboards:
+- name: home
+  url: file://zdt/home.json
