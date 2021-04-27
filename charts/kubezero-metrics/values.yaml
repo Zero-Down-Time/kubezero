@@ -147,7 +147,7 @@ kube-prometheus-stack:
         enabled: true
       dashboards:
         min_refresh_interval: "30s"
-        # default_home_dashboard_path: 'dashboards/kubezero.json'
+        default_home_dashboard_path: '/tmp/dashboards/home.json'
       alerting:
         enabled: false
       date_formats:
