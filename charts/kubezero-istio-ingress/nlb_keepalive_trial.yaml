@@ -15,19 +15,24 @@ spec:
         socket_options:
           # SOL_SOCKET = 1
           # SO_KEEPALIVE = 9
-          - level: 1
-            name: 9
-            int_value: 1
-            state: STATE_LISTENING
+        - int_value: 1
+          level: 1
+          name: 9
+          state: STATE_PREBIND
+          # TCP_KEEPPROBES
+        - int_value: 9
+          level: 6
+          name: 6
+          state: STATE_PREBIND
           # IPPROTO_TCP = 6
           # TCP_KEEPIDLE = 4
-          - level: 6
-            name: 4
-            int_value: 120
-            state: STATE_LISTENING
+        - int_value: 120
+          level: 6
+          name: 4
+          state: STATE_PREBIND
           # TCP_KEEPINTVL = 5
-          - level: 6
-            name: 5
-            int_value: 60
-            state: STATE_LISTENING
+        - int_value: 30
+          level: 6
+          name: 5
+          state: STATE_PREBIND
 {{- end }}
