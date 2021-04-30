@@ -37,3 +37,6 @@ istio-discovery:
   meshConfig:
     accessLogFile: /dev/stdout
     accessLogEncoding: 'JSON'
+    tcpKeepalive:
+      interval: 60s
+      time: 120s
