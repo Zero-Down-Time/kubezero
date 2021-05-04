@@ -7,15 +7,9 @@ nats:
     jetstream:
       enabled: true
 
-      memStorage:
-       enabled: true
-       size: 128Mi
-
   natsbox:
     enabled: false
 
   exporter:
     serviceMonitor:
       enabled: true
-      labels:
-        release: metrics
