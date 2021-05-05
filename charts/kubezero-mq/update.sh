@@ -11,4 +11,5 @@ cp -r k8s/helm/charts/nats/* charts/nats/
 rm -rf k8s
 
 # Fetch dashboards
-../kubezero-metrics/sync_grafana_dashboards.py dashboards.yaml templates/nats/grafana-dashboards.yaml
+../kubezero-metrics/sync_grafana_dashboards.py dashboards-nats.yaml templates/nats/grafana-dashboards.yaml
+../kubezero-metrics/sync_grafana_dashboards.py dashboards-rabbitmq.yaml templates/rabbitmq/grafana-dashboards.yaml
