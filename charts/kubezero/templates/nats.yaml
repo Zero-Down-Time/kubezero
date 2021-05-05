@@ -1,8 +1,0 @@
-{{- define "nats-values" }}
-{{- end }}
-
-
-{{- define "nats-argo" }}
-{{- end }}
-
-{{ include "kubezero-app.app" . }}

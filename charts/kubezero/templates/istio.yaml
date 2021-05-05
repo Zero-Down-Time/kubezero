@@ -1,22 +1,18 @@
 {{- define "istio-values" }}
-
 istio-discovery:
   telemetry:
     enabled: {{ .Values.metrics.enabled }}
 {{- if .Values.HighAvailableControlplane }}
   pilot:
     replicaCount: 2
-
 global:
   defaultPodDisruptionBudget:
     enabled: true
 {{- end }}
-
 {{- end }}
 
 
 {{- define "istio-argo" }}
-
   ignoreDifferences:
   - group: apiextensions.k8s.io
     kind: CustomResourceDefinition
