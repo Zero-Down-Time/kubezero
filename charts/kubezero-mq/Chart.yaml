@@ -1,13 +1,14 @@
 apiVersion: v2
 name: kubezero-mq
-description: KubeZero umbrella chart for MQ systems like NATS
+description: KubeZero umbrella chart for MQ systems like NATS, RabbitMQ
 type: application
-version: 0.1.1
+version: 0.2.0
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
   - kubezero
   - nats
+  - rabbitmq
 maintainers:
   - name: Quarky9
 dependencies:
@@ -18,4 +19,8 @@ dependencies:
     version: 0.8.3
     #repository: https://nats-io.github.io/k8s/helm/charts/
     condition: nats.enabled
+  - name: rabbitmq
+    version: 8.13.1
+    repository: https://charts.bitnami.com/bitnami
+    condition: rabbitmq.enabled
 kubeVersion: ">= 1.18.0"

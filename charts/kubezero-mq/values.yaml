@@ -1,3 +1,4 @@
+# nats
 nats:
   enabled: false
 
@@ -13,5 +14,56 @@ nats:
     enabled: false
 
   exporter:
+    serviceMonitor:
+      enabled: false
+
+# rabbitmq
+rabbitmq:
+  enabled: false
+
+  # rabbitmq.hosts -- hostnames of rabbitmq services, used for Istio and TLS
+  hosts: []
+
+  istio:
+    enabled: false
+    gateway: istio-ingress/private-ingressgateway
+
+  auth:
+    password: "supersecret"
+    erlangCookie: "randomlongerlangcookie"
+    tls:
+      enabled: false
+      failIfNoPeerCert: false
+      existingSecret: rabbitmq-server-certificate
+      existingSecretFullChain: true
+  
+  clustering:
+    forceBoot: true
+  
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+  
+  replicaCount: 1
+  
+  podAntiAffinityPreset: ""
+  topologySpreadConstraints: |-
+    - maxSkew: 1
+      topologyKey: topology.kubernetes.io/zone
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+ 
+  pdb:
+    create: true
+  
+  metrics:
+    enabled: false
     serviceMonitor:
       enabled: false

@@ -1,0 +1,35 @@
+{{- if .Values.rabbitmq.istio.enabled }}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: rabbit-amqp
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kubezero-lib.labels" . | indent 4 }}
+spec:
+  gateways:
+  - {{ .Values.rabbitmq.istio.gateway }}
+  hosts:
+{{ toYaml .Values.rabbitmq.hosts | indent 2 }}
+  tcp:
+  - match:
+    - port: 5672
+    route:
+    - destination:
+        host: rabbitmq-headless
+        port:
+          number: 5672
+  - match:
+    - port: 5671
+    route:
+    - destination:
+        host: rabbitmq-headless
+        port:
+          number: 5671
+  http:
+  - route:
+    - destination:
+        host: rabbitmq-headless
+        port:
+          number: 15672
+{{- end }}
