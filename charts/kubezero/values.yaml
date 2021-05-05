@@ -69,7 +69,3 @@ argocd:
     enabled: false
 
 argo: {}
-
-nats:
-  enabled: false
-  namespace: nats

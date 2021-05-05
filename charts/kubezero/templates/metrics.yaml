@@ -2,7 +2,7 @@
 
 {{- with .Values.metrics.istio }}
 istio:
- {{- toYaml . | nindent 2 }}
+{{- toYaml . | nindent 2 }}
 {{- end }}
 {{- if index .Values "metrics" "kube-prometheus-stack" }}
 kube-prometheus-stack:
