@@ -1,6 +1,8 @@
 #!/bin/bash
 set -ex
 
+### NATS
+
 # get latest chart until they have upstream repo fixed
 rm -rf charts/nats && mkdir -p charts/nats
 

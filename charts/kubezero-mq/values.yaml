@@ -1,4 +1,6 @@
 nats:
+  enabled: false
+
   nats:
     image: nats:2.2.1-alpine3.13
 
@@ -12,4 +14,4 @@ nats:
 
   exporter:
     serviceMonitor:
-      enabled: true
+      enabled: false

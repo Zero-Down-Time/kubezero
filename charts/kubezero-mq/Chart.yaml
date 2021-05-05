@@ -1,6 +1,6 @@
 apiVersion: v2
-name: kubezero-nats
-description: KubeZero umbrella chart for NATS
+name: kubezero-mq
+description: KubeZero umbrella chart for MQ systems like NATS
 type: application
 version: 0.1.1
 home: https://kubezero.com
@@ -17,4 +17,5 @@ dependencies:
   - name: nats
     version: 0.8.3
     #repository: https://nats-io.github.io/k8s/helm/charts/
+    condition: nats.enabled
 kubeVersion: ">= 1.18.0"
