@@ -7,6 +7,9 @@ dashboards:
   tags: ['kubernetes', 'DNS']
 - name: etcd
   url: https://grafana.com/api/dashboards/3070/revisions/3/download
+  tags: ['kubernetes', 'etcd']
+- name: node
+  url: https://grafana.com/api/dashboards/1860/revisions/23/download
   tags: ['kubernetes']
 # cd kube-mixin; for f in *.json; do echo "- name: ${f%%.json}" >> ../dashboards.yaml; echo "  url: file://kube-mixin/$f" >> ../dashboards.yaml; done; cd -
 - name: apiserver
