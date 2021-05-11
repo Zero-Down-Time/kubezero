@@ -1,6 +1,6 @@
 # kubezero-metrics
 
-![Version: 0.3.4](https://img.shields.io/badge/Version-0.3.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.4.1](https://img.shields.io/badge/Version-0.4.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for prometheus-operator
 
@@ -18,8 +18,8 @@ Kubernetes: `>= 1.18.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | kube-prometheus-stack | 14.3.0 |
-| https://prometheus-community.github.io/helm-charts | prometheus-adapter | 2.12.1 |
+|  | kube-prometheus-stack | 15.4.4 |
+| https://prometheus-community.github.io/helm-charts | prometheus-adapter | 2.12.3 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## Values
@@ -45,15 +45,32 @@ Kubernetes: `>= 1.18.0`
 | kube-prometheus-stack.alertmanager.enabled | bool | `false` |  |
 | kube-prometheus-stack.coreDns.enabled | bool | `true` |  |
 | kube-prometheus-stack.defaultRules.create | bool | `true` |  |
+| kube-prometheus-stack.global.rbac.pspEnabled | bool | `false` |  |
+| kube-prometheus-stack.grafana."grafana.ini"."auth.anonymous".enabled | bool | `true` |  |
+| kube-prometheus-stack.grafana."grafana.ini".alerting.enabled | bool | `false` |  |
+| kube-prometheus-stack.grafana."grafana.ini".analytics.check_for_updates | bool | `false` |  |
+| kube-prometheus-stack.grafana."grafana.ini".dashboards.default_home_dashboard_path | string | `"/tmp/dashboards/zdt-home.json"` |  |
+| kube-prometheus-stack.grafana."grafana.ini".dashboards.min_refresh_interval | string | `"30s"` |  |
+| kube-prometheus-stack.grafana."grafana.ini".date_formats.default_timezone | string | `"UTC"` |  |
+| kube-prometheus-stack.grafana."grafana.ini".security.cookie_secure | bool | `true` |  |
+| kube-prometheus-stack.grafana."grafana.ini".security.disable_gravatar | bool | `true` |  |
+| kube-prometheus-stack.grafana."grafana.ini".security.strict_transport_security | bool | `true` |  |
+| kube-prometheus-stack.grafana."grafana.ini".server.enable_gzip | bool | `true` |  |
+| kube-prometheus-stack.grafana.defaultDashboardsEnabled | bool | `false` |  |
 | kube-prometheus-stack.grafana.enabled | bool | `true` |  |
+| kube-prometheus-stack.grafana.extraContainerVolumes[0].configMap.defaultMode | int | `511` |  |
+| kube-prometheus-stack.grafana.extraContainerVolumes[0].configMap.name | string | `"script-configmap"` |  |
+| kube-prometheus-stack.grafana.extraContainerVolumes[0].name | string | `"script-volume"` |  |
 | kube-prometheus-stack.grafana.initChownData.enabled | bool | `false` |  |
-| kube-prometheus-stack.grafana.persistence.enabled | bool | `true` |  |
-| kube-prometheus-stack.grafana.persistence.size | string | `"4Gi"` |  |
-| kube-prometheus-stack.grafana.persistence.storageClassName | string | `"ebs-sc-gp2-xfs"` |  |
 | kube-prometheus-stack.grafana.plugins[0] | string | `"grafana-piechart-panel"` |  |
+| kube-prometheus-stack.grafana.rbac.pspEnabled | bool | `false` |  |
 | kube-prometheus-stack.grafana.service.portName | string | `"http-grafana"` |  |
+| kube-prometheus-stack.grafana.sidecar.dashboards.provider.foldersFromFilesStructure | bool | `true` |  |
+| kube-prometheus-stack.grafana.sidecar.dashboards.searchNamespace | string | `"ALL"` |  |
+| kube-prometheus-stack.grafana.sidecar.image.tag | string | `"1.12.0"` |  |
 | kube-prometheus-stack.grafana.testFramework.enabled | bool | `false` |  |
 | kube-prometheus-stack.kube-state-metrics.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
+| kube-prometheus-stack.kube-state-metrics.podSecurityPolicy.enabled | bool | `false` |  |
 | kube-prometheus-stack.kube-state-metrics.tolerations[0].effect | string | `"NoSchedule"` |  |
 | kube-prometheus-stack.kube-state-metrics.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | kube-prometheus-stack.kubeApiServer.enabled | bool | `true` |  |
@@ -82,26 +99,27 @@ Kubernetes: `>= 1.18.0`
 | kube-prometheus-stack.nodeExporter.serviceMonitor.relabelings[0].separator | string | `";"` |  |
 | kube-prometheus-stack.nodeExporter.serviceMonitor.relabelings[0].sourceLabels[0] | string | `"__meta_kubernetes_pod_node_name"` |  |
 | kube-prometheus-stack.nodeExporter.serviceMonitor.relabelings[0].targetLabel | string | `"node"` |  |
+| kube-prometheus-stack.prometheus-node-exporter.rbac.pspEnabled | bool | `false` |  |
 | kube-prometheus-stack.prometheus-node-exporter.resources.requests.cpu | string | `"20m"` |  |
 | kube-prometheus-stack.prometheus-node-exporter.resources.requests.memory | string | `"16Mi"` |  |
 | kube-prometheus-stack.prometheus.enabled | bool | `true` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.logFormat | string | `"json"` |  |
+| kube-prometheus-stack.prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues | bool | `false` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.portName | string | `"http-prometheus"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.resources.limits.memory | string | `"3Gi"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.resources.requests.cpu | string | `"500m"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.resources.requests.memory | string | `"512Mi"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.retention | string | `"8d"` |  |
+| kube-prometheus-stack.prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues | bool | `false` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.accessModes[0] | string | `"ReadWriteOnce"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage | string | `"16Gi"` |  |
-| kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.storageClassName | string | `"ebs-sc-gp2-xfs"` |  |
+| kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.storageClassName | string | `"ebs-sc-gp3-xfs"` |  |
+| kube-prometheus-stack.prometheus.prometheusSpec.walCompression | bool | `true` |  |
 | kube-prometheus-stack.prometheusOperator.admissionWebhooks.patch.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
 | kube-prometheus-stack.prometheusOperator.admissionWebhooks.patch.tolerations[0].effect | string | `"NoSchedule"` |  |
 | kube-prometheus-stack.prometheusOperator.admissionWebhooks.patch.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | kube-prometheus-stack.prometheusOperator.enabled | bool | `true` |  |
 | kube-prometheus-stack.prometheusOperator.logFormat | string | `"json"` |  |
-| kube-prometheus-stack.prometheusOperator.namespaces.additional[0] | string | `"kube-system"` |  |
-| kube-prometheus-stack.prometheusOperator.namespaces.additional[1] | string | `"logging"` |  |
-| kube-prometheus-stack.prometheusOperator.namespaces.releaseNamespace | bool | `true` |  |
 | kube-prometheus-stack.prometheusOperator.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
 | kube-prometheus-stack.prometheusOperator.resources.limits.memory | string | `"64Mi"` |  |
 | kube-prometheus-stack.prometheusOperator.resources.requests.cpu | string | `"20m"` |  |
