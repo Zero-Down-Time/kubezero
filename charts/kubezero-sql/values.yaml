@@ -1,0 +1,20 @@
+mariadb-galera:
+  enabled: true
+
+  replicaCount: 2
+
+  # Passwords should be fixed otherwise helm will create random new ones each time we template|apply
+  rootUser:
+    password: 12345qwert
+  db:
+    password: 12345qwert
+  galera:
+    mariabackup:
+      password: 12345qwert
+
+  metrics:
+    serviceMonitor:
+      enabled: false
+
+    prometheusRules:
+      enabled: false
