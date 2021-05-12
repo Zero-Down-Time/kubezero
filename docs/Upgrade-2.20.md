@@ -42,9 +42,10 @@ Providing backup solutions for KubeZero clusters:
 ## Metrics
 - Added various dashboards for KubeZero modules
 - Updated / improved dashboard organization incl. folders and tags
-- Grafana Dashboards are now all provided via configmaps, no more storing of state required
+- Grafana Dashboards are now all provided via configmaps, no more state required, no manual changes persisted
+- Grafana allows anonymous read-only access
+- all dashboards ndefault to now-1h and prohibit less than 30s refresh
 - Custom dashboards can easily be provided by simple installing a ConfigMap along with workloads in any namespace
-
 
 
 ## Upgrade - Without ArgoCD
