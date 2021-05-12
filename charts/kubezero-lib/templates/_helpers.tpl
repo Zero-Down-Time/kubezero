@@ -5,6 +5,7 @@ Common set of labels
 helm.sh/chart: {{ include "kubezero-lib.chart" . }}
 app.kubernetes.io/name: {{ include "kubezero-lib.name" . }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/part-of: kubezero
 {{- end -}}
 
