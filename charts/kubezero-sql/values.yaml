@@ -23,5 +23,5 @@ mariadb-galera:
 
   istio:
     enabled: false
-    gateway: istio-system/private-ingressgateway
+    gateway: istio-ingress/private-ingressgateway
     url: mariadb.example.com
