@@ -17,6 +17,9 @@ spec:
             enabled: true
             serviceMonitor:
               enabled: true
+          istio:
+            enabled: true
+            url: mariadb.dev.mayneinc.com
 
   destination:
     server: 'https://kubernetes.default.svc'

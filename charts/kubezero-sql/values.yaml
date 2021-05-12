@@ -7,6 +7,7 @@ mariadb-galera:
   rootUser:
     password: 12345qwert
   db:
+    user: mariadb
     password: 12345qwert
   galera:
     mariabackup:
@@ -19,3 +20,8 @@ mariadb-galera:
 
     prometheusRules:
       enabled: false
+
+  istio:
+    enabled: false
+    gateway: istio-system/private-ingressgateway
+    url: mariadb.example.com
