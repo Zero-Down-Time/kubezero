@@ -2,7 +2,7 @@ apiVersion: v2
 name: kubezero-sql
 description: KubeZero umbrella chart for SQL databases like MariaDB, PostgreSQL
 type: application
-version: 0.1.0
+version: 0.1.1
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
@@ -18,5 +18,5 @@ dependencies:
   - name: mariadb-galera
     version: 5.8.0
     repository: https://charts.bitnami.com/bitnami
-    condition: mariadb.enabled
+    condition: mariadb-galera.enabled
 kubeVersion: ">= 1.18.0"
