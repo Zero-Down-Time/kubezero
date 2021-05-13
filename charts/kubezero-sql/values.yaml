@@ -25,3 +25,5 @@ mariadb-galera:
     enabled: false
     gateway: istio-ingress/private-ingressgateway
     url: mariadb.example.com
+
+  configurationConfigMap: "{{ .Release.Name }}-mariadb-galera-configuration"
