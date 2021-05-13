@@ -19,7 +19,7 @@ dependencies:
     version: ">= 0.1.3"
     repository: https://zero-down-time.github.io/kubezero/
   - name: eck-operator
-    version: 1.4.1
+    version: 1.5.0
     repository: https://helm.elastic.co
     condition: eck-operator.enabled
   - name: fluentd
