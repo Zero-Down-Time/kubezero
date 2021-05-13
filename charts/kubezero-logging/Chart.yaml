@@ -3,7 +3,7 @@ name: kubezero-logging
 description: KubeZero Umbrella Chart for complete EFK stack
 type: application
 version: 0.6.5
-appVersion: 1.4.1
+appVersion: 1.5.0
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
@@ -20,7 +20,7 @@ dependencies:
     repository: https://zero-down-time.github.io/kubezero/
   - name: eck-operator
     version: 1.5.0
-    repository: https://helm.elastic.co
+    # repository: https://helm.elastic.co
     condition: eck-operator.enabled
   - name: fluentd
     version: 0.2.2
