@@ -24,7 +24,7 @@ spec:
       {{- if .processors }}
       node.processors: {{ .processors }}
       {{- end }}
-      indices.memory.index_buffer_size: "30%"
+      indices.memory.index_buffer_size: "20%"
     podTemplate:
       {{- if $.Values.es.s3Snapshot.iamrole }}
       metadata:
