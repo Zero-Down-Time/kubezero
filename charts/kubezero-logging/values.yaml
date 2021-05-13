@@ -181,8 +181,9 @@ fluentd:
           logstash_format true
           reconnect_on_error true
           reload_on_failure true
-          request_timeout 60s
+          request_timeout 120s
           suppress_type_name true
+          bulk_message_request_threshold 2097152
 
           <buffer tag>
             @type file_single
@@ -190,7 +191,7 @@ fluentd:
             chunk_limit_size 8MB
             total_limit_size 4GB
             flush_mode interval
-            flush_thread_count 2
+            flush_thread_count 8
             flush_interval 10s
             flush_at_shutdown true
             retry_type exponential_backoff
