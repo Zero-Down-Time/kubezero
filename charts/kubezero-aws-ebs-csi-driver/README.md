@@ -1,6 +1,6 @@
 # kubezero-aws-ebs-csi-driver
 
-![Version: 0.4.4](https://img.shields.io/badge/Version-0.4.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.9.0](https://img.shields.io/badge/AppVersion-0.9.0-informational?style=flat-square)
+![Version: 0.5.1](https://img.shields.io/badge/Version-0.5.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.10.0](https://img.shields.io/badge/AppVersion-0.10.0-informational?style=flat-square)
 
 KubeZero Umbrella Chart for aws-ebs-csi-driver
 
@@ -23,7 +23,7 @@ Kubernetes: `>= 1.18.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://kubernetes-sigs.github.io/aws-ebs-csi-driver | aws-ebs-csi-driver | 0.9.14 |
+| https://kubernetes-sigs.github.io/aws-ebs-csi-driver | aws-ebs-csi-driver | 0.10.0 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## IAM Role

@@ -1,6 +1,6 @@
 # kubezero-aws-efs-csi-driver
 
-![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-informational?style=flat-square) ![AppVersion: 1.2.0](https://img.shields.io/badge/AppVersion-1.2.0-informational?style=flat-square)
+![Version: 0.3.5](https://img.shields.io/badge/Version-0.3.5-informational?style=flat-square) ![AppVersion: 1.2.0](https://img.shields.io/badge/AppVersion-1.2.0-informational?style=flat-square)
 
 KubeZero Umbrella Chart for aws-efs-csi-driver
 
@@ -23,7 +23,7 @@ Kubernetes: `>=1.18.0-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | aws-efs-csi-driver | 1.2.1 |
+|  | aws-efs-csi-driver | 1.2.2 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## Storage Class

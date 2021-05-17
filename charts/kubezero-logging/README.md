@@ -18,9 +18,9 @@ Kubernetes: `>= 1.18.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
+|  | eck-operator | 1.5.0 |
 |  | fluent-bit | 0.15.4 |
 |  | fluentd | 0.2.2 |
-| https://helm.elastic.co | eck-operator | 1.5.0 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## Changes from upstream
@@ -105,10 +105,10 @@ Kubernetes: `>= 1.18.0`
 | fluentd.env[1].name | string | `"OUTPUT_PASSWORD"` |  |
 | fluentd.env[1].valueFrom.secretKeyRef.key | string | `"elastic"` |  |
 | fluentd.env[1].valueFrom.secretKeyRef.name | string | `"logging-es-elastic-user"` |  |
-| fluentd.fileConfigs."00_system.conf" | string | `"<system>\n  workers 2\n</system>"` |  |
+| fluentd.fileConfigs."00_system.conf" | string | `"<system>\n  root_dir /var/log/fluentd\n  # log_level debug\n  workers 2\n</system>"` |  |
 | fluentd.fileConfigs."01_sources.conf" | string | `"<source>\n  @type http\n  @label @KUBERNETES\n  port 9880\n  bind 0.0.0.0\n  keepalive_timeout 30\n</source>\n\n<source>\n  @type forward\n  @label @KUBERNETES\n  port 24224\n  bind 0.0.0.0\n  # skip_invalid_event true\n  send_keepalive_packet true\n  <security>\n    self_hostname \"#{ENV['HOSTNAME']}\"\n    shared_key {{ .Values.shared_key }}\n  </security>\n</source>"` |  |
 | fluentd.fileConfigs."02_filters.conf" | string | `"<label @KUBERNETES>\n  # prevent log feedback loops eg. ES has issues etc.\n  # discard logs from our own pods\n  <match kube.logging.fluentd>\n    @type relabel\n    @label @FLUENT_LOG\n  </match>\n\n  <match **>\n    @type relabel\n    @label @DISPATCH\n  </match>\n</label>"` |  |
-| fluentd.fileConfigs."04_outputs.conf" | string | `"<label @OUTPUT>\n  <match **>\n    @id elasticsearch\n    @type elasticsearch\n    @log_level info\n    include_tag_key true\n    id_key id\n    remove_keys id\n\n    # KubeZero pipeline incl. GeoIP etc.\n    pipeline fluentd\n\n    hosts \"{{ .Values.output.host }}\"\n    port 9200\n    scheme http\n    user elastic\n    password \"#{ENV['OUTPUT_PASSWORD']}\"\n\n    log_es_400_reason\n    logstash_format true\n    reconnect_on_error true\n    reload_on_failure true\n    request_timeout 120s\n    suppress_type_name true\n    bulk_message_request_threshold 2097152\n\n    <buffer tag>\n      @type file_single\n      path /var/log/fluentd-buffers/kubernetes.system.buffer\n      chunk_limit_size 8MB\n      total_limit_size 4GB\n      flush_mode interval\n      flush_thread_count 8\n      flush_interval 10s\n      flush_at_shutdown true\n      retry_type exponential_backoff\n      retry_timeout 300m\n      overflow_action drop_oldest_chunk\n      disable_chunk_backup true\n    </buffer>\n  </match>\n</label>"` |  |
+| fluentd.fileConfigs."04_outputs.conf" | string | `"<label @OUTPUT>\n  <match **>\n    @id out_es\n    @type elasticsearch\n    @log_level info\n    include_tag_key true\n    id_key id\n    remove_keys id\n\n    # KubeZero pipeline incl. GeoIP etc.\n    pipeline fluentd\n\n    hosts \"{{ .Values.output.host }}\"\n    port 9200\n    scheme http\n    user elastic\n    password \"#{ENV['OUTPUT_PASSWORD']}\"\n\n    log_es_400_reason\n    logstash_format true\n    reconnect_on_error true\n    reload_on_failure true\n    request_timeout 60s\n    suppress_type_name true\n    slow_flush_log_threshold 40.0\n    # bulk_message_request_threshold 2097152\n\n    <buffer tag>\n      @type file_single\n      chunk_limit_size 16MB\n      total_limit_size 4GB\n      flush_mode interval\n      flush_thread_count 2\n      flush_interval 10s\n      flush_at_shutdown true\n      retry_type exponential_backoff\n      retry_timeout 2h\n      flush_thread_interval 30s\n      overflow_action drop_oldest_chunk\n      disable_chunk_backup true\n    </buffer>\n  </match>\n</label>"` |  |
 | fluentd.image.repository | string | `"fluent/fluentd-kubernetes-daemonset"` |  |
 | fluentd.image.tag | string | `"v1.12-debian-elasticsearch7-1"` |  |
 | fluentd.istio.enabled | bool | `false` |  |
