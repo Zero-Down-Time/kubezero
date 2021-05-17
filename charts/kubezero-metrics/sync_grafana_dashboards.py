@@ -34,11 +34,17 @@ with open(config_file, 'r') as yaml_contents:
     config = yaml.safe_load(yaml_contents.read())
 
 
+configmap = ''
 if 'condition' in config:
-    configmap = '''{{- if %(condition)s }}
+    # use index function to make go template happy if '-' in names
+    if '-' in config['condition']:
+        tokens = config['condition'].split('.')
+        configmap = '''{{- if index .Values %(condition)s }}
+''' % {'condition': ' '.join(f'"{w}"' for w in tokens[2:])}
+
+    else:
+        configmap = '''{{- if %(condition)s }}
 ''' % config
-else:
-    configmap = ''
 
 # Base configmap for KubeZero
 configmap += '''apiVersion: v1
