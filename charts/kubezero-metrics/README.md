@@ -49,7 +49,7 @@ Kubernetes: `>= 1.18.0`
 | kube-prometheus-stack.grafana."grafana.ini"."auth.anonymous".enabled | bool | `true` |  |
 | kube-prometheus-stack.grafana."grafana.ini".alerting.enabled | bool | `false` |  |
 | kube-prometheus-stack.grafana."grafana.ini".analytics.check_for_updates | bool | `false` |  |
-| kube-prometheus-stack.grafana."grafana.ini".dashboards.default_home_dashboard_path | string | `"/tmp/dashboards/zdt-home.json"` |  |
+| kube-prometheus-stack.grafana."grafana.ini".dashboards.default_home_dashboard_path | string | `"/tmp/dashboards/home.json"` |  |
 | kube-prometheus-stack.grafana."grafana.ini".dashboards.min_refresh_interval | string | `"30s"` |  |
 | kube-prometheus-stack.grafana."grafana.ini".date_formats.default_timezone | string | `"UTC"` |  |
 | kube-prometheus-stack.grafana."grafana.ini".security.cookie_secure | bool | `true` |  |
