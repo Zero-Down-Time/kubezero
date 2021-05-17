@@ -119,6 +119,8 @@ fluentd:
   fileConfigs:
     00_system.conf: |-
       <system>
+        root_dir /var/log/fluentd
+        # log_level debug
         workers 2
       </system>
     01_sources.conf: |-
@@ -161,7 +163,7 @@ fluentd:
     04_outputs.conf: |-
       <label @OUTPUT>
         <match **>
-          @id elasticsearch
+          @id out_es
           @type elasticsearch
           @log_level info
           include_tag_key true
@@ -181,21 +183,22 @@ fluentd:
           logstash_format true
           reconnect_on_error true
           reload_on_failure true
-          request_timeout 120s
+          request_timeout 60s
           suppress_type_name true
-          bulk_message_request_threshold 2097152
+          slow_flush_log_threshold 40.0
+          # bulk_message_request_threshold 2097152
 
           <buffer tag>
             @type file_single
-            path /var/log/fluentd-buffers/kubernetes.system.buffer
-            chunk_limit_size 8MB
+            chunk_limit_size 16MB
             total_limit_size 4GB
             flush_mode interval
-            flush_thread_count 8
+            flush_thread_count 2
             flush_interval 10s
             flush_at_shutdown true
             retry_type exponential_backoff
-            retry_timeout 300m
+            retry_timeout 2h
+            flush_thread_interval 30s
             overflow_action drop_oldest_chunk
             disable_chunk_backup true
           </buffer>
