@@ -2,40 +2,61 @@ apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
 metadata:
   name: kubezero-clusterconfiguration
-kubernetesVersion: {{ .Values.clusterVersion }}
+kubernetesVersion: {{ .Chart.Version }}
 clusterName: {{ .Values.clusterName }}
-controlPlaneEndpoint: {{ .Values.apiEndpoint }}
+controlPlaneEndpoint: {{ .Values.api.endpoint }}
 networking:
   podSubnet: 10.244.0.0/16
 etcd:
   local:
     extraArgs:
+      #name: {{ .Values.etcd.nodeName }}
+      ### DNS discovery
+      #discovery-srv: {{ .Values.domain }}
+      #discovery-srv-name: {{ .Values.clusterName }}
+      #initial-cluster:
+      ### Regular
+      #{{- if .Values.etcd.initialCluster }}
+      #initial-cluster: {{ .Values.etcd.initialCluster }}
+      #{{- end }}
+      #initial-advertise-peer-urls: "https://{{ .Values.etcd.nodeName }}:2380"
+      #advertise-client-urls: "https://{{ .Values.etcd.nodeName }}:2379"
+      initial-cluster-token: etcd-{{ .Values.clusterName }}
       listen-metrics-urls: "http://{{ .Values.listenAddress }}:2381"
       logger: "zap"
       # log-level: "warn"
-      {{- with .Values.etcdExtraArgs }}
+      {{- with .Values.etcd.extraArgs }}
       {{- toYaml . | nindent 6 }}
       {{- end }}
+    # These will only be used to create the etcd certs but removed for Init/Join kudeadm calls allowing us to sneak in aliases for etcd nodes
+    serverCertSANs:
+    - "{{ .Values.etcd.nodeName }}"
+    - "{{ .Values.etcd.nodeName }}.{{ .Values.domain }}"
+    - "{{ .Values.domain }}"
+    peerCertSANs:
+    - "{{ .Values.etcd.nodeName }}"
+    - "{{ .Values.etcd.nodeName }}.{{ .Values.domain }}"
+    - "{{ .Values.domain }}"
 controllerManager:
   extraArgs:
     profiling: "false"
     bind-address: {{ .Values.listenAddress }}
     terminated-pod-gc-threshold: "300"
-    leader-elect: {{ .Values.clusterHighAvailable | quote }}
+    leader-elect: {{ .Values.highAvailable | quote }}
     logging-format: json
     feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" "platform" .Values.platform ) | trimSuffix "," | quote }}
 scheduler:
   extraArgs:
     profiling: "false"
     bind-address: {{ .Values.listenAddress }}
-    leader-elect: {{ .Values.clusterHighAvailable | quote }}
+    leader-elect: {{ .Values.highAvailable | quote }}
     logging-format: json
     feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" "platform" .Values.platform ) | trimSuffix "," | quote }}
 apiServer:
   certSANs:
-  - {{ regexSplit ":" .Values.apiEndpoint -1 | first }}
+  -  {{ regexSplit ":" .Values.api.endpoint -1 | first }}
   extraArgs:
-    etcd-servers: {{ .Values.allEtcdEndpoints }}
+    etcd-servers: {{ ternary .Values.api.allEtcdEndpoints "https://127.0.0.1:2379" .Values.highAvailable }}
     profiling: "false"
     audit-log-path: "/var/log/kubernetes/audit.log"
     audit-policy-file: /etc/kubernetes/apiserver/audit-policy.yaml
@@ -50,11 +71,11 @@ apiServer:
     {{- end }}
     feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" "platform" .Values.platform ) | trimSuffix "," | quote }}
     enable-admission-plugins: NodeRestriction,EventRateLimit
-    {{- if .Values.clusterHighAvailable }}
+    {{- if .Values.highAvailable }}
     goaway-chance: ".001"
     {{- end }}
     logging-format: json
-    {{- with .Values.apiExtraArgs }}
+    {{- with .Values.api.extraArgs }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
   extraVolumes:
