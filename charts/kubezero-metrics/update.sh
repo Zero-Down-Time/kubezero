@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=15.4.4
+VERSION=16.1.2
 
 rm -rf charts/kube-prometheus-stack
 curl -L -s -o - https://github.com/prometheus-community/helm-charts/releases/download/kube-prometheus-stack-${VERSION}/kube-prometheus-stack-${VERSION}.tgz | tar xfz - -C charts
@@ -11,6 +11,7 @@ patch -p0 -i metrics-zdt.patch --no-backup-if-mismatch
 
 # Create ZDT dashboard configmap
 cd dashboards
+../sync_grafana_dashboards.py metrics-dashboards.yaml ../templates/grafana-dashboards-metrics.yaml
 ../sync_grafana_dashboards.py k8s-dashboards.yaml ../templates/grafana-dashboards-k8s.yaml
 ../sync_grafana_dashboards.py zdt-dashboards.yaml ../templates/grafana-dashboards-zdt.yaml
 cd -

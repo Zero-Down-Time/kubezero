@@ -104,6 +104,7 @@ kube-prometheus-stack:
       # gather all monitors 
       podMonitorSelectorNilUsesHelmValues: false
       serviceMonitorSelectorNilUsesHelmValues: false
+      ruleSelectorNilUsesHelmValues: false
 
       resources:
         requests:
