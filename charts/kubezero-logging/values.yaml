@@ -186,19 +186,22 @@ fluentd:
           request_timeout 60s
           suppress_type_name true
           slow_flush_log_threshold 50.0
-          # bulk_message_request_threshold 2097152
+
+          # Retry failed bulk requests
+          # https://github.com/uken/fluent-plugin-elasticsearch#unrecoverable-error-types
+          unrecoverable_error_types ["out_of_memory_error"]
+          bulk_message_request_threshold 2097152
 
           <buffer tag>
-            @type file_single
-            chunk_limit_size 2MB
+            @type file
+            chunk_limit_size 4MB
             total_limit_size 2GB
             flush_mode interval
             flush_thread_count 1
-            flush_interval 10s
+            flush_interval 30s
             flush_at_shutdown true
             retry_type exponential_backoff
             retry_timeout 2h
-            flush_thread_interval 30s
             overflow_action drop_oldest_chunk
             disable_chunk_backup true
           </buffer>
