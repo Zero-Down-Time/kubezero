@@ -2,16 +2,23 @@
 
 # CloudBender
 ## Changes
-- controller node names are now strictly tight to the AZ they are in: AZ1 -> controller00, AZ2 -> controller01 etc. to prevent controller03 from happening in case AWS launches new instances before the old ones are actually terminated 
+### Single node control plane
+- Control
  
 ## Upgrade
-- Set Kubernetes version in the controller config to eg. `1.20`  
-- Update controller and worker stacks with latest CFN code
+- Set the specific wanted Kubernetes version in the controller config to eg. `v1.20.2`  
+- configure your AWS CLI profile as well as your kubectl context to cluster you want to upgrade.
+- verify your config ...
 
-- Upgrade requires careful replacement in case existing control planes are shuffled otherwise: ( this might reduce the number of online controllers temporarily to 1 ! )
-  - manually set controller ASG to Min/Maz 0 for the ASG currently hosting controller00
-  - terminate controller node in AZ1 which will return as controller00
-  - replace controller01 and 02 in similar fashion
+- run ./scripts/upgrade_120.sh
+- update the CFN stack for kube-control-plane
+
+### Single node control plane
+- will automatically be upgraded and the controller node replaced as part of the CFN update
+
+### Clustered control plane
+- replace controller instances one by one in no particular order
+- once confirmed that the upgraded 1.20 control plane is working as expected update the clustered control plane CFN stack once more with `LBType: none` to remove the AWS NLB fronting the Kubernetes API which is not required anymore.
 
 - replace worker nodes in a rolling fashion via. drain / terminate / rinse-repeat
 
