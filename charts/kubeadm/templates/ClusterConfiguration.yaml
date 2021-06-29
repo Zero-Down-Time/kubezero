@@ -10,17 +10,10 @@ networking:
 etcd:
   local:
     extraArgs:
-      #name: {{ .Values.etcd.nodeName }}
       ### DNS discovery
       #discovery-srv: {{ .Values.domain }}
       #discovery-srv-name: {{ .Values.clusterName }}
       #initial-cluster:
-      ### Regular
-      #{{- if .Values.etcd.initialCluster }}
-      #initial-cluster: {{ .Values.etcd.initialCluster }}
-      #{{- end }}
-      #initial-advertise-peer-urls: "https://{{ .Values.etcd.nodeName }}:2380"
-      #advertise-client-urls: "https://{{ .Values.etcd.nodeName }}:2379"
       initial-cluster-token: etcd-{{ .Values.clusterName }}
       listen-metrics-urls: "http://{{ .Values.listenAddress }}:2381"
       logger: "zap"
@@ -42,21 +35,21 @@ controllerManager:
     profiling: "false"
     bind-address: {{ .Values.listenAddress }}
     terminated-pod-gc-threshold: "300"
-    leader-elect: {{ .Values.highAvailable | quote }}
+    # leader-elect: {{ .Values.highAvailable | quote }}
     logging-format: json
     feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" "platform" .Values.platform ) | trimSuffix "," | quote }}
 scheduler:
   extraArgs:
     profiling: "false"
     bind-address: {{ .Values.listenAddress }}
-    leader-elect: {{ .Values.highAvailable | quote }}
+    # leader-elect: {{ .Values.highAvailable | quote }}
     logging-format: json
     feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" "platform" .Values.platform ) | trimSuffix "," | quote }}
 apiServer:
   certSANs:
   -  {{ regexSplit ":" .Values.api.endpoint -1 | first }}
   extraArgs:
-    etcd-servers: {{ ternary .Values.api.allEtcdEndpoints "https://127.0.0.1:2379" .Values.highAvailable }}
+    etcd-servers: {{ .Values.api.allEtcdEndpoints }}
     profiling: "false"
     audit-log-path: "/var/log/kubernetes/audit.log"
     audit-policy-file: /etc/kubernetes/apiserver/audit-policy.yaml
@@ -67,13 +60,18 @@ apiServer:
     tls-cipher-suites: "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384"
     admission-control-config-file: /etc/kubernetes/apiserver/admission-configuration.yaml
     {{- if eq .Values.platform "aws" }}
+    service-account-issuer: "{{ .Values.serviceAccountIssuer }}"
+    service-account-jwks-uri: "{{ .Values.serviceAccountIssuer }}/openid/v1/jwks"
+    api-audiences: "istio-ca,sts.amazonaws.com"
     authentication-token-webhook-config-file: /etc/kubernetes/apiserver/aws-iam-authenticator.yaml
+    {{- else }}
+    api-audiences: "istio-ca"
     {{- end }}
     feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" "platform" .Values.platform ) | trimSuffix "," | quote }}
     enable-admission-plugins: NodeRestriction,EventRateLimit
-    {{- if .Values.highAvailable }}
-    goaway-chance: ".001"
-    {{- end }}
+    # {{- if .Values.highAvailable }}
+    # goaway-chance: ".001"
+    # {{- end }}
     logging-format: json
     {{- with .Values.api.extraArgs }}
     {{- toYaml . | nindent 4 }}

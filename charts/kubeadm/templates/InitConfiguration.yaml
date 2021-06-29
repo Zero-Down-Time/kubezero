@@ -11,3 +11,6 @@ nodeRegistration:
   - KubeletVersion
   kubeletExtraArgs:
     node-labels: {{ .Values.nodeLabels | quote }}
+    {{- with .Values.providerID }}
+    provider-id: {{ . }}
+    {{- end }}
