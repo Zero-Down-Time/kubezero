@@ -13,6 +13,14 @@ securityContext:
 dnsConfig:
   {{- toYaml . | nindent 2 }}
 {{- end }}
+{{- with .Values.hostAliases }}
+hostAliases:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- if .Values.initContainers }}
+initContainers:
+  {{- toYaml .Values.initContainers | nindent 2 }}
+{{- end }}
 #hostNetwork: true
 #dnsPolicy: ClusterFirstWithHostNet
 containers:
@@ -23,11 +31,11 @@ containers:
     imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- if .Values.env }}
     env:
-    {{- toYaml .Values.env | nindent 4 }}
+      {{- toYaml .Values.env | nindent 6 }}
   {{- end }}
   {{- if .Values.envFrom }}
     envFrom:
-    {{- toYaml .Values.envFrom | nindent 4 }}
+      {{- toYaml .Values.envFrom | nindent 6 }}
   {{- end }}
   {{- if .Values.args }}
     args:
