@@ -1,0 +1,23 @@
+Only in charts/aws-efs-csi-driver.zdt/: .values.yaml.swp
+diff -rtub charts/aws-efs-csi-driver/templates/node-daemonset.yaml charts/aws-efs-csi-driver.zdt/templates/node-daemonset.yaml
+--- charts/aws-efs-csi-driver/templates/node-daemonset.yaml	2021-06-14 23:12:20.000000000 +0200
++++ charts/aws-efs-csi-driver.zdt/templates/node-daemonset.yaml	2021-06-25 12:29:05.279549688 +0200
+@@ -40,15 +40,10 @@
+         {{- with .Values.node.nodeSelector }}
+         {{- toYaml . | nindent 8 }}
+         {{- end }}
++      {{- with .Values.node.affinity }}
+       affinity:
+-        nodeAffinity:
+-          requiredDuringSchedulingIgnoredDuringExecution:
+-            nodeSelectorTerms:
+-            - matchExpressions:
+-              - key: eks.amazonaws.com/compute-type
+-                operator: NotIn
+-                values:
+-                - fargate
++        {{- . | toYaml | nindent 8 }}
++      {{- end }}
+       hostNetwork: true
+       dnsPolicy: {{ .Values.node.dnsPolicy }}
+       {{- with .Values.node.dnsConfig }}
