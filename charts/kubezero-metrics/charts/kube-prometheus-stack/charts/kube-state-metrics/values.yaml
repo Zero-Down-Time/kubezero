@@ -162,7 +162,7 @@ collectors:
   - statefulsets
   - storageclasses
   - validatingwebhookconfigurations
-  # - verticalpodautoscalers
+  #- verticalpodautoscalers
   - volumeattachments
 
 # Enabling kubeconfig will pass the --kubeconfig argument to the container
