@@ -1,15 +1,13 @@
 {{- define "aws-efs-csi-driver-values" }}
-{{ with index .Values "aws-efs-csi-driver" "IamArn" }}
 aws-efs-csi-driver:
   controller:
     extraEnv:
     - name: AWS_ROLE_ARN
-      value: "{{ . }}"
+      value: {{ index .Values "aws-efs-csi-driver" "IamArn" | quote }}
     - name: AWS_WEB_IDENTITY_TOKEN_FILE
       value: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
     - name: AWS_STS_REGIONAL_ENDPOINTS
       value: regional
-{{- end }}
 {{- with index .Values "aws-efs-csi-driver" "PersistentVolumes" }}
 PersistentVolumes:
 {{- toYaml . | nindent 2 }}
