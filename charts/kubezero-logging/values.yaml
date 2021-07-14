@@ -120,7 +120,9 @@ fluentd:
     00_system.conf: |-
       <system>
         root_dir /var/log/fluentd
-        # log_level debug
+        log_level info
+        ignore_repeated_log_interval 60s
+        ignore_same_log_interval 60s
         workers 2
       </system>
     01_sources.conf: |-
@@ -165,7 +167,7 @@ fluentd:
         <match **>
           @id out_es
           @type elasticsearch
-          @log_level info
+          # @log_level debug
           include_tag_key true
           id_key id
           remove_keys id
@@ -185,7 +187,7 @@ fluentd:
           reload_on_failure true
           request_timeout 60s
           suppress_type_name true
-          slow_flush_log_threshold 50.0
+          slow_flush_log_threshold 55.0
 
           # Retry failed bulk requests
           # https://github.com/uken/fluent-plugin-elasticsearch#unrecoverable-error-types
@@ -199,12 +201,12 @@ fluentd:
             flush_thread_count 1
             flush_interval 30s
 
-            chunk_limit_size 4MB
+            chunk_limit_size 8MB
             total_limit_size 2GB
 
             flush_at_shutdown true
             retry_type exponential_backoff
-            retry_timeout 2h
+            retry_timeout 6h
             overflow_action drop_oldest_chunk
             disable_chunk_backup true
           </buffer>

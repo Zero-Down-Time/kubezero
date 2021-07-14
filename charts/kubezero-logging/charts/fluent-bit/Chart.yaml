@@ -1,8 +1,8 @@
 annotations:
   artifacthub.io/changes: |
-    - Upgrade fluent-bit image to v1.7.8
+    - Upgrade fluent-bit image to v1.7.9
 apiVersion: v1
-appVersion: 1.7.8
+appVersion: 1.7.9
 description: Fast and lightweight log processor and forwarder or Linux, OSX and BSD
   family operating systems.
 home: https://fluentbit.io/
@@ -21,4 +21,4 @@ maintainers:
 name: fluent-bit
 sources:
 - https://github.com/fluent/fluent-bit/
-version: 0.15.14
+version: 0.15.15

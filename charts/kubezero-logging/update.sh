@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ECK_VERSION=1.6.0
-FLUENT_BIT_VERSION=0.15.14
+FLUENT_BIT_VERSION=0.15.15
 FLUENTD_VERSION=0.2.6
 
 # fix ECK crds handling to adhere to proper helm v3 support which also fixes ArgoCD applyong updates on upgrades
