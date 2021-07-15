@@ -59,19 +59,27 @@ and verify your config via `aws sts get-caller-identity` and `kubectl cluster-in
 - replace worker nodes in a rolling fashion via. drain / terminate and rinse-repeat
 
 # Upgrade KubeZero
-1. Update CRDs of all enabled components:  
-`./bootstrap.sh crds all clusters/$CLUSTER`
-
-2. Prepare upgrade
+1. Prepare upgrade
 - Remove legacy monitoring configmaps
-- Remove previous Grafana stateful config
-- Remove legacy Istio Envoyfilter
-
 ```
 kubectl delete cm -n monitoring -l grafana_dashboard=1
+```
+
+- Remove previous Grafana stateful config
+```
 kubectl delete pvc metrics-grafana -n monitoring
+```
+
+- Remove legacy Istio Envoyfilter
+```
 kubectl delete envoyfilter -A -l operator.istio.io/version=1.6.9
 ```
+
+- ensure that the latest kubezero.yaml output from CloudBender is present under `clusters/$CLUSTER` and no legacy cloudbender.yaml is around anymore.  
+If ArgoCD is used make sure the `valuesFiles` settings in the top-level values.yaml matches the files under `clusters/$CLUSTER`
+
+2. Update CRDs of all enabled components:  
+`./bootstrap.sh crds all clusters/$CLUSTER`
 
 3. Upgrade all KubeZero modules:  
 - without ArgoCD:  
