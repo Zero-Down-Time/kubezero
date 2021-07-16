@@ -68,6 +68,8 @@ apiServer:
     api-audiences: "istio-ca"
     {{- end }}
     feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" "platform" .Values.platform ) | trimSuffix "," | quote }}
+    # for 1.21
+    # enable-admission-plugins: DenyServiceExternalIPs,NodeRestriction,EventRateLimit
     enable-admission-plugins: NodeRestriction,EventRateLimit
     # {{- if .Values.highAvailable }}
     # goaway-chance: ".001"

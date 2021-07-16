@@ -79,6 +79,7 @@ spec:
 
           echo "Patching ClusterConfig to re-create new etcd server certificates"
           yq w /etc/kubezero/kubeadm/templates/ClusterConfiguration.yaml etcd.local.serverCertSANs[+] $nodename > /etc/kubernetes/kubeadm-recert.yaml
+          yq w -i /etc/kubernetes/kubeadm-recert.yaml etcd.local.serverCertSANs[+] $nodename.$zone_name
           rm -f /etc/kubernetes/pki/etcd/server.*
           kubeadm init phase certs etcd-server --config=/etc/kubernetes/kubeadm-recert.yaml 2>/dev/null
           kill -s HUP $(ps -e | grep etcd | awk '{print $1}')
