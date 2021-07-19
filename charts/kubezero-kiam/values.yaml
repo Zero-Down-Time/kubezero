@@ -67,6 +67,7 @@ kiam:
       effect: NoSchedule
     - key: kubezero-workergroup
       effect: NoSchedule
+      operator: Exists
     priorityClassName: system-node-critical
     prometheus:
       servicemonitor:
