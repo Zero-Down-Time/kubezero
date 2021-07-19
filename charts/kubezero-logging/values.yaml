@@ -224,6 +224,8 @@ fluent-bit:
   tolerations:
   - key: node-role.kubernetes.io/master
     effect: NoSchedule
+  - key: kubezero-workergroup
+    effect: NoSchedule
 
   resources:
     requests:
