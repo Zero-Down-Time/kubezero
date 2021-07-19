@@ -4,7 +4,7 @@ set -ex
 ### TODO
 # - https://istio.io/latest/docs/ops/configuration/security/harden-docker-images/
 
-export ISTIO_VERSION=1.10.2
+export ISTIO_VERSION=1.10.3
 
 rm -rf istio
 curl -sL "https://github.com/istio/istio/releases/download/${ISTIO_VERSION}/istio-${ISTIO_VERSION}-linux-amd64.tar.gz" | tar xz
