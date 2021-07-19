@@ -39,6 +39,7 @@ aws-efs-csi-driver:
     tolerations:
     - key: kubezero-workergroup
       effect: NoSchedule
+      operator: Exists
 
   storageClasses:
   - name: efs-sc

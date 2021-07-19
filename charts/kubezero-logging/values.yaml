@@ -226,6 +226,7 @@ fluent-bit:
     effect: NoSchedule
   - key: kubezero-workergroup
     effect: NoSchedule
+    operator: Exists
 
   resources:
     requests:
