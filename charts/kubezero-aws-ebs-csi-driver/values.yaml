@@ -29,6 +29,11 @@ aws-ebs-csi-driver:
         # cpu: 50m
         memory: 40Mi
 
+  node:
+    tolerations:
+    - key: kubezero-workergroup
+      effect: NoSchedule
+
   storageClasses:
   - name: ebs-sc-gp2-xfs
     volumeBindingMode: WaitForFirstConsumer
