@@ -21,8 +21,8 @@ hostAliases:
 initContainers:
   {{- toYaml .Values.initContainers | nindent 2 }}
 {{- end }}
-#hostNetwork: true
-#dnsPolicy: ClusterFirstWithHostNet
+hostNetwork: true
+dnsPolicy: ClusterFirstWithHostNet
 containers:
   - name: {{ .Chart.Name }}
     securityContext:
