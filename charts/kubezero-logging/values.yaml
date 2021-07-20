@@ -216,6 +216,9 @@ fluentd:
 fluent-bit:
   enabled: false
 
+  image:
+    tag: 1.8.1
+
   serviceMonitor:
     enabled: false
     selector:
@@ -245,7 +248,7 @@ fluent-bit:
       memBufLimit: 4MB
       refreshInterval: 10
 
-    logLevel: warn
+    logLevel: info
     flushInterval: 5
 
     #extraRecords:
@@ -266,10 +269,12 @@ fluent-bit:
           Name tail
           Path /var/log/containers/*.log
           Parser cri-log
+          #multiline.parser cri
           Tag cri.*
           Skip_Long_Lines On
           DB /var/log/flb_kube.db
           DB.Sync Normal
+          DB.locking true
           {{- with .Values.config.input }}
           Mem_Buf_Limit {{ default "4MB" .memBufLimit }}
           Refresh_Interval {{ default 10 .refreshInterval }}
@@ -291,8 +296,9 @@ fluent-bit:
           Keep_Log Off
           K8S-Logging.Parser Off
           K8S-Logging.Exclude Off
+          Kube_Meta_Cache_TTL 3600s
+          Buffer_Size 0
           #Use_Kubelet true
-          #Kubelet_Port 10250
 
       {{- if index .Values "config" "extraRecords" }}
 
@@ -331,7 +337,7 @@ fluent-bit:
       [PARSER]
           Name cri-log
           Format regex
-          Regex ^(?<time>[^ ]+) (?<stream>stdout|stderr) (?<logtag>[^ ]*) (?<log>.*)$
+          Regex ^(?<time>.+) (?<stream>stdout|stderr) (?<logtag>F|P) (?<log>.*)$
           Time_Key    time
           Time_Format %Y-%m-%dT%H:%M:%S.%L%z
 
