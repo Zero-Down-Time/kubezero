@@ -50,8 +50,6 @@ Kubernetes: `>= 1.18.0`
 | istio.enabled | bool | `false` |  |
 | istio.namespace | string | `"istio-system"` |  |
 | kiam.enabled | bool | `false` |  |
-| local-path-provisioner.enabled | bool | `false` |  |
-| local-volume-provisioner.enabled | bool | `false` |  |
 | logging.crds | bool | `true` |  |
 | logging.enabled | bool | `false` |  |
 | logging.namespace | string | `"logging"` |  |
@@ -60,6 +58,8 @@ Kubernetes: `>= 1.18.0`
 | metrics.istio.grafana | object | `{}` |  |
 | metrics.istio.prometheus | object | `{}` |  |
 | metrics.namespace | string | `"monitoring"` |  |
+| storage.crds | bool | `true` |  |
+| storage.enabled | bool | `false` |  |
 | timecapsule.enabled | bool | `false` |  |
 
 ----------------------------------------------
