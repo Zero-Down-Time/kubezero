@@ -38,9 +38,10 @@ Scheduled snapshots for EBS backed PVCs incl. custom retention and restore.
 - hardened and optimized settings for Envoy gateway proxies
 - improved deployment strategy to reduce errors during upgrades
 - Added various Grafana Dashboards
-- version bump to 1.10.2
+- version bump to 1.10.3
 
 ### Metrics
+- Added support for Prometheus PushGateway (optional)
 - Added various dashboards for KubeZero modules
 - Updated / improved dashboard organization incl. folders and tags
 - Grafana Dashboards are now all provided via configmaps, no more state required, also no more manual changes persisted
