@@ -241,6 +241,13 @@ prometheus-adapter:
         containerLabel: container
       window: 5m
 
+# Pushgateway
+prometheus-pushgateway:
+  enabled: false
+
+  serviceMonitor:
+    enabled: true
+
 istio:
   grafana:
     enabled: false
