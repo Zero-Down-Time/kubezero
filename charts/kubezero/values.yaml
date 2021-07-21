@@ -30,12 +30,6 @@ storage:
   enabled: false
   crds: true
 
-local-volume-provisioner:
-  enabled: false
-
-local-path-provisioner:
-  enabled: false
-
 aws-ebs-csi-driver:
   enabled: false
   crds: true

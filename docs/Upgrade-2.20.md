@@ -5,14 +5,24 @@
 This allows pods to assume IAM roles without the need of additional services like kiam.
 - Cert-manager integration now supports [cross-account issuer](https://cert-manager.io/docs/configuration/acme/dns01/route53/#cross-account-access) for AWS route53
 - Optional Proxy Protocol support for Ingress Loadbalancers, which allows preserving the real client IP and at the same time solves the hairpin routing issues of the AWS NLBs, see [Istio blog](https://istio.io/v1.9/blog/2020/show-source-ip/)
+- Optional taints for each workergroup allowing to reserve certain nodes for dedicated workloads. The minimum required KubeZero pods will still be scheduled eg. CSI drivers, logging and metric agents.
 
 ## New modules
+### Storage
+New module to provide various storage related components from here on. The first provider is a minimal subset of OpenEBS.  
+
+The *LVM Local PV provisioner* allows the use of any available LVM storage on worker nodes as local PVs.
+ 
 ### MQ / NATS  
 Deploy [NATS](https://docs.nats.io/jetstream/jetstream) services incl. jetstream engine, Grafana dashboards etc. 
 
 ### TimeCapsule
 Provides backup solutions for KubeZero clusters, like  
 Scheduled snapshots for EBS backed PVCs incl. custom retention and restore.
+
+## Removed modules
+- local-path-provisioner -> functionality replaced by OpenEBS LVM
+- local-volume-provisioner -> functionality replaced by OpenEBS LVM
 
 ## Changelog
 
