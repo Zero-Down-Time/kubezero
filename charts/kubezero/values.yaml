@@ -26,6 +26,10 @@ aws-node-termination-handler:
 timecapsule:
   enabled: false
 
+storage:
+  enabled: false
+  crds: true
+
 local-volume-provisioner:
   enabled: false
 
