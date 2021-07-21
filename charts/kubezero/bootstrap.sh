@@ -186,10 +186,6 @@ function kiam-pre() {
 function kiam-post() {
   wait_for 'kubectl get daemonset -n kube-system kiam-agent'
   kubectl rollout status daemonset -n kube-system kiam-agent
-
-  # Make sure kube-system and cert-manager are allowed to kiam
-  kubectl annotate --overwrite namespace kube-system 'iam.amazonaws.com/permitted=.*'
-  kubectl annotate --overwrite namespace cert-manager 'iam.amazonaws.com/permitted=.*CertManagerRole.*'
 }
 
 
