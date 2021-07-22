@@ -13,8 +13,12 @@ New module to provide various storage related components from here on. The first
 
 The *LVM Local PV provisioner* allows the use of any available LVM storage on worker nodes as local PVs.
  
-### MQ / NATS  
-Deploy [NATS](https://docs.nats.io/jetstream/jetstream) services incl. jetstream engine, Grafana dashboards etc. 
+### MQ
+
+- [NATS](https://docs.nats.io/jetstream/jetstream) services incl. jetstream engine, Grafana dashboards etc.  
+This also incl. optional MQTT support.
+
+- RabbitMQ
 
 ### TimeCapsule
 Provides backup solutions for KubeZero clusters, like  
@@ -56,6 +60,15 @@ Scheduled snapshots for EBS backed PVCs incl. custom retention and restore.
 and verify your config via `aws sts get-caller-identity` and `kubectl cluster-info`
 
 - run `./scripts/upgrade_120.sh`
+
+- ensure that the S3 bucket for the cluster backups does *NOT* block public access:  
+`aws s3api get-public-access-block --bucket <cluster-backup-bucket>`  
+needs to have:
+
+```
+"BlockPublicAcls": false
+"IgnorePublicAcls": false
+```
 - update the CFN stack kube-control-plane for your cluster
 
 ### Single node control plane
