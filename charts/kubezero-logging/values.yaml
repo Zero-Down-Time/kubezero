@@ -217,8 +217,8 @@ fluent-bit:
   enabled: false
 
   image:
-    repository: public.ecr.aws/zero-downtime/fluent-bit
-    tag: v1.8.2-rc1
+    #repository: public.ecr.aws/zero-downtime/fluent-bit
+    tag: v1.8.2
 
   serviceMonitor:
     enabled: false
@@ -269,7 +269,7 @@ fluent-bit:
       [INPUT]
           Name tail
           Path /var/log/containers/*.log
-          multiline.parser docker,cri
+          multiline.parser cri
           Tag cri.*
           Skip_Long_Lines On
           DB /var/log/flb_kube.db
