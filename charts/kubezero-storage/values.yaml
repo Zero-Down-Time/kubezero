@@ -41,3 +41,4 @@ openebs:
 
 storageClass:
   vgpattern: ""
+  default: true
