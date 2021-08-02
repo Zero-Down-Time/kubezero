@@ -6,6 +6,6 @@ volumeBindingMode: WaitForFirstConsumer
 reclaimPolicy: Delete
 parameters:
   storage: lvm
-  vgpattern: "openebs.*"
+  vgpattern: {{ default "openebs.*" .Values.storageClass.vgpattern }}
   fsType: xfs
 provisioner: local.csi.openebs.io
