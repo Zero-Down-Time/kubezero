@@ -1,6 +1,6 @@
 {{- define "storage-values" }}
 
-{{- with index .Values "cert-manager" "storageClass" }}
+{{- with index .Values "storage" "storageClass" }}
 storageClass:
   {{- . | toYaml | nindent 2 }}
 {{- end }}
