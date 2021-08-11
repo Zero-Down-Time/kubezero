@@ -16,7 +16,7 @@ spec:
     - port: 1883
     route:
     - destination:
-        host: {{ .Release.Name }}-nats
+        host: nats
         port:
           number: 1883
 {{- end }}
