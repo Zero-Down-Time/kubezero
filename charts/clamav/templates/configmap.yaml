@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "kubezero-lib.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kubezero-lib.labels" . | nindent 4 }}
+data:
+  clamd.conf: |
+    LogTime yes
+    LogClean yes
+    LogSyslog no
+    LogVerbose no
+    LogFileMaxSize 0
+    LogFile /dev/stdout
+    DatabaseDirectory /var/lib/clamav
+    TCPSocket 3310
+    LocalSocket /run/clamav/clamd.sock
+    User clamav
+    ExitOnOOM yes
+    Foreground yes
+    MaxScanSize {{.Values.clamav.limits.scanSize}}M
+    MaxFileSize {{.Values.clamav.limits.fileSize}}M
+
+    #  Close the connection when the data size limit is exceeded.
+    #  The value should match your MTA's limit for a maximum attachment size.
+    #  Default: 25M
+    StreamMaxLength {{.Values.clamav.limits.scanSize}}M
+
+    # Maximum length the queue of pending connections may grow to.
+    # Default: 200
+    MaxConnectionQueueLength {{.Values.clamav.limits.connectionQueueLength}}
+
+    # Maximum number of threads running at the same time.
+    # Default: 10
+    MaxThreads {{.Values.clamav.limits.maxThreads}}
+
+    # This option specifies how long to wait (in milliseconds) if the send buffer
+    # is full.
+    # Keep this value low to prevent clamd hanging.
+    #
+    # Default: 500
+    SendBufTimeout {{.Values.clamav.limits.sendBufTimeout}}
+
+  freshclam.conf: |
+    LogTime yes
+    LogVerbose yes
+    NotifyClamd /etc/clamav/clamd.conf
+    Checks 24
+    LogSyslog no
+    DatabaseOwner root
+    DatabaseMirror {{ .Values.clamav.freshclam.mirrors }}

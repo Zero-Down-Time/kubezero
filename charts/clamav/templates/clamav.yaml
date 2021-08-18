@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "kubezero-lib.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kubezero-lib.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.clamav.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "kubezero-lib.selectorLabels" . | nindent 6 }}
+  serviceName: {{ include "kubezero-lib.fullname" . }}
+  template:
+    metadata:
+      labels:
+        {{- include "kubezero-lib.selectorLabels" . | nindent 8 }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+    spec:
+      containers:
+      - name: clamav
+        image: "{{ .Values.clamav.image }}:{{ default .Chart.AppVersion .Values.clamav.version }}_base"
+        ports:
+        - containerPort: 3310
+          name: clamav
+          protocol: TCP
+        # Give clamav up to 300s to get CVDs in place etc.
+        startupProbe:
+          exec:
+            command:
+            - /usr/local/bin/clamdcheck.sh
+          failureThreshold: 30
+          periodSeconds: 10
+        livenessProbe:
+          exec:
+            command:
+            - /usr/local/bin/clamdcheck.sh
+          failureThreshold: 2
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 3
+        readinessProbe:
+          exec:
+            command:
+            - /usr/local/bin/clamdcheck.sh
+          initialDelaySeconds: 90
+          failureThreshold: 2
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 3
+        resources:
+          {{- toYaml .Values.clamav.resources | nindent 10 }}
+        volumeMounts:
+          - mountPath: /var/lib/clamav
+            name: signatures
+          - mountPath: /etc/clamav
+            name: config-volume
+      #securityContext:
+      #  runAsNonRoot: true
+      volumes:
+      - name: config-volume
+        configMap:
+          name: {{ include "kubezero-lib.fullname" . }}
+      {{- with .Values.clamav.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.clamav.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.clamav.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  volumeClaimTemplates:
+  - metadata:
+      name: signatures
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      {{- with .Values.clamav.storageClassName }}
+      storageClassName: {{ . }}
+      {{- end }}
+      resources:
+        requests:
+          storage: 2Gi
