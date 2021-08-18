@@ -41,8 +41,6 @@ clamav:
     requests:
       cpu: 300m
       memory: 1300M
-      ephemeral-storage: "500M"
-    limits:
-      cpu: 1500m
-      memory: 2000M
-      ephemeral-storage: "1000M"
+    #limits:
+    #  cpu: 1500m
+    #  memory: 2000M
