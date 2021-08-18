@@ -40,15 +40,6 @@ spec:
           periodSeconds: 30
           successThreshold: 1
           timeoutSeconds: 3
-        readinessProbe:
-          exec:
-            command:
-            - /usr/local/bin/clamdcheck.sh
-          initialDelaySeconds: 90
-          failureThreshold: 2
-          periodSeconds: 30
-          successThreshold: 1
-          timeoutSeconds: 3
         resources:
           {{- toYaml .Values.clamav.resources | nindent 10 }}
         volumeMounts:
