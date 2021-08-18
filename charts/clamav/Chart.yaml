@@ -1,0 +1,18 @@
+apiVersion: v2
+name: clamav
+description: Chart for deploying a ClamavD on kubernetes as statfulSet
+type: application
+version: 0.1.0
+appVersion: 0.104.0
+home: https://kubezero.com
+icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
+keywords:
+  - kubezero
+  - clamav
+maintainers:
+  - name: Quarky9
+dependencies:
+  - name: kubezero-lib
+    version: ">= 0.1.4"
+    repository: https://zero-down-time.github.io/kubezero/
+kubeVersion: ">= 1.18.0"
