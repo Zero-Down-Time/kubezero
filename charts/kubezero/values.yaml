@@ -1,9 +1,9 @@
-global:
-  kubezero:
-    server: https://kubernetes.default.svc
-    repoURL: https://github.com/zero-down-time/kubezero
-    targetRevision: HEAD
-    pathPrefix: ''
+kubezero:
+  server: https://kubernetes.default.svc
+  repoURL: https://zero-down-time.github.io/kubezero
+  targetRevision: '*'
+  sourceRepos:
+  - 'https://zero-down-time.github.io/kubezero'
 
 HighAvailableControlplane: false
 
@@ -11,45 +11,50 @@ calico:
   enabled: false
   crds: true
   retain: true
+  targetRevision: 0.2.2
 
 cert-manager:
   enabled: false
   crds: true
   namespace: cert-manager
+  targetRevision: 0.6.1
 
 kiam:
   enabled: false
-
-aws-node-termination-handler:
-  enabled: false
-
-timecapsule:
-  enabled: false
+  targetRevision: 0.3.5
 
 storage:
   enabled: false
   crds: true
 
+timecapsule:
+  enabled: false
+
 aws-ebs-csi-driver:
   enabled: false
   crds: true
+  targetRevision: 0.6.4
 
 aws-efs-csi-driver:
   enabled: false
+  targetRevision: 0.4.2
 
 istio:
   enabled: false
   crds: true
   namespace: istio-system
+  targetRevision: 0.7.2
 
 istio-ingress:
   enabled: false
   namespace: istio-ingress
+  targetRevision: 0.7.2
 
 metrics:
   enabled: false
   crds: true
   namespace: monitoring
+  targetRevision: 0.4.6
   istio:
     grafana: {}
     prometheus: {}
@@ -58,12 +63,12 @@ logging:
   enabled: false
   crds: true
   namespace: logging
+  targetRevision: 0.7.6
 
 argocd:
   enabled: false
   crds: true
   namespace: argocd
+  targetRevision: 0.8.1
   istio:
     enabled: false
-
-argo: {}

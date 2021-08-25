@@ -1,4 +1,5 @@
 {{- define "argocd-values" }}
+
 argo-cd:
   controller:
     metrics:
@@ -23,9 +24,9 @@ istio:
   {{- end }}
 {{- end }}
 
-{{- with index .Values "argocd" "kubezero" }}
-kubezero:
-  {{- toYaml . | nindent 2 }}
 {{- end }}
 
+{{- define "argocd-argo" }}
 {{- end }}
+
+{{ include "kubezero-app.app" . }}

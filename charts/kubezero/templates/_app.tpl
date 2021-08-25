@@ -1,14 +1,14 @@
 {{- define "kubezero-app.app" }}
 {{- $name := regexReplaceAll "kubezero/templates/([a-z-]*)..*" .Template.Name "${1}" }}
 
-{{- if and .Values.argo ( index .Values $name "enabled" ) }}
+{{- if and .Values.argocdAppName ( index .Values $name "enabled" ) }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: {{ $name }}
   namespace: argocd
   labels:
-{{ include "kubezero-lib.labels" . | indent 4 }}
+    {{- include "kubezero-lib.labels" . | nindent 4 }}
   {{- if not ( index .Values $name "retain" ) }}
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -17,18 +17,18 @@ spec:
   project: kubezero
 
   source:
-    repoURL: {{ .Values.global.kubezero.repoURL }}
-    targetRevision: {{ .Values.global.kubezero.targetRevision }}
-    path: {{ .Values.global.kubezero.pathPrefix}}charts/kubezero-{{ $name }}
+    chart: kubezero-{{ $name }}
+    repoURL: {{ .Values.kubezero.repoURL }}
+    targetRevision: {{ default .Values.kubezero.targetRevision ( index .Values $name "targetRevision" ) | quote }}
     helm:
       values: |
 {{- include (print $name "-values") $ | nindent 8 }}
 
   destination:
-    server: {{ .Values.global.kubezero.server }}
+    server: {{ .Values.kubezero.server }}
     namespace: {{ default "kube-system" ( index .Values $name "namespace" ) }}
 
-  {{- with .Values.global.kubezero.syncPolicy }}
+  {{- with .Values.kubezero.syncPolicy }}
   syncPolicy:
     {{- toYaml . | nindent 4 }}
   {{- end }}

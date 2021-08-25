@@ -1,0 +1,77 @@
+{{- if .Values.installKubeZero }}
+# Add KubeZero app and project
+
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: kubezero
+  namespace: argocd
+  labels:
+    {{- include "kubezero-lib.labels" . | nindent 4 }}
+spec:
+  description: KubeZero - ZeroDownTime Kubernetes Platform
+
+  # Allow manifests to deploy from
+  {{- with .Values.kubezero.sourceRepos }}
+  sourceRepos:
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+
+  # platform namespaces in the local cluster
+  destinations:
+  - namespace: argocd
+    server: https://kubernetes.default.svc
+  - namespace: kube-system
+    server: https://kubernetes.default.svc
+  - namespace: cert-manager
+    server: https://kubernetes.default.svc
+  - namespace: istio-system
+    server: https://kubernetes.default.svc
+  - namespace: istio-ingress
+    server: https://kubernetes.default.svc
+  - namespace: monitoring
+    server: https://kubernetes.default.svc
+  - namespace: elastic-system
+    server: https://kubernetes.default.svc
+  - namespace: logging
+    server: https://kubernetes.default.svc
+
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kubezero
+  namespace: argocd
+  labels:
+    {{- include "kubezero-lib.labels" . | nindent 4 }}
+spec:
+  project: kubezero
+  source:
+    repoURL: https://zero-down-time.github.io/kubezero
+    chart: kubezero
+    # targetRevision: '>=1.20.8-0'
+    targetRevision: '{{ .Chart.Version }}'
+
+    helm:
+      parameters:
+      # We use this to detect if we are called from ArgoCD
+      - name: argocdAppName
+        value: $ARGOCD_APP_NAME
+      # This breaks the recursion, otherwise we install another kubezero project and app
+      - name: installKubeZero
+        value: "false"
+      values: |
+        {{- toYaml .Values | nindent 8 }}
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+
+  syncPolicy:
+    automated:
+      prune: true
+{{- end }}
