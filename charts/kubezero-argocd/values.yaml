@@ -1,28 +1,3 @@
-# Configure app of apps
-kubezero:
-  enabled: false
-
-  # kubezero.server -- destination cluster
-  server: https://kubernetes.default.svc
-
-  # This repoURL is used a base for all the repoURLs applications
-  # Setting this to a eg. private git repo incl. the use of pathPrefix allows kubezero to be
-  # integrated into any repository as a git subtree if for example public internet access is unavailable
-  # kubezero.repoURL -- repository for kubezero argo applications
-  repoURL: https://github.com/zero-down-time/kubezero
-  # kubezero.targetRevision -- git branch to track
-  targetRevision: HEAD
-  # kubezero.path -- path within repoURL
-  path: 'charts/kubezero'
-
-  # syncPolicy, details see: https://argoproj.github.io/argo-cd/user-guide/auto_sync
-  #syncPolicy:
-  #  automated:
-  #    prune: true
-
-  valuesFiles:
-  - values.yaml
-
 # Support for Istio Ingress for ArgoCD
 istio:
   # istio.enabled -- Deploy Istio VirtualService to expose ArgoCD
@@ -40,9 +15,9 @@ argo-cd:
   #    argocdServerAdminPassword: "$2a$10$ivKzaXVxMqdeDSfS3nqi1Od3iDbnL7oXrixzDfZFRHlXHnAG6LydG"
   #    argocdServerAdminPasswordMtime: "2020-04-24T15:33:09BST"
 
-  global:
-    image:
-      tag: v2.0.4
+  #global:
+  #  image:
+  #    tag: v2.0.4
 
   controller:
     args:
