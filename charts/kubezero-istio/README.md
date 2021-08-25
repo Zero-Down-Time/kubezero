@@ -1,6 +1,6 @@
 # kubezero-istio
 
-![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.10.2](https://img.shields.io/badge/AppVersion-1.10.2-informational?style=flat-square)
+![Version: 0.7.1](https://img.shields.io/badge/Version-0.7.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.11.1](https://img.shields.io/badge/AppVersion-1.11.1-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Istio
 
@@ -20,8 +20,9 @@ Kubernetes: `>= 1.18.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | base | 1.10.2 |
-|  | istio-discovery | 1.10.2 |
+|  | base | 1.11.1 |
+|  | istio-discovery | 1.11.1 |
+|  | kiali-server | 1.38.1 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## Values
@@ -43,6 +44,26 @@ Kubernetes: `>= 1.18.0`
 | istio-discovery.pilot.tolerations[0].effect | string | `"NoSchedule"` |  |
 | istio-discovery.pilot.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | istio-discovery.telemetry.enabled | bool | `false` |  |
+| kiali-server.auth.strategy | string | `"anonymous"` |  |
+| kiali-server.deployment.ingress_enabled | bool | `false` |  |
+| kiali-server.deployment.view_only_mode | bool | `true` |  |
+| kiali-server.enabled | bool | `false` |  |
+| kiali-server.external_services.custom_dashboards.enabled | bool | `false` |  |
+| kiali-server.external_services.prometheus.url | string | `"http://metrics-kube-prometheus-st-prometheus.monitoring:9090"` |  |
+| kiali-server.istio.enabled | bool | `false` |  |
+| kiali-server.istio.gateway | string | `"istio-ingress/private-ingressgateway"` |  |
+| kiali-server.server.metrics_enabled | bool | `false` |  |
+| rateLimiting.descriptors.ingress[0].key | string | `"remote_address"` |  |
+| rateLimiting.descriptors.ingress[0].rate_limit.requests_per_unit | int | `10` |  |
+| rateLimiting.descriptors.ingress[0].rate_limit.unit | string | `"second"` |  |
+| rateLimiting.descriptors.privateIngress[0].key | string | `"remote_address"` |  |
+| rateLimiting.descriptors.privateIngress[0].rate_limit.requests_per_unit | int | `10` |  |
+| rateLimiting.descriptors.privateIngress[0].rate_limit.unit | string | `"second"` |  |
+| rateLimiting.enabled | bool | `true` |  |
+| rateLimiting.failureModeDeny | bool | `false` |  |
+| rateLimiting.localCacheSize | int | `1048576` |  |
+| rateLimiting.log.format | string | `"json"` |  |
+| rateLimiting.log.level | string | `"warn"` |  |
 
 ## Resources
 

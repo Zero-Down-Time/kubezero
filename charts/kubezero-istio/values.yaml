@@ -1,6 +1,6 @@
 global:
   # hub: docker.io/istio
-  # tag: 1.10.2
+  # tag: 1.11.0
 
   logAsJson: true
 
@@ -39,3 +39,56 @@ istio-discovery:
     tcpKeepalive:
       interval: 60s
       time: 120s
+
+kiali-server:
+  enabled: false
+
+  auth:
+    strategy: anonymous
+
+  deployment:
+    ingress_enabled: false
+    view_only_mode: true
+
+  server:
+    metrics_enabled: false
+
+  external_services:
+    custom_dashboards:
+      enabled: false
+
+    prometheus:
+      url: "http://metrics-kube-prometheus-st-prometheus.monitoring:9090"
+ 
+  istio:
+    enabled: false
+    gateway: istio-ingress/private-ingressgateway
+    #url: "kiali.example.com"
+
+
+rateLimiting:
+  enabled: true
+
+  log:
+    level: warn
+    format: json
+
+  # 1MB local cache for already reached limits to reduce calls to Redis
+  localCacheSize: 1048576
+
+  # Wether to block requests if ratelimiting is down
+  failureModeDeny: false
+
+  # rate limit descriptors for each domain, examples 10 req/s per sourceIP
+  descriptors:
+    ingress:
+    - key: remote_address
+      rate_limit:
+        unit: second
+        requests_per_unit: 10
+
+    privateIngress:
+    - key: remote_address
+      rate_limit:
+        unit: second
+        requests_per_unit: 10

@@ -1,0 +1,19 @@
+# Private Ingress Gateway
+{{- $gateway := index .Values "istio-private-ingress" }}
+
+{{- if and $gateway.enabled $gateway.certificates }}
+# https://istio.io/latest/docs/tasks/traffic-management/ingress/secure-ingress/#configure-a-tls-ingress-gateway-for-multiple-hosts
+
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: private-ingressgateway
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kubezero-lib.labels" . | nindent 4 }}
+spec:
+  selector:
+    istio: private-ingressgateway
+  servers:
+  {{- include "gatewayServers" (dict "certificates" $gateway.certificates "ports" (index $gateway "gateways" "istio-ingressgateway" "ports") ) | nindent 2}}
+{{- end }}

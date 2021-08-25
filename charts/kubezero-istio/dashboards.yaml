@@ -4,18 +4,18 @@ folder: Istio
 condition: 'index .Values "istio-discovery" "telemetry" "enabled"'
 dashboards:
 - name: istio-control-plane
-  url: https://grafana.com/api/dashboards/7645/revisions/60/download
+  url: https://grafana.com/api/dashboards/7645/revisions/82/download
   tags:
   - Istio
 - name: istio-mesh
-  url: https://grafana.com/api/dashboards/7639/revisions/60/download
+  url: https://grafana.com/api/dashboards/7639/revisions/82/download
   tags:
   - Istio
 - name: istio-service
-  url: https://grafana.com/api/dashboards/7636/revisions/60/download
+  url: https://grafana.com/api/dashboards/7636/revisions/82/download
   tags:
   - Istio
 - name: istio-workload
-  url: https://grafana.com/api/dashboards/7630/revisions/60/download
+  url: https://grafana.com/api/dashboards/7630/revisions/82/download
   tags:
   - Istio

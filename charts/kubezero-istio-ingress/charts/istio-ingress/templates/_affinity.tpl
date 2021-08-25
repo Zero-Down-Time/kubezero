@@ -21,10 +21,15 @@ nodeAffinity:
         {{- end }}
         {{- $nodeSelector := default .global.defaultNodeSelector .nodeSelector -}}
         {{- range $key, $val := $nodeSelector }}
+        {{- if eq $val "Exists" }}
+        - key: {{ $key }}
+          operator: Exists
+        {{- else }}
         - key: {{ $key }}
           operator: In
           values:
           - {{ $val | quote }}
+        {{- end }}
         {{- end }}
 {{- end }}
 
@@ -70,6 +75,13 @@ nodeAffinity:
           {{- end }}
           {{- end }}
       topologyKey: {{ $item.topologyKey }}
+      {{- if $item.namespaces }}
+      namespaces:
+      {{- $ns := split "," $item.namespaces }}
+      {{- range $i, $n := $ns }}
+      - {{ $n | quote }}
+      {{- end }}
+      {{- end }}
     {{- end }}
 {{- end }}
 
