@@ -45,6 +45,8 @@ fi
 
 cd $TMPDIR/repo
 
+# read
+
 helm repo index .
 git status
 

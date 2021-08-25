@@ -210,7 +210,7 @@ fluentd:
             flush_thread_count 1
             flush_interval 30s
 
-            chunk_limit_size 8MB
+            chunk_limit_size 4MB
             total_limit_size 2GB
 
             flush_at_shutdown true
