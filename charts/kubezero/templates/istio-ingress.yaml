@@ -26,7 +26,6 @@ istio-ingress:
     dnsNames:
     {{- toYaml $cert.dnsNames | nindent 4 }}
   {{- end }}
-  proxyProtocol: {{ default false (index .Values "istio-ingress" "public" "proxyProtocol") }}
 {{- end }}
 
 {{- if index .Values "istio-ingress" "private" }}

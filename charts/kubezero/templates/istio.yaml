@@ -9,6 +9,14 @@ global:
   defaultPodDisruptionBudget:
     enabled: true
 {{- end }}
+{{- with  index .Values "istio" "kiali-server" }}
+kiali-server:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- with .Values.istio.rateLimiting }}
+rateLimiting:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
 {{- end }}
 
 
@@ -24,6 +32,8 @@ global:
     jsonPointers:
     - /webhooks/0/clientConfig/caBundle
     - /webhooks/0/failurePolicy
+    - /webhooks/1/clientConfig/caBundle
+    - /webhooks/1/failurePolicy
   - group: admissionregistration.k8s.io
     kind: MutatingWebhookConfiguration
     jsonPointers:

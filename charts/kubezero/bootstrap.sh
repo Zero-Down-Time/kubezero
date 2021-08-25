@@ -6,32 +6,18 @@ ARTIFACTS=($(echo $2 | tr "," "\n"))
 CLUSTER=$3
 LOCATION=${4:-""}
 
-API_VERSIONS="-a monitoring.coreos.com/v1"
-
-DEPLOY_DIR=$( dirname $( realpath $0 ))
 which yq || { echo "yq not found!"; exit 1; }
 which helm || { echo "helm not found!"; exit 1; }
 helm_version=$(helm version --short)
 echo $helm_version | grep -qe "^v3.[3-9]" || { echo "Helm version >= 3.3 required!"; exit 1; }
 
+# Simulate well-known CRDs being available
+API_VERSIONS="-a monitoring.coreos.com/v1"
+KUBE_VERSION="--kube-version $(kubectl version -o json | jq -r .serverVersion.gitVersion)"
+
 TMPDIR=$(mktemp -d kubezero.XXX)
 [ -z "$DEBUG" ] && trap 'rm -rf $TMPDIR' ERR EXIT
 
-# First lets generate kubezero.yaml
-# Add all yaml files in $CLUSTER
-VALUES="$(find $CLUSTER -name '*.yaml' | tr '\n' ',')"
-helm template $DEPLOY_DIR -f ${VALUES%%,} --set argo=false > $TMPDIR/kubezero.yaml
-
-# Resolve all the all enabled artifacts in order of their appearance
-if [ ${ARTIFACTS[0]} == "all" ]; then
-  ARTIFACTS=($(yq r -p p $TMPDIR/kubezero.yaml "*.enabled" | awk -F "." '{print $1}'))
-fi
-
-# Update only if we use upstream
-if [ -z "$LOCATION" ]; then
-  helm repo add kubezero https://zero-down-time.github.io/kubezero
-  helm repo update
-fi
 
 # Waits for max 300s and retries
 function wait_for() {
@@ -72,8 +58,8 @@ function delete_ns() {
 
 # Extract crds via helm calls and apply delta=crds only
 function _crds() {
-  helm template $(chart_location $chart) --namespace $namespace --name-template $release --skip-crds --set ${release}.installCRDs=false -f $TMPDIR/values.yaml > $TMPDIR/helm-no-crds.yaml
-  helm template $(chart_location $chart) --namespace $namespace --name-template $release --include-crds --set ${release}.installCRDs=true -f $TMPDIR/values.yaml > $TMPDIR/helm-crds.yaml
+  helm template $(chart_location $chart) -n $namespace --name-template $release --skip-crds --set ${release}.installCRDs=false -f $TMPDIR/values.yaml $API_VERSIONS $KUBE_VERSION > $TMPDIR/helm-no-crds.yaml
+  helm template $(chart_location $chart) -n $namespace --name-template $release --include-crds --set ${release}.installCRDs=true -f $TMPDIR/values.yaml $API_VERSIONS $KUBE_VERSION > $TMPDIR/helm-crds.yaml
   diff -e $TMPDIR/helm-no-crds.yaml $TMPDIR/helm-crds.yaml | head -n-1 | tail -n+2 > $TMPDIR/crds.yaml
   [ -s $TMPDIR/crds.yaml ] && kubectl apply -f $TMPDIR/crds.yaml
 }
@@ -82,9 +68,9 @@ function _crds() {
 # helm template | kubectl apply -f -
 # confine to one namespace if possible
 function apply(){
-  helm template $(chart_location $chart) --namespace $namespace --name-template $release --skip-crds -f $TMPDIR/values.yaml $API_VERSIONS $@ > $TMPDIR/helm.yaml
+  helm template $(chart_location $chart) -n $namespace --name-template $release --skip-crds -f $TMPDIR/values.yaml $API_VERSIONS $KUBE_VERSION $@ > $TMPDIR/helm.yaml
 
-  # If resources are out of the single $namespace, apply without restrictions
+  # If resources are in more than ONE $namespace, apply without restrictions
   nr_ns=$(grep -e '^  namespace:' $TMPDIR/helm.yaml  | sed "s/\"//g" | sort | uniq | wc -l)
   if [ $nr_ns -gt 1 ]; then
     kubectl $action -f $TMPDIR/helm.yaml && rc=$? || rc=$?
@@ -133,6 +119,7 @@ function is_enabled() {
   local enabled=$(yq r $TMPDIR/kubezero.yaml ${chart}.enabled)
 
   if [ "$enabled" == "true" ]; then
+    # slice values for this chart only from kubezero.yaml
     yq r $TMPDIR/kubezero.yaml ${chart}.values > $TMPDIR/values.yaml
     return 0
   fi
@@ -154,6 +141,11 @@ function get_namespace() {
   [ -z "$namespace" ] && echo "kube-system" || echo $namespace
 }
 
+
+function update_kubezero_argo() {
+  helm template $(chart_location kubezero) -f ${VALUES%%,} --set installKubeZero=true > $TMPDIR/kubezero-argocd.yaml
+  kubectl apply -f $TMPDIR/kubezero-argocd.yaml
+}
 
 ################
 # cert-manager #
@@ -198,7 +190,28 @@ function metrics-pre() {
 }
 
 
+##########
+# ArgoCD #
+##########
+# Install KubeZero app and project
+function argocd-post() {
+  update_kubezero_argo
+}
+
+
 ## MAIN ##
+# First lets generate kubezero.yaml
+# Add all yaml files in $CLUSTER
+VALUES="$(find $CLUSTER -maxdepth 1 -name '*.yaml' | sort | tr '\n' ',')"
+helm template $(chart_location kubezero) -f ${VALUES%%,} > $TMPDIR/kubezero.yaml
+
+# Resolve all the all enabled artifacts in order of their appearance
+if [ ${ARTIFACTS[0]} == "all" ]; then
+  ARTIFACTS=($(yq r -p p $TMPDIR/kubezero.yaml "*.enabled" | awk -F "." '{print $1}'))
+fi
+echo "Artifacts: ${ARTIFACTS[@]}"
+
+
 if [ $1 == "deploy" ]; then
   for t in ${ARTIFACTS[@]}; do
     is_enabled $t && _helm apply $t || true
@@ -216,4 +229,8 @@ elif [ $1 == "delete" ]; then
   for (( idx=${#ARTIFACTS[@]}-1 ; idx>=0 ; idx-- )) ; do
     is_enabled ${ARTIFACTS[idx]} && _helm delete ${ARTIFACTS[idx]} || true
   done
+
+# Update ArgoCD Kubezero app
+elif [ $1 == "argo" -a $2 == 'kubezero' ]; then
+  update_kubezero_argo
 fi

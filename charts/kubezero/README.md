@@ -1,6 +1,6 @@
 # kubezero
 
-![Version: 0.5.1](https://img.shields.io/badge/Version-0.5.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 1.20.8-alpha](https://img.shields.io/badge/Version-1.20.8--alpha-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero - Bootstrap and ArgoCD Root App of Apps chart
 
@@ -18,14 +18,13 @@ Kubernetes: `>= 1.18.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
+| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.4 |
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | HighAvailableControlplane | bool | `false` |  |
-| argo | object | `{}` |  |
 | argocd.crds | bool | `true` |  |
 | argocd.enabled | bool | `false` |  |
 | argocd.istio.enabled | bool | `false` |  |
@@ -40,16 +39,16 @@ Kubernetes: `>= 1.18.0`
 | cert-manager.crds | bool | `true` |  |
 | cert-manager.enabled | bool | `false` |  |
 | cert-manager.namespace | string | `"cert-manager"` |  |
-| global.kubezero.pathPrefix | string | `""` |  |
-| global.kubezero.repoURL | string | `"https://github.com/zero-down-time/kubezero"` |  |
-| global.kubezero.server | string | `"https://kubernetes.default.svc"` |  |
-| global.kubezero.targetRevision | string | `"HEAD"` |  |
 | istio-ingress.enabled | bool | `false` |  |
 | istio-ingress.namespace | string | `"istio-ingress"` |  |
 | istio.crds | bool | `true` |  |
 | istio.enabled | bool | `false` |  |
 | istio.namespace | string | `"istio-system"` |  |
 | kiam.enabled | bool | `false` |  |
+| kubezero.repoURL | string | `"https://zero-down-time.github.io/kubezero"` |  |
+| kubezero.server | string | `"https://kubernetes.default.svc"` |  |
+| kubezero.sourceRepos[0] | string | `"https://zero-down-time.github.io/kubezero"` |  |
+| kubezero.targetRevision | string | `"*"` |  |
 | logging.crds | bool | `true` |  |
 | logging.enabled | bool | `false` |  |
 | logging.namespace | string | `"logging"` |  |
