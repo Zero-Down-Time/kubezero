@@ -115,4 +115,5 @@ EOF
     kubectl apply -f _job.yaml
     kubectl wait -n kube-system --timeout 300s --for=condition=complete job/kubezero-upgrade
     kubectl delete -f _job.yaml
+    rm -f _job.yaml
 done

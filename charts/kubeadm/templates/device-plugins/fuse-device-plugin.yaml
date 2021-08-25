@@ -14,7 +14,7 @@ spec:
     spec:
       hostNetwork: true
       containers:
-      - image: public.ecr.aws/zero-downtime/fuse-device-plugin:v1.0
+      - image: public.ecr.aws/zero-downtime/fuse-device-plugin:v1.0-r1
         # imagePullPolicy: Always
         name: fuse-device-plugin
         securityContext:

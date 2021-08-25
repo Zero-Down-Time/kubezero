@@ -2,7 +2,7 @@
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: mariadb
+  name: {{ template "kubezero-lib.fullname" $ }}-mariadb
   namespace: {{ .Release.Namespace }}
   labels:
 {{ include "kubezero-lib.labels" . | indent 4 }}
