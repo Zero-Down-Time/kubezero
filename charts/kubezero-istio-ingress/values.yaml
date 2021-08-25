@@ -1,7 +1,7 @@
 # Make sure these values match kuberzero-istio !!!
 global:
   #hub: docker.io/istio
-  #tag: 1.10.2
+  #tag: 1.11.0
 
   logAsJson: true
 
@@ -50,31 +50,50 @@ istio-ingress:
         mountPath: /etc/istio/custom-bootstrap
         configMapName: istio-gateway-bootstrap-config
 
-      # The node selector is normally the list of nodeports, see CloudBender
+      # Unfortunately the upstream chart makes this complicated as they abuse the nodeSelector, see zdt.patch
       nodeSelector:
-        node.kubernetes.io/ingress.public: "30080_30443"
+        node.kubernetes.io/ingress.public: "Exists"
+      # Only nodes who are fronted with matching NLB
+      #affintiy:
+      #  nodeAffinity:
+      #    requiredDuringSchedulingIgnoredDuringExecution:
+      #      nodeSelectorTerms:
+      #      - matchExpressions:
+      #        - key: node.kubernetes.io/ingress.public
+      #          operator: Exists
+
+      # Map port 80/443 to 8080/8443 so we don't need to root
+
+      # ports is extended as follows:
+      # noGateway: true -> this port does NOT get mapped to a Gateway port
+      # tls: optional gateway port setting
+      # gatewayProtocol: Loadbalancer protocol which is NOT the same as Container Procotol !
       ports:
       - name: status-port
         port: 15021
         nodePort: 30021
-        protocol: TCP
+        noGateway: true
       - name: http2
         port: 80
         targetPort: 8080
         nodePort: 30080
-        protocol: TCP
+        gatewayProtocol: HTTP2
+        tls:
+          httpsRedirect: true
       - name: https
         port: 443
         targetPort: 8443
         nodePort: 30443
-        protocol: TCP
+        gatewayProtocol: HTTPS
+        tls:
+          mode: SIMPLE
 
   certificates:
   - name: ingress-cert
     dnsNames: []
   #  - '*.example.com'
 
-  proxyProtocol: false
+  proxyProtocol: true
 
   meshConfig:
    defaultConfig:
@@ -124,27 +143,43 @@ istio-private-ingress:
         mountPath: /etc/istio/custom-bootstrap
         configMapName: istio-gateway-bootstrap-config
 
+      # Unfortunately the upstream chart makes this complicated as they abuse the nodeSelector, see zdt.patch
       nodeSelector:
-        node.kubernetes.io/ingress.private: "31080_31443"
-        #nodeSelector: "31080_31443_31671_31672_31224"
+        node.kubernetes.io/ingress.private: "Exists"
+      # Only nodes who are fronted with matching NLB
+      #affintiy:
+      #  nodeAffinity:
+      #    requiredDuringSchedulingIgnoredDuringExecution:
+      #      nodeSelectorTerms:
+      #      - matchExpressions:
+      #        - key: node.kubernetes.io/ingress.private
+      #          operator: Exists
+
       ports:
       - name: status-port
         port: 15021
         nodePort: 31021
-        protocol: TCP
+        noGateway: true
       - name: http2
         port: 80
         targetPort: 8080
         nodePort: 31080
-        protocol: TCP
+        gatewayProtocol: HTTP2
+        tls:
+          httpsRedirect: true
       - name: https
         port: 443
         targetPort: 8443
         nodePort: 31443
-        protocol: TCP
+        gatewayProtocol: HTTPS
+        tls:
+          mode: SIMPLE
       #- name: fluentd-forward
       #  port: 24224
       #  nodePort: 31224
+      #  gatewayProtocol: TLS
+      #  tls:
+      #    mode: SIMPLE
       #- name: amqps
       #  port: 5671
       #  nodePort: 31671
@@ -160,7 +195,7 @@ istio-private-ingress:
     dnsNames: []
     #- '*.example.com'
 
-  proxyProtocol: false
+  proxyProtocol: true
 
   meshConfig:
    defaultConfig:

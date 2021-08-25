@@ -1,7 +1,27 @@
-diff -turN istio/manifests/charts/gateways/istio-ingress/templates/deployment.yaml istio.zdt/manifests/charts/gateways/istio-ingress/templates/deployment.yaml
---- istio/manifests/charts/gateways/istio-ingress/templates/deployment.yaml	2021-04-11 01:57:29.000000000 +0200
-+++ istio.zdt/manifests/charts/gateways/istio-ingress/templates/deployment.yaml	2021-04-20 12:20:04.401862116 +0200
-@@ -17,6 +17,8 @@
+diff -tubr istio/manifests/charts/gateways/istio-ingress/templates/_affinity.tpl istio.zdt/manifests/charts/gateways/istio-ingress/templates/_affinity.tpl
+--- istio/manifests/charts/gateways/istio-ingress/templates/_affinity.tpl	2021-07-15 07:32:30.000000000 +0200
++++ istio.zdt/manifests/charts/gateways/istio-ingress/templates/_affinity.tpl	2021-08-10 15:49:57.298616463 +0200
+@@ -21,11 +21,16 @@
+         {{- end }}
+         {{- $nodeSelector := default .global.defaultNodeSelector .nodeSelector -}}
+         {{- range $key, $val := $nodeSelector }}
++        {{- if eq $val "Exists" }}
++        - key: {{ $key }}
++          operator: Exists
++        {{- else }}
+         - key: {{ $key }}
+           operator: In
+           values:
+           - {{ $val | quote }}
+         {{- end }}
++        {{- end }}
+ {{- end }}
+ 
+ {{- define "nodeAffinityPreferredDuringScheduling" }}
+diff -tubr istio/manifests/charts/gateways/istio-ingress/templates/deployment.yaml istio.zdt/manifests/charts/gateways/istio-ingress/templates/deployment.yaml
+--- istio/manifests/charts/gateways/istio-ingress/templates/deployment.yaml	2021-07-15 07:32:30.000000000 +0200
++++ istio.zdt/manifests/charts/gateways/istio-ingress/templates/deployment.yaml	2021-08-10 15:46:23.216421660 +0200
+@@ -16,6 +16,8 @@
  {{- if $gateway.replicaCount }}
    replicas: {{ $gateway.replicaCount }}
  {{- end }}
@@ -10,7 +30,7 @@ diff -turN istio/manifests/charts/gateways/istio-ingress/templates/deployment.ya
  {{- end }}
    selector:
      matchLabels:
-@@ -69,6 +71,7 @@
+@@ -65,6 +67,7 @@
  {{- if .Values.global.priorityClassName }}
        priorityClassName: "{{ .Values.global.priorityClassName }}"
  {{- end }}
@@ -18,7 +38,7 @@ diff -turN istio/manifests/charts/gateways/istio-ingress/templates/deployment.ya
  {{- if .Values.global.proxy.enableCoreDump }}
        initContainers:
          - name: enable-core-dump
-@@ -140,6 +143,11 @@
+@@ -136,6 +139,11 @@
              privileged: false
              readOnlyRootFilesystem: true
          {{- end }}
@@ -30,9 +50,24 @@ diff -turN istio/manifests/charts/gateways/istio-ingress/templates/deployment.ya
            readinessProbe:
              failureThreshold: 30
              httpGet:
-diff -turN istio/manifests/charts/istio-control/istio-discovery/templates/deployment.yaml istio.zdt/manifests/charts/istio-control/istio-discovery/templates/deployment.yaml
---- istio/manifests/charts/istio-control/istio-discovery/templates/deployment.yaml	2021-04-11 01:57:29.000000000 +0200
-+++ istio.zdt/manifests/charts/istio-control/istio-discovery/templates/deployment.yaml	2021-04-19 21:55:45.461749267 +0200
+diff -tubr istio/manifests/charts/gateways/istio-ingress/templates/service.yaml istio.zdt/manifests/charts/gateways/istio-ingress/templates/service.yaml
+--- istio/manifests/charts/gateways/istio-ingress/templates/service.yaml	2021-07-15 07:32:30.000000000 +0200
++++ istio.zdt/manifests/charts/gateways/istio-ingress/templates/service.yaml	2021-08-10 19:58:01.037876557 +0200
+@@ -34,9 +34,11 @@
+     {{- range $key, $val := $gateway.ports }}
+     -
+       {{- range $pkey, $pval := $val }}
++      {{- if has $pkey (list "name" "nodePort" "port" "targetPort") }}
+       {{ $pkey}}: {{ $pval }}
+       {{- end }}
+     {{- end }}
++    {{- end }}
+ 
+   {{ range $app := $gateway.ingressPorts }}
+     -
+diff -tubr istio/manifests/charts/istio-control/istio-discovery/templates/deployment.yaml istio.zdt/manifests/charts/istio-control/istio-discovery/templates/deployment.yaml
+--- istio/manifests/charts/istio-control/istio-discovery/templates/deployment.yaml	2021-07-15 07:32:30.000000000 +0200
++++ istio.zdt/manifests/charts/istio-control/istio-discovery/templates/deployment.yaml	2021-08-10 15:46:23.216421660 +0200
 @@ -60,6 +60,11 @@
  {{- end }}
        securityContext:

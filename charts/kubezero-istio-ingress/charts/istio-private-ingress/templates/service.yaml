@@ -34,8 +34,10 @@ spec:
     {{- range $key, $val := $gateway.ports }}
     -
       {{- range $pkey, $pval := $val }}
+      {{- if has $pkey (list "name" "nodePort" "port" "targetPort") }}
       {{ $pkey}}: {{ $pval }}
       {{- end }}
+    {{- end }}
     {{- end }}
 
   {{ range $app := $gateway.ingressPorts }}

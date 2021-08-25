@@ -5,7 +5,7 @@ metadata:
   name: ingressgateway-listener-tcp-keepalive
   namespace: {{ .Release.Namespace }}
   labels:
-{{ include "kubezero-lib.labels" . | indent 4 }}
+    {{- include "kubezero-lib.labels" . | nindent 4 }}
 spec:
   workloadSelector:
     labels:
@@ -43,7 +43,7 @@ metadata:
   name: private-ingressgateway-listener-tcp-keepalive
   namespace: {{ .Release.Namespace }}
   labels:
-{{ include "kubezero-lib.labels" . | indent 4 }}
+    {{- include "kubezero-lib.labels" . | nindent 4 }}
 spec:
   workloadSelector:
     labels:
