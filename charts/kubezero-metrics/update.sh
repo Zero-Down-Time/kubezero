@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=17.0.3
+VERSION=18.0.1
 PG_VER=1.10.1
 
 rm -rf charts/kube-prometheus-stack

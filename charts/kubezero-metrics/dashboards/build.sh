@@ -5,4 +5,6 @@
 ./jb-linux-amd64 update
 
 mkdir -p kube-mixin
+#jsonnet -J vendor -S -e 'std.manifestYamlDoc((import "mixin.libsonnet").prometheusAlerts)' > kube-mixin/alerts.yml
+#jsonnet -J vendor -S -e 'std.manifestYamlDoc((import "mixin.libsonnet").prometheusRules)' > kube-mixin/rules.yml
 jsonnet -J vendor -m kube-mixin -e '(import "mixin.libsonnet").grafanaDashboards'
