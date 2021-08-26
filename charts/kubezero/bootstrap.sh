@@ -5,15 +5,18 @@ ACTION=$1
 ARTIFACTS=($(echo $2 | tr "," "\n"))
 CLUSTER=$3
 LOCATION=${4:-""}
+KUBEZERO_VERSION=${5:-""}
 
 which yq || { echo "yq not found!"; exit 1; }
 which helm || { echo "helm not found!"; exit 1; }
 helm_version=$(helm version --short)
-echo $helm_version | grep -qe "^v3.[3-9]" || { echo "Helm version >= 3.3 required!"; exit 1; }
+echo $helm_version | grep -qe "^v3.[5-9]" || { echo "Helm version >= 3.5 required!"; exit 1; }
 
 # Simulate well-known CRDs being available
 API_VERSIONS="-a monitoring.coreos.com/v1"
 KUBE_VERSION="--kube-version $(kubectl version -o json | jq -r .serverVersion.gitVersion)"
+
+[ -n "$KUBEZERO_VERSION" ] && KUBEZERO_VERSION="--version $KUBEZERO_VERSION"
 
 TMPDIR=$(mktemp -d kubezero.XXX)
 [ -z "$DEBUG" ] && trap 'rm -rf $TMPDIR' ERR EXIT
@@ -143,7 +146,7 @@ function get_namespace() {
 
 
 function update_kubezero_argo() {
-  helm template $(chart_location kubezero) -f ${VALUES%%,} --set installKubeZero=true > $TMPDIR/kubezero-argocd.yaml
+  helm template $(chart_location kubezero) -f ${VALUES%%,} --set installKubeZero=true $KUBEZERO_VERSION > $TMPDIR/kubezero-argocd.yaml
   kubectl apply -f $TMPDIR/kubezero-argocd.yaml
 }
 
@@ -203,7 +206,7 @@ function argocd-post() {
 # First lets generate kubezero.yaml
 # Add all yaml files in $CLUSTER
 VALUES="$(find $CLUSTER -maxdepth 1 -name '*.yaml' | sort | tr '\n' ',')"
-helm template $(chart_location kubezero) -f ${VALUES%%,} > $TMPDIR/kubezero.yaml
+helm template $(chart_location kubezero) -f ${VALUES%%,} $KUBEZERO_VERSION > $TMPDIR/kubezero.yaml
 
 # Resolve all the all enabled artifacts in order of their appearance
 if [ ${ARTIFACTS[0]} == "all" ]; then
