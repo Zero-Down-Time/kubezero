@@ -1,3 +1,28 @@
+{{- define "_ingress" }}
+# reuse values for the two sub-charts Public and Private
+enabled: {{ .enabled }}
+{{- with .gateway }}
+gateways:
+  istio-ingressgateway:
+    {{- toYaml . | nindent 6 }}
+{{- end }}
+certificates:
+{{- with .dnsNames }}
+- name: ingress-cert
+  dnsNames:
+  {{- toYaml . | nindent 4 }}
+{{- end }}
+{{- range $cert := .certificates }}
+- name: {{ $cert.name }}
+  dnsNames:
+  {{- toYaml $cert.dnsNames | nindent 4 }}
+{{- end }}
+{{- with .proxyProtocol }}
+proxyProtocol: {{ . }}
+{{- end }}
+{{- end }}
+
+
 {{- define "istio-ingress-values" }}
 
 {{- with index .Values "istio-ingress" "global" }}
@@ -5,51 +30,18 @@ global:
   {{- toYaml . | nindent 2 }}
 {{- end }}
 
-{{- if index .Values "istio-ingress" "public" }}
+{{- with index .Values "istio-ingress" "public" }}
 istio-ingress:
-  enabled: {{ index .Values "istio-ingress" "public" "enabled" }}
   telemetry:
-    enabled: {{ .Values.metrics.enabled }}
-  {{- with index .Values "istio-ingress" "public" "gateway" }}
-  gateways:
-    istio-ingressgateway:
-      {{- toYaml . | nindent 6 }}
-  {{- end }}
-  certificates:
-  {{- with index .Values "istio-ingress" "public" "dnsNames" }}
-  - name: ingress-cert
-    dnsNames:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
-  {{- range $cert := (index .Values "istio-ingress" "public" "certificates") }}
-  - name: {{ $cert.name }}
-    dnsNames:
-    {{- toYaml $cert.dnsNames | nindent 4 }}
-  {{- end }}
+    enabled: {{ $.Values.metrics.enabled }}
+{{- include "_ingress" . | nindent 2 }}
 {{- end }}
 
-{{- if index .Values "istio-ingress" "private" }}
+{{- with index .Values "istio-ingress" "private" }}
 istio-private-ingress:
-  enabled: {{ index .Values "istio-ingress" "private" "enabled" }}
   telemetry:
-    enabled: {{ .Values.metrics.enabled }}
-  {{- with index .Values "istio-ingress" "private" "gateway" }}
-  gateways:
-    istio-ingressgateway:
-      {{- toYaml . | nindent 6 }}
-  {{- end }}
-  certificates:
-  {{- with index .Values "istio-ingress" "private" "dnsNames" }}
-  - name: private-ingress-cert
-    dnsNames:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
-  {{- range $cert := (index .Values "istio-ingress" "private" "certificates") }}
-  - name: {{ $cert.name }}
-    dnsNames:
-    {{- toYaml $cert.dnsNames | nindent 4 }}
-  {{- end }}
-  proxyProtocol: {{ default false (index .Values "istio-ingress" "private" "proxyProtocol") }}
+    enabled: {{ $.Values.metrics.enabled }}
+{{- include "_ingress" . | nindent 2 }}
 {{- end }}
 
 {{- end }}
