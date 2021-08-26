@@ -1,8 +1,8 @@
 apiVersion: v2
 name: kubezero-storage
-description: KubeZero umbrella chart for all things storage, eg. openEBS
+description: KubeZero umbrella chart for all things storage, eg. openEBS-lvm
 type: application
-version: 0.1.2
+version: 0.2.0
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
@@ -11,8 +11,8 @@ keywords:
 maintainers:
   - name: Quarky9
 dependencies:
-  - name: openebs
-    version: 2.11.2
-    repository: https://openebs.github.io/charts
-    condition: openebs.enabled
+  - name: lvm-localpv
+    version: 0.8.0
+    repository: https://openebs.github.io/lvm-localpv
+    condition: lvm-localpv.enabled
 kubeVersion: ">= 1.18.0"
