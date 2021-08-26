@@ -67,7 +67,7 @@ kiali-server:
 
 
 rateLimiting:
-  enabled: true
+  enabled: false
 
   log:
     level: warn
