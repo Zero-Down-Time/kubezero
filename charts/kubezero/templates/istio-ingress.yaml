@@ -1,5 +1,4 @@
 {{- define "_ingress" }}
-# reuse values for the two sub-charts Public and Private
 enabled: {{ .enabled }}
 {{- with .gateway }}
 gateways:
@@ -17,9 +16,7 @@ certificates:
   dnsNames:
   {{- toYaml $cert.dnsNames | nindent 4 }}
 {{- end }}
-{{- with .proxyProtocol }}
-proxyProtocol: {{ . }}
-{{- end }}
+proxyProtocol: {{ default true .proxyProtocol }}
 {{- end }}
 
 

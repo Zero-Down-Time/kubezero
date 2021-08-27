@@ -63,7 +63,7 @@ logging:
   enabled: false
   crds: true
   namespace: logging
-  targetRevision: 0.7.6
+  targetRevision: 0.7.7
 
 argocd:
   enabled: false
