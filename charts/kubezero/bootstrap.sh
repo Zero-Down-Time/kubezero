@@ -16,7 +16,7 @@ echo $helm_version | grep -qe "^v3.[5-9]" || { echo "Helm version >= 3.5 require
 API_VERSIONS="-a monitoring.coreos.com/v1"
 KUBE_VERSION="--kube-version $(kubectl version -o json | jq -r .serverVersion.gitVersion)"
 
-[ -n "$KUBEZERO_VERSION" ] && KUBEZERO_VERSION="--version $KUBEZERO_VERSION"
+[ -n "$KUBEZERO_VERSION" ] && KUBEZERO_VERSION="--version $KUBEZERO_VERSION --devel"
 
 TMPDIR=$(mktemp -d kubezero.XXX)
 [ -z "$DEBUG" ] && trap 'rm -rf $TMPDIR' ERR EXIT
