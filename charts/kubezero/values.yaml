@@ -43,7 +43,7 @@ istio:
   enabled: false
   crds: true
   namespace: istio-system
-  targetRevision: 0.7.2
+  targetRevision: 0.7.3
 
 istio-ingress:
   enabled: false

@@ -193,15 +193,6 @@ function metrics-pre() {
 }
 
 
-##########
-# ArgoCD #
-##########
-# Install KubeZero app and project
-function argocd-post() {
-  update_kubezero_argo
-}
-
-
 ## MAIN ##
 # First lets generate kubezero.yaml
 # Add all yaml files in $CLUSTER
