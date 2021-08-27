@@ -225,14 +225,19 @@ fluentd:
 fluent-bit:
   enabled: false
 
-  image:
+  #image:
     #repository: public.ecr.aws/zero-downtime/fluent-bit
-    tag: 1.8.3
+    #tag: 1.8.3
 
   serviceMonitor:
     enabled: false
     selector:
       release: metrics
+
+  #rbac:
+  #  nodeAccess: true
+  #hostNetwork: true
+  #dnsPolicy: ClusterFirstWithHostNet
 
   tolerations:
   - key: node-role.kubernetes.io/master
@@ -274,6 +279,7 @@ fluent-bit:
           HTTP_Server On
           HTTP_Listen 0.0.0.0
           HTTP_Port {{ .Values.service.port }}
+          Health_Check On
     inputs: |
       [INPUT]
           Name tail
