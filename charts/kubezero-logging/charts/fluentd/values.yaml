@@ -124,6 +124,14 @@ tolerations: []
 ##
 affinity: {}
 
+## Annotations to be added to fluentd DaemonSet/Deployment
+##
+annotations: {}
+
+## Labels to be added to fluentd DaemonSet/Deployment
+##
+labels: {}
+
 ## Annotations to be added to fluentd pods
 ##
 podAnnotations: {}
@@ -131,6 +139,13 @@ podAnnotations: {}
 ## Labels to be added to fluentd pods
 ##
 podLabels: {}
+
+## Deployment strategy / DaemonSet updateStrategy
+##
+updateStrategy: {}
+#   type: RollingUpdate
+#   rollingUpdate:
+#     maxUnavailable: 1
 
 ## Additional environment variables to set for fluentd pods
 env:

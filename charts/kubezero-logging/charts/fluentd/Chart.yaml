@@ -6,8 +6,10 @@ icon: https://www.fluentd.org/assets/img/miscellany/fluentd-logo_2x.png
 maintainers:
 - email: eduardo@treasure-data.com
   name: edsiper
+- email: diogo.filipe.tomas.guerra@cern.ch
+  name: dioguerra
 name: fluentd
 sources:
 - https://github.com/fluent/fluentd/
 - https://github.com/fluent/fluentd-kubernetes-daemonset
-version: 0.2.6
+version: 0.2.10
