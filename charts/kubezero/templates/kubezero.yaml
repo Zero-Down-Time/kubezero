@@ -11,10 +11,11 @@ metadata:
 spec:
   description: KubeZero - ZeroDownTime Kubernetes Platform
 
-  # Allow manifests to deploy from
-  {{- with .Values.kubezero.sourceRepos }}
+  # Add the git repo used for git-sync
   sourceRepos:
-  {{- toYaml . | nindent 2 }}
+  - {{ .Values.kubezero.repoURL }}
+  {{ with .Values.kubezero.gitSync.repoURL }}
+  - {{ . }}
   {{- end }}
 
   # platform namespaces in the local cluster
@@ -44,28 +45,20 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kubezero
+  name: kubezero-git-sync
   namespace: argocd
   labels:
     {{- include "kubezero-lib.labels" . | nindent 4 }}
 spec:
   project: kubezero
   source:
-    repoURL: https://zero-down-time.github.io/kubezero
-    chart: kubezero
-    # targetRevision: '>=1.20.8-0'
-    targetRevision: '{{ .Chart.Version }}'
+    repoURL: {{ .Values.kubezero.gitSync.repoURL }}
+    targetRevision: {{ .Values.kubezero.gitSync.targetRevision }}
+    path: {{ .Values.kubezero.gitSync.path }}
 
     helm:
-      parameters:
-      # We use this to detect if we are called from ArgoCD
-      - name: argocdAppName
-        value: $ARGOCD_APP_NAME
-      # This breaks the recursion, otherwise we install another kubezero project and app
-      - name: installKubeZero
-        value: "false"
-      values: |
-        {{- toYaml .Values | nindent 8 }}
+      valueFiles:
+      - kubezero.yaml
 
   destination:
     server: https://kubernetes.default.svc

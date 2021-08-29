@@ -1,9 +1,8 @@
 kubezero:
   server: https://kubernetes.default.svc
   repoURL: https://zero-down-time.github.io/kubezero
-  targetRevision: '*'
-  sourceRepos:
-  - 'https://zero-down-time.github.io/kubezero'
+  defaultTargetRevision: '*'
+  gitSync: {}
 
 HighAvailableControlplane: false
 
@@ -63,7 +62,7 @@ logging:
   enabled: false
   crds: true
   namespace: logging
-  targetRevision: 0.7.7
+  targetRevision: 0.7.8
 
 argocd:
   enabled: false

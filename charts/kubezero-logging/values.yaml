@@ -46,7 +46,8 @@ fluentd:
   enabled: false
   image:
     repository: fluent/fluentd-kubernetes-daemonset
-    tag: v1-debian-elasticsearch
+    # tag: v1-debian-elasticsearch
+    tag: v1.11.1-debian-elasticsearch7-1.3
   istio:
     enabled: false
 
@@ -123,7 +124,7 @@ fluentd:
         log_level info
         ignore_repeated_log_interval 60s
         ignore_same_log_interval 60s
-        workers 2
+        workers 1
       </system>
     01_sources.conf: |-
       <source>
@@ -165,6 +166,13 @@ fluentd:
           </exclude>
         </filter>
 
+        # Generate Hash ID to break endless loop for already ingested events during retries
+        <filter **>
+          @type elasticsearch_genid
+          use_entire_record true
+        </filter>
+
+        # Route through DISPATCH for Prometheus metrics
         <match **>
           @type relabel
           @label @DISPATCH
@@ -178,8 +186,8 @@ fluentd:
           @type elasticsearch
           # @log_level debug
           include_tag_key true
-          id_key id
-          remove_keys id
+          id_key _hash
+          remove_keys _hash
 
           # KubeZero pipeline incl. GeoIP etc.
           pipeline fluentd
@@ -207,7 +215,7 @@ fluentd:
             @type file
 
             flush_mode interval
-            flush_thread_count 1
+            flush_thread_count 2
             flush_interval 30s
 
             chunk_limit_size 4MB
