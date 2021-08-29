@@ -101,3 +101,18 @@ argo-cd:
 
   dex:
     enabled: false
+
+
+argocd-applicationset:
+  enabled: false
+
+  rbac:
+    pspEnabled: false
+
+  resources:
+    # limits:
+      # cpu: 500m
+      # memory: 2048Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi

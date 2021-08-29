@@ -1,7 +1,7 @@
 apiVersion: v2
 description: KubeZero ArgoCD Helm chart to install ArgoCD itself and the KubeZero ArgoCD Application
 name: kubezero-argocd
-version: 0.8.1
+version: 0.8.2
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
@@ -17,4 +17,8 @@ dependencies:
   - name: argo-cd
     version: 3.13.1
     repository: https://argoproj.github.io/argo-helm
+  - name: argocd-applicationset
+    version: 1.4.0
+    repository: https://argoproj.github.io/argo-helm
+    condition: argocd-applicationset.enabled
 kubeVersion: ">= 1.18.0"
