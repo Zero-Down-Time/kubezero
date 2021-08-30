@@ -1,0 +1,13 @@
+apiVersion: v2
+name: kubezero-git-sync
+description: KubeZero Git Sync Argo Application to track cluster values via git
+type: application
+version: 0.1
+home: https://kubezero.com
+icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
+keywords:
+  - kubezero
+  - argocd
+maintainers:
+  - name: Quarky9
+kubeVersion: ">= 1.18.0"
