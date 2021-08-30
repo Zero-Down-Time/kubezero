@@ -194,9 +194,13 @@ function metrics-pre() {
 
 
 ## MAIN ##
-# First lets generate kubezero.yaml
-# Add all yaml files in $CLUSTER
-VALUES="$(find $CLUSTER -maxdepth 1 -name '*.yaml' | sort | tr '\n' ',')"
+# First lets generate kubezero.yaml, either plain values.yaml or application.yaml for ArgoCD
+if [ -f $CLUSTER/kubezero/application.yaml ]; then
+  yq r $CLUSTER/kubezero/application.yaml 'spec.source.helm.values' > $TMPDIR/_argovalues.yaml
+  VALUES=$TMPDIR/_argovalues.yaml
+else
+  VALUES="$(find $CLUSTER -name '*.yaml' | sort | tr '\n' ',')"
+fi
 helm template $(chart_location kubezero) -f ${VALUES%%,} $KUBEZERO_VERSION > $TMPDIR/kubezero.yaml
 
 # Resolve all the all enabled artifacts in order of their appearance

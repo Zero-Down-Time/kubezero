@@ -56,9 +56,8 @@ spec:
     targetRevision: {{ .Values.kubezero.gitSync.targetRevision }}
     path: {{ .Values.kubezero.gitSync.path }}
 
-    helm:
-      valueFiles:
-      - kubezero.yaml
+  directory:
+    recurse: true
 
   destination:
     server: https://kubernetes.default.svc
