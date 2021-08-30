@@ -106,6 +106,10 @@ argo-cd:
 argocd-applicationset:
   enabled: false
 
+  # Prevent accidental cascading deletes of Applications
+  args:
+    policy: create-update
+
   rbac:
     pspEnabled: false
 
