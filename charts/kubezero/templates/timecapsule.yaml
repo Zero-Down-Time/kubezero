@@ -1,8 +1,0 @@
-{{- define "timecapsule-values" }}
-{{- end }}
-
-
-{{- define "timecapsule-argo" }}
-{{- end }}
-
-{{ include "kubezero-app.app" . }}
