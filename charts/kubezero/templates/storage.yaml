@@ -1,8 +1,13 @@
 {{- define "storage-values" }}
 
-{{- with index .Values "storage" "storageClass" }}
-storageClass:
-  {{- . | toYaml | nindent 2 }}
+{{- with index .Values "storage" "lvm-localpv" }}
+lvm-localpv:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+
+{{- with .Values.storage.gemini }}
+gemini:
+  {{- toYaml . | nindent 2 }}
 {{- end }}
 
 {{- end }}
