@@ -9,4 +9,5 @@ spec:
     claimName: {{ $ssg.claimName }}
   schedule:
     {{- toYaml $ssg.schedule | nindent 4 }}
+---
 {{- end }}

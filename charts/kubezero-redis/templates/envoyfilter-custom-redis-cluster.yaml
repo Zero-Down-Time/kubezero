@@ -1,4 +1,4 @@
-{{- if index .Values "redis-cluster" "enabled" }}
+{{- if and ( index .Values "redis-cluster" "enabled" ) .Values.istio.enabled }}
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
