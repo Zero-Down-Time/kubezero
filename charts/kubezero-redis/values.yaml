@@ -42,3 +42,12 @@ redis-cluster:
 
 istio:
   enabled: false
+
+snapshotgroups: {}
+# - name: redis-snaps
+#   claimName: redis-data-redis-cluster-master-0
+#   schedule:
+#   - every: hour
+#     keep: 24
+#   - every: day
+#     keep: 7
