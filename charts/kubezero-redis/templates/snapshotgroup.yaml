@@ -1,0 +1,12 @@
+{{- range .Values.snapshotgroups }}
+apiVersion: gemini.fairwinds.com/v1beta1
+kind: SnapshotGroup
+metadata:
+  name: {{ .name }}
+  namespace: {{ $.Release.Namespace }}
+spec:
+  persistentVolumeClaim:
+    claimName: {{ .claimName }}
+  schedule:
+    {{- toYaml .schedule | nindent 4 }}
+{{- end }}
