@@ -1,12 +1,12 @@
-{{- range .Values.snapshotgroups }}
+{{- range $ssg := .Values.snapshotgroups }}
 apiVersion: gemini.fairwinds.com/v1beta1
 kind: SnapshotGroup
 metadata:
-  name: {{ .name }}
+  name: {{ $ssg.name }}
   namespace: {{ $.Release.Namespace }}
 spec:
   persistentVolumeClaim:
-    claimName: {{ .claimName }}
+    claimName: {{ $ssg.claimName }}
   schedule:
-    {{- toYaml .schedule | nindent 4 }}
+    {{- toYaml $ssg.schedule | nindent 4 }}
 {{- end }}
