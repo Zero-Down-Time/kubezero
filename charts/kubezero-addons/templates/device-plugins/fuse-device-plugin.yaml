@@ -1,3 +1,4 @@
+{{- if .Values.fuseDevicePlugin.enabled }}
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -28,3 +29,4 @@ spec:
         - name: device-plugin
           hostPath:
             path: /var/lib/kubelet/device-plugins
+{{- end }}
