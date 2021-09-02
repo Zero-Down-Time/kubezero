@@ -1,0 +1,18 @@
+metallb:
+  enabled: true
+  psp:
+    create: false
+
+  controller:
+    tolerations:    
+    - key: node-role.kubernetes.io/master    
+      effect: NoSchedule    
+    nodeSelector:    
+      node-role.kubernetes.io/master: ""    
+
+  configInline: {}
+#   address-pools:
+#   - name: my-ip-space
+#     protocol: layer2
+#     addresses:
+#     - 192.168.42.0/24

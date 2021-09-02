@@ -6,6 +6,10 @@ kubezero:
 
 HighAvailableControlplane: false
 
+addons:
+  enabled: false
+  targetRevision: 0.0.1
+
 calico:
   enabled: false
   crds: true
