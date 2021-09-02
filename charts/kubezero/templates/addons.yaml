@@ -1,0 +1,13 @@
+{{- define "addons-values" }}
+
+{{- with index .Values "addons" "metallb" }}
+metallb:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+
+{{- end }}
+
+{{- define "addons-argo" }}
+{{- end }}
+
+{{ include "kubezero-app.app" . }}

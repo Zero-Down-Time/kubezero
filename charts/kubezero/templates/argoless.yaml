@@ -1,7 +1,7 @@
 {{- if and ( not .Values.argocdAppName ) ( not .Values.installKubeZero ) }}
 # if no ArgoCD is used, only render the global values.yaml for all kubezero modules
 
-{{- $artifacts := list "calico" "cert-manager" "kiam" "aws-ebs-csi-driver" "aws-efs-csi-driver" "istio" "istio-ingress" "metrics" "logging" "argocd" "storage" }}
+{{- $artifacts := list "addons" "calico" "cert-manager" "kiam" "aws-ebs-csi-driver" "aws-efs-csi-driver" "istio" "istio-ingress" "metrics" "logging" "argocd" "storage" }}
 
 {{- range $artifacts }}
 {{- if index $.Values . }}
