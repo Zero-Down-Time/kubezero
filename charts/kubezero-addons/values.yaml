@@ -1,5 +1,5 @@
 metallb:
-  enabled: true
+  enabled: false
   psp:
     create: false
 
@@ -16,3 +16,9 @@ metallb:
 #     protocol: layer2
 #     addresses:
 #     - 192.168.42.0/24
+
+fuseDevicePlugin:
+  enabled: false
+
+k8sEcrLoginRenew:
+  enabled: false
