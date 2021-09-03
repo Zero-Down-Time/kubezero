@@ -14,7 +14,7 @@
 {{- range $cert := $.certificates }}
 - port:
     number: {{ $port.port }}
-    name: {{ $port.name }}
+    name: {{ $port.name }}-{{ $cert.name }}
     protocol: {{ default "TCP" $port.gatewayProtocol }}
   tls:
     credentialName: {{ $cert.name }}
