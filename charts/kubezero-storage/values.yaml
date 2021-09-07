@@ -2,6 +2,7 @@ lvm-localpv:
   enabled: false
 
   lvmNode:
+    logLevel: 2
     nodeSelector:
       node.kubernetes.io/lvm: "openebs"
     tolerations:
@@ -10,6 +11,7 @@ lvm-localpv:
       operator: Exists
 
   lvmController:
+    logLevel: 2
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
@@ -19,6 +21,9 @@ lvm-localpv:
   storageClass:
     vgpattern: ""
     default: false
+
+  analytics:
+    enabled: false
 
 gemini:
   enabled: false
