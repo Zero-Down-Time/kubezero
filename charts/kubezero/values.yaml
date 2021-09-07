@@ -8,7 +8,7 @@ HighAvailableControlplane: false
 
 addons:
   enabled: false
-  targetRevision: 0.0.1
+  targetRevision: 0.1.0
 
 calico:
   enabled: false
@@ -44,12 +44,12 @@ istio:
   enabled: false
   crds: true
   namespace: istio-system
-  targetRevision: 0.7.3
+  targetRevision: 0.7.4
 
 istio-ingress:
   enabled: false
   namespace: istio-ingress
-  targetRevision: 0.7.2
+  targetRevision: 0.7.4
 
 metrics:
   enabled: false
