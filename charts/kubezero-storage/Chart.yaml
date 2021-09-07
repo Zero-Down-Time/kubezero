@@ -2,7 +2,7 @@ apiVersion: v2
 name: kubezero-storage
 description: KubeZero umbrella chart for all things storage incl. backup, eg. openEBS-lvm, gemini
 type: application
-version: 0.3.0
+version: 0.3.1
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
@@ -14,7 +14,7 @@ maintainers:
   - name: Quarky9
 dependencies:
   - name: lvm-localpv
-    version: 0.8.0
+    version: 0.8.2
     repository: https://openebs.github.io/lvm-localpv
     condition: lvm-localpv.enabled
   - name: gemini
