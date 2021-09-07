@@ -4,7 +4,7 @@ set -ex
 ### TODO
 # - https://istio.io/latest/docs/ops/configuration/security/harden-docker-images/
 
-export ISTIO_VERSION=1.11.1
+export ISTIO_VERSION=1.11.2
 export KIALI_VERSION=1.38.1
 
 rm -rf istio
