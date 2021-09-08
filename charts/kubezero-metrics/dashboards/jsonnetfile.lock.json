@@ -8,8 +8,8 @@
           "subdir": "grafonnet"
         }
       },
-      "version": "3082bfca110166cd69533fa3c0875fdb1b68c329",
-      "sum": "4/sUV0Kk+o8I+wlYxL9R6EPhL/NiLfYHk+NXlU64RUk="
+      "version": "05fb200ee1a1816fc1b4c522071d5606d8dd71c1",
+      "sum": "mEoObbqbyVaXrHFEJSM2Nad31tOvadzIevWuyNHHBgI="
     },
     {
       "source": {
@@ -18,7 +18,7 @@
           "subdir": "grafana-builder"
         }
       },
-      "version": "ac31371db5008f92b054751dfc4f7ece6526250f",
+      "version": "ff22d1d6698573e7cb76228198edfa2b2f632dcc",
       "sum": "GRf2GvwEU4jhXV+JOonXSZ4wdDv8mnHBPCQ6TUVd+g8="
     },
     {
