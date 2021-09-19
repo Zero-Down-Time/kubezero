@@ -1,8 +1,8 @@
 #!/bin/bash
 
-ECK_VERSION=1.6.0
-FLUENT_BIT_VERSION=0.16.3
-FLUENTD_VERSION=0.2.10
+ECK_VERSION=$(yq r Chart.yaml dependencies.name==eck-operator.version)
+FLUENT_BIT_VERSION=$(yq r Chart.yaml dependencies.name==fluent-bit.version)
+FLUENTD_VERSION=$(yq r Chart.yaml dependencies.name==fluentd.version)
 
 # fix ECK crds handling to adhere to proper helm v3 support which also fixes ArgoCD applying updates on upgrades
 helm repo list | grep elastic -qc || { helm repo add elastic https://helm.elastic.co; helm repo update; }
