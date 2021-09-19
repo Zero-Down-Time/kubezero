@@ -2,7 +2,7 @@ apiVersion: v2
 name: kubezero-logging
 description: KubeZero Umbrella Chart for complete EFK stack
 type: application
-version: 0.7.12
+version: 0.7.13
 appVersion: 1.6.0
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
@@ -26,6 +26,6 @@ dependencies:
     version: 0.2.10
     condition: fluentd.enabled
   - name: fluent-bit
-    version: 0.16.3
+    version: 0.17.0
     condition: fluent-bit.enabled
 kubeVersion: ">= 1.18.0"
