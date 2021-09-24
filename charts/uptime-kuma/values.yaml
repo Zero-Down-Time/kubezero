@@ -27,6 +27,6 @@ version: 1.6.3-alpine
   #  memory: 2000M
 
 istio:
+  enabled: false
   gateway: istio-ingress/private-ingressgateway
-  enabled: true
   url: uptime.example.com
