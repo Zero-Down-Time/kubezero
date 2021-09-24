@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "kubezero-lib.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kubezero-lib.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "kubezero-lib.selectorLabels" . | nindent 6 }}
+  serviceName: {{ include "kubezero-lib.fullname" . }}
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        {{- include "kubezero-lib.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: uptime-kuma
+        image: "{{ .Values.image }}:{{ default .Chart.AppVersion .Values.version }}"
+        ports:
+        - containerPort: 3001
+        volumeMounts:
+        - mountPath: /app/data
+          name: storage
+        livenessProbe:
+          exec:
+            command:
+            - node
+            - extra/healthcheck.js
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          timeoutSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3001
+            scheme: HTTP
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+      #securityContext:
+      #  runAsNonRoot: true
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  volumeClaimTemplates:
+  - metadata:
+      name: storage
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      {{- with .Values.storageClassName }}
+      storageClassName: {{ . }}
+      {{- end }}
+      resources:
+        requests:
+          storage: 1Gi
