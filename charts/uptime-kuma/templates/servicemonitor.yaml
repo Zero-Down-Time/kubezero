@@ -1,0 +1,63 @@
+{{- if .Values.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "kubezero-lib.fullname" . }}
+  {{- with .Values.serviceMonitor.namespace }}
+  namespace: {{ . }}
+  {{- end }}
+  labels:
+    {{- include "kubezero-lib.labels" . | nindent 4 }}
+spec:
+  jobLabel: {{ .Values.serviceMonitor.jobLabel | default .Release.Name }}
+  endpoints:
+    - port: http
+      path: /metrics
+      {{- with .Values.serviceMonitor.interval }}
+      interval: {{ . }}
+      {{- end }}
+      {{- with .Values.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ . }}
+      {{- end }}
+      {{- if .Values.serviceMonitor.metricRelabelings }}
+      metricRelabelings:
+      {{ tpl (toYaml .Values.serviceMonitor.metricRelabelings | indent 6) . }}
+      {{- end }}
+      {{- if .Values.serviceMonitor.relabelings }}
+      relabelings:
+      {{ toYaml .Values.serviceMonitor.relabelings | indent 6 }}
+      {{- end }}
+      {{- if .Values.serviceMonitor.basicAuth }}
+      basicAuth:
+        password:
+          name: {{ include "kubezero-lib.fullname" . }}-servicemonitor-basic-auth
+          key: password
+        username:
+          name: {{ include "kubezero-lib.fullname" . }}-servicemonitor-basic-auth
+          key: username
+      {{- end }}
+  {{- if .Values.serviceMonitor.namespaceSelector }}
+  namespaceSelector:
+    {{ toYaml .Values.serviceMonitor.namespaceSelector | indent 4 -}}
+  {{ else }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "kubezero-lib.selectorLabels" . | nindent 6 }}
+---
+
+{{- if .Values.serviceMonitor.basicAuth }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "kubezero-lib.fullname" . }}-servicemonitor-basic-auth
+data:
+  password: {{ .Values.serviceMonitor.basicAuth.password | b64enc }}
+  username: {{ .Values.serviceMonitor.basicAuth.username | b64enc }}
+type: Opaque
+{{- end }}
+
+{{- end }}

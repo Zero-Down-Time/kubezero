@@ -1,0 +1,8 @@
+configmap: grafana-dashboards
+gzip: true
+folder: Metrics
+condition: '.Values.serviceMonitor.enabled'
+dashboards:
+- name: Uptime
+  url: https://grafana.com/api/dashboards/14847/revisions/2/download
+  tags: []
