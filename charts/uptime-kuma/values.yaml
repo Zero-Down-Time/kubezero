@@ -1,0 +1,32 @@
+# Default values for uptime-kuma.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# nameOverride -- override the name of the uptime-kuma chart
+nameOverride: ""
+
+# fullnameOverride -- override the full name of the uptime-kuma chart
+fullnameOverride: ""
+
+service:
+  # service.port -- The port to be used by the uptime-kuma service
+  port: 3001
+
+# uptime-kuma.image -- The uptime-kuma docker image
+image: louislam/uptime-kuma
+# uptime-kuma.version -- The uptime-kuma docker image version - defaults to .Chart.appVersion
+version: 1.6.3-alpine
+
+#resources:
+  # uptime-kuma.resources -- The resource requests and limits for the uptime-kuma service
+  #requests:
+  #  cpu: 300m
+  #  memory: 1300M
+  #limits:
+  #  cpu: 1500m
+  #  memory: 2000M
+
+istio:
+  gateway: istio-ingress/private-ingressgateway
+  enabled: true
+  url: uptime.example.com
