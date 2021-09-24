@@ -30,3 +30,9 @@ istio:
   enabled: false
   gateway: istio-ingress/private-ingressgateway
   url: uptime.example.com
+
+serviceMonitor:
+  enabled: false
+# basicAuth:
+#   username: uptime
+#   password: check
