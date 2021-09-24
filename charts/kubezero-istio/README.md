@@ -1,6 +1,6 @@
 # kubezero-istio
 
-![Version: 0.7.3](https://img.shields.io/badge/Version-0.7.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.11.1](https://img.shields.io/badge/AppVersion-1.11.1-informational?style=flat-square)
+![Version: 0.7.5](https://img.shields.io/badge/Version-0.7.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.11.3](https://img.shields.io/badge/AppVersion-1.11.3-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Istio
 
@@ -20,8 +20,8 @@ Kubernetes: `>= 1.18.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | base | 1.11.1 |
-|  | istio-discovery | 1.11.1 |
+|  | base | 1.11.3 |
+|  | istio-discovery | 1.11.3 |
 |  | kiali-server | 1.38.1 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.4 |
 
