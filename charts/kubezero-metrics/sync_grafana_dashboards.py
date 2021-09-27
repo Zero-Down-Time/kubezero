@@ -54,7 +54,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     grafana_dashboard: "1"
-{{ include "kubezero-lib.labels" . | indent 4 }}
+    {{- include "kubezero-lib.labels" . | nindent 4 }}
 ''' % config
 
 # Put all dashboards into a folder ?

@@ -19,10 +19,10 @@ patch -p0 -i zdt-pushgateway.patch --no-backup-if-mismatch
 cd dashboards
 ./build.sh
 
-# Patch for the apiserver dashboard
-patch -p1 -i ../zdt-apiserver-dashboard.patch --no-backup-if-mismatch
-
 ../sync_grafana_dashboards.py metrics-dashboards.yaml ../templates/grafana-dashboards-metrics.yaml
 ../sync_grafana_dashboards.py k8s-dashboards.yaml ../templates/grafana-dashboards-k8s.yaml
 ../sync_grafana_dashboards.py zdt-dashboards.yaml ../templates/grafana-dashboards-zdt.yaml
 cd -
+
+# Delete not used upstream dashboards
+rm -rf charts/kube-prometheus-stack/templates/grafana/dashboards-1.14

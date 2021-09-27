@@ -8,8 +8,8 @@
           "subdir": "grafonnet"
         }
       },
-      "version": "05fb200ee1a1816fc1b4c522071d5606d8dd71c1",
-      "sum": "mEoObbqbyVaXrHFEJSM2Nad31tOvadzIevWuyNHHBgI="
+      "version": "19b27b272abf4263af1365ec485784c49815a332",
+      "sum": "gF8foHByYcB25jcUOBqP6jxk0OPifQMjPvKY0HaCk6w="
     },
     {
       "source": {
@@ -18,7 +18,7 @@
           "subdir": "grafana-builder"
         }
       },
-      "version": "ff22d1d6698573e7cb76228198edfa2b2f632dcc",
+      "version": "14bc3cec71f32ba3cc490a47a22004a744b6bb4e",
       "sum": "GRf2GvwEU4jhXV+JOonXSZ4wdDv8mnHBPCQ6TUVd+g8="
     },
     {
@@ -28,8 +28,8 @@
           "subdir": ""
         }
       },
-      "version": "2b27a09a667091cef74776b690ccceaf55995e29",
-      "sum": "j2jPdrcM3iuaUK+6V9jWn2M3Fapr0KtI8FZ1KQoHIGA="
+      "version": "ff4641bcd83314c955150bea6b147df9ca335c4a",
+      "sum": "oUVGwcCbmdH8qz9B+lbRawI9s23GY9HeW7MwYZRbZ/0="
     }
   ],
   "legacyImports": false
