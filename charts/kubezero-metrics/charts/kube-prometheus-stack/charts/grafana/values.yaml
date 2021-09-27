@@ -70,7 +70,7 @@ livenessProbe:
 
 image:
   repository: grafana/grafana
-  tag: 8.1.0
+  tag: 8.1.5
   sha: ""
   pullPolicy: IfNotPresent
 
@@ -241,7 +241,8 @@ affinity: {}
 extraInitContainers: []
 
 ## Enable an Specify container in extraContainers. This is meant to allow adding an authentication proxy to a grafana pod
-extraContainers: |
+extraContainers: ""
+# extraContainers: |
 # - name: proxy
 #   image: quay.io/gambol99/keycloak-proxy:latest
 #   args:
@@ -382,6 +383,12 @@ envFromSecret: ""
 ## Sensible environment variables that will be rendered as new secret object
 ## This can be useful for auth tokens, etc
 envRenderSecret: {}
+
+## The names of secrets in the same kubernetes namespace which contain values to be added to the environment
+## Each entry should contain a name key, and can optionally specify whether the secret must be defined with an optional key.
+envFromSecrets: []
+## - name: secret-name
+##   optional: true
 
 # Inject Kubernetes services as environment variables.
 # See https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/#environment-variables
@@ -608,7 +615,7 @@ smtp:
 sidecar:
   image:
     repository: quay.io/kiwigrid/k8s-sidecar
-    tag: 1.12.2
+    tag: 1.12.3
     sha: ""
   imagePullPolicy: IfNotPresent
   resources: {}
@@ -705,7 +712,7 @@ imageRenderer:
   # extra environment variables
   env:
     HTTP_HOST: "0.0.0.0"
-    # RENDERING_ARGS: --disable-gpu,--window-size=1280x758
+    # RENDERING_ARGS: --no-sandbox,--disable-gpu,--window-size=1280x758
     # RENDERING_MODE: clustered
   # image-renderer deployment serviceAccount
   serviceAccountName: ""

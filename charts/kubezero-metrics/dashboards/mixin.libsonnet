@@ -4,8 +4,10 @@ local kubernetes = import "kubernetes-mixin/mixin.libsonnet";
 
 kubernetes {
   _config+:: {
+    kubeApiserverSelector: 'job="apiserver"',
     grafanaK8s+:: {
-       dashboardNamePrefix: '',
+      linkPrefix: '',
+      dashboardNamePrefix: '',
       dashboardTags: ['kubernetes'],
     },
   },
