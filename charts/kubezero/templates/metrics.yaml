@@ -1,5 +1,9 @@
 {{- define "metrics-values" }}
 
+{{- with .Values.metrics.additionalRuleLabels }}
+additionalRuleLabels:
+{{- toYaml . | nindent 2 }}
+{{- end }}
 {{- with .Values.metrics.istio }}
 istio:
 {{- toYaml . | nindent 2 }}
