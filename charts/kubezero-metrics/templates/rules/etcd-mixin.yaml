@@ -59,28 +59,6 @@ spec:
         {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
         {{- end }}
         severity: warning
-    - alert: etcdHighNumberOfFailedGRPCRequests
-      annotations:
-        description: 'etcd cluster "{{`{{`}} $labels.job {{`}}`}}": {{`{{`}} $value {{`}}`}}% of requests for {{`{{`}} $labels.grpc_method {{`}}`}} failed on etcd instance {{`{{`}} $labels.instance {{`}}`}}.'
-        summary: etcd cluster has high number of failed grpc requests.
-      expr: "100 * sum(rate(grpc_server_handled_total{job=~\".*etcd.*\", grpc_code=~\"Unknown|FailedPrecondition|ResourceExhausted|Internal|Unavailable|DataLoss|DeadlineExceeded\"}[5m])) without (grpc_type, grpc_code)\n  /\nsum(rate(grpc_server_handled_total{job=~\".*etcd.*\"}[5m])) without (grpc_type, grpc_code)\n  > 1\n"
-      for: 10m
-      labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
-        severity: warning
-    - alert: etcdHighNumberOfFailedGRPCRequests
-      annotations:
-        description: 'etcd cluster "{{`{{`}} $labels.job {{`}}`}}": {{`{{`}} $value {{`}}`}}% of requests for {{`{{`}} $labels.grpc_method {{`}}`}} failed on etcd instance {{`{{`}} $labels.instance {{`}}`}}.'
-        summary: etcd cluster has high number of failed grpc requests.
-      expr: "100 * sum(rate(grpc_server_handled_total{job=~\".*etcd.*\", grpc_code=~\"Unknown|FailedPrecondition|ResourceExhausted|Internal|Unavailable|DataLoss|DeadlineExceeded\"}[5m])) without (grpc_type, grpc_code)\n  /\nsum(rate(grpc_server_handled_total{job=~\".*etcd.*\"}[5m])) without (grpc_type, grpc_code)\n  > 5\n"
-      for: 5m
-      labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
-        severity: critical
     - alert: etcdGRPCRequestsSlow
       annotations:
         description: 'etcd cluster "{{`{{`}} $labels.job {{`}}`}}": 99th percentile of gRPC requests is {{`{{`}} $value {{`}}`}}s on etcd instance {{`{{`}} $labels.instance {{`}}`}}.'
