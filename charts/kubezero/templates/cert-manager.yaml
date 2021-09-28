@@ -25,6 +25,10 @@ cert-manager:
   - name: aws-token
     mountPath: "/var/run/secrets/sts.amazonaws.com/serviceaccount/"
     readOnly: true
+
+  prometheus:
+    servicemonitor:
+      enabled: {{ $.Values.metrics.enabled }}
 {{- end }}
 
 {{- with index .Values "cert-manager" "clusterIssuer" }}

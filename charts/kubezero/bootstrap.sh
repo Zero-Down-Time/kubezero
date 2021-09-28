@@ -13,7 +13,7 @@ helm_version=$(helm version --short)
 echo $helm_version | grep -qe "^v3.[5-9]" || { echo "Helm version >= 3.5 required!"; exit 1; }
 
 # Simulate well-known CRDs being available
-API_VERSIONS="-a monitoring.coreos.com/v1"
+API_VERSIONS="-a monitoring.coreos.com/v1 -a snapshot.storage.k8s.io/v1"
 KUBE_VERSION="--kube-version $(kubectl version -o json | jq -r .serverVersion.gitVersion)"
 
 [ -n "$KUBEZERO_VERSION" ] && KUBEZERO_VERSION="--version $KUBEZERO_VERSION --devel"
