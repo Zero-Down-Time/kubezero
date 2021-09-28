@@ -86,14 +86,14 @@ for b in config['dashboards']:
 
     # replace datasources
     traverse_json(obj)
-   
+
     # Set default tim in all charts to 1h
-    obj['time'] = { "from": "now-1h", "to": "now" }
+    obj['time'] = {"from": "now-1h", "to": "now"}
     obj['refresh'] = "30s"
 
     # set tags
     if 'tags' in b:
-      obj['tags'] = b['tags']
+        obj['tags'] = b['tags']
 
     text = json.dumps(obj, indent=2)
 

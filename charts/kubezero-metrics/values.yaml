@@ -1,16 +1,14 @@
+#additionalRuleLabels:
+#  clusterName: myTestCluster
+#  awsRegion: eu-central-1
+
 kube-prometheus-stack:
   global:
     rbac:
       pspEnabled: false
 
   defaultRules:
-    create: true
-    # Disable kubeapi error budget rules for now as they are buggy
-    rules:
-      kubeApiserverSlos: false
-    #additionalRuleLabels:
-    #  clusterName: myTestCluster
-    #  awsRegion: eu-central-1
+    create: false
 
   coreDns:
     enabled: true
