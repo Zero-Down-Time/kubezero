@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ printf "%s-%s" (include "kubezero-lib.fullname" $) "grafana-dashboards-kube-mixin" | trunc 63 | trimSuffix "-" }}
+  name: {{ printf "%s-%s" (include "kubezero-lib.fullname" $) "grafana-dashboards-k8s" | trunc 63 | trimSuffix "-" }}
   namespace: {{ .Release.Namespace }}
   labels:
     grafana_dashboard: "1"

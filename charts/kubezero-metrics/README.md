@@ -1,8 +1,8 @@
 # kubezero-metrics
 
-![Version: 0.4.1](https://img.shields.io/badge/Version-0.4.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.5.1](https://img.shields.io/badge/Version-0.5.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
-KubeZero Umbrella Chart for prometheus-operator
+KubeZero Umbrella Chart for Prometheus, Grafana and Alertmanager as well as all Kubernetes integrations.
 
 **Homepage:** <https://kubezero.com>
 
@@ -18,9 +18,10 @@ Kubernetes: `>= 1.18.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | kube-prometheus-stack | 16.12.0 |
-| https://prometheus-community.github.io/helm-charts | prometheus-adapter | 2.14.2 |
-| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
+|  | kube-prometheus-stack | 18.1.0 |
+|  | prometheus-pushgateway | 1.10.1 |
+| https://prometheus-community.github.io/helm-charts | prometheus-adapter | 2.17 |
+| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.4 |
 
 ## Values
 
@@ -41,10 +42,42 @@ Kubernetes: `>= 1.18.0`
 | istio.prometheus.gateway | string | `"istio-ingress/ingressgateway"` |  |
 | istio.prometheus.ipBlocks | list | `[]` |  |
 | istio.prometheus.url | string | `""` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].env[0].name | string | `"SNS_FORWARDER_ARN_PREFIX"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].env[0].valueFrom.fieldRef.fieldPath | string | `"metadata.annotations['kubezero.com/sns_forwarder_ARN_PREFIX']"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].env[1].name | string | `"AWS_ROLE_ARN"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].env[1].valueFrom.fieldRef.fieldPath | string | `"metadata.annotations['kubezero.com/sns_forwarder_AWS_ROLE_ARN']"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].env[2].name | string | `"AWS_WEB_IDENTITY_TOKEN_FILE"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].env[2].value | string | `"/var/run/secrets/sts.amazonaws.com/serviceaccount/token"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].env[3].name | string | `"AWS_STS_REGIONAL_ENDPOINTS"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].env[3].value | string | `"regional"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].image | string | `"datareply/alertmanager-sns-forwarder:latest"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].imagePullPolicy | string | `"Always"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].livenessProbe.httpGet.path | string | `"/health"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].livenessProbe.httpGet.port | string | `"webhook-port"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].livenessProbe.initialDelaySeconds | int | `30` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].livenessProbe.timeoutSeconds | int | `10` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].name | string | `"alertmanager-sns-forwarder"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].ports[0].containerPort | int | `9087` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].ports[0].name | string | `"webhook-port"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].readinessProbe.httpGet.path | string | `"/health"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].readinessProbe.httpGet.port | string | `"webhook-port"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].readinessProbe.initialDelaySeconds | int | `10` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].readinessProbe.timeoutSeconds | int | `10` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].resources.limits.cpu | string | `"100m"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].resources.limits.memory | string | `"64Mi"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].resources.requests.cpu | string | `"25m"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].resources.requests.memory | string | `"32Mi"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].volumeMounts[0].mountPath | string | `"/var/run/secrets/sts.amazonaws.com/serviceaccount/"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].volumeMounts[0].name | string | `"aws-token"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].volumeMounts[0].readOnly | bool | `true` |  |
 | kube-prometheus-stack.alertmanager.alertmanagerSpec.logFormat | string | `"json"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.volumes[0].name | string | `"aws-token"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.volumes[0].projected.sources[0].serviceAccountToken.audience | string | `"sts.amazonaws.com"` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.volumes[0].projected.sources[0].serviceAccountToken.expirationSeconds | int | `86400` |  |
+| kube-prometheus-stack.alertmanager.alertmanagerSpec.volumes[0].projected.sources[0].serviceAccountToken.path | string | `"token"` |  |
 | kube-prometheus-stack.alertmanager.enabled | bool | `false` |  |
 | kube-prometheus-stack.coreDns.enabled | bool | `true` |  |
-| kube-prometheus-stack.defaultRules.create | bool | `true` |  |
+| kube-prometheus-stack.defaultRules.create | bool | `false` |  |
 | kube-prometheus-stack.global.rbac.pspEnabled | bool | `false` |  |
 | kube-prometheus-stack.grafana."grafana.ini"."auth.anonymous".enabled | bool | `true` |  |
 | kube-prometheus-stack.grafana."grafana.ini".alerting.enabled | bool | `false` |  |
@@ -113,7 +146,6 @@ Kubernetes: `>= 1.18.0`
 | kube-prometheus-stack.prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues | bool | `false` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.accessModes[0] | string | `"ReadWriteOnce"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage | string | `"16Gi"` |  |
-| kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.storageClassName | string | `"ebs-sc-gp3-xfs"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.walCompression | bool | `true` |  |
 | kube-prometheus-stack.prometheusOperator.admissionWebhooks.patch.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
 | kube-prometheus-stack.prometheusOperator.admissionWebhooks.patch.tolerations[0].effect | string | `"NoSchedule"` |  |
@@ -146,6 +178,8 @@ Kubernetes: `>= 1.18.0`
 | prometheus-adapter.rules.resource.window | string | `"5m"` |  |
 | prometheus-adapter.tolerations[0].effect | string | `"NoSchedule"` |  |
 | prometheus-adapter.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| prometheus-pushgateway.enabled | bool | `false` |  |
+| prometheus-pushgateway.serviceMonitor.enabled | bool | `true` |  |
 
 # Dashboards
 
@@ -153,3 +187,5 @@ Kubernetes: `>= 1.18.0`
 - https://grafana.com/api/dashboards/9578/revisions/4/download
 ## Prometheus
 - https://grafana.com/api/dashboards/3662/revisions/2/download
+## AlertManager SNS Forwarder
+- https://github.com/DataReply/alertmanager-sns-forwarder

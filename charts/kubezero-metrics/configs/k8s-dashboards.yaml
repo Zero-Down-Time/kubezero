@@ -1,0 +1,49 @@
+configmap: grafana-dashboards-k8s
+gzip: true
+folder: Kubernetes
+dashboards:
+- name: coreDNS
+  url: https://grafana.com/api/dashboards/12539/revisions/5/download
+  tags: ['kubernetes', 'DNS']
+- name: etcd
+  url: https://grafana.com/api/dashboards/3070/revisions/3/download
+  tags: ['kubernetes', 'etcd']
+- name: node
+  url: https://grafana.com/api/dashboards/1860/revisions/23/download
+  tags: ['kubernetes']
+# cd dashboards; for f in *.json; do echo "- name: ${f%%.json}" >> ../dashboards.yaml; echo "  url: file://dashboards/$f" >> ../dashboards.yaml; done; cd -
+- name: apiserver
+  url: file://dashboards/apiserver.json
+- name: cluster-total
+  url: file://dashboards/cluster-total.json
+- name: controller-manager
+  url: file://dashboards/controller-manager.json
+- name: k8s-resources-cluster
+  url: file://dashboards/k8s-resources-cluster.json
+- name: k8s-resources-namespace
+  url: file://dashboards/k8s-resources-namespace.json
+- name: k8s-resources-node
+  url: file://dashboards/k8s-resources-node.json
+- name: k8s-resources-pod
+  url: file://dashboards/k8s-resources-pod.json
+- name: k8s-resources-workload
+  url: file://dashboards/k8s-resources-workload.json
+- name: k8s-resources-workloads-namespace
+  url: file://dashboards/k8s-resources-workloads-namespace.json
+- name: kubelet
+  url: file://dashboards/kubelet.json
+- name: namespace-by-pod
+  url: file://dashboards/namespace-by-pod.json
+- name: namespace-by-workload
+  url: file://dashboards/namespace-by-workload.json
+- name: persistentvolumesusage
+  url: file://dashboards/persistentvolumesusage.json
+  tags: ['kubernetes', 'csi']
+- name: pod-total
+  url: file://dashboards/pod-total.json
+- name: proxy
+  url: file://dashboards/proxy.json
+- name: scheduler
+  url: file://dashboards/scheduler.json
+- name: workload-total
+  url: file://dashboards/workload-total.json
