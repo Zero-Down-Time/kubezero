@@ -19,9 +19,6 @@ spec:
         '
       for: 15m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: warning
     - alert: PrometheusOperatorWatchErrors
       annotations:
@@ -33,9 +30,6 @@ spec:
         '
       for: 15m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: warning
     - alert: PrometheusOperatorSyncFailed
       annotations:
@@ -47,9 +41,6 @@ spec:
         '
       for: 10m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: warning
     - alert: PrometheusOperatorReconcileErrors
       annotations:
@@ -61,9 +52,6 @@ spec:
         '
       for: 10m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: warning
     - alert: PrometheusOperatorNodeLookupErrors
       annotations:
@@ -75,9 +63,6 @@ spec:
         '
       for: 10m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: warning
     - alert: PrometheusOperatorNotReady
       annotations:
@@ -89,9 +74,6 @@ spec:
         '
       for: 5m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: warning
     - alert: PrometheusOperatorRejectedResources
       annotations:
@@ -103,8 +85,5 @@ spec:
         '
       for: 5m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: warning
 

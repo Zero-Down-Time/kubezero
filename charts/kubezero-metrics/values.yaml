@@ -1,7 +1,3 @@
-#additionalRuleLabels:
-#  clusterName: myTestCluster
-#  awsRegion: eu-central-1
-
 kube-prometheus-stack:
   global:
     rbac:
@@ -105,7 +101,7 @@ kube-prometheus-stack:
       logFormat: json
       # externalUrl:
 
-      # gather all monitors 
+      # gather ALL monitors
       podMonitorSelectorNilUsesHelmValues: false
       serviceMonitorSelectorNilUsesHelmValues: false
       ruleSelectorNilUsesHelmValues: false

@@ -1,5 +1,6 @@
 configmap: grafana-dashboards-zdt
 gzip: true
+folder: KubeZero
 dashboards:
 - name: home
   url: file://zdt/home.json

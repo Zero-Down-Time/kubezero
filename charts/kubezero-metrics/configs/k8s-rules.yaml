@@ -2,8 +2,6 @@
 rules:
 - name: alertmanager
   url: file://rules/alertmanager-prometheusRule
-- name: etcd-mixin
-  url: file://rules/etcd-mixin-prometheusRule
 - name: kube-prometheus
   url: file://rules/kube-prometheus-prometheusRule
 - name: kube-state-metrics
@@ -16,3 +14,5 @@ rules:
   url: file://rules/prometheus-operator-prometheusRule
 - name: prometheus
   url: file://rules/prometheus-prometheusRule
+- name: etcd-mixin
+  url: file://rules/etcd-mixin-prometheusRule

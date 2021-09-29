@@ -61,19 +61,9 @@ for r in config['rules']:
 
     # Encode {{ }} for helm
     text = text.replace("{{", "{{`{{").replace("}}", "}}`}}").replace("{{`{{", "{{`{{`}}").replace("}}`}}", "{{`}}`}}")
-    text = textwrap.indent(text, ' '*2)
-
-    # add support for additionalRuleLabels from Helm values
-    helm_labels = '''{{- if .Values.additionalRuleLabels }}
-{{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-{{- end }}
-'''
-    helm_labels = textwrap.indent(helm_labels, ' '*8)
-
-    text = text.replace("labels:\n", "labels:\n{}".format(helm_labels))
 
     rule += '''spec:\n'''
-    rule += text+'\n'
+    rule += textwrap.indent(text, ' '*2)+'\n'
 
     if 'condition' in r:
         rule += '{{- end }}'+'\n'

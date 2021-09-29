@@ -17,9 +17,6 @@ spec:
       expr: 100 * (count(up == 0) BY (job, namespace, service) / count(up) BY (job, namespace, service)) > 10
       for: 10m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: warning
     - alert: Watchdog
       annotations:
@@ -38,9 +35,6 @@ spec:
         summary: An alert that should always be firing to certify that Alertmanager is working properly.
       expr: vector(1)
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: none
   - name: node-network
     rules:
@@ -54,9 +48,6 @@ spec:
         '
       for: 2m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: warning
   - name: kube-prometheus-node-recording.rules
     rules:
