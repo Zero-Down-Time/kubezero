@@ -20,7 +20,7 @@ cert-manager:
   enabled: false
   crds: true
   namespace: cert-manager
-  targetRevision: 0.7.0
+  targetRevision: 0.7.3
 
 kiam:
   enabled: false
@@ -55,7 +55,7 @@ metrics:
   enabled: false
   crds: true
   namespace: monitoring
-  targetRevision: 0.5.2
+  targetRevision: 0.5.4
   istio:
     grafana: {}
     prometheus: {}
