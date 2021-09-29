@@ -1,6 +1,6 @@
 # kubezero-cert-manager
 
-![Version: 1.5.3](https://img.shields.io/badge/Version-1.5.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.7.3](https://img.shields.io/badge/Version-0.7.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.5.3](https://img.shields.io/badge/AppVersion-1.5.3-informational?style=flat-square)
 
 KubeZero Umbrella Chart for cert-manager
 
@@ -39,6 +39,7 @@ If your resolvers need additional sercrets like CloudFlare API tokens etc. make 
 | cert-manager.ingressShim.defaultIssuerName | string | `"letsencrypt-dns-prod"` |  |
 | cert-manager.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
 | cert-manager.prometheus.servicemonitor.enabled | bool | `false` |  |
+| cert-manager.startupapicheck.enabled | bool | `false` |  |
 | cert-manager.tolerations[0].effect | string | `"NoSchedule"` |  |
 | cert-manager.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | cert-manager.webhook.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
