@@ -1,6 +1,6 @@
 # kubezero
 
-![Version: 1.20.8-11](https://img.shields.io/badge/Version-1.20.8--11-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 1.20.8-12](https://img.shields.io/badge/Version-1.20.8--12-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero - Bootstrap and ArgoCD Root App of Apps chart
 
@@ -44,7 +44,7 @@ Kubernetes: `>= 1.18.0`
 | cert-manager.crds | bool | `true` |  |
 | cert-manager.enabled | bool | `false` |  |
 | cert-manager.namespace | string | `"cert-manager"` |  |
-| cert-manager.targetRevision | string | `"0.7.0"` |  |
+| cert-manager.targetRevision | string | `"0.7.3"` |  |
 | istio-ingress.enabled | bool | `false` |  |
 | istio-ingress.namespace | string | `"istio-ingress"` |  |
 | istio-ingress.targetRevision | string | `"0.7.5"` |  |
@@ -67,7 +67,7 @@ Kubernetes: `>= 1.18.0`
 | metrics.istio.grafana | object | `{}` |  |
 | metrics.istio.prometheus | object | `{}` |  |
 | metrics.namespace | string | `"monitoring"` |  |
-| metrics.targetRevision | string | `"0.5.2"` |  |
+| metrics.targetRevision | string | `"0.5.4"` |  |
 | storage.crds | bool | `true` |  |
 | storage.enabled | bool | `false` |  |
 | storage.targetRevision | string | `"0.3.0"` |  |
