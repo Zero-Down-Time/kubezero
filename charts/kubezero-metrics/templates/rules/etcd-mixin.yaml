@@ -16,9 +16,6 @@ spec:
       expr: "max without (endpoint) (\n  sum without (instance, pod) (up{job=~\".*etcd.*\"} == bool 0)\nor\n  count without (To) (\n    sum without (instance, pod) (rate(etcd_network_peer_sent_failures_total{job=~\".*etcd.*\"}[120s])) > 0.01\n  )\n)\n> 0\n"
       for: 10m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: critical
     - alert: etcdInsufficientMembers
       annotations:
@@ -29,9 +26,6 @@ spec:
         '
       for: 3m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: critical
     - alert: etcdNoLeader
       annotations:
@@ -42,9 +36,6 @@ spec:
         '
       for: 1m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: critical
     - alert: etcdHighNumberOfLeaderChanges
       annotations:
@@ -55,9 +46,6 @@ spec:
         '
       for: 5m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: warning
     - alert: etcdGRPCRequestsSlow
       annotations:
@@ -70,9 +58,6 @@ spec:
         '
       for: 10m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: critical
     - alert: etcdMemberCommunicationSlow
       annotations:
@@ -85,9 +70,6 @@ spec:
         '
       for: 10m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: warning
     - alert: etcdHighNumberOfFailedProposals
       annotations:
@@ -98,9 +80,6 @@ spec:
         '
       for: 15m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: warning
     - alert: etcdHighFsyncDurations
       annotations:
@@ -113,9 +92,6 @@ spec:
         '
       for: 10m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: warning
     - alert: etcdHighFsyncDurations
       annotations:
@@ -127,9 +103,6 @@ spec:
         '
       for: 10m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: critical
     - alert: etcdHighCommitDurations
       annotations:
@@ -142,9 +115,6 @@ spec:
         '
       for: 10m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: warning
     - alert: etcdBackendQuotaLowSpace
       annotations:
@@ -154,9 +124,6 @@ spec:
         '
       for: 10m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: critical
     - alert: etcdExcessiveDatabaseGrowth
       annotations:
@@ -166,8 +133,5 @@ spec:
         '
       for: 10m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: warning
 

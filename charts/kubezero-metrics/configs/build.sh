@@ -1,16 +1,15 @@
 #!/bin/bash -ex
 
-JB='./jb-linux-amd64'
+which jsonnet > /dev/null || { echo "Required jsonnet not found!"; exit 1;}
+which jb > /dev/null || { echo "Required jb ( json-bundler ) not found!"; exit 1;}
 
-which jsonnet > /dev/null || { echo "Required jsonnet not found!"; }
-[ -x $JB ] || { wget https://github.com/jsonnet-bundler/jsonnet-bundler/releases/download/v0.4.0/jb-linux-amd64 && chmod +x $JB; }
-#which gojsontoyaml || go install github.com/brancz/gojsontoyaml@latest
+# wget https://github.com/jsonnet-bundler/jsonnet-bundler/releases/download/v0.4.0/jb-linux-amd64
 
-[ -r jsonnetfile.json ] || $JB init
+[ -r jsonnetfile.json ] || jb init
 if [ -r jsonnetfile.lock.json ]; then
-  $JB update 
+  jb update
 else
-  $JB install github.com/prometheus-operator/kube-prometheus/jsonnet/kube-prometheus@main
+  jb install github.com/prometheus-operator/kube-prometheus/jsonnet/kube-prometheus@main
 fi
 
 rm -rf dashboards && mkdir -p dashboards

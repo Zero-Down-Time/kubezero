@@ -23,9 +23,6 @@ spec:
         '
       for: 10m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: critical
     - alert: AlertmanagerMembersInconsistent
       annotations:
@@ -35,9 +32,6 @@ spec:
       expr: "# Without max_over_time, failed scrapes could create false negatives, see\n# https://www.robustperception.io/alerting-on-gauges-in-prometheus-2-0 for details.\n  max_over_time(alertmanager_cluster_members{job=\"alertmanager-main\",namespace=\"monitoring\"}[5m])\n< on (namespace,service) group_left\n  count by (namespace,service) (max_over_time(alertmanager_cluster_members{job=\"alertmanager-main\",namespace=\"monitoring\"}[5m]))\n"
       for: 15m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: critical
     - alert: AlertmanagerFailedToSendAlerts
       annotations:
@@ -47,9 +41,6 @@ spec:
       expr: "(\n  rate(alertmanager_notifications_failed_total{job=\"alertmanager-main\",namespace=\"monitoring\"}[5m])\n/\n  rate(alertmanager_notifications_total{job=\"alertmanager-main\",namespace=\"monitoring\"}[5m])\n)\n> 0.01\n"
       for: 5m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: warning
     - alert: AlertmanagerClusterFailedToSendAlerts
       annotations:
@@ -59,9 +50,6 @@ spec:
       expr: "min by (namespace,service, integration) (\n  rate(alertmanager_notifications_failed_total{job=\"alertmanager-main\",namespace=\"monitoring\", integration=~`.*`}[5m])\n/\n  rate(alertmanager_notifications_total{job=\"alertmanager-main\",namespace=\"monitoring\", integration=~`.*`}[5m])\n)\n> 0.01\n"
       for: 5m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: critical
     - alert: AlertmanagerClusterFailedToSendAlerts
       annotations:
@@ -71,9 +59,6 @@ spec:
       expr: "min by (namespace,service, integration) (\n  rate(alertmanager_notifications_failed_total{job=\"alertmanager-main\",namespace=\"monitoring\", integration!~`.*`}[5m])\n/\n  rate(alertmanager_notifications_total{job=\"alertmanager-main\",namespace=\"monitoring\", integration!~`.*`}[5m])\n)\n> 0.01\n"
       for: 5m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: warning
     - alert: AlertmanagerConfigInconsistent
       annotations:
@@ -83,9 +68,6 @@ spec:
       expr: "count by (namespace,service) (\n  count_values by (namespace,service) (\"config_hash\", alertmanager_config_hash{job=\"alertmanager-main\",namespace=\"monitoring\"})\n)\n!= 1\n"
       for: 20m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: critical
     - alert: AlertmanagerClusterDown
       annotations:
@@ -95,9 +77,6 @@ spec:
       expr: "(\n  count by (namespace,service) (\n    avg_over_time(up{job=\"alertmanager-main\",namespace=\"monitoring\"}[5m]) < 0.5\n  )\n/\n  count by (namespace,service) (\n    up{job=\"alertmanager-main\",namespace=\"monitoring\"}\n  )\n)\n>= 0.5\n"
       for: 5m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: critical
     - alert: AlertmanagerClusterCrashlooping
       annotations:
@@ -107,8 +86,5 @@ spec:
       expr: "(\n  count by (namespace,service) (\n    changes(process_start_time_seconds{job=\"alertmanager-main\",namespace=\"monitoring\"}[10m]) > 4\n  )\n/\n  count by (namespace,service) (\n    up{job=\"alertmanager-main\",namespace=\"monitoring\"}\n  )\n)\n>= 0.5\n"
       for: 5m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: critical
 

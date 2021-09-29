@@ -17,9 +17,6 @@ spec:
       expr: "(sum(rate(kube_state_metrics_list_total{job=\"kube-state-metrics\",result=\"error\"}[5m]))\n  /\nsum(rate(kube_state_metrics_list_total{job=\"kube-state-metrics\"}[5m])))\n> 0.01\n"
       for: 15m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: critical
     - alert: KubeStateMetricsWatchErrors
       annotations:
@@ -29,9 +26,6 @@ spec:
       expr: "(sum(rate(kube_state_metrics_watch_total{job=\"kube-state-metrics\",result=\"error\"}[5m]))\n  /\nsum(rate(kube_state_metrics_watch_total{job=\"kube-state-metrics\"}[5m])))\n> 0.01\n"
       for: 15m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: critical
     - alert: KubeStateMetricsShardingMismatch
       annotations:
@@ -43,9 +37,6 @@ spec:
         '
       for: 15m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: critical
     - alert: KubeStateMetricsShardsMissing
       annotations:
@@ -55,8 +46,5 @@ spec:
       expr: "2^max(kube_state_metrics_total_shards{job=\"kube-state-metrics\"}) - 1\n  -\nsum( 2 ^ max by (shard_ordinal) (kube_state_metrics_shard_ordinal{job=\"kube-state-metrics\"}) )\n!= 0\n"
       for: 15m
       labels:
-        {{- if .Values.additionalRuleLabels }}
-        {{- toYaml .Values.additionalRuleLabels | nindent 8 }}
-        {{- end }}
         severity: critical
 
