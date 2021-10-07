@@ -3,6 +3,7 @@ kind: InitConfiguration
 metadata:
   name: kubezero-initconfiguration
 localAPIEndpoint:
+  advertiseAddress: {{ .Values.listenAddress }}
   bindPort: {{ .Values.api.listenPort }}
 nodeRegistration:
   ignorePreflightErrors:
