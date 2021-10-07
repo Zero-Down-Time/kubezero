@@ -29,7 +29,7 @@ kiam:
 storage:
   enabled: false
   crds: true
-  targetRevision: 0.3.0
+  targetRevision: 0.3.2
 
 aws-ebs-csi-driver:
   enabled: false
@@ -70,6 +70,6 @@ argocd:
   enabled: false
   crds: true
   namespace: argocd
-  targetRevision: 0.8.2
+  targetRevision: 0.8.4
   istio:
     enabled: false
