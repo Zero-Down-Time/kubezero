@@ -1,9 +1,11 @@
 annotations:
   artifacthub.io/changes: |
-    - kind: changed
-      description: "Update image version to v1.8.6."
+    - kind: added
+      description: "Support setting initContainers to a string value to enable full templating."
+    - kind: removed
+      description: "Don't template initContainers when set to an array."
 apiVersion: v1
-appVersion: 1.8.6
+appVersion: 1.8.7
 description: Fast and lightweight log processor and forwarder or Linux, OSX and BSD
   family operating systems.
 home: https://fluentbit.io/
@@ -22,4 +24,4 @@ maintainers:
 name: fluent-bit
 sources:
 - https://github.com/fluent/fluent-bit/
-version: 0.17.0
+version: 0.19.0
