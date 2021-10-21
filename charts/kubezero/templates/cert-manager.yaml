@@ -2,8 +2,12 @@
 
 localCA:
   enabled: true
-{{ with index .Values "cert-manager" "IamArn" }}
+
 cert-manager:
+  prometheus:
+    servicemonitor:
+      enabled: {{ $.Values.metrics.enabled }}
+{{ with index .Values "cert-manager" "IamArn" }}
   extraEnv:
   - name: AWS_ROLE_ARN
     value: "{{ . }}"
@@ -25,10 +29,6 @@ cert-manager:
   - name: aws-token
     mountPath: "/var/run/secrets/sts.amazonaws.com/serviceaccount/"
     readOnly: true
-
-  prometheus:
-    servicemonitor:
-      enabled: {{ $.Values.metrics.enabled }}
 {{- end }}
 
 {{- with index .Values "cert-manager" "clusterIssuer" }}
