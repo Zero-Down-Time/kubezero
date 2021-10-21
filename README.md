@@ -9,6 +9,7 @@ KubeZero is a Kubernetes distribution providing an integrated container platform
 - Organic Open Source / open and permissive licenses over closed-source solutions
 - No premium services / subscriptions required
 - Staying and contributing back to upstream projects as much as possible
+- Corgi approved :dog:
 
 
 # Version / Support Matrix
@@ -19,8 +20,12 @@ KubeZero is distributed as a collection of versioned Helm charts, allowing custo
 
 | KubeZero Version | Kubernetes Version  | EOL         |
 |------------------|---------------------|-------------|
+| v1.21.0-alpha    | v1.21               | 28 Feb 2022 |
 | v1.20.8          | v1.20               | 30 Nov 2021 |
-| v1.21.0          | v1.21               | 28 Feb 2022 |
+| v1.19            | v1.19               | Jul 2021    |
+| v1.18            | v1.18               | Apr 2021    |
+| v1.17            | v1.17               | Jan 2021    |
+| v1.16            | v1.16               | Nov 2020    |
 
 [Upstream release policy](https://kubernetes.io/releases/)
 
@@ -39,7 +44,8 @@ KubeZero is distributed as a collection of versioned Helm charts, allowing custo
 - controller nodes are used for various platform admin controllers / operators to reduce costs and noise on worker nodes
 
 ## GitOps
-- full ArgoCD support and integration (optional)
+- cli / cmd line install
+- optional full ArgoCD support and integration
 
 ## AWS integrations
 - IAM roles for service accounts allowing each pod to assume individual IAM roles
