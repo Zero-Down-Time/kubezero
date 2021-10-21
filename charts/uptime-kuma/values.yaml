@@ -14,8 +14,8 @@ service:
 
 # uptime-kuma.image -- The uptime-kuma docker image
 image: louislam/uptime-kuma
-# uptime-kuma.version -- The uptime-kuma docker image version - defaults to .Chart.appVersion
-version: 1.8.0-alpine
+# uptime-kuma.version -- The uptime-kuma docker image version - defaults to .Chart.appVersion-alpine
+# version: 1.8.0-alpine
 
 #resources:
   # uptime-kuma.resources -- The resource requests and limits for the uptime-kuma service
