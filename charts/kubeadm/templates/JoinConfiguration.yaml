@@ -1,3 +1,4 @@
+# This is for controllers only, workers dont use kubeadm
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: JoinConfiguration
 discovery:
@@ -5,7 +6,7 @@ discovery:
     kubeConfigPath: /root/.kube/config
 controlPlane:
   localAPIEndpoint:
-    advertiseAddress: {{ .Values.serviceIp }}
+    advertiseAddress: {{ .Values.listenAddress }}
     bindPort: {{ .Values.api.listenPort }}
 nodeRegistration:
   ignorePreflightErrors:

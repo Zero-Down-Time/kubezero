@@ -1,20 +1,22 @@
 clusterName: pleasechangeme
 domain: changeme.org
 
-serviceIp: set_via_cmdline
+# Needs to be set to primary node IP
+listenAddress: 0.0.0.0
 
 api:
   endpoint: kube-api.changeme.org:6443
   listenPort: 6443
   allEtcdEndpoints: ""
   extraArgs: {}
+  serviceAccountIssuer: ""
+  apiAudiences: "istio-ca"
 
 etcd:
   nodeName: set_via_cmdline
   extraArgs: {}
 
 highAvailable: false
-listenAddress: 0.0.0.0
 
 # supported values aws,bare-metal
 platform: "aws"
