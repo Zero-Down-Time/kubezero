@@ -18,7 +18,14 @@ spec:
     spec:
       containers:
       - name: uptime-kuma
-        image: "{{ .Values.image }}:{{ default .Chart.AppVersion .Values.version }}"
+        {{- if .Values.version }}
+        image: "{{ .Values.image }}:{{ .Values.version }}"
+        {{- else }}
+        image: "{{ .Values.image }}:{{ .Chart.AppVersion }}-alpine"
+        {{- end }}
+        env:
+        - name: UPTIME_KUMA_PORT
+          value: "3001"
         ports:
         - containerPort: 3001
         volumeMounts:
