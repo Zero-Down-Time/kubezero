@@ -12,6 +12,10 @@ KubeZero is a Kubernetes distribution providing an integrated container platform
 - Corgi approved :dog:
 
 
+# Architecture
+![aws_architecture](docs/aws_architecture.png)
+
+
 # Version / Support Matrix
 KubeZero releases track the same *minor* version of Kubernetes.  
 Any 1.20.X-Y release of Kubezero supports any Kubernetes cluster 1.20.X.
@@ -28,10 +32,6 @@ KubeZero is distributed as a collection of versioned Helm charts, allowing custo
 | v1.16            | v1.16               | Nov 2020    |
 
 [Upstream release policy](https://kubernetes.io/releases/)
-
-# Architecture
-![aws_architecture](docs/aws_architecture.png)
-
 
 # Components
 
@@ -74,9 +74,8 @@ KubeZero is distributed as a collection of versioned Helm charts, allowing custo
 ## Metrics
 - Prometheus support for all components
 - automated service discovery allowing instant access to common workload metrics
-- Various pre-configured Grafana dashboards for common services
-- Various pre-configured Alerts
-- Alerts can be send via SNSAlertHub to eg. Slack, Goole, Matrix, etc.
+- pre-configured Grafana dashboards and alerts
+- Alertmanager events via SNSAlertHub to Slack, Google, Matrix, etc.
 
 ## Logging
 - all container logs are enhanced with Kubernetes and AWS metadata to provide context for each message
