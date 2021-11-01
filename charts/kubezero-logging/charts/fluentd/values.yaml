@@ -1,10 +1,10 @@
 nameOverride: ""
 fullnameOverride: ""
 
-# DaemonSet or Deployment
+# DaemonSet, Deployment or StatefulSet
 kind: "DaemonSet"
 
-# # Only applicable for Deployment
+# # Only applicable for Deployment or StatefulSet
 # replicaCount: 1
 
 image:
@@ -49,7 +49,7 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
-# Congigure the livessProbe
+# Configure the livessProbe
 # Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 livenessProbe:
   httpGet:
@@ -61,7 +61,7 @@ livenessProbe:
   # successThreshold: 1
   # failureThreshold: 3
 
-# Congigure the readinessProbe
+# Configure the readinessProbe
 # Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 readinessProbe:
   httpGet:
@@ -184,6 +184,15 @@ volumeMounts:
   mountPath: /etc/fluent
 - name: etcfluentd-config
   mountPath: /etc/fluent/config.d/
+
+## Only available if kind is StatefulSet
+## Fluentd persistence
+##
+persistence:
+  enabled: false
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 10Gi
 
 ## Fluentd service
 ##

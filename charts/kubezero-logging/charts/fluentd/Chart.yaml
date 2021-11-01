@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: v1.12.0
 description: A Helm chart for Kubernetes
 home: https://www.fluentd.org/
-icon: https://www.fluentd.org/assets/img/miscellany/fluentd-logo_2x.png
+icon: https://www.fluentd.org/images/miscellany/fluentd-logo_2x.png
 maintainers:
 - email: eduardo@treasure-data.com
   name: edsiper
@@ -12,4 +12,4 @@ name: fluentd
 sources:
 - https://github.com/fluent/fluentd/
 - https://github.com/fluent/fluentd-kubernetes-daemonset
-version: 0.2.10
+version: 0.3.0
