@@ -1,6 +1,6 @@
 # kubezero-logging
 
-![Version: 0.7.13](https://img.shields.io/badge/Version-0.7.13-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6.0](https://img.shields.io/badge/AppVersion-1.6.0-informational?style=flat-square)
+![Version: 0.7.15](https://img.shields.io/badge/Version-0.7.15-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6.0](https://img.shields.io/badge/AppVersion-1.6.0-informational?style=flat-square)
 
 KubeZero Umbrella Chart for complete EFK stack
 
@@ -19,8 +19,8 @@ Kubernetes: `>= 1.18.0`
 | Repository | Name | Version |
 |------------|------|---------|
 |  | eck-operator | 1.6.0 |
-|  | fluent-bit | 0.17.0 |
-|  | fluentd | 0.2.10 |
+|  | fluent-bit | 0.19.2 |
+|  | fluentd | 0.3.0 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## Changes from upstream
@@ -90,7 +90,7 @@ Kubernetes: `>= 1.18.0`
 | fluent-bit.daemonSetVolumes[1].hostPath.type | string | `"File"` |  |
 | fluent-bit.daemonSetVolumes[1].name | string | `"etcmachineid"` |  |
 | fluent-bit.enabled | bool | `false` |  |
-| fluent-bit.image.tag | string | `"1.8.7"` |  |
+| fluent-bit.image | string | `nil` |  |
 | fluent-bit.luaScripts."kubezero.lua" | string | `"function nest_k8s_ns(tag, timestamp, record)\n    if not record['kubernetes']['namespace_name'] then\n        return 0, 0, 0\n    end\n    new_record = {}\n    for key, val in pairs(record) do\n        if key == 'kube' then\n            new_record[key] = {}\n            new_record[key][record['kubernetes']['namespace_name']] = record[key]\n        else\n            new_record[key] = record[key]\n        end\n    end\n    return 1, timestamp, new_record\nend\n"` |  |
 | fluent-bit.resources.limits.memory | string | `"64Mi"` |  |
 | fluent-bit.resources.requests.cpu | string | `"20m"` |  |

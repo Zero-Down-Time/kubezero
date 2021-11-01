@@ -1,11 +1,9 @@
 annotations:
   artifacthub.io/changes: |
-    - kind: added
-      description: "Support setting initContainers to a string value to enable full templating."
-    - kind: removed
-      description: "Don't template initContainers when set to an array."
+    - kind: changed
+      description: "Update Fluent Bit image to v1.8.9."
 apiVersion: v1
-appVersion: 1.8.7
+appVersion: 1.8.9
 description: Fast and lightweight log processor and forwarder or Linux, OSX and BSD
   family operating systems.
 home: https://fluentbit.io/
@@ -24,4 +22,4 @@ maintainers:
 name: fluent-bit
 sources:
 - https://github.com/fluent/fluent-bit/
-version: 0.19.0
+version: 0.19.2
