@@ -1,0 +1,19 @@
+apiVersion: v2
+name: kubezero-ci
+description: KubeZero umbrella chart for all things CI
+type: application
+version: 0.1.0
+home: https://kubezero.com
+icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
+keywords:
+  - kubezero
+  - jenkins
+  - goCD
+maintainers:
+  - name: Quarky9
+dependencies:
+  - name: gocd
+    version: 1.39.4
+    repository: https://gocd.github.io/helm-chart
+    condition: gocd.enabled
+kubeVersion: ">= 1.18.0"
