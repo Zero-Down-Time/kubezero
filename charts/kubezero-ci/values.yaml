@@ -7,5 +7,10 @@ gocd:
     ingress:
       enabled: false
 
+  istio:
+    enabled: false
+    gateway: istio-ingress/private-ingressgateway
+    url: "" # gocd.example.com
+
 jenkins:
   enabled: false

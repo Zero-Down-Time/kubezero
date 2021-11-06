@@ -12,6 +12,9 @@ keywords:
 maintainers:
   - name: Quarky9
 dependencies:
+  - name: kubezero-lib
+    version: ">= 0.1.4"
+    repository: https://zero-down-time.github.io/kubezero/
   - name: gocd
     version: 1.39.4
     repository: https://gocd.github.io/helm-chart
