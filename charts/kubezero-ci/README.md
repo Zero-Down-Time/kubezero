@@ -30,11 +30,5 @@ Kubernetes: `>= 1.18.0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| fuseDevicePlugin.enabled | bool | `false` |  |
-| k8sEcrLoginRenew.enabled | bool | `false` |  |
-| metallb.configInline | object | `{}` |  |
-| metallb.controller.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
-| metallb.controller.tolerations[0].effect | string | `"NoSchedule"` |  |
-| metallb.controller.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
-| metallb.enabled | bool | `false` |  |
-| metallb.psp.create | bool | `false` |  |
+| gocd.enabled | bool | `false` |  |
+| jenkins.enabled | bool | `false` |  |
