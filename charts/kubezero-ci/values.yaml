@@ -1,5 +1,11 @@
 gocd:
   enabled: false
 
+  server:
+    service:
+      type: "ClusterIP"
+    ingress:
+      enabled: false
+
 jenkins:
   enabled: false
