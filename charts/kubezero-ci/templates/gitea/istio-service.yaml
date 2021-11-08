@@ -1,4 +1,4 @@
-{{- if and .Values.gocd.enabled .Values.gocd.istio.enabled }}
+{{- if and .Values.gitea.enabled .Values.gitea.istio.enabled }}
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -8,11 +8,11 @@ metadata:
     {{- include "kubezero-lib.labels" . | nindent 4 }}
 spec:
   gateways:
-  - {{ .Values.gocd.istio.gateway }}
+  - {{ .Values.gitea.istio.gateway }}
   hosts:
-  - {{ .Values.gocd.istio.url }}
+  - {{ .Values.gitea.istio.url }}
   http:
   - route:
     - destination:
-        host: gocd-server
+        host: gitea-http
 {{- end }}

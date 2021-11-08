@@ -12,5 +12,60 @@ gocd:
     gateway: istio-ingress/private-ingressgateway
     url: "" # gocd.example.com
 
+gitea:
+  enabled: false
+
+  image:
+    rootless: true
+
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+      add:
+        - SYS_CHROOT
+
+  persistence:
+    enabled: true
+    size: 4Gi
+
+  gitea:
+    admin:
+      existingSecret: gitea-admin-secret
+
+    # Enable to install demo creds
+    demo: false
+
+    metrics:
+      enabled: false
+      serviceMonitor:
+        enabled: false
+
+    config:
+      database:
+        DB_TYPE: sqlite3
+
+      cache:
+        ADAPTER: memory
+
+    database:
+      builtIn:
+        postgresql:
+          enabled: false
+        mysql:
+          enabled: false
+        mariadb:
+          enabled: false
+
+    cache:
+      builtIn:
+        enabled: false
+
+  istio:
+    enabled: false
+    gateway: istio-ingress/private-ingressgateway
+    url: "" # git.example.com
+
 jenkins:
   enabled: false
