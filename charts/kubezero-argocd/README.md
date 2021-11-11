@@ -1,6 +1,6 @@
 # kubezero-argocd
 
-![Version: 0.8.3](https://img.shields.io/badge/Version-0.8.3-informational?style=flat-square)
+![Version: 0.8.7](https://img.shields.io/badge/Version-0.8.7-informational?style=flat-square)
 
 KubeZero ArgoCD Helm chart to install ArgoCD itself and the KubeZero ArgoCD Application
 
@@ -18,7 +18,7 @@ Kubernetes: `>= 1.18.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://argoproj.github.io/argo-helm | argo-cd | 3.22.1 |
+| https://argoproj.github.io/argo-helm | argo-cd | 3.26.5 |
 | https://argoproj.github.io/argo-helm | argocd-applicationset | 1.4.0 |
 | https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.4 |
 
@@ -26,6 +26,8 @@ Kubernetes: `>= 1.18.0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| argo-cd.configs.knownHosts.data.ssh_known_hosts | string | `"bitbucket.org ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw==\ngithub.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==\ngit.zero-downtime.net ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBBytYYdGzh0Y9iwx4hxgjiEwbxLxBdIaMbfpkB6zqiDqmMtVDprjZfRlDTew25+p+Hki7/xJPQRYqB6RR0fuTwo=\ngit.zero-downtime.net:22000 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBBytYYdGzh0Y9iwx4hxgjiEwbxLxBdIaMbfpkB6zqiDqmMtVDprjZfRlDTew25+p+Hki7/xJPQRYqB6RR0fuTwo=\n"` |  |
+| argo-cd.configs.secret.createSecret | bool | `false` |  |
 | argo-cd.controller.args.appResyncPeriod | string | `"300"` |  |
 | argo-cd.controller.args.operationProcessors | string | `"4"` |  |
 | argo-cd.controller.args.statusProcessors | string | `"8"` |  |
@@ -35,14 +37,12 @@ Kubernetes: `>= 1.18.0`
 | argo-cd.controller.resources.requests.cpu | string | `"100m"` |  |
 | argo-cd.controller.resources.requests.memory | string | `"256Mi"` |  |
 | argo-cd.dex.enabled | bool | `false` |  |
-| argo-cd.global.image.tag | string | `"v2.1.3"` |  |
+| argo-cd.global.image.tag | string | `"v2.1.6"` |  |
 | argo-cd.installCRDs | bool | `false` |  |
 | argo-cd.repoServer.logFormat | string | `"json"` |  |
 | argo-cd.repoServer.metrics.enabled | bool | `false` |  |
 | argo-cd.repoServer.metrics.serviceMonitor.enabled | bool | `true` |  |
 | argo-cd.server.config."resource.customizations" | string | `"cert-manager.io/Certificate:\n  # Lua script for customizing the health status assessment\n  health.lua: |\n    hs = {}\n    if obj.status ~= nil then\n      if obj.status.conditions ~= nil then\n        for i, condition in ipairs(obj.status.conditions) do\n          if condition.type == \"Ready\" and condition.status == \"False\" then\n            hs.status = \"Degraded\"\n            hs.message = condition.message\n            return hs\n          end\n          if condition.type == \"Ready\" and condition.status == \"True\" then\n            hs.status = \"Healthy\"\n            hs.message = condition.message\n            return hs\n          end\n        end\n      end\n    end\n    hs.status = \"Progressing\"\n    hs.message = \"Waiting for certificate\"\n    return hs\n"` |  |
-| argo-cd.server.config."ui.bannercontent" | string | `"KubeZero Release 2.20 incl. ArgoCD 2.0 -> Release notes"` |  |
-| argo-cd.server.config."ui.bannerurl" | string | `"https://blog.argoproj.io/argo-cd-v2-0-rc1-is-here-f7d21ff1aa64"` |  |
 | argo-cd.server.config.url | string | `"argocd.example.com"` | ArgoCD hostname to be exposed via Istio |
 | argo-cd.server.extraArgs[0] | string | `"--insecure"` |  |
 | argo-cd.server.logFormat | string | `"json"` |  |

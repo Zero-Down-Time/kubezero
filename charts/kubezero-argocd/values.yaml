@@ -17,11 +17,18 @@ argo-cd:
 
   global:
     image:
-      tag: v2.1.3
+      tag: v2.1.6
 
   configs:
     secret:
       createSecret: false
+    knownHosts:
+     data:
+       ssh_known_hosts: |
+         bitbucket.org ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw==
+         github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
+         git.zero-downtime.net ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBBytYYdGzh0Y9iwx4hxgjiEwbxLxBdIaMbfpkB6zqiDqmMtVDprjZfRlDTew25+p+Hki7/xJPQRYqB6RR0fuTwo=
+         git.zero-downtime.net:22000 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBBytYYdGzh0Y9iwx4hxgjiEwbxLxBdIaMbfpkB6zqiDqmMtVDprjZfRlDTew25+p+Hki7/xJPQRYqB6RR0fuTwo=
 
   controller:
     args:
@@ -53,8 +60,8 @@ argo-cd:
   server:
     logFormat: json
     config:
-      ui.bannercontent: "KubeZero Release 1.20.8-12 incl. ArgoCD 2.1 -> Release notes"
-      ui.bannerurl: "https://blog.argoproj.io/argo-cd-v2-1-first-release-candidate-is-ready-c1aab7795638"
+      #ui.bannercontent: "KubeZero Release 1.20.8-12 incl. ArgoCD 2.1 -> Release notes"
+      #ui.bannerurl: "https://blog.argoproj.io/argo-cd-v2-1-first-release-candidate-is-ready-c1aab7795638"
 
       # argo-cd.server.config.url -- ArgoCD hostname to be exposed via Istio
       url: argocd.example.com
