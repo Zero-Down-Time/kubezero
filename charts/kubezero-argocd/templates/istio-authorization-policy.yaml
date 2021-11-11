@@ -4,8 +4,9 @@ apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
   name: argocd-deny-not-in-ipblocks
+  namespace: istio-system
   labels:
-{{ include "kubezero-lib.labels" . | indent 4 }}
+    {{- include "kubezero-lib.labels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
@@ -15,9 +16,7 @@ spec:
   - from:
     - source:
         notIpBlocks:
-        {{- with .Values.istio.ipBlocks }}
-        {{- . | toYaml | nindent 8 }}
-        {{- end }}
+        {{- toYaml .Values.istio.ipBlocks | nindent 8 }}
     to:
     - operation:
         hosts: ["{{ index .Values "argo-cd" "server" "config" "url" }}"]
