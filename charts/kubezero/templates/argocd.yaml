@@ -13,10 +13,47 @@ argo-cd:
     {{- with index .Values "argocd" "server" }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
+    additionalProjects:
+    - name: kubezero
+      namespace: argocd
+      description: KubeZero - ZeroDownTime Kubernetes Platform
+      sourceRepos:
+      - {{ .Values.kubezero.repoURL }}
+      {{- with .Values.kubezero.gitSync.repoURL }}
+      - {{ . }}
+      {{- end }}
+      destinations:
+      - namespace: '*'
+        server: https://kubernetes.default.svc
+      clusterResourceWhitelist:
+      - group: '*'
+        kind: '*'
+    additionalApplications:
+    - name: kubezero-git-sync
+      namespace: argocd
+      project: kubezero
+      source:
+        repoURL: {{ .Values.kubezero.gitSync.repoURL }}
+        targetRevision: {{ .Values.kubezero.gitSync.targetRevision }}
+        path: {{ .Values.kubezero.gitSync.path }}
+
+        directory:
+          recurse: true
+
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: argocd
+
+      {{- with .Values.kubezero.syncPolicy }}
+      syncPolicy:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
   {{- with index .Values "argocd" "configs" }}
   configs:
     {{- toYaml . | nindent 4 }}
   {{- end }}
+
 {{- if and ( index .Values "argocd" "istio" "enabled" ) .Values.istio.enabled }}
 istio:
   {{- with index .Values "argocd" "istio" }}
