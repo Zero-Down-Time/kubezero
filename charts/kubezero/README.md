@@ -1,6 +1,6 @@
 # kubezero
 
-![Version: 1.20.8-13](https://img.shields.io/badge/Version-1.20.8--13-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 1.20.11-4](https://img.shields.io/badge/Version-1.20.11--4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero - Bootstrap and ArgoCD Root App of Apps chart
 
@@ -27,28 +27,23 @@ Kubernetes: `>= 1.18.0`
 | HighAvailableControlplane | bool | `false` |  |
 | addons.enabled | bool | `false` |  |
 | addons.targetRevision | string | `"0.1.0"` |  |
-| argocd.crds | bool | `true` |  |
 | argocd.enabled | bool | `false` |  |
 | argocd.istio.enabled | bool | `false` |  |
 | argocd.namespace | string | `"argocd"` |  |
-| argocd.targetRevision | string | `"0.8.4"` |  |
-| aws-ebs-csi-driver.crds | bool | `true` |  |
+| argocd.targetRevision | string | `"0.8.7"` |  |
 | aws-ebs-csi-driver.enabled | bool | `false` |  |
 | aws-ebs-csi-driver.targetRevision | string | `"0.6.4"` |  |
 | aws-efs-csi-driver.enabled | bool | `false` |  |
 | aws-efs-csi-driver.targetRevision | string | `"0.4.2"` |  |
-| calico.crds | bool | `true` |  |
 | calico.enabled | bool | `false` |  |
 | calico.retain | bool | `true` |  |
 | calico.targetRevision | string | `"0.2.2"` |  |
-| cert-manager.crds | bool | `true` |  |
 | cert-manager.enabled | bool | `false` |  |
 | cert-manager.namespace | string | `"cert-manager"` |  |
 | cert-manager.targetRevision | string | `"0.7.3"` |  |
 | istio-ingress.enabled | bool | `false` |  |
 | istio-ingress.namespace | string | `"istio-ingress"` |  |
 | istio-ingress.targetRevision | string | `"0.7.5"` |  |
-| istio.crds | bool | `true` |  |
 | istio.enabled | bool | `false` |  |
 | istio.namespace | string | `"istio-system"` |  |
 | istio.targetRevision | string | `"0.7.5"` |  |
@@ -58,17 +53,14 @@ Kubernetes: `>= 1.18.0`
 | kubezero.gitSync | object | `{}` |  |
 | kubezero.repoURL | string | `"https://zero-down-time.github.io/kubezero"` |  |
 | kubezero.server | string | `"https://kubernetes.default.svc"` |  |
-| logging.crds | bool | `true` |  |
 | logging.enabled | bool | `false` |  |
 | logging.namespace | string | `"logging"` |  |
-| logging.targetRevision | string | `"0.7.14"` |  |
-| metrics.crds | bool | `true` |  |
+| logging.targetRevision | string | `"0.7.16"` |  |
 | metrics.enabled | bool | `false` |  |
 | metrics.istio.grafana | object | `{}` |  |
 | metrics.istio.prometheus | object | `{}` |  |
 | metrics.namespace | string | `"monitoring"` |  |
 | metrics.targetRevision | string | `"0.5.4"` |  |
-| storage.crds | bool | `true` |  |
 | storage.enabled | bool | `false` |  |
 | storage.targetRevision | string | `"0.3.2"` |  |
 

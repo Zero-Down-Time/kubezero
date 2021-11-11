@@ -12,13 +12,11 @@ addons:
 
 calico:
   enabled: false
-  crds: true
   retain: true
   targetRevision: 0.2.2
 
 cert-manager:
   enabled: false
-  crds: true
   namespace: cert-manager
   targetRevision: 0.7.3
 
@@ -28,12 +26,10 @@ kiam:
 
 storage:
   enabled: false
-  crds: true
   targetRevision: 0.3.2
 
 aws-ebs-csi-driver:
   enabled: false
-  crds: true
   targetRevision: 0.6.4
 
 aws-efs-csi-driver:
@@ -42,7 +38,6 @@ aws-efs-csi-driver:
 
 istio:
   enabled: false
-  crds: true
   namespace: istio-system
   targetRevision: 0.7.5
 
@@ -53,7 +48,6 @@ istio-ingress:
 
 metrics:
   enabled: false
-  crds: true
   namespace: monitoring
   targetRevision: 0.5.4
   istio:
@@ -62,14 +56,12 @@ metrics:
 
 logging:
   enabled: false
-  crds: true
   namespace: logging
   targetRevision: 0.7.16
 
 argocd:
   enabled: false
-  crds: true
   namespace: argocd
-  targetRevision: 0.8.4
+  targetRevision: 0.8.7
   istio:
     enabled: false

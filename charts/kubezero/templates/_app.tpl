@@ -1,7 +1,7 @@
 {{- define "kubezero-app.app" }}
 {{- $name := regexReplaceAll "kubezero/templates/([a-z-]*)..*" .Template.Name "${1}" }}
 
-{{- if and .Values.argocdAppName ( index .Values $name "enabled" ) }}
+{{- if index .Values $name "enabled" }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
