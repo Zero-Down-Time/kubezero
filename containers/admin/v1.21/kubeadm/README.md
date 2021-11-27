@@ -1,8 +1,8 @@
 # kubeadm
 
-![Version: 1.20.11](https://img.shields.io/badge/Version-1.20.11-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 1.21.7](https://img.shields.io/badge/Version-1.21.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
-KubeZero Kubeadm golden config
+KubeZero Kubeadm cluster config
 
 **Homepage:** <https://kubezero.com>
 
@@ -10,11 +10,11 @@ KubeZero Kubeadm golden config
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Quarky9 |  |  |
+| Stefan Reimer | stefan@zero-downtime.net |  |
 
 ## Requirements
 
-Kubernetes: `>= 1.18.0`
+Kubernetes: `>= 1.20.0`
 
 ## Values
 
@@ -22,20 +22,25 @@ Kubernetes: `>= 1.18.0`
 |-----|------|---------|-------------|
 | api.allEtcdEndpoints | string | `""` |  |
 | api.apiAudiences | string | `"istio-ca"` |  |
+| api.awsIamAuth | string | `"false"` |  |
 | api.endpoint | string | `"kube-api.changeme.org:6443"` |  |
 | api.extraArgs | object | `{}` |  |
 | api.listenPort | int | `6443` |  |
-| api.serviceAccountIssuer | string | `""` |  |
+| api.oidcEndpoint | string | `""` | s3://${CFN[ConfigBucket]}/k8s/$CLUSTERNAME |
+| api.serviceAccountIssuer | string | `""` | https://s3.${REGION}.amazonaws.com/${CFN[ConfigBucket]}/k8s/$CLUSTERNAME |
+| backup.passwordFile | string | `""` | /etc/cloudbender/clusterBackup.passphrase |
+| backup.repository | string | `""` | s3:https://s3.amazonaws.com/${CFN[ConfigBucket]}/k8s/${CLUSTERNAME}/clusterBackup |
 | clusterName | string | `"pleasechangeme"` |  |
 | domain | string | `"changeme.org"` |  |
 | etcd.extraArgs | object | `{}` |  |
 | etcd.nodeName | string | `"set_via_cmdline"` |  |
 | highAvailable | bool | `false` |  |
 | kubeAdminRole | string | `"arn:aws:iam::000000000000:role/KubernetesNode"` |  |
-| listenAddress | string | `"0.0.0.0"` |  |
-| platform | string | `"aws"` |  |
+| listenAddress | string | `"0.0.0.0"` | Needs to be set to primary node IP |
+| nodeName | string | `"localhost"` | set to $HOSTNAME |
+| platform | string | `"aws"` | supported values aws,bare-metal |
 | protectKernelDefaults | bool | `true` |  |
-| systemd | bool | `true` |  |
+| systemd | bool | `true` | Set to false for openrc, eg. on Gentoo or Alpine |
 | workerNodeRole | string | `"arn:aws:iam::000000000000:role/KubernetesNode"` |  |
 
 ## Resources

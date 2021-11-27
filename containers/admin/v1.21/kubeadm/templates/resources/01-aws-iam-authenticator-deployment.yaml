@@ -112,12 +112,10 @@ spec:
       tolerations:
       - effect: NoSchedule
         key: node-role.kubernetes.io/master
-      - key: CriticalAddonsOnly
-        operator: Exists
 
       containers:
       - name: aws-iam-authenticator
-        image: public.ecr.aws/zero-downtime/aws-iam-authenticator:v0.5.2
+        image: public.ecr.aws/zero-downtime/aws-iam-authenticator:v0.5.3
         args:
         - server
         - --backend-mode=CRD,MountedFile
@@ -150,6 +148,6 @@ spec:
         configMap:
           name: aws-iam-authenticator
       - name: state
-        hostPath:
-          path: /var/aws-iam-authenticator/
+        secret:
+          secretName: aws-iam-certs
 {{- end }}
