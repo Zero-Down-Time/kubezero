@@ -1,29 +1,23 @@
 #!/bin/bash
-set -eux
+set -ex
+
+REPO_URL_S3="s3://zero-downtime-web/cdn/charts"
+REPO_URL="https://cdn.zero-downtime.net/charts"
 
 CHARTS=${1:-'.*'}
-FORCE=${2:-''}
-# all credits go to the argoproj Helm guys https://github.com/argoproj/argo-helm
 
 SRCROOT="$(cd "$(dirname "$0")/.." && pwd)"
-GIT_PUSH=${GIT_PUSH:-true}
 
 TMPDIR=$(mktemp -d kubezero-repo.XXX)
-mkdir -p $TMPDIR/stage && trap 'rm -rf $TMPDIR' ERR EXIT
+mkdir -p $TMPDIR
 
-git clone -b gh-pages ssh://git@git.zero-downtime.net:22000/ZeroDownTime/KubeZero.git $TMPDIR/repo
-# Reset all
-# rm -rf $TMPDIR/repo/*tgz $TMPDIR/repo/index.yaml
-
-helm repo add argoproj https://argoproj.github.io/argo-helm
-helm repo add jetstack https://charts.jetstack.io
-helm repo add uswitch https://uswitch.github.io/kiam-helm-charts/charts/
-helm repo update
+[ -z "$DEBUG" ] && trap 'rm -rf $TMPDIR' ERR EXIT
 
 for dir in $(find -L $SRCROOT/charts -mindepth 1 -maxdepth 1 -type d);
 do
     name=$(basename $dir)
     [[ $name =~ $CHARTS ]] || continue
+
     if [ $(helm dep list $dir 2>/dev/null| wc -l) -gt 1 ]
     then
         echo "Processing chart dependencies"
@@ -32,28 +26,15 @@ do
     fi
 
     echo "Processing $dir"
-    helm lint $dir || true
-    helm --debug package -d $TMPDIR/stage $dir
+    helm lint $dir
+    helm package -d $TMPDIR $dir
 done
 
-# Do NOT overwrite existing charts
-if [ -n "$FORCE" ]; then
-  cp $TMPDIR/stage/*.tgz $TMPDIR/repo
-else
-  cp -n $TMPDIR/stage/*.tgz $TMPDIR/repo
-fi
+curl -L -s -o $TMPDIR/index.yaml ${REPO_URL}/index.yaml
 
-cd $TMPDIR/repo
+helm repo index $TMPDIR --url $REPO_URL --merge $TMPDIR/index.yaml
 
-# read
+aws s3 cp $TMPDIR/*.tgz $REPO_URL_S3/ 
+aws s3 cp $TMPDIR/index.yaml $REPO_URL_S3/ --cache-control max-age=1
 
-helm repo index .
-git status
-
-if [ "$GIT_PUSH" == "true" ]
-then
-    git add . && git commit -m "ci: Publish charts" && git push ssh://git@git.zero-downtime.net:22000/ZeroDownTime/KubeZero.git gh-pages
-fi
-
-cd -
 rm -rf $TMPDIR

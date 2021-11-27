@@ -1,0 +1,10 @@
+json:
+  - op: add
+    path: /spec/containers/0/command/-
+    value: --bind-address={{ .Values.listenAddress }}
+  - op: replace
+    path: /spec/containers/0/livenessProbe/httpGet/host
+    value: {{ .Values.listenAddress }}
+  - op: replace
+    path: /spec/containers/0/startupProbe/httpGet/host
+    value: {{ .Values.listenAddress }}

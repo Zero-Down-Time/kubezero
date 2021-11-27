@@ -65,6 +65,7 @@ KubeZero is distributed as a collection of versioned Helm charts, allowing custo
 
 ## Ingress
 - AWS Network Loadbalancer and Istio Ingress controllers
+- optional rate limiting support
 - No additional costs per exposed service
 - Automated SSL Certificate handling via cert-manager incl. renewal etc.
 - support for TCP services

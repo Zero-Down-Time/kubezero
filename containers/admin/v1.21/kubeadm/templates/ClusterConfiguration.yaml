@@ -1,7 +1,5 @@
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
-metadata:
-  name: kubezero-clusterconfiguration
 kubernetesVersion: {{ .Chart.Version }}
 clusterName: {{ .Values.clusterName }}
 controlPlaneEndpoint: {{ .Values.api.endpoint }}
@@ -15,7 +13,7 @@ etcd:
       #discovery-srv-name: {{ .Values.clusterName }}
       #initial-cluster:
       initial-cluster-token: etcd-{{ .Values.clusterName }}
-      listen-metrics-urls: "http://{{ .Values.listenAddress }}:2381"
+      listen-metrics-urls: "http://0.0.0.0:2381"
       logger: "zap"
       # log-level: "warn"
       {{- with .Values.etcd.extraArgs }}
@@ -35,7 +33,6 @@ etcd:
 controllerManager:
   extraArgs:
     profiling: "false"
-    bind-address: {{ .Values.listenAddress }}
     terminated-pod-gc-threshold: "300"
     # leader-elect: {{ .Values.highAvailable | quote }}
     logging-format: json
@@ -43,7 +40,6 @@ controllerManager:
 scheduler:
   extraArgs:
     profiling: "false"
-    bind-address: {{ .Values.listenAddress }}
     # leader-elect: {{ .Values.highAvailable | quote }}
     logging-format: json
     feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" "platform" .Values.platform ) | trimSuffix "," | quote }}
@@ -59,7 +55,6 @@ apiServer:
     audit-log-maxsize: "100"
     audit-log-maxbackup: "3"
     audit-log-compress: "true"
-    bind-address: {{ .Values.listenAddress }}
     tls-cipher-suites: "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384"
     admission-control-config-file: /etc/kubernetes/apiserver/admission-configuration.yaml
     api-audiences: {{ .Values.api.apiAudiences }}
@@ -71,9 +66,7 @@ apiServer:
     authentication-token-webhook-config-file: /etc/kubernetes/apiserver/aws-iam-authenticator.yaml
     {{- end }}
     feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" "platform" .Values.platform ) | trimSuffix "," | quote }}
-    # for 1.21
-    # enable-admission-plugins: DenyServiceExternalIPs,NodeRestriction,EventRateLimit
-    enable-admission-plugins: NodeRestriction,EventRateLimit
+    enable-admission-plugins: DenyServiceExternalIPs,NodeRestriction,EventRateLimit
     # {{- if .Values.highAvailable }}
     # goaway-chance: ".001"
     # {{- end }}

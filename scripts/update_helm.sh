@@ -19,4 +19,7 @@ do
 
     echo "Processing $dir"
     helm lint $dir && helm --debug package $dir
+
+    echo "Updating README"
+    helm-docs -c $dir 
 done

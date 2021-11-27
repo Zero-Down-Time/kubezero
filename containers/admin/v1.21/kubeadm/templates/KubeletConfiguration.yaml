@@ -1,8 +1,6 @@
 # https://kubernetes.io/docs/reference/config-api/kubelet-config.v1beta1/
 apiVersion: kubelet.config.k8s.io/v1beta1
 kind: KubeletConfiguration
-metadata:
-  name: kubezero-kubeletconfiguration
 failSwapOn: false
 cgroupDriver: cgroupfs
 logging:

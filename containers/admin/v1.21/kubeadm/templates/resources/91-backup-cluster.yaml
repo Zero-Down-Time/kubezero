@@ -1,0 +1,53 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: kubezero-backup
+  namespace: kube-system
+spec:
+  schedule: "0 * * * *"
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        spec:
+          containers:
+          - name: kubezero-admin
+            image: public.ecr.aws/zero-downtime/kubezero-admin:v{{ .Chart.Version }}
+            imagePullPolicy: Always
+            command: ["kubezero.sh"]
+            args:
+            - backup
+            volumeMounts:
+            - name: host
+              mountPath: /host
+            - name: workdir
+              mountPath: /tmp
+            env: 
+            - name: DEBUG
+              value: "1"
+            - name: RESTIC_REPOSITORY
+              valueFrom: 
+                secretKeyRef: 
+                  name: kubezero-backup-restic
+                  key: repository
+            - name: RESTIC_PASSWORD
+              valueFrom: 
+                secretKeyRef: 
+                  name: kubezero-backup-restic
+                  key: password 
+            #securityContext:
+            # readOnlyRootFilesystem: true
+          hostNetwork: true
+          volumes:
+          - name: host
+            hostPath:
+              path: /
+              type: Directory
+          - name: workdir
+            emptyDir: {}
+          nodeSelector:
+            node-role.kubernetes.io/master: ""
+          tolerations:
+          - key: node-role.kubernetes.io/master
+            effect: NoSchedule
+          restartPolicy: Never
