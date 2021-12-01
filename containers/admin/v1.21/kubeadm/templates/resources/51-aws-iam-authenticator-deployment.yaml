@@ -1,4 +1,4 @@
-{{- if eq .Values.platform "aws" }}
+{{- if .Values.api.awsIamAuth.enabled }}
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -106,9 +106,9 @@ spec:
       # run on the host network (don't depend on CNI)
       hostNetwork: true
 
-      # run on each master node
+      # run on each controller
       nodeSelector:
-        node-role.kubernetes.io/master: ""
+        node-role.kubernetes.io/control-plane: ""
       tolerations:
       - effect: NoSchedule
         key: node-role.kubernetes.io/master

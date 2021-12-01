@@ -1,11 +1,11 @@
-{{- if eq .Values.platform "aws" }}
+{{- if .Values.api.awsIamAuth.enabled }}
 # Controller role for consistency, similar to kubeadm admin.conf
 apiVersion: iamauthenticator.k8s.aws/v1alpha1
 kind: IAMIdentityMapping
 metadata:
   name: kubezero-worker-nodes
 spec:
-  arn: {{ .Values.workerNodeRole }}
+  arn: {{ .Values.api.awsIamAuth.workerNodeRole }}
   username: system:node:{{ "{{" }}EC2PrivateDNSName{{ "}}" }}
   groups:
   # For now use masters, define properly with 1.20
@@ -19,7 +19,7 @@ kind: IAMIdentityMapping
 metadata:
   name: kubernetes-admin
 spec:
-  arn: {{ .Values.kubeAdminRole }}
+  arn: {{ .Values.api.awsIamAuth.kubeAdminRole }}
   username: kubernetes-admin
   groups:
   - system:masters

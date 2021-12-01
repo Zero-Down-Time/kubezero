@@ -41,7 +41,7 @@ render_kubeadm() {
   yq eval 'del(.etcd.local.serverCertSANs) | del(.etcd.local.peerCertSANs)' \
     ${HOSTFS}/etc/kubernetes/kubeadm-etcd.yaml > ${HOSTFS}/etc/kubernetes/kubeadm.yaml
 
-  # Copy JoinConfig 
+  # Copy JoinConfig
   cp ${WORKDIR}/kubeadm/templates/JoinConfiguration.yaml ${HOSTFS}/etc/kubernetes
 
   # hack to "uncloack" the json patches after they go processed by helm
@@ -55,10 +55,12 @@ render_kubeadm() {
 parse_kubezero() {
   [ -f ${HOSTFS}/etc/kubernetes/kubezero.yaml ] || { echo "Missing /etc/kubernetes/kubezero.yaml!"; exit 1; }
 
+  KUBE_VERSION=$(kubeadm version -o yaml | yq eval .clientVersion.gitVersion -)
   CLUSTERNAME=$(yq eval '.clusterName' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
   NODENAME=$(yq eval '.nodeName' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
-  AWS_IAM_AUTH=$(yq eval '.api.awsIamAuth // "true"' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
 
+  AWS_IAM_AUTH=$(yq eval '.api.awsIamAuth.enabled' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
+  AWS_NTH=$(yq eval '.addons.aws-node-termination-handler.enabled' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
 }
 
 
@@ -66,7 +68,7 @@ parse_kubezero() {
 pre_kubeadm() {
   # update all apiserver addons first
   cp -r ${WORKDIR}/kubeadm/templates/apiserver ${HOSTFS}/etc/kubernetes
-  
+
   # aws-iam-authenticator enabled ?
   if [ "$AWS_IAM_AUTH" == "true" ]; then
 
@@ -89,7 +91,9 @@ pre_kubeadm() {
 # Shared steps after calling kubeadm
 post_kubeadm() {
   # KubeZero resources
-  cat ${WORKDIR}/kubeadm/templates/resources/*.yaml | kubectl apply -f - $LOG
+  for f in ${WORKDIR}/kubeadm/templates/resources/*.yaml; do
+    kubectl apply -f $f $LOG
+  done
 
   # Patch coreDNS addon, ideally we prevent kubeadm to reset coreDNS to its defaults
   kubectl patch deployment coredns -n kube-system --patch-file ${WORKDIR}/kubeadm/templates/patches/coredns0.yaml $LOG
@@ -132,6 +136,23 @@ if [ "$1" == 'upgrade' ]; then
 
   ### POST 1.21 specific
   ######################
+  helm repo add kubezero https://cdn.zero-downtime.net/charts/
+
+  # if Calico, install multus to prepare migration
+  kubectl get ds calico-node -n kube-system && \
+    helm template kubezero/kubezero-network --version 0.1.0 --include-crds --namespace kube-system --kube-version $KUBE_VERSION --name-template network \
+      --set multus.enabled=true \
+      | kubectl apply -f - $LOG
+
+  # migrate backup
+  if [ -f ${HOSTFS}/usr/local/sbin/backup_control_plane.sh ]; then
+    _repo=$(grep "export RESTIC_REPOSITORY" ${HOSTFS}/usr/local/sbin/backup_control_plane.sh)
+    helm template kubezero/kubezero-addons --version 0.2.0 --include-crds --namespace kube-system --kube-version $KUBE_VERSION --name-template addons \
+      --set clusterBackup.enabled=true \
+      --set clusterBackup.repository="${_repo##*=}" \
+      --set clusterBackup.password="$(cat ${HOSTFS}/etc/kubernetes/clusterBackup.passphrase)" \
+    | kubectl apply -f - $LOG
+  fi
 
   ######################
 
@@ -147,7 +168,6 @@ if [ "$1" == 'upgrade' ]; then
 
   # Removed:
   # - update oidc do we need that ?
-  # - backup right after upgrade ... not so sure about that one
 
 
 elif [[ "$1" =~ "^(bootstrap|recover|join)$" ]]; then
@@ -203,8 +223,23 @@ elif [[ "$1" =~ "^(bootstrap|recover|join)$" ]]; then
     yq eval -M ".clusters[0].cluster.certificate-authority-data = \"$(cat ${HOSTFS}/etc/kubernetes/pki/ca.crt | base64 -w0)\"" ${WORKDIR}/kubeadm/templates/admin-aws-iam.yaml > ${HOSTFS}/etc/kubernetes/admin-aws-iam.yaml
   fi
 
+  # Install some basics on bootstrap
+  if [[ "$1" =~ "^(bootstrap)$" ]]; then
+    helm repo add kubezero https://cdn.zero-downtime.net/charts/
+
+    # network
+    yq eval '.network // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
+    helm template kubezero/kubezero-network --version 0.1.0 --include-crds --namespace kube-system --name-template network \
+      -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply -f - $LOG
+
+    # addons
+    yq eval '.addons // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
+    helm template kubezero/kubezero-addons --version 0.2.0 --include-crds --namespace kube-system --name-template addons \
+      -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply -f - $LOG
+  fi
+
   post_kubeadm
-  
+
   echo "${1} cluster $CLUSTERNAME successfull."
 
 
@@ -225,7 +260,7 @@ elif [ "$1" == 'backup' ]; then
   # pki & cluster-admin access
   cp -r ${HOSTFS}/etc/kubernetes/pki ${WORKDIR}
   cp -r ${HOSTFS}/etc/kubernetes/admin.conf ${WORKDIR}
-  
+
   # Backup via restic
   restic snapshots || restic init
   restic backup ${WORKDIR} -H $CLUSTERNAME

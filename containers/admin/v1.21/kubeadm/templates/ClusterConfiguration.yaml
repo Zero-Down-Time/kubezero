@@ -36,13 +36,13 @@ controllerManager:
     terminated-pod-gc-threshold: "300"
     # leader-elect: {{ .Values.highAvailable | quote }}
     logging-format: json
-    feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" "platform" .Values.platform ) | trimSuffix "," | quote }}
+    feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" ) | trimSuffix "," | quote }}
 scheduler:
   extraArgs:
     profiling: "false"
     # leader-elect: {{ .Values.highAvailable | quote }}
     logging-format: json
-    feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" "platform" .Values.platform ) | trimSuffix "," | quote }}
+    feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" ) | trimSuffix "," | quote }}
 apiServer:
   certSANs:
   -  {{ regexSplit ":" .Values.api.endpoint -1 | first }}
@@ -62,10 +62,10 @@ apiServer:
     service-account-issuer: "{{ .Values.api.serviceAccountIssuer }}"
     service-account-jwks-uri: "{{ .Values.api.serviceAccountIssuer }}/openid/v1/jwks"
     {{- end }}
-    {{- if eq .Values.platform "aws" }}
+    {{- if .Values.api.awsIamAuth.enabled }}
     authentication-token-webhook-config-file: /etc/kubernetes/apiserver/aws-iam-authenticator.yaml
     {{- end }}
-    feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" "platform" .Values.platform ) | trimSuffix "," | quote }}
+    feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" ) | trimSuffix "," | quote }}
     enable-admission-plugins: DenyServiceExternalIPs,NodeRestriction,EventRateLimit
     # {{- if .Values.highAvailable }}
     # goaway-chance: ".001"
