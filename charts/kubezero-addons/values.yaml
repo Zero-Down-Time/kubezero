@@ -1,21 +1,40 @@
-metallb:
+clusterBackup:
   enabled: false
-  psp:
+
+  image:
+    name: public.ecr.aws/zero-downtime/kubezero-admin
+    tag: v1.21.7
+
+  repository: ""
+  password: ""
+
+aws-node-termination-handler:
+  enabled: false
+
+  fullnameOverride: "aws-node-termination-handler"
+
+  enableSqsTerminationDraining: true
+
+  # -- SQS queue ARN from kube controller stack
+  queueURL: ""
+
+  deleteLocalData: true
+  taintNode: true
+
+  enablePrometheusServer: false
+  podMonitor:
     create: false
 
-  controller:
-    tolerations:    
-    - key: node-role.kubernetes.io/master    
-      effect: NoSchedule    
-    nodeSelector:    
-      node-role.kubernetes.io/master: ""    
+  jsonLogging: true
 
-  configInline: {}
-#   address-pools:
-#   - name: my-ip-space
-#     protocol: layer2
-#     addresses:
-#     - 192.168.42.0/24
+  tolerations:
+  - key: node-role.kubernetes.io/master
+    effect: NoSchedule
+  nodeSelector:
+    node-role.kubernetes.io/control-plane: ""
+
+  rbac:
+    pspEnabled: false
 
 fuseDevicePlugin:
   enabled: false

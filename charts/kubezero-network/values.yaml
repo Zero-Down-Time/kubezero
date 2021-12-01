@@ -1,0 +1,45 @@
+metallb:
+  enabled: false
+  psp:
+    create: false
+
+  controller:
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    nodeSelector:
+      node-role.kubernetes.io/control-plane: ""
+
+  configInline: {}
+#   address-pools:
+#   - name: my-ip-space
+#     protocol: layer2
+#     addresses:
+#     - 192.168.42.0/24
+
+multus:
+  enabled: false
+  tag: "v3.8"
+
+cilium:
+  enabled: false
+
+  cni:
+    #-- Ensure this is false if multus is enabled
+    exclusive: true
+
+  tunnel: geneve
+
+  prometheus:
+    enabled: false
+    port: 9091
+
+  operator:
+    replicas: 1
+
+  hubble:
+    enabled: false
+
+# Legacy / Testing
+calico:
+  enabled: false

@@ -1,6 +1,6 @@
 apiVersion: v2
-name: kubezero-calico
-description: KubeZero Umbrella Chart for Calico
+name: calico
+description: KubeZero Chart for Calico
 type: application
 version: 0.2.2
 appVersion: v3.16.5
@@ -15,4 +15,4 @@ dependencies:
   - name: kubezero-lib
     version: ">= 0.1.3"
     repository: https://zero-down-time.github.io/kubezero/
-kubeVersion: ">= 1.16.0"
+kubeVersion: ">= 1.20.0"
