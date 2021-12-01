@@ -1,0 +1,22 @@
+{{- define "network-values" }}
+
+{{- with index .Values "network" "metallb" }}
+metallb:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- with index .Values "network" "multus" }}
+multus:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- with index .Values "network" "cilium" }}
+cilium:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+
+{{- end }}
+
+
+{{- define "network-argo" }}
+{{- end }}
+
+{{ include "kubezero-app.app" . }}

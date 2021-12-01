@@ -91,7 +91,10 @@ function _helm() {
   local chart="kubezero-${module}"
   local namespace=$(yq r $TMPDIR/kubezero/templates/${module}.yaml spec.destination.namespace)
 
-  local targetRevision="--version $(yq r $TMPDIR/kubezero/templates/${module}.yaml spec.source.targetRevision)"
+  targetRevision=""
+  _version="$(yq r $TMPDIR/kubezero/templates/${module}.yaml spec.source.targetRevision)"
+
+  [ -n "$_version" ] && targetRevision="--version $_version"
 
   yq r $TMPDIR/kubezero/templates/${module}.yaml 'spec.source.helm.values' > $TMPDIR/values.yaml
 
@@ -141,18 +144,13 @@ function cert-manager-post() {
 }
 
 
-########
-# Kiam #
-########
-function kiam-pre() {
-  # Certs only first
-  apply --set kiam.enabled=false
-  kubectl wait --timeout=120s --for=condition=Ready -n kube-system Certificate/kiam-server
-}
-
-function kiam-post() {
-  wait_for 'kubectl get daemonset -n kube-system kiam-agent'
-  kubectl rollout status daemonset -n kube-system kiam-agent
+###########
+# ArgoCD  #
+###########
+function argocd-pre() {
+  for f in $CLUSTER/secrets/argocd-*.yaml; do
+    kubectl apply -f $f
+  done
 }
 
 

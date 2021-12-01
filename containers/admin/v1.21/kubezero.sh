@@ -147,7 +147,7 @@ if [ "$1" == 'upgrade' ]; then
   # migrate backup
   if [ -f ${HOSTFS}/usr/local/sbin/backup_control_plane.sh ]; then
     _repo=$(grep "export RESTIC_REPOSITORY" ${HOSTFS}/usr/local/sbin/backup_control_plane.sh)
-    helm template kubezero/kubezero-addons --version 0.2.0 --include-crds --namespace kube-system --kube-version $KUBE_VERSION --name-template addons \
+    helm template kubezero/kubezero-addons --version 0.2.1 --include-crds --namespace kube-system --kube-version $KUBE_VERSION --name-template addons \
       --set clusterBackup.enabled=true \
       --set clusterBackup.repository="${_repo##*=}" \
       --set clusterBackup.password="$(cat ${HOSTFS}/etc/kubernetes/clusterBackup.passphrase)" \
@@ -234,7 +234,7 @@ elif [[ "$1" =~ "^(bootstrap|recover|join)$" ]]; then
 
     # addons
     yq eval '.addons // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
-    helm template kubezero/kubezero-addons --version 0.2.0 --include-crds --namespace kube-system --name-template addons \
+    helm template kubezero/kubezero-addons --version 0.2.1 --include-crds --namespace kube-system --name-template addons \
       -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply -f - $LOG
   fi
 
