@@ -22,12 +22,14 @@ Kubernetes: `>= 1.20.0`
 |-----|------|---------|-------------|
 | api.allEtcdEndpoints | string | `""` |  |
 | api.apiAudiences | string | `"istio-ca"` |  |
-| api.awsIamAuth | string | `"false"` |  |
 | api.endpoint | string | `"kube-api.changeme.org:6443"` |  |
 | api.extraArgs | object | `{}` |  |
 | api.listenPort | int | `6443` |  |
 | api.oidcEndpoint | string | `""` | s3://${CFN[ConfigBucket]}/k8s/$CLUSTERNAME |
 | api.serviceAccountIssuer | string | `""` | https://s3.${REGION}.amazonaws.com/${CFN[ConfigBucket]}/k8s/$CLUSTERNAME |
+| awsIamAuth.enabled | bool | `false` |  |
+| awsIamAuth.kubeAdminRole | string | `"arn:aws:iam::000000000000:role/KubernetesNode"` |  |
+| awsIamAuth.workerNodeRole | string | `"arn:aws:iam::000000000000:role/KubernetesNode"` |  |
 | backup.passwordFile | string | `""` | /etc/cloudbender/clusterBackup.passphrase |
 | backup.repository | string | `""` | s3:https://s3.amazonaws.com/${CFN[ConfigBucket]}/k8s/${CLUSTERNAME}/clusterBackup |
 | clusterName | string | `"pleasechangeme"` |  |
@@ -35,13 +37,12 @@ Kubernetes: `>= 1.20.0`
 | etcd.extraArgs | object | `{}` |  |
 | etcd.nodeName | string | `"set_via_cmdline"` |  |
 | highAvailable | bool | `false` |  |
-| kubeAdminRole | string | `"arn:aws:iam::000000000000:role/KubernetesNode"` |  |
 | listenAddress | string | `"0.0.0.0"` | Needs to be set to primary node IP |
+| network.multus.enabled | bool | `true` |  |
+| network.multus.tag | string | `"v3.8"` |  |
 | nodeName | string | `"localhost"` | set to $HOSTNAME |
-| platform | string | `"aws"` | supported values aws,bare-metal |
 | protectKernelDefaults | bool | `true` |  |
 | systemd | bool | `true` | Set to false for openrc, eg. on Gentoo or Alpine |
-| workerNodeRole | string | `"arn:aws:iam::000000000000:role/KubernetesNode"` |  |
 
 ## Resources
 

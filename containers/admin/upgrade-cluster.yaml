@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: kubezero-upgrade
+  name: kubezero-upgrade-v1.21.7
   namespace: kube-system
 spec:
   backoffLimit: 1

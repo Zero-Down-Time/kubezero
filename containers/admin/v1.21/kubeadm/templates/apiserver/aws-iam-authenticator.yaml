@@ -1,4 +1,4 @@
-{{- if eq .Values.platform "aws" }}
+{{- if .Values.api.awsIamAuth.enabled }}
 # clusters refers to the remote service.
 clusters:
   - name: aws-iam-authenticator
