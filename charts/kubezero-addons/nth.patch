@@ -1,0 +1,39 @@
+diff -tuNr charts/aws-node-termination-handler.orig/templates/deployment.yaml charts/aws-node-termination-handler/templates/deployment.yaml
+--- charts/aws-node-termination-handler.orig/templates/deployment.yaml	2021-12-01 16:41:46.713472250 +0100
++++ charts/aws-node-termination-handler/templates/deployment.yaml	2021-12-01 16:41:54.276883046 +0100
+@@ -32,6 +32,13 @@
+           configMap:
+             name: {{ .Values.webhookTemplateConfigMapName }}
+         {{- end }}
++        - name: aws-token
++          projected:
++            sources:
++            - serviceAccountToken:
++                path: token
++                expirationSeconds: 86400
++                audience: "sts.amazonaws.com"
+       priorityClassName: {{ .Values.priorityClassName | quote }}
+       affinity:
+         nodeAffinity:
+@@ -71,6 +78,9 @@
+             - name: "webhook-template"
+               mountPath: "/config/"
+             {{- end }}
++            - name: aws-token
++              mountPath: "/var/run/secrets/sts.amazonaws.com/serviceaccount/"
++              readOnly: true
+           env:
+           - name: NODE_NAME
+             valueFrom:
+diff -tuNr charts/aws-node-termination-handler.orig/values.yaml charts/aws-node-termination-handler/values.yaml
+--- charts/aws-node-termination-handler.orig/values.yaml	2021-12-01 16:41:46.713472250 +0100
++++ charts/aws-node-termination-handler/values.yaml	2021-12-01 16:42:02.350299065 +0100
+@@ -15,7 +15,7 @@
+ nameOverride: ""
+ fullnameOverride: ""
+ 
+-extraEnv: []
++extraEnv: {}
+ 
+ priorityClassName: system-node-critical
+ 

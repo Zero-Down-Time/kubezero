@@ -2,7 +2,7 @@ apiVersion: v2
 name: kubezero-addons
 description: KubeZero umbrella chart for various optional cluster addons
 type: application
-version: 0.2.0
+version: 0.2.1
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
@@ -16,6 +16,6 @@ maintainers:
 dependencies:
   - name: aws-node-termination-handler
     version: 0.16.0
-    repository: https://aws.github.io/eks-charts
+    # repository: https://aws.github.io/eks-charts
     condition: aws-node-termination-handler.enabled
 kubeVersion: ">= 1.20.0"

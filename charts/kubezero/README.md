@@ -1,8 +1,8 @@
 # kubezero
 
-![Version: 1.20.11-4](https://img.shields.io/badge/Version-1.20.11--4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 1.21.7-0](https://img.shields.io/badge/Version-1.21.7--0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
-KubeZero - Bootstrap and ArgoCD Root App of Apps chart
+KubeZero - Root App of Apps chart
 
 **Homepage:** <https://kubezero.com>
 
@@ -10,15 +10,15 @@ KubeZero - Bootstrap and ArgoCD Root App of Apps chart
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Quarky9 |  |  |
+| Stefan Reimer | stefan@zero-downtime.net |  |
 
 ## Requirements
 
-Kubernetes: `>= 1.18.0`
+Kubernetes: `>= 1.20.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.4 |
+| https://cdn.zero-downtime.net/charts | kubezero-lib | >= 0.1.4 |
 
 ## Values
 
@@ -35,9 +35,6 @@ Kubernetes: `>= 1.18.0`
 | aws-ebs-csi-driver.targetRevision | string | `"0.6.4"` |  |
 | aws-efs-csi-driver.enabled | bool | `false` |  |
 | aws-efs-csi-driver.targetRevision | string | `"0.4.2"` |  |
-| calico.enabled | bool | `false` |  |
-| calico.retain | bool | `true` |  |
-| calico.targetRevision | string | `"0.2.2"` |  |
 | cert-manager.enabled | bool | `false` |  |
 | cert-manager.namespace | string | `"cert-manager"` |  |
 | cert-manager.targetRevision | string | `"0.7.3"` |  |
@@ -51,7 +48,7 @@ Kubernetes: `>= 1.18.0`
 | kiam.targetRevision | string | `"0.3.5"` |  |
 | kubezero.defaultTargetRevision | string | `"*"` |  |
 | kubezero.gitSync | object | `{}` |  |
-| kubezero.repoURL | string | `"https://zero-down-time.github.io/kubezero"` |  |
+| kubezero.repoURL | string | `"https://cdn.zero-downtime.net/charts"` |  |
 | kubezero.server | string | `"https://kubernetes.default.svc"` |  |
 | logging.enabled | bool | `false` |  |
 | logging.namespace | string | `"logging"` |  |
@@ -61,6 +58,9 @@ Kubernetes: `>= 1.18.0`
 | metrics.istio.prometheus | object | `{}` |  |
 | metrics.namespace | string | `"monitoring"` |  |
 | metrics.targetRevision | string | `"0.5.4"` |  |
+| network.enabled | bool | `false` |  |
+| network.retain | bool | `true` |  |
+| network.targetRevision | string | `"0.1.0"` |  |
 | storage.enabled | bool | `false` |  |
 | storage.targetRevision | string | `"0.3.2"` |  |
 

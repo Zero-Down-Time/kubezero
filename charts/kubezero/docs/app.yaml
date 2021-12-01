@@ -7,7 +7,7 @@ metadata:
 spec:
   project: kubezero
   source:
-    repoURL: https://zero-down-time.github.io/kubezero
+    repoURL: https://cdn.zero-downtime.net/charts
     chart: kubezero
     targetRevision: {{ .Values.kubezero.version }}
 

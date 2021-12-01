@@ -1,6 +1,6 @@
 kubezero:
   server: https://kubernetes.default.svc
-  repoURL: https://zero-down-time.github.io/kubezero
+  repoURL: https://cdn.zero-downtime.net/charts
   defaultTargetRevision: '*'
   gitSync: {}
 
@@ -10,10 +10,10 @@ addons:
   enabled: false
   targetRevision: 0.1.0
 
-calico:
+network:
   enabled: false
   retain: true
-  targetRevision: 0.2.2
+  targetRevision: 0.1.0
 
 cert-manager:
   enabled: false

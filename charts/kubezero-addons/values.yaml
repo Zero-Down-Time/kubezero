@@ -15,8 +15,15 @@ aws-node-termination-handler:
 
   enableSqsTerminationDraining: true
 
-  # -- SQS queue ARN from kube controller stack
+  # -- https://sqs.${AWS::Region}.amazonaws.com/${AWS::AccountId}/${ClusterName}_Nth
   queueURL: ""
+
+  metadataTries: 0
+  extraEnv:
+    # -- "arn:aws:iam::${AWS::AccountId}:role/${AWS::Region}.${ClusterName}.awsNth"
+    AWS_ROLE_ARN: ""
+    AWS_WEB_IDENTITY_TOKEN_FILE: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
+    AWS_STS_REGIONAL_ENDPOINTS: "regional"
 
   deleteLocalData: true
   taintNode: true
