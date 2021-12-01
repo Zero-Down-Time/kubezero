@@ -1,8 +1,8 @@
-# kubezero-calico
+# calico
 
 ![Version: 0.2.2](https://img.shields.io/badge/Version-0.2.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v3.16.5](https://img.shields.io/badge/AppVersion-v3.16.5-informational?style=flat-square)
 
-KubeZero Umbrella Chart for Calico
+KubeZero Chart for Calico
 
 **Homepage:** <https://kubezero.com>
 
@@ -14,7 +14,7 @@ KubeZero Umbrella Chart for Calico
 
 ## Requirements
 
-Kubernetes: `>= 1.16.0`
+Kubernetes: `>= 1.20.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
