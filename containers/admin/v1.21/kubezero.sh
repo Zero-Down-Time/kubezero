@@ -3,6 +3,7 @@ set -e
 
 WORKDIR=/tmp/kubezero
 HOSTFS=/host
+VERSION=v1.21
 
 export KUBECONFIG="${HOSTFS}/root/.kube/config"
 
@@ -138,27 +139,26 @@ if [ "$1" == 'upgrade' ]; then
   ######################
   helm repo add kubezero https://cdn.zero-downtime.net/charts/
 
-  # if Calico, install multus to prepare migration
-  kubectl get ds calico-node -n kube-system && \
-    helm template kubezero/kubezero-network --version 0.1.0 --include-crds --namespace kube-system --kube-version $KUBE_VERSION --name-template network \
-      --set multus.enabled=true \
-      | kubectl apply -f - $LOG
+  # network
+  yq eval '.network // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
+  helm template kubezero/kubezero-network --version 0.1.0 --include-crds --namespace kube-system --name-template network \
+    -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply -f - $LOG
 
-  # migrate backup
-  if [ -f ${HOSTFS}/usr/local/sbin/backup_control_plane.sh ]; then
-    _repo=$(grep "export RESTIC_REPOSITORY" ${HOSTFS}/usr/local/sbin/backup_control_plane.sh)
-    helm template kubezero/kubezero-addons --version 0.2.1 --include-crds --namespace kube-system --kube-version $KUBE_VERSION --name-template addons \
-      --set clusterBackup.enabled=true \
-      --set clusterBackup.repository="${_repo##*=}" \
-      --set clusterBackup.password="$(cat ${HOSTFS}/etc/kubernetes/clusterBackup.passphrase)" \
-    | kubectl apply -f - $LOG
-  fi
+  # addons
+  yq eval '.addons // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
+  helm template kubezero/kubezero-addons --version 0.2.2 --include-crds --namespace kube-system --name-template addons \
+    -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply -f - $LOG
 
   ######################
 
+  # Execute cluster backup to allow new controllers to join
+  kubectl create job backup-cluster-now --from=cronjob/kubezero-backup -n kube-system
+
+  # That might take a while as the backup pod needs the CNIs to come online etc.
+  retry 10 30 40 kubectl wait --for=condition=complete job/backup-cluster-now -n kube-system && kubectl delete job backup-cluster-now -n kube-system
 
   # Cleanup after kubeadm on the host
-  rm -rf /etc/kubernetes/tmp
+  rm -rf ${HOSTFS}/etc/kubernetes/tmp
 
   echo "Successfully upgraded cluster."
 
@@ -169,6 +169,30 @@ if [ "$1" == 'upgrade' ]; then
   # Removed:
   # - update oidc do we need that ?
 
+elif [[ "$1" == 'node-upgrade' ]]; then
+
+  echo "Starting node upgrade ..."
+
+  if [ -f ${HOSTFS}/usr/local/sbin/backup_control_plane.sh ]; then
+    mv ${HOSTFS}/usr/local/sbin/backup_control_plane.sh ${HOSTFS}/usr/local/sbin/backup_control_plane.disabled
+    echo "Disabled old cluster backup OS cronjob"
+  fi
+
+  echo "Migrating kubezero.yaml"
+
+  export restic_repo=$(grep "export RESTIC_REPOSITORY" ${HOSTFS}/usr/local/sbin/backup_control_plane.disabled | sed -e 's/.*=//' | sed -e 's/"//g')
+  export restic_pw="$(cat ${HOSTFS}/etc/cloudbender/clusterBackup.passphrase)"
+  export REGION=$(kubectl get node $NODE_NAME -o yaml | yq eval '.metadata.labels."topology.kubernetes.io/region"' -)
+
+  # enable backup and awsIamAuth. multus, match other reorg
+  yq -Mi e '.api.awsIamAuth.enabled = "true" | .api.awsIamAuth.workerNodeRole = .workerNodeRole | .api.awsIamAuth.kubeAdminRole = .kubeAdminRole
+    | .api.serviceAccountIssuer = .serviceAccountIssuer | .api.apiAudiences = "istio-ca,sts.amazonaws.com"
+    | .network.multus.enabled = "true"
+    | .addons.clusterBackup.enabled = "true" | .addons.clusterBackup.repository = strenv(restic_repo) | .addons.clusterBackup.password = strenv(restic_pw)
+    | .addons.clusterBackup.extraEnv[0].name = "AWS_DEFAULT_REGION" | .addons.clusterBackup.extraEnv[0].value = strenv(REGION)
+    ' ${HOSTFS}/etc/kubernetes/kubezero.yaml
+
+  echo "All done."
 
 elif [[ "$1" =~ "^(bootstrap|recover|join)$" ]]; then
 
@@ -223,8 +247,8 @@ elif [[ "$1" =~ "^(bootstrap|recover|join)$" ]]; then
     yq eval -M ".clusters[0].cluster.certificate-authority-data = \"$(cat ${HOSTFS}/etc/kubernetes/pki/ca.crt | base64 -w0)\"" ${WORKDIR}/kubeadm/templates/admin-aws-iam.yaml > ${HOSTFS}/etc/kubernetes/admin-aws-iam.yaml
   fi
 
-  # Install some basics on bootstrap
-  if [[ "$1" =~ "^(bootstrap)$" ]]; then
+  # Install some basics on bootstrap and join for 1.21.7 to get new modules in place
+  if [[ "$1" =~ "^(bootstrap|join|recover)$" ]]; then
     helm repo add kubezero https://cdn.zero-downtime.net/charts/
 
     # network
@@ -234,7 +258,7 @@ elif [[ "$1" =~ "^(bootstrap|recover|join)$" ]]; then
 
     # addons
     yq eval '.addons // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
-    helm template kubezero/kubezero-addons --version 0.2.1 --include-crds --namespace kube-system --name-template addons \
+    helm template kubezero/kubezero-addons --version 0.2.2 --include-crds --namespace kube-system --name-template addons \
       -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply -f - $LOG
   fi
 
@@ -263,15 +287,20 @@ elif [ "$1" == 'backup' ]; then
 
   # Backup via restic
   restic snapshots || restic init
-  restic backup ${WORKDIR} -H $CLUSTERNAME
+  restic backup ${WORKDIR} -H $CLUSTERNAME --tag $VERSION
 
   echo "Backup complete"
+
+  # Remove all previous
+  restic forget --keep-tag $VERSION --prune
+
   restic forget --keep-hourly 24 --keep-daily ${RESTIC_RETENTION:-7} --prune
+
 
 elif [ "$1" == 'restore' ]; then
   mkdir -p ${WORKDIR}
 
-  restic restore latest --no-lock -t /
+  restic restore latest --no-lock -t / --tag $VERSION
 
   # Make last etcd snapshot available
   cp ${WORKDIR}/etcd_snapshot ${HOSTFS}/etc/kubernetes
