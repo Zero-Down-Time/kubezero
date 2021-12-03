@@ -12,8 +12,8 @@ Kubernetes: `>= 1.18.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.3 |
 | https://charts.jetstack.io | cert-manager | 1.5.3 |
-| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## AWS - IAM Role
 If you use kiam or kube2iam and restrict access on nodes running cert-manager please adjust:

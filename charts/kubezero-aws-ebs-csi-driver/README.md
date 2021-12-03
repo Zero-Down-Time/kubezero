@@ -24,7 +24,7 @@ Kubernetes: `>= 1.18.0`
 | Repository | Name | Version |
 |------------|------|---------|
 |  | aws-ebs-csi-driver | 1.2.4 |
-| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.3 |
 
 ## IAM Role
 If you use kiam or kube2iam and restrict access on nodes running this controller please adjust:

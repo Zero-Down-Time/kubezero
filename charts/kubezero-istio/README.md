@@ -23,7 +23,7 @@ Kubernetes: `>= 1.18.0`
 |  | base | 1.11.3 |
 |  | istio-discovery | 1.11.3 |
 |  | kiali-server | 1.38.1 |
-| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.4 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.4 |
 
 ## Values
 

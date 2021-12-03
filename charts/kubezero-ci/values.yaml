@@ -69,3 +69,6 @@ gitea:
 
 jenkins:
   enabled: false
+
+teamcity:
+  enabled: false

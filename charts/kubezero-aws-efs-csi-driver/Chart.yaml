@@ -19,7 +19,7 @@ maintainers:
 dependencies:
   - name: kubezero-lib
     version: ">= 0.1.3"
-    repository: https://zero-down-time.github.io/kubezero/
+    repository: https://cdn.zero-downtime.net/charts/
   - name: aws-efs-csi-driver
     version: 2.1.3
     # repository: https://kubernetes-sigs.github.io/aws-efs-csi-driver/

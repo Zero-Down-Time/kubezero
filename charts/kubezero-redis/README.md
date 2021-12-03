@@ -1,6 +1,6 @@
 # kubezero-redis
 
-![Version: 0.2.2](https://img.shields.io/badge/Version-0.2.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.3.5](https://img.shields.io/badge/Version-0.3.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Redis HA
 
@@ -18,9 +18,9 @@ Kubernetes: `>= 1.18.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://charts.bitnami.com/bitnami | redis | 12.1.1 |
-| https://charts.bitnami.com/bitnami | redis-cluster | 4.1.0 |
-| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.3 |
+| https://charts.bitnami.com/bitnami | redis | 15.5.4 |
+| https://charts.bitnami.com/bitnami | redis-cluster | 6.3.9 |
 
 ## Values
 
@@ -32,18 +32,16 @@ Kubernetes: `>= 1.18.0`
 | redis-cluster.enabled | bool | `false` |  |
 | redis-cluster.metrics.enabled | bool | `false` |  |
 | redis-cluster.metrics.serviceMonitor.enabled | bool | `false` |  |
-| redis-cluster.metrics.serviceMonitor.selector.release | string | `"metrics"` |  |
 | redis-cluster.persistence.enabled | bool | `false` |  |
-| redis-cluster.redisPort | int | `6379` |  |
 | redis-cluster.usePassword | bool | `false` |  |
-| redis.cluster.slaveCount | int | `0` |  |
+| redis.architecture | string | `"standalone"` |  |
+| redis.auth.enabled | bool | `false` |  |
 | redis.enabled | bool | `false` |  |
 | redis.master.persistence.enabled | bool | `false` |  |
 | redis.metrics.enabled | bool | `false` |  |
 | redis.metrics.serviceMonitor.enabled | bool | `false` |  |
-| redis.metrics.serviceMonitor.selector.release | string | `"metrics"` |  |
-| redis.redisPort | int | `6379` |  |
-| redis.usePassword | bool | `false` |  |
+| redis.replica.replicaCount | int | `0` |  |
+| snapshotgroups | object | `{}` |  |
 
 # Dashboards
 https://grafana.com/grafana/dashboards/11835

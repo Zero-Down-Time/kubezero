@@ -36,6 +36,9 @@ spec:
                 secretKeyRef: 
                   name: kubezero-backup-restic
                   key: password 
+            {{- with .Values.clusterBackup.extraEnv }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
             #securityContext:
             # readOnlyRootFilesystem: true
           hostNetwork: true
