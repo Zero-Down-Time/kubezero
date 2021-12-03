@@ -1,6 +1,6 @@
 # kubezero-mq
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.2.2](https://img.shields.io/badge/Version-0.2.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for MQ systems like NATS, RabbitMQ
 
@@ -18,9 +18,9 @@ Kubernetes: `>= 1.18.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | nats | 0.8.3 |
+|  | nats | 0.8.4 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.3 |
 | https://charts.bitnami.com/bitnami | rabbitmq | 8.13.1 |
-| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
 
 ## Values
 
@@ -28,8 +28,10 @@ Kubernetes: `>= 1.18.0`
 |-----|------|---------|-------------|
 | nats.enabled | bool | `false` |  |
 | nats.exporter.serviceMonitor.enabled | bool | `false` |  |
+| nats.istio.enabled | bool | `false` |  |
+| nats.istio.gateway | string | `"istio-ingress/private-ingressgateway"` |  |
+| nats.mqtt.enabled | bool | `false` |  |
 | nats.nats.advertise | bool | `false` |  |
-| nats.nats.image | string | `"nats:2.2.1-alpine3.13"` |  |
 | nats.nats.jetstream.enabled | bool | `true` |  |
 | nats.natsbox.enabled | bool | `false` |  |
 | rabbitmq.auth.erlangCookie | string | `"randomlongerlangcookie"` |  |

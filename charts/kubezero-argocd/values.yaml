@@ -67,7 +67,7 @@ argo-cd:
       url: argocd.example.com
 
       #repositories: |
-      #  - url: https://zero-down-time.github.io/kubezero.git
+      #  - url: https://cdn.zero-downtime.net/charts
 
       resource.customizations: |
         cert-manager.io/Certificate:

@@ -1,6 +1,6 @@
 # kubezero-aws-efs-csi-driver
 
-![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![AppVersion: 1.3.1](https://img.shields.io/badge/AppVersion-1.3.1-informational?style=flat-square)
+![Version: 0.4.2](https://img.shields.io/badge/Version-0.4.2-informational?style=flat-square) ![AppVersion: 1.3.2](https://img.shields.io/badge/AppVersion-1.3.2-informational?style=flat-square)
 
 KubeZero Umbrella Chart for aws-efs-csi-driver
 
@@ -23,8 +23,8 @@ Kubernetes: `>=1.18.0-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | aws-efs-csi-driver | 2.1.1 |
-| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.3 |
+|  | aws-efs-csi-driver | 2.1.3 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.3 |
 
 ## Storage Class
 Optionally creates the *efs-cs* storage class.
@@ -48,5 +48,8 @@ Details also see: [Reserve PV](https://kubernetes.io/docs/concepts/storage/persi
 | aws-efs-csi-driver.node.resources.limits.memory | string | `"128Mi"` |  |
 | aws-efs-csi-driver.node.resources.requests.cpu | string | `"20m"` |  |
 | aws-efs-csi-driver.node.resources.requests.memory | string | `"64Mi"` |  |
+| aws-efs-csi-driver.node.tolerations[0].effect | string | `"NoSchedule"` |  |
+| aws-efs-csi-driver.node.tolerations[0].key | string | `"kubezero-workergroup"` |  |
+| aws-efs-csi-driver.node.tolerations[0].operator | string | `"Exists"` |  |
 | aws-efs-csi-driver.replicaCount | int | `1` |  |
 | aws-efs-csi-driver.storageClasses[0].name | string | `"efs-sc"` |  |

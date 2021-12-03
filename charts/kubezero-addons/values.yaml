@@ -7,13 +7,20 @@ clusterBackup:
 
   repository: ""
   password: ""
+  extraEnv: []
 
 aws-node-termination-handler:
   enabled: false
 
   fullnameOverride: "aws-node-termination-handler"
 
+  # -- "aws-node-termination-handler/${ClusterName}"
+  managedAsgTag: "aws-node-termination-handler/managed"
+
   enableSqsTerminationDraining: true
+  deleteLocalData: true
+  ignoreDaemonSets: true
+  taintNode: true
 
   # -- https://sqs.${AWS::Region}.amazonaws.com/${AWS::AccountId}/${ClusterName}_Nth
   queueURL: ""
@@ -24,9 +31,6 @@ aws-node-termination-handler:
     AWS_ROLE_ARN: ""
     AWS_WEB_IDENTITY_TOKEN_FILE: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
     AWS_STS_REGIONAL_ENDPOINTS: "regional"
-
-  deleteLocalData: true
-  taintNode: true
 
   enablePrometheusServer: false
   podMonitor:

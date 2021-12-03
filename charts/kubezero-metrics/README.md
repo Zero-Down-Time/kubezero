@@ -20,8 +20,8 @@ Kubernetes: `>= 1.18.0`
 |------------|------|---------|
 |  | kube-prometheus-stack | 18.1.0 |
 |  | prometheus-pushgateway | 1.10.1 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.4 |
 | https://prometheus-community.github.io/helm-charts | prometheus-adapter | 2.17 |
-| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.4 |
 
 ## Values
 
@@ -75,6 +75,12 @@ Kubernetes: `>= 1.18.0`
 | kube-prometheus-stack.alertmanager.alertmanagerSpec.volumes[0].projected.sources[0].serviceAccountToken.audience | string | `"sts.amazonaws.com"` |  |
 | kube-prometheus-stack.alertmanager.alertmanagerSpec.volumes[0].projected.sources[0].serviceAccountToken.expirationSeconds | int | `86400` |  |
 | kube-prometheus-stack.alertmanager.alertmanagerSpec.volumes[0].projected.sources[0].serviceAccountToken.path | string | `"token"` |  |
+| kube-prometheus-stack.alertmanager.config.global.resolve_timeout | string | `"5m"` |  |
+| kube-prometheus-stack.alertmanager.config.route.group_by[0] | string | `"severity"` |  |
+| kube-prometheus-stack.alertmanager.config.route.group_by[1] | string | `"clusterName"` |  |
+| kube-prometheus-stack.alertmanager.config.route.group_interval | string | `"5m"` |  |
+| kube-prometheus-stack.alertmanager.config.route.group_wait | string | `"30s"` |  |
+| kube-prometheus-stack.alertmanager.config.route.repeat_interval | string | `"6h"` |  |
 | kube-prometheus-stack.alertmanager.enabled | bool | `false` |  |
 | kube-prometheus-stack.coreDns.enabled | bool | `true` |  |
 | kube-prometheus-stack.defaultRules.create | bool | `false` |  |
@@ -82,7 +88,7 @@ Kubernetes: `>= 1.18.0`
 | kube-prometheus-stack.grafana."grafana.ini"."auth.anonymous".enabled | bool | `true` |  |
 | kube-prometheus-stack.grafana."grafana.ini".alerting.enabled | bool | `false` |  |
 | kube-prometheus-stack.grafana."grafana.ini".analytics.check_for_updates | bool | `false` |  |
-| kube-prometheus-stack.grafana."grafana.ini".dashboards.default_home_dashboard_path | string | `"/tmp/dashboards/home.json"` |  |
+| kube-prometheus-stack.grafana."grafana.ini".dashboards.default_home_dashboard_path | string | `"/tmp/dashboards/KubeZero/home.json"` |  |
 | kube-prometheus-stack.grafana."grafana.ini".dashboards.min_refresh_interval | string | `"30s"` |  |
 | kube-prometheus-stack.grafana."grafana.ini".date_formats.default_timezone | string | `"UTC"` |  |
 | kube-prometheus-stack.grafana."grafana.ini".security.cookie_secure | bool | `true` |  |

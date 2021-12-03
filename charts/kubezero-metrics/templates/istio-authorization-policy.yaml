@@ -7,7 +7,7 @@ metadata:
   name: {{ $name }}-deny-not-in-ipblocks
   namespace: istio-system
   labels:
-{{ include "kubezero-lib.labels" $ | indent 4 }}
+    {{- include "kubezero-lib.labels" $ | nindent 4 }}
 spec:
   selector:
     matchLabels:

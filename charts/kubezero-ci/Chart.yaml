@@ -2,19 +2,21 @@ apiVersion: v2
 name: kubezero-ci
 description: KubeZero umbrella chart for all things CI
 type: application
-version: 0.2.0
+version: 0.2.5
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
   - kubezero
   - jenkins
   - goCD
+  - teamcity
+  - gitea
 maintainers:
   - name: Quarky9
 dependencies:
   - name: kubezero-lib
     version: ">= 0.1.4"
-    repository: https://zero-down-time.github.io/kubezero/
+    repository: https://cdn.zero-downtime.net/charts/
   - name: gocd
     version: 1.39.4
     repository: https://gocd.github.io/helm-chart
@@ -23,5 +25,8 @@ dependencies:
     version: 4.1.1
     repository: https://dl.gitea.io/charts/
     condition: gitea.enabled
+  - name: teamcity
+    version: 0.1.0
+    condition: teamcity.enabled
 
 kubeVersion: ">= 1.18.0"

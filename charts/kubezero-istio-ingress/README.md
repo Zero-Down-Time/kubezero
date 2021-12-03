@@ -22,7 +22,7 @@ Kubernetes: `>= 1.18.0`
 |------------|------|---------|
 |  | istio-ingress | 1.11.3 |
 |  | istio-private-ingress | 1.11.3 |
-| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.4 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.4 |
 
 ## Values
 
