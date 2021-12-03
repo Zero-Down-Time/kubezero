@@ -1,0 +1,57 @@
+# Default values for teamcity.
+
+agentReplicaCount: 0
+
+image:
+  server:
+    repository: jetbrains/teamcity-server
+  agent:
+    repository: jetbrains/teamcity-agent
+  tag: ""
+  pullPolicy: IfNotPresent
+
+pvc:
+  data:
+    #storageClass: default
+    storageSize: 4Gi
+  logs:
+    #storageClass: default
+    storageSize: 1Gi
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+rbac:
+  create: true
+
+podAnnotations: {}
+
+podSecurityContext:
+  fsGroup: 1000
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 8111
+
+istio:
+  enabled: false
+  gateway: istio-ingress/private-ingressgateway
+  url: "" # tc.example.com
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
