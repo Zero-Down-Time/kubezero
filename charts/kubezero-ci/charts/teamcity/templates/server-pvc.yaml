@@ -1,0 +1,33 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "teamcity.fullname" . }}-data
+  labels:
+    {{- include "kubezero-lib.labels" . | nindent 4 }}
+spec:
+{{- if .Values.pvc.data.storageClass }}
+  storageClassName: {{ .Values.pvc.data.storageClass }}
+{{- end }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.pvc.data.storageSize }}
+
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "teamcity.fullname" . }}-logs
+  labels:
+    {{- include "kubezero-lib.labels" . | nindent 4 }}
+spec:
+{{- if .Values.pvc.logs.storageClass }}
+  storageClassName: {{ .Values.pvc.logs.storageClass }}
+{{- end }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.pvc.logs.storageSize }}
