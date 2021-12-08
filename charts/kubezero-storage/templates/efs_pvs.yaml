@@ -1,4 +1,5 @@
-{{- range .Values.PersistentVolumes }}
+{{- if index .Values "aws-efs-csi-driver" "enabled" }}
+{{- range ( index .Values "aws-efs-csi-driver" "PersistentVolumes" ) }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -25,4 +26,5 @@ spec:
   {{- . | toYaml | nindent 4 }}
   {{- end }}
 ---
+{{- end }}
 {{- end }}

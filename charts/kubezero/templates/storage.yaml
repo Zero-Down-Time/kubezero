@@ -10,6 +10,34 @@ gemini:
   {{- toYaml . | nindent 2 }}
 {{- end }}
 
+aws-ebs-csi-driver:
+  enabled: {{ default false (index .Values "storage" "aws-ebs-csi-driver" "enabled")}}
+  controller:
+    replicaCount: {{ ternary 2 1 .Values.HighAvailableControlplane }}
+    k8sTagClusterId: {{ .Values.ClusterName }}
+    env:
+    - name: AWS_ROLE_ARN
+      value: {{ index .Values "storage" "aws-ebs-csi-driver" "IamArn" | quote }}
+    - name: AWS_WEB_IDENTITY_TOKEN_FILE
+      value: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
+    - name: AWS_STS_REGIONAL_ENDPOINTS
+      value: regional
+
+aws-efs-csi-driver:
+  enabled: {{ default false (index .Values "storage" "aws-efs-csi-driver" "enabled")}}
+  controller:
+    extraEnv:
+    - name: AWS_ROLE_ARN
+      value: {{ index .Values "storage" "aws-efs-csi-driver" "IamArn" | quote }}
+    - name: AWS_WEB_IDENTITY_TOKEN_FILE
+      value: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
+    - name: AWS_STS_REGIONAL_ENDPOINTS
+      value: regional
+  {{- with index .Values "storage" "aws-efs-csi-driver" "PersistentVolumes" }}
+  PersistentVolumes:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+
 {{- end }}
 
 {{- define "storage-argo" }}

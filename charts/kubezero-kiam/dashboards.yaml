@@ -1,8 +1,0 @@
-configmap: grafana-dashboards-kiam
-condition: '.Values.kiam.server.prometheus.servicemonitor.enabled'
-gzip: true
-folder: AWS
-dashboards:
-- name: kiam
-  url: https://raw.githubusercontent.com/uswitch/kiam/master/docs/dashboard-prom.json
-  tags: ['AWS']

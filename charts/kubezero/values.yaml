@@ -20,19 +20,12 @@ cert-manager:
   namespace: cert-manager
   targetRevision: 0.7.3
 
+# deprecated - removed with 1.22
 kiam:
   enabled: false
   targetRevision: 0.3.5
 
 storage:
-  enabled: false
-  targetRevision: 0.3.2
-
-aws-ebs-csi-driver:
-  enabled: false
-  targetRevision: 0.6.4
-
-aws-efs-csi-driver:
   enabled: false
   targetRevision: 0.4.2
 
@@ -62,6 +55,6 @@ logging:
 argocd:
   enabled: false
   namespace: argocd
-  targetRevision: 0.8.7
+  targetRevision: 0.8.8
   istio:
     enabled: false
