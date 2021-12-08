@@ -55,6 +55,6 @@ logging:
 argocd:
   enabled: false
   namespace: argocd
-  targetRevision: 0.8.8
+  targetRevision: 0.9.0
   istio:
     enabled: false
