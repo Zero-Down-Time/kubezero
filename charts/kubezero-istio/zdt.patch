@@ -73,7 +73,7 @@ diff -tubr istio/manifests/charts/istio-control/istio-discovery/templates/deploy
        securityContext:
          fsGroup: 1337
 +      nodeSelector:
-+        node-role.kubernetes.io/master: ""
++        node-role.kubernetes.io/control-plane: ""
 +      tolerations:
 +      - effect: NoSchedule
 +        key: node-role.kubernetes.io/master

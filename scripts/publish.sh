@@ -18,12 +18,12 @@ do
     name=$(basename $dir)
     [[ $name =~ $CHARTS ]] || continue
 
-    if [ $(helm dep list $dir 2>/dev/null| wc -l) -gt 1 ]
-    then
-        echo "Processing chart dependencies"
-        rm -rf $dir/tmpcharts
-        helm dependency update --skip-refresh $dir
-    fi
+    #if [ $(helm dep list $dir 2>/dev/null| wc -l) -gt 1 ]
+    #then
+    #    echo "Processing chart dependencies"
+    #    rm -rf $dir/tmpcharts
+    #    helm dependency update --skip-refresh $dir
+    #fi
 
     echo "Processing $dir"
     helm lint $dir
@@ -34,7 +34,9 @@ curl -L -s -o $TMPDIR/index.yaml ${REPO_URL}/index.yaml
 
 helm repo index $TMPDIR --url $REPO_URL --merge $TMPDIR/index.yaml
 
-aws s3 cp $TMPDIR/*.tgz $REPO_URL_S3/ 
+for p in $TMPDIR/*.tgz; do
+  aws s3 cp $p $REPO_URL_S3/
+done
 aws s3 cp $TMPDIR/index.yaml $REPO_URL_S3/ --cache-control max-age=1
 
 rm -rf $TMPDIR

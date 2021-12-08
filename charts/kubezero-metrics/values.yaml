@@ -57,7 +57,7 @@ kube-prometheus-stack:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
     nodeSelector:
-      node-role.kubernetes.io/master: ""
+      node-role.kubernetes.io/control-plane: ""
     resources:
       requests:
         cpu: 20m
@@ -71,7 +71,7 @@ kube-prometheus-stack:
         - key: node-role.kubernetes.io/master
           effect: NoSchedule
         nodeSelector:
-          node-role.kubernetes.io/master: ""
+          node-role.kubernetes.io/control-plane: ""
 
   nodeExporter:
     enabled: true
@@ -191,7 +191,7 @@ kube-prometheus-stack:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
     nodeSelector:
-      node-role.kubernetes.io/master: ""
+      node-role.kubernetes.io/control-plane: ""
 
   # Todo
   alertmanager:
@@ -276,7 +276,7 @@ prometheus-adapter:
   - key: node-role.kubernetes.io/master
     effect: NoSchedule
   nodeSelector:
-    node-role.kubernetes.io/master: ""
+    node-role.kubernetes.io/control-plane: ""
   # Basic rules for HPA to work replacing heaptster, taken from kube-prometheus project
   # https://github.com/coreos/kube-prometheus/blob/master/manifests/prometheus-adapter-configMap.yaml
   rules:
