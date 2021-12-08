@@ -8,7 +8,7 @@ eck-operator:
   - key: node-role.kubernetes.io/master
     effect: NoSchedule
   nodeSelector:
-    node-role.kubernetes.io/master: ""
+    node-role.kubernetes.io/control-plane: ""
 
 # Version for ElasticSearch and Kibana have to match so we define it at top-level
 version: 7.13.4

@@ -50,7 +50,7 @@ cert-manager:
   - key: node-role.kubernetes.io/master
     effect: NoSchedule
   nodeSelector:
-    node-role.kubernetes.io/master: ""
+    node-role.kubernetes.io/control-plane: ""
 
   ingressShim:
     defaultIssuerName: letsencrypt-dns-prod
@@ -61,14 +61,14 @@ cert-manager:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
     nodeSelector:
-      node-role.kubernetes.io/master: ""
+      node-role.kubernetes.io/control-plane: ""
 
   cainjector:
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
     nodeSelector:
-      node-role.kubernetes.io/master: ""
+      node-role.kubernetes.io/control-plane: ""
 
   extraArgs:
     - "--dns01-recursive-nameservers-only"
