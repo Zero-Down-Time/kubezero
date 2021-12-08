@@ -46,6 +46,8 @@ aws-ebs-csi-driver:
     replicaCount: 1
     logLevel: 2
 
+    defaultFsType: xfs
+
     nodeSelector:
       node-role.kubernetes.io/control-plane: ""
     tolerations:
@@ -76,6 +78,14 @@ aws-ebs-csi-driver:
     - key: kubezero-workergroup
       effect: NoSchedule
       operator: Exists
+
+    resources:
+      requests:
+        cpu: 10m
+        memory: 16Mi
+      limits:
+        # cpu: 50m
+        memory: 32Mi
 
   storageClasses:
   - name: ebs-sc-gp2-xfs
