@@ -2,7 +2,7 @@
 
 ![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
-KubeZero umbrella chart for all things storage incl. backup, eg. openEBS-lvm, gemini
+KubeZero umbrella chart for all things storage incl. AWS EBS/EFS, openEBS-lvm, gemini
 
 **Homepage:** <https://kubezero.com>
 
@@ -10,25 +10,26 @@ KubeZero umbrella chart for all things storage incl. backup, eg. openEBS-lvm, ge
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Quarky9 |  |  |
+| Stefan Reimer | stefan@zero-downtime.net |  |
 
 ## Requirements
 
-Kubernetes: `>= 1.18.0`
+Kubernetes: `>= 1.20.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | aws-ebs-csi-driver | 2.3.0 |
-|  | aws-efs-csi-driver | 2.1.5 |
-|  | gemini | 0.0.7 |
-|  | lvm-localpv | 0.8.5 |
+|  | aws-ebs-csi-driver | 2.5.0 |
+|  | aws-efs-csi-driver | 2.2.0 |
+|  | gemini | 0.0.8 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.4 |
+| https://openebs.github.io/lvm-localpv | lvm-localpv | 0.8.5 |
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | aws-ebs-csi-driver.controller.logLevel | int | `2` |  |
-| aws-ebs-csi-driver.controller.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
+| aws-ebs-csi-driver.controller.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | aws-ebs-csi-driver.controller.replicaCount | int | `1` |  |
 | aws-ebs-csi-driver.controller.resources.limits.memory | string | `"40Mi"` |  |
 | aws-ebs-csi-driver.controller.resources.requests.cpu | string | `"10m"` |  |
@@ -52,9 +53,16 @@ Kubernetes: `>= 1.18.0`
 | aws-ebs-csi-driver.storageClasses[1].parameters.encrypted | string | `"true"` |  |
 | aws-ebs-csi-driver.storageClasses[1].parameters.type | string | `"gp3"` |  |
 | aws-ebs-csi-driver.storageClasses[1].volumeBindingMode | string | `"WaitForFirstConsumer"` |  |
+| aws-efs-csi-driver.PersistentVolumes[0].claimRef.name | string | `"foo-pvc"` |  |
+| aws-efs-csi-driver.PersistentVolumes[0].claimRef.namespace | string | `"foo"` |  |
+| aws-efs-csi-driver.PersistentVolumes[0].mountOptions[0] | string | `"tls"` |  |
+| aws-efs-csi-driver.PersistentVolumes[0].name | string | `"example-pv"` |  |
+| aws-efs-csi-driver.PersistentVolumes[0].volumeHandle | string | `"<efs-id>:/path"` |  |
+| aws-efs-csi-driver.PersistentVolumes[1].name | string | `"example-pv2"` |  |
+| aws-efs-csi-driver.PersistentVolumes[1].volumeHandle | string | `"<efs-id>:/path2"` |  |
 | aws-efs-csi-driver.controller.create | bool | `true` |  |
 | aws-efs-csi-driver.controller.logLevel | int | `2` |  |
-| aws-efs-csi-driver.controller.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
+| aws-efs-csi-driver.controller.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | aws-efs-csi-driver.controller.tolerations[0].effect | string | `"NoSchedule"` |  |
 | aws-efs-csi-driver.controller.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | aws-efs-csi-driver.enabled | bool | `false` |  |
@@ -85,7 +93,6 @@ Kubernetes: `>= 1.18.0`
 | lvm-localpv.lvmNode.tolerations[0].effect | string | `"NoSchedule"` |  |
 | lvm-localpv.lvmNode.tolerations[0].key | string | `"kubezero-workergroup"` |  |
 | lvm-localpv.lvmNode.tolerations[0].operator | string | `"Exists"` |  |
-| lvm-localpv.storageCapacity | bool | `false` |  |
 | lvm-localpv.storageClass.default | bool | `false` |  |
 | lvm-localpv.storageClass.vgpattern | string | `""` |  |
 

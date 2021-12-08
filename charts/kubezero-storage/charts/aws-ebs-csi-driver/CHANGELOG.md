@@ -1,5 +1,22 @@
 # Helm chart
 
+## v2.5.0
+
+* Bump app/driver version to `v1.5.0`
+
+
+## v2.4.1
+
+* Replace deprecated arg `--extra-volume-tags` by `--extra-tags`
+
+## v2.4.0
+
+* Bump app/driver version to `v1.4.0`
+
+## v2.3.1
+
+* Bump app/driver version to `v1.3.1`
+
 ## v2.3.0
 
 * Support overriding controller `--default-fstype` flag via values

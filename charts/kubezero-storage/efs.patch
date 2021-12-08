@@ -1,14 +1,6 @@
 diff -tubNr charts/aws-efs-csi-driver/templates/controller-deployment.yaml charts/aws-efs-csi-driver.zdt/templates/controller-deployment.yaml
 --- charts/aws-efs-csi-driver/templates/controller-deployment.yaml	2021-06-25 22:43:06.000000000 +0200
 +++ charts/aws-efs-csi-driver.zdt/templates/controller-deployment.yaml	2021-07-15 00:37:28.960305011 +0200
-@@ -23,7 +23,6 @@
-       annotations: {{- toYaml . | nindent 8 }}
-       {{- end }}
-     spec:
--      hostNetwork: true 
-       {{- if .Values.imagePullSecrets }}
-       imagePullSecrets:
-         {{- range .Values.imagePullSecrets }}
 @@ -57,9 +56,14 @@
            env:
              - name: CSI_ENDPOINT

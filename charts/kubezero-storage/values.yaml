@@ -16,7 +16,7 @@ lvm-localpv:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
     nodeSelector:
-      node-role.kubernetes.io/master: ""
+      node-role.kubernetes.io/control-plane: ""
 
   storageClass:
     vgpattern: ""
@@ -47,12 +47,13 @@ aws-ebs-csi-driver:
     logLevel: 2
 
     nodeSelector:
-      node-role.kubernetes.io/master: ""
+      node-role.kubernetes.io/control-plane: ""
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
 
     # k8sTagClusterId: <CLUSTER_NAME>
+    # region: <AWS_DEFAULT_REGION>
 
     #env:
     #  ebsPlugin:
@@ -108,7 +109,7 @@ aws-efs-csi-driver:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
     nodeSelector:
-      node-role.kubernetes.io/master: ""
+      node-role.kubernetes.io/control-plane: ""
 
     #extraEnv:
     #- name: AWS_ROLE_ARN
@@ -143,14 +144,14 @@ aws-efs-csi-driver:
   storageClasses:
   - name: efs-sc
 
-#PersistentVolumes:
-#  - name: example-pv
-#    mountOptions:
-#    - tls
-#    volumeHandle: "<efs-id>:/path"
-#    claimRef:
-#      name: foo-pvc
-#      namespace: foo
-#
-#  - name: example-pv2
-#    volumeHandle: "<efs-id>:/path2"
+  #PersistentVolumes:
+  #  - name: example-pv
+  #    mountOptions:
+  #    - tls
+  #    volumeHandle: "<efs-id>:/path"
+  #    claimRef:
+  #      name: foo-pvc
+  #      namespace: foo
+  #
+  #  - name: example-pv2
+  #    volumeHandle: "<efs-id>:/path2"

@@ -23,6 +23,7 @@ spec:
       annotations: {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
+      hostNetwork: true 
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- range .Values.imagePullSecrets }}
@@ -66,7 +67,7 @@ spec:
               mountPath: "/var/run/secrets/sts.amazonaws.com/serviceaccount/"
           ports:
             - name: healthz
-              containerPort: 9909
+              containerPort: {{ .Values.controller.healthPort }}
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -104,7 +105,7 @@ spec:
           imagePullPolicy: {{ .Values.sidecars.livenessProbe.image.pullPolicy }}
           args:
             - --csi-address=/csi/csi.sock
-            - --health-port=9909
+            - --health-port={{ .Values.controller.healthPort }}
           volumeMounts:
             - name: socket-dir
               mountPath: /csi

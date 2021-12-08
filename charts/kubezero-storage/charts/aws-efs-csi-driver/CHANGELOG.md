@@ -1,5 +1,12 @@
 # Helm chart
 
+# v2.2.0
+* Allow health ports to be configured
+* Add Missing "patch" permission for "events"
+
+# v2.1.6
+* Bump app/driver version to `v1.3.4`
+
 # v2.1.5
 * Bump app/driver version to `v1.3.3`
 
