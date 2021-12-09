@@ -9,10 +9,9 @@ keywords:
 maintainers:
 - email: gianrubio@gmail.com
   name: gianrubio
-- name: vsliouniaev
 - name: bismarck
 name: prometheus-node-exporter
 sources:
 - https://github.com/prometheus/node_exporter/
 type: application
-version: 2.0.4
+version: 2.2.2

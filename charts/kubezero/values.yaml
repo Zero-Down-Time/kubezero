@@ -42,7 +42,7 @@ istio-ingress:
 metrics:
   enabled: false
   namespace: monitoring
-  targetRevision: 0.5.4
+  targetRevision: 0.6.1
   istio:
     grafana: {}
     prometheus: {}

@@ -160,7 +160,12 @@ kube-prometheus-stack:
         searchNamespace: ALL
         provider:
           foldersFromFilesStructure: true
+        script: "/opt/script.sh"
     # For the gunzip script
+        extraMounts:
+        - name: script-volume
+          mountPath: /opt/script.sh
+          subPath: script.sh
     extraContainerVolumes:
     - name: script-volume
       configMap:

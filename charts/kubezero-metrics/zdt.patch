@@ -1,20 +1,11 @@
-diff -tubr charts/kube-prometheus-stack/charts/grafana/templates/_pod.tpl charts/kube-prometheus-stack.zdt/charts/grafana/templates/_pod.tpl
---- charts/kube-prometheus-stack/charts/grafana/templates/_pod.tpl	2021-06-26 19:54:57.000000000 +0200
-+++ charts/kube-prometheus-stack.zdt/charts/grafana/templates/_pod.tpl	2021-07-01 13:31:20.750609396 +0200
-@@ -198,11 +198,16 @@
-       - name: FOLDER_ANNOTATION
-         value: "{{ .Values.sidecar.dashboards.folderAnnotation }}"
-       {{- end }}
-+      - name: SCRIPT
-+        value: /opt/script.sh
-     resources:
- {{ toYaml .Values.sidecar.resources | indent 6 }}
-     volumeMounts:
-       - name: sc-dashboard-volume
-         mountPath: {{ .Values.sidecar.dashboards.folder | quote }}
-+      - name: script-volume
-+        mountPath: /opt/script.sh
-+        subPath: script.sh
- {{- end}}
-   - name: {{ .Chart.Name }}
-     {{- if .Values.image.sha }}
+diff -tuNr charts/kube-prometheus-stack.orig/crds/crd-prometheuses.yaml charts/kube-prometheus-stack/crds/crd-prometheuses.yaml
+--- charts/kube-prometheus-stack.orig/crds/crd-prometheuses.yaml	2021-12-09 14:58:13.123561137 +0100
++++ charts/kube-prometheus-stack/crds/crd-prometheuses.yaml	2021-12-09 14:58:50.570226461 +0100
+@@ -6,6 +6,7 @@
+ metadata:
+   annotations:
+     controller-gen.kubebuilder.io/version: v0.6.2
++    argocd.argoproj.io/sync-options: Replace=true
+   creationTimestamp: null
+   name: prometheuses.monitoring.coreos.com
+ spec:

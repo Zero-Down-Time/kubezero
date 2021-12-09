@@ -190,11 +190,11 @@ spec:
     rules:
     - expr: "count without (cpu, mode) (\n  node_cpu_seconds_total{job=\"node-exporter\",mode=\"idle\"}\n)\n"
       record: instance:node_num_cpu:sum
-    - expr: "1 - avg without (cpu, mode) (\n  rate(node_cpu_seconds_total{job=\"node-exporter\", mode=\"idle\"}[5m])\n)\n"
+    - expr: "1 - avg without (cpu) (\n  sum without (mode) (rate(node_cpu_seconds_total{job=\"node-exporter\", mode=~\"idle|iowait|steal\"}[5m]))\n)\n"
       record: instance:node_cpu_utilisation:rate5m
     - expr: "(\n  node_load1{job=\"node-exporter\"}\n/\n  instance:node_num_cpu:sum{job=\"node-exporter\"}\n)\n"
       record: instance:node_load1_per_cpu:ratio
-    - expr: "1 - (\n  node_memory_MemAvailable_bytes{job=\"node-exporter\"}\n  or\n  (\n    node_memory_Buffers_bytes{job=\"node-exporter\"}\n    +\n    node_memory_Cached_bytes{job=\"node-exporter\"}\n    +\n    node_memory_MemFree_bytes{job=\"node-exporter\"}\n    +\n    node_memory_Slab_bytes{job=\"node-exporter\"}\n  )\n/\n  node_memory_MemTotal_bytes{job=\"node-exporter\"}\n)\n"
+    - expr: "1 - (\n  (\n    node_memory_MemAvailable_bytes{job=\"node-exporter\"}\n    or\n    (\n      node_memory_Buffers_bytes{job=\"node-exporter\"}\n      +\n      node_memory_Cached_bytes{job=\"node-exporter\"}\n      +\n      node_memory_MemFree_bytes{job=\"node-exporter\"}\n      +\n      node_memory_Slab_bytes{job=\"node-exporter\"}\n    )\n  )\n/\n  node_memory_MemTotal_bytes{job=\"node-exporter\"}\n)\n"
       record: instance:node_memory_utilisation:ratio
     - expr: 'rate(node_vmstat_pgmajfault{job="node-exporter"}[5m])
 
