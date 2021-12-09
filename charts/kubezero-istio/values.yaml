@@ -1,6 +1,6 @@
 global:
   # hub: docker.io/istio
-  # tag: 1.11.0
+  tag: 1.11.5-distroless
 
   logAsJson: true
 
@@ -14,9 +14,10 @@ istio-discovery:
     autoscaleEnabled: false
     replicaCount: 1
 
-    # Not implemented, monkey patched in the chart itself
     nodeSelector:
       node-role.kubernetes.io/control-plane: ""
+
+    # Not implemented, monkey patched in the chart itself
     tolerations:
     - effect: NoSchedule
       key: node-role.kubernetes.io/master
