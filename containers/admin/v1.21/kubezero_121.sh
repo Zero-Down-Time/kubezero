@@ -14,3 +14,6 @@ kubectl delete statefulset ebs-snapshot-controller -n kube-system
 
 kubectl delete deployment efs-csi-controller -n kube-system
 kubectl delete daemonSet efs-csi-node -n kube-system
+
+# Remove calico Servicemonitor in case still around
+# kubectl delete servicemonitor calico-node -n kube-system
