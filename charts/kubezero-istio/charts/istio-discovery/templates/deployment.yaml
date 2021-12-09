@@ -54,14 +54,16 @@ spec:
 {{ toYaml .Values.pilot.podAnnotations | indent 8 }}
         {{- end }}
     spec:
+{{- if .Values.pilot.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.pilot.nodeSelector | indent 8 }}
+{{- end }}
       serviceAccountName: istiod{{- if not (eq .Values.revision "") }}-{{ .Values.revision }}{{- end }}
 {{- if .Values.global.priorityClassName }}
       priorityClassName: "{{ .Values.global.priorityClassName }}"
 {{- end }}
       securityContext:
         fsGroup: 1337
-      nodeSelector:
-        node-role.kubernetes.io/control-plane: ""
       tolerations:
       - effect: NoSchedule
         key: node-role.kubernetes.io/master

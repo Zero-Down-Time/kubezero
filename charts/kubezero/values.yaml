@@ -32,12 +32,12 @@ storage:
 istio:
   enabled: false
   namespace: istio-system
-  targetRevision: 0.7.5
+  targetRevision: 0.7.6
 
 istio-ingress:
   enabled: false
   namespace: istio-ingress
-  targetRevision: 0.7.5
+  targetRevision: 0.7.6
 
 metrics:
   enabled: false

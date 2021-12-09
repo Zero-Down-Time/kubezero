@@ -68,12 +68,10 @@ diff -tubr istio/manifests/charts/gateways/istio-ingress/templates/service.yaml 
 diff -tubr istio/manifests/charts/istio-control/istio-discovery/templates/deployment.yaml istio.zdt/manifests/charts/istio-control/istio-discovery/templates/deployment.yaml
 --- istio/manifests/charts/istio-control/istio-discovery/templates/deployment.yaml	2021-07-15 07:32:30.000000000 +0200
 +++ istio.zdt/manifests/charts/istio-control/istio-discovery/templates/deployment.yaml	2021-08-10 15:46:23.216421660 +0200
-@@ -60,6 +60,11 @@
+@@ -60,6 +60,9 @@
  {{- end }}
        securityContext:
          fsGroup: 1337
-+      nodeSelector:
-+        node-role.kubernetes.io/control-plane: ""
 +      tolerations:
 +      - effect: NoSchedule
 +        key: node-role.kubernetes.io/master
