@@ -366,14 +366,16 @@ alertmanager:
 
     bearerTokenFile:
 
-    ## Metric relabel configs to apply to samples before ingestion.
+    ## MetricRelabelConfigs to apply to samples after scraping, but before ingestion.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     metricRelabelings: []
     # - action: keep
     #   regex: 'kube_(daemonset|deployment|pod|namespace|node|statefulset).+'
     #   sourceLabels: [__name__]
 
-    #   relabel configs to apply to samples before ingestion.
+    ## RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     relabelings: []
     # - sourceLabels: [__meta_kubernetes_pod_node_name]
@@ -396,7 +398,7 @@ alertmanager:
     ##
     image:
       repository: quay.io/prometheus/alertmanager
-      tag: v0.22.2
+      tag: v0.23.0
       sha: ""
 
     ## If true then the user will be responsible to provide a secret with alertmanager configuration
@@ -596,7 +598,7 @@ alertmanager:
 
     ## PortName to use for Alert Manager.
     ##
-    portName: "web"
+    portName: "http-web"
 
     ## ClusterAdvertiseAddress is the explicit address to advertise in cluster. Needs to be provided for non RFC1918 [1] (public) addresses. [1] RFC1918: https://tools.ietf.org/html/rfc1918
     ##
@@ -718,6 +720,10 @@ grafana:
   #   configMap: certs-configmap
   #   readOnly: true
 
+  deleteDatasources: []
+  # - name: example-datasource
+  #   orgId: 1
+
   ## Configure additional grafana datasources (passed through tpl)
   ## ref: http://docs.grafana.org/administration/provisioning/#datasources
   additionalDataSources: []
@@ -737,7 +743,7 @@ grafana:
   ## Passed to grafana subchart and used by servicemonitor below
   ##
   service:
-    portName: service
+    portName: http-web
 
   ## If true, create a serviceMonitor for grafana
   ##
@@ -751,14 +757,17 @@ grafana:
     # in grafana.ini
     path: "/metrics"
 
-    ## Metric relabel configs to apply to samples before ingestion.
+
+    ## MetricRelabelConfigs to apply to samples after scraping, but before ingestion.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     metricRelabelings: []
     # - action: keep
     #   regex: 'kube_(daemonset|deployment|pod|namespace|node|statefulset).+'
     #   sourceLabels: [__name__]
 
-    #   relabel configs to apply to samples before ingestion.
+    ## RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     relabelings: []
     # - sourceLabels: [__meta_kubernetes_pod_node_name]
@@ -789,12 +798,17 @@ kubeApiServer:
         component: apiserver
         provider: kubernetes
 
-    ## Metric relabel configs to apply to samples before ingestion.
+    ## MetricRelabelConfigs to apply to samples after scraping, but before ingestion.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     metricRelabelings: []
     # - action: keep
     #   regex: 'kube_(daemonset|deployment|pod|namespace|node|statefulset).+'
     #   sourceLabels: [__name__]
+
+    ## RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
     relabelings: []
     # - sourceLabels:
     #     - __meta_kubernetes_namespace
@@ -839,7 +853,9 @@ kubelet:
     resource: false
     # From kubernetes 1.18, /metrics/resource/v1alpha1 renamed to /metrics/resource
     resourcePath: "/metrics/resource/v1alpha1"
-    ## Metric relabellings to apply to samples before ingestion
+
+    ## MetricRelabelConfigs to apply to samples after scraping, but before ingestion.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     cAdvisorMetricRelabelings: []
     # - sourceLabels: [__name__, image]
@@ -853,7 +869,8 @@ kubelet:
     #   replacement: $1
     #   action: drop
 
-    ## Metric relabellings to apply to samples before ingestion
+    ## MetricRelabelConfigs to apply to samples after scraping, but before ingestion.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     probesMetricRelabelings: []
     # - sourceLabels: [__name__, image]
@@ -867,9 +884,10 @@ kubelet:
     #   replacement: $1
     #   action: drop
 
-    #   relabel configs to apply to samples before ingestion.
-    #   metrics_path is required to match upstream rules and charts
+    ## RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
+    ## metrics_path is required to match upstream rules and charts
     cAdvisorRelabelings:
       - sourceLabels: [__metrics_path__]
         targetLabel: metrics_path
@@ -880,6 +898,9 @@ kubelet:
     #   replacement: $1
     #   action: replace
 
+    ## RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
     probesRelabelings:
       - sourceLabels: [__metrics_path__]
         targetLabel: metrics_path
@@ -890,6 +911,9 @@ kubelet:
     #   replacement: $1
     #   action: replace
 
+    ## RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
     resourceRelabelings:
       - sourceLabels: [__metrics_path__]
         targetLabel: metrics_path
@@ -900,6 +924,9 @@ kubelet:
     #   replacement: $1
     #   action: replace
 
+    ## MetricRelabelConfigs to apply to samples after scraping, but before ingestion.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
     metricRelabelings: []
     # - sourceLabels: [__name__, image]
     #   separator: ;
@@ -912,9 +939,10 @@ kubelet:
     #   replacement: $1
     #   action: drop
 
-    #   relabel configs to apply to samples before ingestion.
-    #   metrics_path is required to match upstream rules and charts
+    ## RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
+    ## metrics_path is required to match upstream rules and charts
     relabelings:
       - sourceLabels: [__metrics_path__]
         targetLabel: metrics_path
@@ -967,14 +995,16 @@ kubeControllerManager:
     # Name of the server to use when validating TLS certificate
     serverName: null
 
-    ## Metric relabel configs to apply to samples before ingestion.
+    ## MetricRelabelConfigs to apply to samples after scraping, but before ingestion.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     metricRelabelings: []
     # - action: keep
     #   regex: 'kube_(daemonset|deployment|pod|namespace|node|statefulset).+'
     #   sourceLabels: [__name__]
 
-    #   relabel configs to apply to samples before ingestion.
+    ## RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     relabelings: []
     # - sourceLabels: [__meta_kubernetes_pod_node_name]
@@ -1002,14 +1032,16 @@ coreDns:
     ##
     proxyUrl: ""
 
-    ## Metric relabel configs to apply to samples before ingestion.
+    ## MetricRelabelConfigs to apply to samples after scraping, but before ingestion.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     metricRelabelings: []
     # - action: keep
     #   regex: 'kube_(daemonset|deployment|pod|namespace|node|statefulset).+'
     #   sourceLabels: [__name__]
 
-    #   relabel configs to apply to samples before ingestion.
+    ## RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     relabelings: []
     # - sourceLabels: [__meta_kubernetes_pod_node_name]
@@ -1041,14 +1073,16 @@ kubeDns:
     ##
     proxyUrl: ""
 
-    ## Metric relabel configs to apply to samples before ingestion.
+    ## MetricRelabelConfigs to apply to samples after scraping, but before ingestion.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     metricRelabelings: []
     # - action: keep
     #   regex: 'kube_(daemonset|deployment|pod|namespace|node|statefulset).+'
     #   sourceLabels: [__name__]
 
-    #   relabel configs to apply to samples before ingestion.
+    ## RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     relabelings: []
     # - sourceLabels: [__meta_kubernetes_pod_node_name]
@@ -1057,12 +1091,17 @@ kubeDns:
     #   targetLabel: nodename
     #   replacement: $1
     #   action: replace
+
+    ## MetricRelabelConfigs to apply to samples after scraping, but before ingestion.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
     dnsmasqMetricRelabelings: []
     # - action: keep
     #   regex: 'kube_(daemonset|deployment|pod|namespace|node|statefulset).+'
     #   sourceLabels: [__name__]
 
-    #   relabel configs to apply to samples before ingestion.
+    ## RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     dnsmasqRelabelings: []
     # - sourceLabels: [__meta_kubernetes_pod_node_name]
@@ -1119,14 +1158,16 @@ kubeEtcd:
     certFile: ""
     keyFile: ""
 
-    ## Metric relabel configs to apply to samples before ingestion.
+    ## MetricRelabelConfigs to apply to samples after scraping, but before ingestion.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     metricRelabelings: []
     # - action: keep
     #   regex: 'kube_(daemonset|deployment|pod|namespace|node|statefulset).+'
     #   sourceLabels: [__name__]
 
-    #   relabel configs to apply to samples before ingestion.
+    ## RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     relabelings: []
     # - sourceLabels: [__meta_kubernetes_pod_node_name]
@@ -1177,14 +1218,16 @@ kubeScheduler:
     ## Name of the server to use when validating TLS certificate
     serverName: null
 
-    ## Metric relabel configs to apply to samples before ingestion.
+    ## MetricRelabelConfigs to apply to samples after scraping, but before ingestion.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     metricRelabelings: []
     # - action: keep
     #   regex: 'kube_(daemonset|deployment|pod|namespace|node|statefulset).+'
     #   sourceLabels: [__name__]
 
-    #   relabel configs to apply to samples before ingestion.
+    ## RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     relabelings: []
     # - sourceLabels: [__meta_kubernetes_pod_node_name]
@@ -1229,14 +1272,16 @@ kubeProxy:
     ##
     https: false
 
-    ## Metric relabel configs to apply to samples before ingestion.
+    ## MetricRelabelConfigs to apply to samples after scraping, but before ingestion.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     metricRelabelings: []
     # - action: keep
     #   regex: 'kube_(daemonset|deployment|pod|namespace|node|statefulset).+'
     #   sourceLabels: [__name__]
 
-    #   relabel configs to apply to samples before ingestion.
+    ## RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     relabelings: []
     # - action: keep
@@ -1261,18 +1306,17 @@ kubeStateMetrics:
     ## Override serviceMonitor selector
     ##
     selectorOverride: {}
-    ## Override namespace selector
-    ##
-    namespaceOverride: ""
 
-    ## Metric relabel configs to apply to samples before ingestion.
+    ## MetricRelabelConfigs to apply to samples after scraping, but before ingestion.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     metricRelabelings: []
     # - action: keep
     #   regex: 'kube_(daemonset|deployment|pod|namespace|node|statefulset).+'
     #   sourceLabels: [__name__]
 
-    #   relabel configs to apply to samples before ingestion.
+    ## RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     relabelings: []
     # - sourceLabels: [__meta_kubernetes_pod_node_name]
@@ -1320,7 +1364,8 @@ nodeExporter:
     ##
     scrapeTimeout: ""
 
-    ## Metric relabel configs to apply to samples before ingestion.
+    ## MetricRelabelConfigs to apply to samples after scraping, but before ingestion.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     metricRelabelings: []
     # - sourceLabels: [__name__]
@@ -1329,7 +1374,8 @@ nodeExporter:
     #   replacement: $1
     #   action: drop
 
-    ## relabel configs to apply to samples before ingestion.
+    ## RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     relabelings: []
     # - sourceLabels: [__meta_kubernetes_pod_node_name]
@@ -1350,6 +1396,8 @@ prometheus-node-exporter:
   extraArgs:
     - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/.+)($|/)
     - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs)$
+  service:
+    portName: http-metrics
 
 ## Manages Prometheus and Alertmanager components
 ##
@@ -1499,6 +1547,8 @@ prometheusOperator:
   kubeletService:
     enabled: true
     namespace: kube-system
+    ## Use '{{ template "kube-prometheus-stack.fullname" . }}-kubelet' by default
+    name: ""
 
   ## Create a servicemonitor for the operator
   ##
@@ -1589,7 +1639,7 @@ prometheusOperator:
   ##
   image:
     repository: quay.io/prometheus-operator/prometheus-operator
-    tag: v0.50.0
+    tag: v0.52.0
     sha: ""
     pullPolicy: IfNotPresent
 
@@ -1601,26 +1651,29 @@ prometheusOperator:
   ##
   # alertmanagerDefaultBaseImage: quay.io/prometheus/alertmanager
 
-  ## Prometheus-config-reloader image to use for config and rule reloading
+  ## Prometheus-config-reloader
   ##
-  prometheusConfigReloaderImage:
-    repository: quay.io/prometheus-operator/prometheus-config-reloader
-    tag: v0.50.0
-    sha: ""
+  prometheusConfigReloader:
+    # image to use for config and rule reloading
+    image:
+      repository: quay.io/prometheus-operator/prometheus-config-reloader
+      tag: v0.52.0
+      sha: ""
 
-  ## Set the prometheus config reloader side-car CPU limit
-  ##
-  configReloaderCpu: 100m
-
-  ## Set the prometheus config reloader side-car memory limit
-  ##
-  configReloaderMemory: 50Mi
+    # resource config for prometheusConfigReloader
+    resources:
+      requests:
+        cpu: 100m
+        memory: 50Mi
+      limits:
+        cpu: 100m
+        memory: 50Mi
 
   ## Thanos side-car image when configured
   ##
   thanosImage:
     repository: quay.io/thanos/thanos
-    tag: v0.17.2
+    tag: v0.23.1
     sha: ""
 
   ## Set a Field Selector to filter watched secrets
@@ -2013,7 +2066,7 @@ prometheus:
     ##
     image:
       repository: quay.io/prometheus/prometheus
-      tag: v2.28.1
+      tag: v2.31.1
       sha: ""
 
     ## Tolerations for use with node taints
@@ -2425,6 +2478,13 @@ prometheus:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#thanosspec
     ##
     thanos: {}
+      # secretProviderClass:
+      #   provider: gcp
+      #   parameters:
+      #     secrets: |
+      #       - resourceName: "projects/$PROJECT_ID/secrets/testsecret/versions/latest"
+      #         fileName: "objstore.yaml"
+      # objectStorageConfigFile: /var/secrets/object-store.yaml
 
     ## Containers allows injecting additional containers. This is meant to allow adding an authentication proxy to a Prometheus pod.
     ## if using proxy extraContainer update targetPort with proxy container port
@@ -2436,7 +2496,7 @@ prometheus:
 
     ## PortName to use for Prometheus.
     ##
-    portName: "web"
+    portName: "http-web"
 
     ## ArbitraryFSAccessThroughSMs configures whether configuration based on a service monitor can access arbitrary files
     ## on the file system of the Prometheus container e.g. bearer token files.

@@ -87,7 +87,7 @@ initContainers:
     imagePullPolicy: {{ .Values.sidecar.imagePullPolicy }}
     env:
       - name: METHOD
-        value: LIST
+        value: {{ .Values.sidecar.datasources.watchMethod }}
       - name: LABEL
         value: "{{ .Values.sidecar.datasources.label }}"
       {{- if .Values.sidecar.datasources.labelValue }}
@@ -104,7 +104,7 @@ initContainers:
       {{- end }}
       {{- if .Values.sidecar.datasources.searchNamespace }}
       - name: NAMESPACE
-        value: "{{ .Values.sidecar.datasources.searchNamespace }}"
+        value: "{{ .Values.sidecar.datasources.searchNamespace | join "," }}"
       {{- end }}
       {{- if .Values.sidecar.skipTlsVerify }}
       - name: SKIP_TLS_VERIFY
@@ -112,6 +112,10 @@ initContainers:
       {{- end }}
     resources:
 {{ toYaml .Values.sidecar.resources | indent 6 }}
+{{- if .Values.sidecar.securityContext }}
+    securityContext:
+{{- toYaml .Values.sidecar.securityContext | nindent 6 }}
+{{- end }}
     volumeMounts:
       - name: sc-datasources-volume
         mountPath: "/etc/grafana/provisioning/datasources"
@@ -139,7 +143,7 @@ initContainers:
       {{- end }}
       {{- if .Values.sidecar.notifiers.searchNamespace }}
       - name: NAMESPACE
-        value: "{{ .Values.sidecar.notifiers.searchNamespace }}"
+        value: "{{ .Values.sidecar.notifiers.searchNamespace | join "," }}"
       {{- end }}
       {{- if .Values.sidecar.skipTlsVerify }}
       - name: SKIP_TLS_VERIFY
@@ -147,6 +151,10 @@ initContainers:
       {{- end }}
     resources:
 {{ toYaml .Values.sidecar.resources | indent 6 }}
+{{- if .Values.sidecar.securityContext }}
+    securityContext:
+{{- toYaml .Values.sidecar.securityContext | nindent 6 }}
+{{- end }}
     volumeMounts:
       - name: sc-notifiers-volume
         mountPath: "/etc/grafana/provisioning/notifiers"
@@ -189,7 +197,7 @@ containers:
       {{- end }}
       {{- if .Values.sidecar.dashboards.searchNamespace }}
       - name: NAMESPACE
-        value: "{{ .Values.sidecar.dashboards.searchNamespace }}"
+        value: "{{ .Values.sidecar.dashboards.searchNamespace | join "," }}"
       {{- end }}
       {{- if .Values.sidecar.skipTlsVerify }}
       - name: SKIP_TLS_VERIFY
@@ -199,16 +207,22 @@ containers:
       - name: FOLDER_ANNOTATION
         value: "{{ .Values.sidecar.dashboards.folderAnnotation }}"
       {{- end }}
+      {{- if .Values.sidecar.dashboards.script }}
       - name: SCRIPT
-        value: /opt/script.sh
+        value: "{{ .Values.sidecar.dashboards.script }}"
+      {{- end }}
     resources:
 {{ toYaml .Values.sidecar.resources | indent 6 }}
+{{- if .Values.sidecar.securityContext }}
+    securityContext:
+{{- toYaml .Values.sidecar.securityContext | nindent 6 }}
+{{- end }}
     volumeMounts:
       - name: sc-dashboard-volume
         mountPath: {{ .Values.sidecar.dashboards.folder | quote }}
-      - name: script-volume
-        mountPath: /opt/script.sh
-        subPath: script.sh
+      {{- if .Values.sidecar.dashboards.extraMounts }}
+      {{- toYaml .Values.sidecar.dashboards.extraMounts | trim | nindent 6}}
+      {{- end }}
 {{- end}}
   - name: {{ .Chart.Name }}
     {{- if .Values.image.sha }}

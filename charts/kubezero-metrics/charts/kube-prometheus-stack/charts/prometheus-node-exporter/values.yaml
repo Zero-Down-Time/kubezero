@@ -11,6 +11,7 @@ service:
   port: 9100
   targetPort: 9100
   nodePort:
+  portName: metrics
   listenOnAllInterfaces: true
   annotations:
     prometheus.io/scrape: "true"
@@ -57,6 +58,7 @@ serviceAccount:
   name:
   annotations: {}
   imagePullSecrets: []
+  automountServiceAccountToken: false
 
 securityContext:
   fsGroup: 65534

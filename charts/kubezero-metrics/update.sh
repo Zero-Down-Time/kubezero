@@ -9,6 +9,7 @@ helm pull prometheus-community/kube-prometheus-stack --untar --untardir charts -
 rm -rf charts/prometheus-pushgateway
 helm pull prometheus-community/prometheus-pushgateway --untar --untardir charts --version $PG_VER
 
+# workaround for https://github.com/prometheus-community/helm-charts/issues/1500
 patch -p0 -i zdt.patch --no-backup-if-mismatch
 
 patch -p0 -i zdt-pushgateway.patch --no-backup-if-mismatch
