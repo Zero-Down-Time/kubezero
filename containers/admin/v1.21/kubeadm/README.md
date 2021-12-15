@@ -25,12 +25,12 @@ Kubernetes: `>= 1.20.0`
 | addons.clusterBackup.enabled | bool | `false` |  |
 | addons.clusterBackup.passwordFile | string | `""` | /etc/cloudbender/clusterBackup.passphrase |
 | addons.clusterBackup.repository | string | `""` | s3:https://s3.amazonaws.com/${CFN[ConfigBucket]}/k8s/${CLUSTERNAME}/clusterBackup |
-| api.allEtcdEndpoints | string | `""` |  |
 | api.apiAudiences | string | `"istio-ca"` |  |
 | api.awsIamAuth.enabled | bool | `false` |  |
 | api.awsIamAuth.kubeAdminRole | string | `"arn:aws:iam::000000000000:role/KubernetesNode"` |  |
 | api.awsIamAuth.workerNodeRole | string | `"arn:aws:iam::000000000000:role/KubernetesNode"` |  |
 | api.endpoint | string | `"kube-api.changeme.org:6443"` |  |
+| api.etcdServers | string | `"https://localhost:2379"` |  |
 | api.extraArgs | object | `{}` |  |
 | api.listenPort | int | `6443` |  |
 | api.oidcEndpoint | string | `""` | s3://${CFN[ConfigBucket]}/k8s/$CLUSTERNAME |
@@ -38,7 +38,8 @@ Kubernetes: `>= 1.20.0`
 | clusterName | string | `"pleasechangeme"` |  |
 | domain | string | `"changeme.org"` |  |
 | etcd.extraArgs | object | `{}` |  |
-| etcd.nodeName | string | `"set_via_cmdline"` |  |
+| etcd.nodeName | string | `"etcd"` |  |
+| etcd.state | string | `"new"` |  |
 | highAvailable | bool | `false` |  |
 | listenAddress | string | `"0.0.0.0"` | Needs to be set to primary node IP |
 | network.calico.enabled | bool | `false` |  |

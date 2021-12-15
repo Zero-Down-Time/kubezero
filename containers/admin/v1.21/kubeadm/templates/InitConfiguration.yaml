@@ -5,11 +5,17 @@ localAPIEndpoint:
   bindPort: {{ .Values.api.listenPort }}
 nodeRegistration:
   ignorePreflightErrors:
-  - Swap
   - DirAvailable--var-lib-etcd
+  - DirAvailable--etc-kubernetes-manifests
+  - FileAvailable--etc-kubernetes-pki-ca.crt
+  - FileAvailable--etc-kubernetes-manifests-etcd.yaml
+  - Swap
   - KubeletVersion
   kubeletExtraArgs:
     node-labels: {{ .Values.nodeLabels | quote }}
     {{- with .Values.providerID }}
     provider-id: {{ . }}
+    {{- end }}
+    {{- if ne .Values.listenAddress "0.0.0.0" }}
+    node-ip: {{ .Values.listenAddress }}
     {{- end }}

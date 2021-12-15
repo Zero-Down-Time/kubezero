@@ -7,7 +7,7 @@ KUBE_VERSION := $(shell echo $(VERSION) | sed -e 's/\.[[:digit:]]*$$//')
 
 .PHONY: build push clean scan
 
-all: clean build push
+all: build push
 
 build:
 	podman build --rm --squash-all --build-arg KUBE_VERSION=$(KUBE_VERSION) --build-arg ALPINE_VERSION=$(ALPINE_VERSION) -t $(TAG) .
@@ -18,7 +18,7 @@ push:
 	podman push $(REGISTRY)/$(TAG)
 
 clean:
-	podman rmi -f $(TAG)
+	podman image prune -f
 
 scan:
 	podman system service& 
