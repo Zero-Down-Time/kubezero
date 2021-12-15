@@ -7,6 +7,12 @@ VERSION=v1.21
 
 export KUBECONFIG="${HOSTFS}/root/.kube/config"
 
+# etcd
+export ETCDCTL_API=3
+export ETCDCTL_CACERT=${HOSTFS}/etc/kubernetes/pki/etcd/ca.crt
+export ETCDCTL_CERT=${HOSTFS}/etc/kubernetes/pki/apiserver-etcd-client.crt
+export ETCDCTL_KEY=${HOSTFS}/etc/kubernetes/pki/apiserver-etcd-client.key
+
 if [ -n "$DEBUG" ]; then
   set -x
   LOG="--v=5"
@@ -27,23 +33,21 @@ retry() {
 }
 
 
+_kubeadm() {
+  kubeadm $@ --config /etc/kubernetes/kubeadm.yaml --rootfs ${HOSTFS} $LOG
+}
+
+
 # Render cluster config
 render_kubeadm() {
   helm template /opt/kubeadm --output-dir ${WORKDIR} -f ${HOSTFS}/etc/kubernetes/kubezero.yaml
 
   # Assemble kubeadm config
-  cat /dev/null > ${HOSTFS}/etc/kubernetes/kubeadm-etcd.yaml
+  cat /dev/null > ${HOSTFS}/etc/kubernetes/kubeadm.yaml
   for f in Cluster Init KubeProxy Kubelet; do
-    # echo "---" >> /etc/kubernetes/kubeadm-etcd.yaml
-    cat ${WORKDIR}/kubeadm/templates/${f}Configuration.yaml >> ${HOSTFS}/etc/kubernetes/kubeadm-etcd.yaml
+    # echo "---" >> /etc/kubernetes/kubeadm.yaml
+    cat ${WORKDIR}/kubeadm/templates/${f}Configuration.yaml >> ${HOSTFS}/etc/kubernetes/kubeadm.yaml
   done
-
-  # Remove etcd custom cert entries from final kubeadm config
-  yq eval 'del(.etcd.local.serverCertSANs) | del(.etcd.local.peerCertSANs)' \
-    ${HOSTFS}/etc/kubernetes/kubeadm-etcd.yaml > ${HOSTFS}/etc/kubernetes/kubeadm.yaml
-
-  # Copy JoinConfig
-  cp ${WORKDIR}/kubeadm/templates/JoinConfiguration.yaml ${HOSTFS}/etc/kubernetes
 
   # hack to "uncloack" the json patches after they go processed by helm
   for s in apiserver controller-manager scheduler; do
@@ -58,7 +62,7 @@ parse_kubezero() {
 
   KUBE_VERSION=$(kubeadm version -o yaml | yq eval .clientVersion.gitVersion -)
   CLUSTERNAME=$(yq eval '.clusterName' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
-  NODENAME=$(yq eval '.nodeName' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
+  ETCD_NODENAME=$(yq eval '.etcd.nodeName' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
 
   AWS_IAM_AUTH=$(yq eval '.api.awsIamAuth.enabled' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
   AWS_NTH=$(yq eval '.addons.aws-node-termination-handler.enabled' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
@@ -125,8 +129,7 @@ if [ "$1" == 'upgrade' ]; then
   pre_kubeadm
 
   # Upgrade
-  kubeadm upgrade apply --config /etc/kubernetes/kubeadm.yaml --rootfs ${HOSTFS} \
-    --experimental-patches /tmp/patches $LOG -y
+  _kubeadm upgrade apply -y --experimental-patches /tmp/patches
 
   post_kubeadm
 
@@ -187,6 +190,7 @@ elif [[ "$1" == 'node-upgrade' ]]; then
   # enable backup and awsIamAuth. multus, match other reorg
   yq -Mi e '.api.awsIamAuth.enabled = "true" | .api.awsIamAuth.workerNodeRole = .workerNodeRole | .api.awsIamAuth.kubeAdminRole = .kubeAdminRole
     | .api.serviceAccountIssuer = .serviceAccountIssuer | .api.apiAudiences = "istio-ca,sts.amazonaws.com"
+    | .api.etcdServers = .api.allEtcdEndpoints
     | .network.multus.enabled = "true"
     | .addons.clusterBackup.enabled = "true" | .addons.clusterBackup.repository = strenv(restic_repo) | .addons.clusterBackup.password = strenv(restic_pw)
     | .addons.clusterBackup.extraEnv[0].name = "AWS_DEFAULT_REGION" | .addons.clusterBackup.extraEnv[0].value = strenv(REGION)
@@ -202,33 +206,66 @@ elif [[ "$1" =~ "^(bootstrap|recover|join)$" ]]; then
 
     # Recert certificates for THIS node
     rm -f ${HOSTFS}/etc/kubernetes/pki/etcd/peer.* ${HOSTFS}/etc/kubernetes/pki/etcd/server.* ${HOSTFS}/etc/kubernetes/pki/apiserver.*
-    kubeadm init phase certs etcd-server --config=/etc/kubernetes/kubeadm-etcd.yaml --rootfs ${HOSTFS}
-    kubeadm init phase certs etcd-peer --config=/etc/kubernetes/kubeadm-etcd.yaml --rootfs ${HOSTFS}
-    kubeadm init phase certs apiserver --config=/etc/kubernetes/kubeadm.yaml --rootfs ${HOSTFS}
+    _kubeadm init phase certs etcd-server
+    _kubeadm init phase certs etcd-peer
+    _kubeadm init phase certs apiserver
 
     # Restore only etcd for desaster recovery
     if [[ "$1" =~ "^(recover)$" ]]; then
-      etcdctl snapshot restore ${HOSTFS}/etc/kubernetes \
-        --name $NODENAME \
+      etcdctl snapshot restore ${HOSTFS}/etc/kubernetes/etcd_snapshot \
+        --name $ETCD_NODENAME \
         --data-dir="${HOSTFS}/var/lib/etcd" \
-        --initial-cluster-token ${CLUSTERNAME} \
-        --initial-advertise-peer-urls https://${NODENAME}:2380 \
-        --initial-cluster $NODENAME=https://${NODENAME}:2380
+        --initial-cluster-token etcd-${CLUSTERNAME} \
+        --initial-advertise-peer-urls https://${ETCD_NODENAME}:2380 \
+        --initial-cluster $ETCD_NODENAME=https://${ETCD_NODENAME}:2380
     fi
 
   # Create all certs during bootstrap
   else
-    kubeadm init phase certs all --config=/etc/kubernetes/kubeadm-etcd.yaml --rootfs ${HOSTFS}
+    _kubeadm init phase certs all
   fi
 
   pre_kubeadm
 
   if [[ "$1" =~ "^(join)$" ]]; then
-    kubeadm join --config /etc/kubernetes/JoinConfiguration.yaml --rootfs ${HOSTFS} \
-      --experimental-patches /tmp/patches $LOG
+
+    _kubeadm init phase preflight
+    _kubeadm init phase kubeconfig all
+    _kubeadm init phase kubelet-start
+
+    # first get current running etcd pods for etcdctl commands
+    # retry in case other nodes join / API fails / etcd leader changes etc.
+    while true; do
+      etcd_endpoints=$(kubectl get pods -n kube-system -l component=etcd -o yaml | \
+        yq eval '.items[].metadata.annotations."kubeadm.kubernetes.io/etcd.advertise-client-urls"' - | tr '\n' ',' | sed -e 's/,$//')
+      [[ $etcd_endpoints =~ ^https:// ]] && break
+      sleep 3
+    done
+
+    # is our $ETCD_NODENAME already in the etcd cluster ?
+    # Remove former self first
+    MY_ID=$(etcdctl member list --endpoints=$etcd_endpoints | grep $ETCD_NODENAME | awk '{print $1}' | sed -e 's/,$//')
+    [ -n "$MY_ID" ] && retry 12 5 5 etcdctl member remove $MY_ID --endpoints=$etcd_endpoints
+
+    # Announce new etcd member and capture ETCD_INITIAL_CLUSTER, retry needed in case another node joining causes temp quorum loss
+    ETCD_ENVS=$(retry 12 5 5 etcdctl member add $ETCD_NODENAME --peer-urls="https://${ETCD_NODENAME}:2380" --endpoints=$etcd_endpoints)
+    export $(echo "$ETCD_ENVS" | grep ETCD_INITIAL_CLUSTER= | sed -e 's/"//g')
+
+    # Patch kubezero.yaml and re-render to get etcd manifest patched
+    yq eval -i '.etcd.state = "existing"
+      | .etcd.initialCluster = strenv(ETCD_INITIAL_CLUSTER)
+      ' ${HOSTFS}/etc/kubernetes/kubezero.yaml
+    render_kubeadm
+
+    # Generate our advanced etcd yaml
+    _kubeadm init phase etcd local --experimental-patches /tmp/patches
+
+    _kubeadm init phase control-plane all --experimental-patches /tmp/patches
+    _kubeadm init phase mark-control-plane
+    _kubeadm init phase kubelet-finalize all
+
   else
-    kubeadm init --config /etc/kubernetes/kubeadm.yaml --rootfs ${HOSTFS} \
-      --experimental-patches /tmp/patches --skip-token-print $LOG
+    _kubeadm init --experimental-patches /tmp/patches --skip-token-print
   fi
 
   cp ${HOSTFS}/etc/kubernetes/admin.conf ${HOSTFS}/root/.kube/config
@@ -273,13 +310,7 @@ elif [ "$1" == 'backup' ]; then
 
   restic snapshots || restic init || exit 1
 
-  # etcd
-  export ETCDCTL_API=3
-  export ETCDCTL_CACERT=${HOSTFS}/etc/kubernetes/pki/etcd/ca.crt
-  export ETCDCTL_CERT=${HOSTFS}/etc/kubernetes/pki/apiserver-etcd-client.crt
-  export ETCDCTL_KEY=${HOSTFS}/etc/kubernetes/pki/apiserver-etcd-client.key
-
-  etcdctl --endpoints=https://localhost:2379 snapshot save ${WORKDIR}/etcd_snapshot
+  etcdctl --endpoints=https://${ETCD_NODENAME}:2379 snapshot save ${WORKDIR}/etcd_snapshot
 
   # pki & cluster-admin access
   cp -r ${HOSTFS}/etc/kubernetes/pki ${WORKDIR}

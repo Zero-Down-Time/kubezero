@@ -11,22 +11,25 @@ etcd:
       ### DNS discovery
       #discovery-srv: {{ .Values.domain }}
       #discovery-srv-name: {{ .Values.clusterName }}
-      #initial-cluster:
+      advertise-client-urls: https://{{ .Values.etcd.nodeName }}:2379
+      initial-advertise-peer-urls: https://{{ .Values.etcd.nodeName }}:2380
+      initial-cluster: {{ include "kubeadm.etcd.initialCluster" .Values.etcd | quote }}
+      initial-cluster-state: {{ .Values.etcd.state }}
       initial-cluster-token: etcd-{{ .Values.clusterName }}
-      listen-metrics-urls: "http://0.0.0.0:2381"
-      logger: "zap"
+      name: {{ .Values.etcd.nodeName }}
+      listen-peer-urls: https://{{ .Values.listenAddress }}:2380
+      listen-client-urls: https://{{ .Values.listenAddress }}:2379
+      listen-metrics-urls: http://0.0.0.0:2381
+      logger: zap
       # log-level: "warn"
       {{- with .Values.etcd.extraArgs }}
       {{- toYaml . | nindent 6 }}
       {{- end }}
-    # These will only be used to create the etcd certs but removed for Init/Join kudeadm calls allowing us to sneak in aliases for etcd nodes
     serverCertSANs:
-    - "{{ .Values.listenAddress }}"
     - "{{ .Values.etcd.nodeName }}"
     - "{{ .Values.etcd.nodeName }}.{{ .Values.domain }}"
     - "{{ .Values.domain }}"
     peerCertSANs:
-    - "{{ .Values.listenAddress }}"
     - "{{ .Values.etcd.nodeName }}"
     - "{{ .Values.etcd.nodeName }}.{{ .Values.domain }}"
     - "{{ .Values.domain }}"
@@ -34,20 +37,20 @@ controllerManager:
   extraArgs:
     profiling: "false"
     terminated-pod-gc-threshold: "300"
-    # leader-elect: {{ .Values.highAvailable | quote }}
+    leader-elect: {{ .Values.highAvailable | quote }}
     logging-format: json
     feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" ) | trimSuffix "," | quote }}
 scheduler:
   extraArgs:
     profiling: "false"
-    # leader-elect: {{ .Values.highAvailable | quote }}
+    leader-elect: {{ .Values.highAvailable | quote }}
     logging-format: json
     feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" ) | trimSuffix "," | quote }}
 apiServer:
   certSANs:
   -  {{ regexSplit ":" .Values.api.endpoint -1 | first }}
   extraArgs:
-    etcd-servers: {{ .Values.api.allEtcdEndpoints }}
+    etcd-servers: {{ .Values.api.etcdServers }}
     profiling: "false"
     audit-log-path: "/var/log/kubernetes/audit.log"
     audit-policy-file: /etc/kubernetes/apiserver/audit-policy.yaml
