@@ -28,7 +28,7 @@ dependencies:
     condition: gemini.enabled
     # repository: https://charts.fairwinds.com/stable
   - name: aws-ebs-csi-driver
-    version: 2.5.0
+    version: 2.5.1
     condition: aws-ebs-csi-driver.enabled
     # repository: https://kubernetes-sigs.github.io/aws-ebs-csi-driver
   - name: aws-efs-csi-driver
