@@ -89,14 +89,14 @@ function _helm() {
   local module=$2
 
   local chart="kubezero-${module}"
-  local namespace=$(yq r $TMPDIR/kubezero/templates/${module}.yaml spec.destination.namespace)
+  local namespace="$(yq eval '.spec.destination.namespace' $TMPDIR/kubezero/templates/${module}.yaml)"
 
   targetRevision=""
-  _version="$(yq r $TMPDIR/kubezero/templates/${module}.yaml spec.source.targetRevision)"
+  _version="$(yq eval '.spec.source.targetRevision' $TMPDIR/kubezero/templates/${module}.yaml)"
 
   [ -n "$_version" ] && targetRevision="--version $_version"
 
-  yq r $TMPDIR/kubezero/templates/${module}.yaml 'spec.source.helm.values' > $TMPDIR/values.yaml
+  yq eval '.spec.source.helm.values' $TMPDIR/kubezero/templates/${module}.yaml > $TMPDIR/values.yaml
 
   if [ $action == "crds" ]; then
     # Allow custom CRD handling
@@ -171,10 +171,10 @@ if [ ! -f $CLUSTER/kubezero/application.yaml ]; then
   exit 1
 fi
 
-KUBEZERO_VERSION=$(yq r $CLUSTER/kubezero/application.yaml 'spec.source.targetRevision')
+KUBEZERO_VERSION=$(yq eval '.spec.source.targetRevision' $CLUSTER/kubezero/application.yaml)
 
 # Extract all kubezero values from argo app
-yq r $CLUSTER/kubezero/application.yaml 'spec.source.helm.values' > $TMPDIR/values.yaml
+yq eval '.spec.source.helm.values' $CLUSTER/kubezero/application.yaml > $TMPDIR/values.yaml
 
 # Render all enabled Kubezero modules
 helm template $(chart_location kubezero) -f $TMPDIR/values.yaml --version $KUBEZERO_VERSION --devel --output-dir $TMPDIR

@@ -1,8 +1,9 @@
 #!/bin/bash
+set -ex
 
-ECK_VERSION=$(yq r Chart.yaml dependencies.name==eck-operator.version)
-FLUENT_BIT_VERSION=$(yq r Chart.yaml dependencies.name==fluent-bit.version)
-FLUENTD_VERSION=$(yq r Chart.yaml dependencies.name==fluentd.version)
+ECK_VERSION=$(yq eval '.dependencies[] | select(.name=="eck-operator") | .version' Chart.yaml)
+FLUENT_BIT_VERSION=$(yq eval '.dependencies[] | select(.name=="fluent-bit") | .version' Chart.yaml)
+FLUENTD_VERSION=$(yq eval '.dependencies[] | select(.name=="fluentd") | .version' Chart.yaml)
 
 # fix ECK crds handling to adhere to proper helm v3 support which also fixes ArgoCD applying updates on upgrades
 helm repo list | grep elastic -qc || { helm repo add elastic https://helm.elastic.co; helm repo update; }
@@ -12,7 +13,7 @@ rm -rf charts/eck-operator && helm pull elastic/eck-operator --untar --untardir 
 mkdir charts/eck-operator/crds
 helm template charts/eck-operator/charts/eck-operator-crds --name-template logging > charts/eck-operator/crds/all-crds.yaml
 rm -rf charts/eck-operator/charts
-yq d charts/eck-operator/Chart.yaml dependencies -i
+yq eval -Mi 'del(.dependencies)' charts/eck-operator/Chart.yaml
 
 # Fluent Bit
 rm -rf charts/fluent-bit

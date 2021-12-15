@@ -4,8 +4,8 @@ set -ex
 ### TODO
 # - https://istio.io/latest/docs/ops/configuration/security/harden-docker-images/
 
-export ISTIO_VERSION=$(yq r Chart.yaml dependencies.name==base.version)
-export KIALI_VERSION=$(yq r Chart.yaml dependencies.name==kiali-server.version)
+export ISTIO_VERSION=$(yq eval '.dependencies[] | select(.name=="base") | .version' Chart.yaml)
+export KIALI_VERSION=$(yq eval '.dependencies[] | select(.name=="kiali-server") | .version' Chart.yaml)
 
 rm -rf istio
 curl -sL "https://github.com/istio/istio/releases/download/${ISTIO_VERSION}/istio-${ISTIO_VERSION}-linux-amd64.tar.gz" | tar xz

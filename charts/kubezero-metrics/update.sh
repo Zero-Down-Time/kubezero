@@ -1,7 +1,8 @@
 #!/bin/bash
+set -ex
 
-VERSION=$(yq r Chart.yaml dependencies.name==kube-prometheus-stack.version)
-PG_VER=$(yq r Chart.yaml dependencies.name==prometheus-pushgateway.version)
+VERSION=$(yq eval '.dependencies[] | select(.name=="kube-prometheus-stack") | .version' Chart.yaml)
+PG_VER=$(yq eval '.dependencies[] | select(.name=="prometheus-pushgateway") | .version' Chart.yaml)
 
 rm -rf charts/kube-prometheus-stack
 helm pull prometheus-community/kube-prometheus-stack --untar --untardir charts --version $VERSION
