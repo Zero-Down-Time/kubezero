@@ -1,5 +1,8 @@
-#!/bin/bash
-set -eux
+#!/bin/bash -e
+
+VERSION="v1.21.8"
+
+[ -n "$DEBUG" ] && DEBUG=1
 
 # unset any AWS_DEFAULT_PROFILE as it will break aws-iam-auth
 unset AWS_DEFAULT_PROFILE
@@ -9,11 +12,11 @@ nodes=$(kubectl get nodes -l node-role.kubernetes.io/control-plane -o json | jq 
 for node in $nodes; do
   echo "Deploying node upgrade job on $node..."
 
-  cat <<'EOF' | sed -e "s/__node__/$node/g" | kubectl apply -f -
+  cat <<EOF | sed -e "s/__node__/$node/g" | kubectl apply -f -
 apiVersion: v1
 kind: Pod
 metadata:
-  name: kubezero-upgrade-node-__node__
+  name: kubezero-upgrade-${VERSION//.}-node-__node__
   namespace: kube-system
   labels:
     app: kubezero-upgrade-node
@@ -21,14 +24,14 @@ spec:
   hostNetwork: true
   containers:
   - name: kubezero-admin
-    image: public.ecr.aws/zero-downtime/kubezero-admin:v1.21.7
+    image: public.ecr.aws/zero-downtime/kubezero-admin:${VERSION}
     imagePullPolicy: Always
     command: ["kubezero.sh"]
     args:
     - node-upgrade
     env:
     - name: DEBUG
-      value: "1"
+      value: "$DEBUG"
     - name: NODE_NAME
       valueFrom:
         fieldRef:
@@ -55,21 +58,21 @@ spec:
     effect: NoSchedule
   restartPolicy: Never
 EOF
-  kubectl wait pod kubezero-upgrade-node-$node -n kube-system --timeout 120s --for=condition=initialized
+  kubectl wait pod kubezero-upgrade-${VERSION//.}-node-$node -n kube-system --timeout 120s --for=condition=initialized 2>/dev/null
   while true; do
-    kubectl logs kubezero-upgrade-node-$node -n kube-system -f && break
+    kubectl logs kubezero-upgrade-${VERSION//.}-node-$node -n kube-system -f 2>/dev/null && break
     sleep 3
   done
-  kubectl delete pod kubezero-upgrade-node-$node -n kube-system
+  kubectl delete pod kubezero-upgrade-${VERSION//.}-node-$node -n kube-system
 done
 
 echo "Deploying cluster upgrade job ..."
 
-cat <<'EOF' | kubectl apply -f -
+cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Pod
 metadata:
-  name: kubezero-upgrade-v121
+  name: kubezero-upgrade-${VERSION//.}
   namespace: kube-system
   labels:
     app: kubezero-upgrade
@@ -79,14 +82,14 @@ spec:
   #hostPID: true
   containers:
   - name: kubezero-admin
-    image: public.ecr.aws/zero-downtime/kubezero-admin:v1.21.7
+    image: public.ecr.aws/zero-downtime/kubezero-admin:${VERSION}
     imagePullPolicy: Always
     command: ["kubezero.sh"]
     args:
     - upgrade
     env:
     - name: DEBUG
-      value: "1"
+      value: "$DEBUG"
     - name: NODE_NAME
       valueFrom:
         fieldRef:
@@ -107,15 +110,16 @@ spec:
   - name: workdir
     emptyDir: {}
   nodeSelector:
-    node-role.kubernetes.io/master: ""
+    node-role.kubernetes.io/control-plane: ""
   tolerations:
   - key: node-role.kubernetes.io/master
     effect: NoSchedule
   restartPolicy: Never
 EOF
 
-kubectl wait pod kubezero-upgrade-v121 -n kube-system --timeout 120s --for=condition=initialized
+kubectl wait pod kubezero-upgrade-${VERSION//.} -n kube-system --timeout 120s --for=condition=initialized 2>/dev/null
 while true; do
-  kubectl logs kubezero-upgrade-v121 -n kube-system -f && break
+  kubectl logs kubezero-upgrade-${VERSION//.} -n kube-system -f 2>/dev/null && break
   sleep 3
 done
+kubectl delete pod kubezero-upgrade-${VERSION//.} -n kube-system

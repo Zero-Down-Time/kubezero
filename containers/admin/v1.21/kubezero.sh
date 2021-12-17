@@ -1,9 +1,15 @@
 #!/bin/sh
 set -e
 
-WORKDIR=/tmp/kubezero
-HOSTFS=/host
-VERSION=v1.21
+if [ -n "$DEBUG" ]; then
+  set -x
+  LOG="--v=5"
+fi
+
+# Export vars to ease use in debug_shell etc
+export WORKDIR=/tmp/kubezero
+export HOSTFS=/host
+export VERSION=v1.21
 
 export KUBECONFIG="${HOSTFS}/root/.kube/config"
 
@@ -12,11 +18,6 @@ export ETCDCTL_API=3
 export ETCDCTL_CACERT=${HOSTFS}/etc/kubernetes/pki/etcd/ca.crt
 export ETCDCTL_CERT=${HOSTFS}/etc/kubernetes/pki/apiserver-etcd-client.crt
 export ETCDCTL_KEY=${HOSTFS}/etc/kubernetes/pki/apiserver-etcd-client.key
-
-if [ -n "$DEBUG" ]; then
-  set -x
-  LOG="--v=5"
-fi
 
 # Generic retry utility
 retry() {
@@ -60,12 +61,12 @@ render_kubeadm() {
 parse_kubezero() {
   [ -f ${HOSTFS}/etc/kubernetes/kubezero.yaml ] || { echo "Missing /etc/kubernetes/kubezero.yaml!"; exit 1; }
 
-  KUBE_VERSION=$(kubeadm version -o yaml | yq eval .clientVersion.gitVersion -)
-  CLUSTERNAME=$(yq eval '.clusterName' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
-  ETCD_NODENAME=$(yq eval '.etcd.nodeName' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
+  export KUBE_VERSION=$(kubeadm version -o yaml | yq eval .clientVersion.gitVersion -)
+  export CLUSTERNAME=$(yq eval '.clusterName' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
+  export ETCD_NODENAME=$(yq eval '.etcd.nodeName' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
 
-  AWS_IAM_AUTH=$(yq eval '.api.awsIamAuth.enabled' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
-  AWS_NTH=$(yq eval '.addons.aws-node-termination-handler.enabled' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
+  export AWS_IAM_AUTH=$(yq eval '.api.awsIamAuth.enabled' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
+  export AWS_NTH=$(yq eval '.addons.aws-node-termination-handler.enabled' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
 }
 
 
@@ -173,28 +174,35 @@ if [ "$1" == 'upgrade' ]; then
   # - update oidc do we need that ?
 
 elif [[ "$1" == 'node-upgrade' ]]; then
-
   echo "Starting node upgrade ..."
 
-  if [ -f ${HOSTFS}/usr/local/sbin/backup_control_plane.sh ]; then
-    mv ${HOSTFS}/usr/local/sbin/backup_control_plane.sh ${HOSTFS}/usr/local/sbin/backup_control_plane.disabled
-    echo "Disabled old cluster backup OS cronjob"
-  fi
-
   echo "Migrating kubezero.yaml"
+  yq -i eval '.api.etcdServers = .api.allEtcdEndpoints | .network.multus.enabled = "true"' ${HOSTFS}/etc/kubernetes/kubezero.yaml
 
-  export restic_repo=$(grep "export RESTIC_REPOSITORY" ${HOSTFS}/usr/local/sbin/backup_control_plane.disabled | sed -e 's/.*=//' | sed -e 's/"//g')
-  export restic_pw="$(cat ${HOSTFS}/etc/cloudbender/clusterBackup.passphrase)"
-  export REGION=$(kubectl get node $NODE_NAME -o yaml | yq eval '.metadata.labels."topology.kubernetes.io/region"' -)
+  # AWS
+  if [ -f ${HOSTFS}/etc/cloudbender/clusterBackup.passphrase ]; then
+    if [ -f ${HOSTFS}/usr/local/sbin/backup_control_plane.sh ]; then
+      mv ${HOSTFS}/usr/local/sbin/backup_control_plane.sh ${HOSTFS}/usr/local/sbin/backup_control_plane.disabled
+      echo "Disabled old cluster backup OS cronjob"
+    fi
 
-  # enable backup and awsIamAuth. multus, match other reorg
-  yq -Mi e '.api.awsIamAuth.enabled = "true" | .api.awsIamAuth.workerNodeRole = .workerNodeRole | .api.awsIamAuth.kubeAdminRole = .kubeAdminRole
-    | .api.serviceAccountIssuer = .serviceAccountIssuer | .api.apiAudiences = "istio-ca,sts.amazonaws.com"
-    | .api.etcdServers = .api.allEtcdEndpoints
-    | .network.multus.enabled = "true"
-    | .addons.clusterBackup.enabled = "true" | .addons.clusterBackup.repository = strenv(restic_repo) | .addons.clusterBackup.password = strenv(restic_pw)
-    | .addons.clusterBackup.extraEnv[0].name = "AWS_DEFAULT_REGION" | .addons.clusterBackup.extraEnv[0].value = strenv(REGION)
-    ' ${HOSTFS}/etc/kubernetes/kubezero.yaml
+    # enable backup and awsIamAuth & multus
+    yq -i eval '
+        .api.awsIamAuth.enabled = "true" | .api.awsIamAuth.workerNodeRole = .workerNodeRole | .api.awsIamAuth.kubeAdminRole = .kubeAdminRole
+      | .api.serviceAccountIssuer = .serviceAccountIssuer | .api.apiAudiences = "istio-ca,sts.amazonaws.com"
+      ' ${HOSTFS}/etc/kubernetes/kubezero.yaml
+
+    export restic_repo=$(grep "export RESTIC_REPOSITORY" ${HOSTFS}/usr/local/sbin/backup_control_plane.disabled | sed -e 's/.*=//' | sed -e 's/"//g')
+    export restic_pw="$(cat ${HOSTFS}/etc/cloudbender/clusterBackup.passphrase)"
+    export REGION=$(kubectl get node $NODE_NAME -o yaml | yq eval '.metadata.labels."topology.kubernetes.io/region"' -)
+
+    if [ -n "$restic_repo" ]; then
+      yq -i eval '
+        .addons.clusterBackup.enabled = "true" | .addons.clusterBackup.repository = strenv(restic_repo) | .addons.clusterBackup.password = strenv(restic_pw)
+      | .addons.clusterBackup.extraEnv[0].name = "AWS_DEFAULT_REGION" | .addons.clusterBackup.extraEnv[0].value = strenv(REGION)
+      ' ${HOSTFS}/etc/kubernetes/kubezero.yaml
+    fi
+  fi
 
   echo "All done."
 
@@ -284,7 +292,7 @@ elif [[ "$1" =~ "^(bootstrap|recover|join)$" ]]; then
     yq eval -M ".clusters[0].cluster.certificate-authority-data = \"$(cat ${HOSTFS}/etc/kubernetes/pki/ca.crt | base64 -w0)\"" ${WORKDIR}/kubeadm/templates/admin-aws-iam.yaml > ${HOSTFS}/etc/kubernetes/admin-aws-iam.yaml
   fi
 
-  # Install some basics on bootstrap and join for 1.21.7 to get new modules in place
+  # Install some basics on bootstrap and join for 1.21 to get new modules in place
   if [[ "$1" =~ "^(bootstrap|join|recover)$" ]]; then
     helm repo add kubezero https://cdn.zero-downtime.net/charts/
 
@@ -322,10 +330,14 @@ elif [ "$1" == 'backup' ]; then
 
   echo "Backup complete"
 
-  # Remove all previous
+  # Remove backups from previous versions
   restic forget --keep-tag $VERSION --prune
 
+  # Regular retention
   restic forget --keep-hourly 24 --keep-daily ${RESTIC_RETENTION:-7} --prune
+
+  # Defrag etcd backend
+  etcdctl --endpoints=https://${ETCD_NODENAME}:2379 defrag
 
 
 elif [ "$1" == 'restore' ]; then
@@ -341,6 +353,10 @@ elif [ "$1" == 'restore' ]; then
 
   # Always use kubeadm kubectl config to never run into chicken egg with custom auth hooks
   cp ${WORKDIR}/admin.conf ${HOSTFS}/root/.kube/config
+
+elif [ "$1" == 'debug_shell' ]; then
+  echo "Entering debug shell"
+  /bin/sh
 
 else
   echo "Unknown command!"

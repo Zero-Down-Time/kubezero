@@ -1,6 +1,6 @@
 clusterName: pleasechangeme
 # -- set to $HOSTNAME
-nodeName: localhost
+nodeName: kubezero-node
 domain: changeme.org
 
 # -- Needs to be set to primary node IP
@@ -9,7 +9,7 @@ listenAddress: 0.0.0.0
 api:
   endpoint: kube-api.changeme.org:6443
   listenPort: 6443
-  etcdServers: "https://localhost:2379"
+  etcdServers: "https://etcd:2379"
   extraArgs: {}
   # -- https://s3.${REGION}.amazonaws.com/${CFN[ConfigBucket]}/k8s/$CLUSTERNAME
   serviceAccountIssuer: ""

@@ -1,6 +1,6 @@
 # kubeadm
 
-![Version: 1.21.7](https://img.shields.io/badge/Version-1.21.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 1.21.8](https://img.shields.io/badge/Version-1.21.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Kubeadm cluster config
 
@@ -30,7 +30,7 @@ Kubernetes: `>= 1.20.0`
 | api.awsIamAuth.kubeAdminRole | string | `"arn:aws:iam::000000000000:role/KubernetesNode"` |  |
 | api.awsIamAuth.workerNodeRole | string | `"arn:aws:iam::000000000000:role/KubernetesNode"` |  |
 | api.endpoint | string | `"kube-api.changeme.org:6443"` |  |
-| api.etcdServers | string | `"https://localhost:2379"` |  |
+| api.etcdServers | string | `"https://etcd:2379"` |  |
 | api.extraArgs | object | `{}` |  |
 | api.listenPort | int | `6443` |  |
 | api.oidcEndpoint | string | `""` | s3://${CFN[ConfigBucket]}/k8s/$CLUSTERNAME |
@@ -46,7 +46,7 @@ Kubernetes: `>= 1.20.0`
 | network.cilium.enabled | bool | `false` |  |
 | network.multus.enabled | bool | `false` |  |
 | network.multus.tag | string | `"v3.8"` |  |
-| nodeName | string | `"localhost"` | set to $HOSTNAME |
+| nodeName | string | `"kubezero-node"` | set to $HOSTNAME |
 | protectKernelDefaults | bool | `true` |  |
 | systemd | bool | `true` | Set to false for openrc, eg. on Gentoo or Alpine |
 
