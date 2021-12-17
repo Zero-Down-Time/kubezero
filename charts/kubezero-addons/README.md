@@ -1,6 +1,6 @@
 # kubezero-addons
 
-![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.2.2](https://img.shields.io/badge/Version-0.2.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for various optional cluster addons
 
@@ -49,7 +49,9 @@ Create secret with the IAM user credential for ecr-renew to use, using the crede
 | aws-node-termination-handler.extraEnv.AWS_STS_REGIONAL_ENDPOINTS | string | `"regional"` |  |
 | aws-node-termination-handler.extraEnv.AWS_WEB_IDENTITY_TOKEN_FILE | string | `"/var/run/secrets/sts.amazonaws.com/serviceaccount/token"` |  |
 | aws-node-termination-handler.fullnameOverride | string | `"aws-node-termination-handler"` |  |
+| aws-node-termination-handler.ignoreDaemonSets | bool | `true` |  |
 | aws-node-termination-handler.jsonLogging | bool | `true` |  |
+| aws-node-termination-handler.managedAsgTag | string | `"aws-node-termination-handler/managed"` | "aws-node-termination-handler/${ClusterName}" |
 | aws-node-termination-handler.metadataTries | int | `0` |  |
 | aws-node-termination-handler.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | aws-node-termination-handler.podMonitor.create | bool | `false` |  |
@@ -59,8 +61,9 @@ Create secret with the IAM user credential for ecr-renew to use, using the crede
 | aws-node-termination-handler.tolerations[0].effect | string | `"NoSchedule"` |  |
 | aws-node-termination-handler.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | clusterBackup.enabled | bool | `false` |  |
+| clusterBackup.extraEnv | list | `[]` |  |
 | clusterBackup.image.name | string | `"public.ecr.aws/zero-downtime/kubezero-admin"` |  |
-| clusterBackup.image.tag | string | `"v1.21.7"` |  |
+| clusterBackup.image.tag | string | `"v1.21.8"` |  |
 | clusterBackup.password | string | `""` |  |
 | clusterBackup.repository | string | `""` |  |
 | fuseDevicePlugin.enabled | bool | `false` |  |

@@ -3,7 +3,7 @@ clusterBackup:
 
   image:
     name: public.ecr.aws/zero-downtime/kubezero-admin
-    tag: v1.21.7
+    tag: v1.21.8
 
   repository: ""
   password: ""
