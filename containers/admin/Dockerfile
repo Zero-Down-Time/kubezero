@@ -5,7 +5,7 @@ FROM alpine:${ALPINE_VERSION}
 ARG KUBE_VERSION
 
 RUN cd /etc/apk/keys && \
-    wget "https://cdn.zero-downtime.net/alpine/stefan@zero-downtime.net-6183d596.rsa.pub" && \
+    wget "https://cdn.zero-downtime.net/alpine/stefan@zero-downtime.net-61bb6bfb.rsa.pub" && \
     echo "@kubezero https://cdn.zero-downtime.net/alpine/v${KUBE_VERSION}/kubezero" >> /etc/apk/repositories && \
     echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
     apk upgrade -U -a && \
