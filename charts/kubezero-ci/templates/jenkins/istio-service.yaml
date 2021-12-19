@@ -1,0 +1,18 @@
+{{- if and .Values.jenkins.enabled .Values.jenkins.istio.enabled }}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ .Release.Name }}-jenkins
+  namespace: {{ template "jenkins.namespace" . }}
+spec:
+  hosts:
+  - {{ .Values.jenkins.istio.url }}
+  gateways:
+  - {{ .Values.jenkins.istio.gateway }}
+  http:
+  - route:
+    - destination:
+        host: {{ .Release.Name }}-jenkins
+        port:
+          number: 8080
+{{- end }}
