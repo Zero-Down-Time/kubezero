@@ -199,6 +199,7 @@ elif [[ "$1" == 'node-upgrade' ]]; then
     if [ -n "$restic_repo" ]; then
       yq -i eval '
         .addons.clusterBackup.enabled = "true" | .addons.clusterBackup.repository = strenv(restic_repo) | .addons.clusterBackup.password = strenv(restic_pw)
+      | .addons.clusterBackup.image.tag = strenv(KUBE_VERSION)
       | .addons.clusterBackup.extraEnv[0].name = "AWS_DEFAULT_REGION" | .addons.clusterBackup.extraEnv[0].value = strenv(REGION)
       ' ${HOSTFS}/etc/kubernetes/kubezero.yaml
     fi

@@ -70,5 +70,17 @@ gitea:
 jenkins:
   enabled: false
 
-teamcity:
-  enabled: false
+  controller:
+    tagLabel: alpine
+    disableRememberMe: true
+    prometheus:
+      enabled: false
+    testEnabled: false
+
+  persistence:
+    size: "2Gi"
+
+  istio:
+    enabled: false
+    gateway: istio-ingress/private-ingressgateway
+    url: jenkins.example.com

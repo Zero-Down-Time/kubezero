@@ -8,7 +8,7 @@ HighAvailableControlplane: false
 
 addons:
   enabled: false
-  targetRevision: 0.1.0
+  targetRevision: 0.2.3
 
 network:
   enabled: false
@@ -28,6 +28,10 @@ kiam:
 storage:
   enabled: false
   targetRevision: 0.4.3
+  aws-ebs-csi-driver:
+    enabled: false
+  aws-efs-csi-driver:
+    enabled: false
 
 istio:
   enabled: false

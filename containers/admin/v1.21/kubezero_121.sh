@@ -18,7 +18,7 @@ kubectl delete deployment efs-csi-controller -n kube-system
 kubectl delete daemonSet efs-csi-node -n kube-system
 
 # Remove calico Servicemonitor in case still around
-# kubectl delete servicemonitor calico-node -n kube-system
+kubectl delete servicemonitor calico-node -n kube-system
 
 # Upgrade Prometheus stack, requires state metrics to be removed first
 kubectl delete deployment metrics-kube-state-metrics -n monitoring

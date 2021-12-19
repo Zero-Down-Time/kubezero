@@ -1,0 +1,18 @@
+{{- if and .Values.jenkins.enabled .Values.jenkins.istio.enabled .Values.jenkins.istio.allowBlocks }}
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: {{ .Release.Name }}-jenkins-allowlist
+  namespace: istio-ingress
+spec:
+  selector:
+    matchLabels:
+      app: istio-ingressgateway
+  rules:
+  - from:
+    - source:
+        ipBlocks: {{ .Values.jenkins.istio.allowBlocks | toYaml | nindent 8 }}
+    to:
+    - operation:
+        hosts: [{{ .Values.jenkins.istio.url }}]
+{{- end }}
