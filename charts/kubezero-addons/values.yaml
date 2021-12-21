@@ -18,9 +18,11 @@ aws-node-termination-handler:
   managedAsgTag: "aws-node-termination-handler/managed"
 
   enableSqsTerminationDraining: true
+  enableProbesServer: true
   deleteLocalData: true
   ignoreDaemonSets: true
   taintNode: true
+  emitKubernetesEvents: true
 
   # -- https://sqs.${AWS::Region}.amazonaws.com/${AWS::AccountId}/${ClusterName}_Nth
   queueURL: ""
