@@ -145,7 +145,7 @@ if [ "$1" == 'upgrade' ]; then
 
   # network
   yq eval '.network // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
-  helm template kubezero/kubezero-network --version 0.1.1 --include-crds --namespace kube-system --name-template network \
+  helm template kubezero/kubezero-network --version 0.1.3 --include-crds --namespace kube-system --name-template network \
     -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply -f - $LOG
 
   # addons
@@ -299,7 +299,7 @@ elif [[ "$1" =~ "^(bootstrap|recover|join)$" ]]; then
 
     # network
     yq eval '.network // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
-    helm template kubezero/kubezero-network --version 0.1.1 --include-crds --namespace kube-system --name-template network \
+    helm template kubezero/kubezero-network --version 0.1.3 --include-crds --namespace kube-system --name-template network \
       -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply -f - $LOG
 
     # addons
