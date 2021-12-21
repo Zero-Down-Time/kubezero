@@ -8,6 +8,7 @@ clusterBackup:
 {{- with index .Values "addons" "aws-node-termination-handler" }}
 aws-node-termination-handler:
   {{- toYaml . | nindent 2 }}
+  enablePrometheusServer: {{ .Values.metrics.enabled }}
 {{- end }}
 
 {{- with .Values.addons.fuseDevicePlugin }}

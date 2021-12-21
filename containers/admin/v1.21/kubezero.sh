@@ -145,12 +145,12 @@ if [ "$1" == 'upgrade' ]; then
 
   # network
   yq eval '.network // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
-  helm template kubezero/kubezero-network --version 0.1.0 --include-crds --namespace kube-system --name-template network \
+  helm template kubezero/kubezero-network --version 0.1.1 --include-crds --namespace kube-system --name-template network \
     -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply -f - $LOG
 
   # addons
   yq eval '.addons // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
-  helm template kubezero/kubezero-addons --version 0.2.2 --include-crds --namespace kube-system --name-template addons \
+  helm template kubezero/kubezero-addons --version 0.2.4 --include-crds --namespace kube-system --name-template addons \
     -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply -f - $LOG
 
   ######################
@@ -299,12 +299,12 @@ elif [[ "$1" =~ "^(bootstrap|recover|join)$" ]]; then
 
     # network
     yq eval '.network // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
-    helm template kubezero/kubezero-network --version 0.1.0 --include-crds --namespace kube-system --name-template network \
+    helm template kubezero/kubezero-network --version 0.1.1 --include-crds --namespace kube-system --name-template network \
       -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply -f - $LOG
 
     # addons
     yq eval '.addons // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
-    helm template kubezero/kubezero-addons --version 0.2.2 --include-crds --namespace kube-system --name-template addons \
+    helm template kubezero/kubezero-addons --version 0.2.4 --include-crds --namespace kube-system --name-template addons \
       -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply -f - $LOG
   fi
 
