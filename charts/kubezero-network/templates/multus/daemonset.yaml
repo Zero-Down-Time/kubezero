@@ -113,7 +113,6 @@ spec:
         args:
         - "--multus-conf-file=auto"
         - "--cni-version=0.3.1"
-        - "--cni-bin-dir=/host/usr/libexec/cni"
         resources:
           requests:
             cpu: "100m"
@@ -131,9 +130,26 @@ spec:
         - name: cni
           mountPath: /host/etc/cni/net.d
         - name: cnibin
-          mountPath: /host/usr/libexec/cni
+          mountPath: /host/opt/cni/bin
         - name: multus-cfg
           mountPath: /tmp/multus-conf
+      initContainers:
+        - name: install-multus-binary
+          image: ghcr.io/k8snetworkplumbingwg/multus-cni:{{ .Values.multus.tag }}
+          command:
+            - "cp"
+            - "/usr/src/multus-cni/bin/multus"
+            - "/host/opt/cni/bin/multus"
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "15Mi"
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: cnibin
+              mountPath: /host/opt/cni/bin
+              mountPropagation: Bidirectional
       terminationGracePeriodSeconds: 10
       volumes:
         - name: run
@@ -144,7 +160,7 @@ spec:
             path: /etc/cni/net.d
         - name: cnibin
           hostPath:
-            path: /usr/libexec/cni
+            path: /opt/cni/bin
         - name: multus-cfg
           configMap:
             name: multus-cni-config
