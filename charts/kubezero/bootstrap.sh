@@ -33,7 +33,7 @@ function wait_for() {
 
 function chart_location() {
   if [ -z "$LOCATION" ]; then
-    echo "$1 --repo https://zero-down-time.github.io/kubezero"
+    echo "$1 --repo https://cdn.zero-downtime.net/charts"
   else
     echo "$LOCATION/$1"
   fi
@@ -72,15 +72,20 @@ function _crds() {
 # helm template | kubectl apply -f -
 # confine to one namespace if possible
 function apply(){
-  helm template $(chart_location $chart) -n $namespace --name-template $module $targetRevision --skip-crds -f $TMPDIR/values.yaml $API_VERSIONS $KUBE_VERSION $@ > $TMPDIR/helm.yaml
+  helm template $(chart_location $chart) -n $namespace --name-template $module $targetRevision --skip-crds -f $TMPDIR/values.yaml $API_VERSIONS $KUBE_VERSION $@ \
+    | python3 -c '
+#!/usr/bin/python3
+import yaml
+import sys
 
-  # If resources are in more than ONE $namespace, apply without restrictions
-  nr_ns=$(grep -e '^  namespace:' $TMPDIR/helm.yaml  | sed "s/\"//g" | sort | uniq | wc -l)
-  if [ $nr_ns -gt 1 ]; then
-    kubectl $action -f $TMPDIR/helm.yaml && rc=$? || rc=$?
-  else
-    kubectl $action --namespace $namespace -f $TMPDIR/helm.yaml && rc=$? || rc=$?
-  fi
+for manifest in yaml.safe_load_all(sys.stdin):
+    if manifest:
+        if "metadata" in manifest and "namespace" not in manifest["metadata"]:
+            manifest["metadata"]["namespace"] = sys.argv[1]
+        print("---")
+        print(yaml.dump(manifest))' $namespace > $TMPDIR/helm.yaml
+
+  kubectl $action -f $TMPDIR/helm.yaml && rc=$? || rc=$?
 }
 
 
