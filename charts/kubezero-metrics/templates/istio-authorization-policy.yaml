@@ -18,9 +18,9 @@ spec:
     - source:
         notIpBlocks:
         {{- toYaml $service.ipBlocks | nindent 8 }}
-    to:
-    - operation:
-        hosts: ["{{ $service.url }}"]
+    when:
+    - key: connection.sni
+      values: ["{{ $service.url }}"]
 ---
 {{- end }}
 {{- end }}
