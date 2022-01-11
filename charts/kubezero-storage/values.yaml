@@ -1,3 +1,16 @@
+snapshotController:
+  enabled: true
+  replicas: 1
+  logLevel: 2
+
+  resources:
+    requests:
+      memory: 16Mi
+      cpu: 20m
+    limits:
+      memory: 64Mi
+      cpu: 100m
+
 lvm-localpv:
   enabled: false
 

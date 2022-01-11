@@ -1,0 +1,40 @@
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: snapshot-controller
+  namespace: kube-system
+  labels:
+    {{- include "kubezero-lib.labels" . | nindent 4 }}
+spec:
+  serviceName: "snapshot-controller"
+  replicas: {{ .Values.snapshotController.replicas }}
+  selector:
+    matchLabels:
+      app: snapshot-controller
+  template:
+    metadata:
+      labels:
+        app: snapshot-controller
+    spec:
+      affinity:          
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - snapshot-controller
+            topologyKey: "kubernetes.io/hostname"
+      serviceAccount: snapshot-controller
+      containers:
+        - name: snapshot-controller
+          image: k8s.gcr.io/sig-storage/snapshot-controller:v4.0.0
+          args:
+            - "--v={{ .Values.snapshotController.logLevel }}"
+            {{- if gt (int .Values.snapshotController.replicas) 1 }}
+            - "--leader-election=true"
+            {{- end }}
+          imagePullPolicy: IfNotPresent
+          resources:
+            {{- toYaml .Values.snapshotController.resources | nindent 12 }}

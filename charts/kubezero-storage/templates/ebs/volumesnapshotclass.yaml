@@ -1,0 +1,12 @@
+{{- if index .Values "aws-ebs-csi-driver" "enabled" }}
+kind: VolumeSnapshotClass
+apiVersion: snapshot.storage.k8s.io/v1
+metadata:
+  name: csi-aws-ebs
+  #annotations:
+  #  snapshot.storage.kubernetes.io/is-default-class: "true"
+  labels:
+    {{- include "kubezero-lib.labels" . | nindent 4 }}
+deletionPolicy: Delete
+driver: ebs.csi.aws.com
+{{- end }}

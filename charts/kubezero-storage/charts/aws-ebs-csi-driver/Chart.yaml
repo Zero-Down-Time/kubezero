@@ -19,4 +19,4 @@ maintainers:
 name: aws-ebs-csi-driver
 sources:
 - https://github.com/kubernetes-sigs/aws-ebs-csi-driver
-version: 2.5.1
+version: 2.6.2
