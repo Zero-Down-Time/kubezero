@@ -3,6 +3,12 @@ snapshotController:
   replicas: 1
   logLevel: 2
 
+  tolerations:
+  - key: node-role.kubernetes.io/master
+    effect: NoSchedule
+  nodeSelector:
+    node-role.kubernetes.io/control-plane: ""
+
   resources:
     requests:
       memory: 16Mi
