@@ -38,3 +38,11 @@ spec:
           imagePullPolicy: IfNotPresent
           resources:
             {{- toYaml .Values.snapshotController.resources | nindent 12 }}
+      {{- with .Values.snapshotController.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.snapshotController.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -1,6 +1,6 @@
 # kubezero-storage
 
-![Version: 0.5.2](https://img.shields.io/badge/Version-0.5.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.5.3](https://img.shields.io/badge/Version-0.5.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things storage incl. AWS EBS/EFS, openEBS-lvm, gemini
 
@@ -19,7 +19,7 @@ Kubernetes: `>= 1.20.0`
 | Repository | Name | Version |
 |------------|------|---------|
 |  | aws-ebs-csi-driver | 2.6.2 |
-|  | aws-efs-csi-driver | 2.2.0 |
+|  | aws-efs-csi-driver | 2.2.1 |
 |  | gemini | 0.0.8 |
 |  | lvm-localpv | 0.8.6 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.4 |
@@ -94,11 +94,14 @@ Kubernetes: `>= 1.20.0`
 | lvm-localpv.storageClass.vgpattern | string | `""` |  |
 | snapshotController.enabled | bool | `true` |  |
 | snapshotController.logLevel | int | `2` |  |
+| snapshotController.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | snapshotController.replicas | int | `1` |  |
 | snapshotController.resources.limits.cpu | string | `"100m"` |  |
 | snapshotController.resources.limits.memory | string | `"64Mi"` |  |
 | snapshotController.resources.requests.cpu | string | `"20m"` |  |
 | snapshotController.resources.requests.memory | string | `"16Mi"` |  |
+| snapshotController.tolerations[0].effect | string | `"NoSchedule"` |  |
+| snapshotController.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 
 # Snapshotter
 - https://kubernetes-csi.github.io/docs/snapshot-controller.html#deployment
