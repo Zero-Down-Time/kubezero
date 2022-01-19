@@ -2,10 +2,10 @@
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: {{ include "kubezero-lib.fullname" . }}
+  name: gitea
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "kubezero-lib.labels" . | nindent 4 }}
+    {{- include "kubezero-lib.labels" $ | nindent 4 }}
 spec:
   gateways:
   - {{ .Values.gitea.istio.gateway }}
@@ -15,4 +15,10 @@ spec:
   - route:
     - destination:
         host: gitea-http
+  tcp:
+  - match:
+    - port: 22
+    route:
+    - destination:
+        host: gitea-ssh
 {{- end }}

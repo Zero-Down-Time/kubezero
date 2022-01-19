@@ -1,0 +1,9 @@
+configmap: grafana-dashboards
+gzip: true
+condition: '.Values.jenkins.controller.prometheus.enabled'
+folder: KubeZero
+dashboards:
+- name: Jenkins
+  url: https://grafana.com/api/dashboards/9964/revisions/1/download
+  tags:
+  - CI

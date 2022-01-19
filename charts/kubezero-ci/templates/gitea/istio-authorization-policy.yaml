@@ -1,4 +1,4 @@
-{{- if and .Values.jenkins.enabled .Values.jenkins.istio.enabled .Values.jenkins.istio.ipBlocks }}
+{{- if and .Values.gitea.enabled .Values.gitea.istio.enabled .Values.gitea.istio.ipBlocks }}
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
@@ -15,8 +15,8 @@ spec:
   - from:
     - source:
         notIpBlocks:
-        {{- toYaml .Values.jenkins.istio.ipBlocks | nindent 8 }}
+        {{- toYaml .Values.gitea.istio.ipBlocks | nindent 8 }}
     when:
     - key: connection.sni
-      values: ["{{ .Values.jenkins.istio.url }}"]
+      values: ["{{ .Values.gitea.istio.url }}"]
 {{- end }}
