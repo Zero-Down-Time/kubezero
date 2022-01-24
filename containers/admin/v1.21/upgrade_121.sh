@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-VERSION="v1.21.8"
+VERSION="v1.21.9"
 
 [ -n "$DEBUG" ] && DEBUG=1
 
