@@ -10,6 +10,9 @@ Common naming functions
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- if .subchart }}
+{{- $name = default .subchart .Values.nameOverride -}}
+{{- end -}}
 {{- if contains $name .Release.Name -}}
 {{- .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}

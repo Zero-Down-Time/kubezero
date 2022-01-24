@@ -14,14 +14,18 @@
 {{ template "chart.requirementsSection" . }}
 
 # Jenkins
-    
+- default build retention 10 builds, 32days
+- memory request 1.25GB
+- dark theme
+- trivy scanner incl. HTML reporting and publisher
+
 # goCD
-    
+
 # Gitea
 
 ## OpenSSH 8.8 RSA disabled
 - https://github.com/go-gitea/gitea/issues/17798
 
-## Resources    
+## Resources
 
 {{ template "chart.valuesSection" . }}

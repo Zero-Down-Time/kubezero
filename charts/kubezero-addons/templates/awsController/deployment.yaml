@@ -1,0 +1,30 @@
+{{- if .Values.awsController.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubezero-aws-controller
+  namespace: kube-system
+  labels:
+    app: kubezero-aws-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubezero-aws-controller
+  template:
+    metadata:
+      labels:
+        app: kubezero-aws-controller
+    spec:
+      containers:
+      - name: kubezero-aws-controller
+        image: "{{ .Values.awsController.image.name }}:{{ .Values.awsController.image.tag }}"
+        imagePullPolicy: Always
+      serviceAccountName: kubezero-aws-controller
+      hostNetwork: true
+      nodeSelector:
+        node-role.kubernetes.io/control-plane: ""
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+{{- end }}

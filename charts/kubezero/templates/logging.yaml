@@ -1,10 +1,7 @@
 {{- define "logging-values" }}
-{{- if or .Values.logging.es .Values.logging.kibana }}
+{{- with index .Values "logging" "eck-operator" }}
 eck-operator:
-  enabled: true
-  {{- with index .Values "logging" "eck-operator" }}
   {{- toYaml . | nindent 2 }}
-  {{- end }}
 {{- end }}
 
 {{- if .Values.logging.elastic_password }}

@@ -3,8 +3,11 @@ set -x
 
 # Allow EFS and EBS Argo apps to be deleted without removing things like storageClasses etc.
 # all to be replaced by kubezero-storage
-kubectl patch application aws-ebs-csi-driver -n argocd  --type=json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
-kubectl patch application aws-efs-csi-driver -n argocd  --type=json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
+kubectl patch application aws-ebs-csi-driver -n argocd --type=json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
+kubectl patch application aws-efs-csi-driver -n argocd --type=json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
+
+# Migrate ZeroDownTime helm repo
+kubectl patch appproject kubezero -n argocd --type=json -p='[{"op": "replace", "path": "/spec/sourceRepos/0", "value": "https://cdn.zero-downtime.net/charts" }]'
 
 # Delete EBS and EFS Deployments and Daemonsets as we cannot change the lables while moving them to storage.
 # This will NOT affect provisioned volumes

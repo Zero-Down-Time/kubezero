@@ -27,7 +27,7 @@ kiam:
 
 storage:
   enabled: false
-  targetRevision: 0.4.3
+  targetRevision: 0.5.2
   aws-ebs-csi-driver:
     enabled: false
   aws-efs-csi-driver:
