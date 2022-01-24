@@ -9,6 +9,13 @@ clusterBackup:
   password: ""
   extraEnv: []
 
+tenjin:
+  enabled: false
+
+  image:
+    name: public.ecr.aws/zero-downtime/kubezero-tenjin
+    tag: v0.1.0
+
 aws-node-termination-handler:
   enabled: false
 

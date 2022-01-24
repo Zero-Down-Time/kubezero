@@ -6,6 +6,10 @@
 kubectl get pods --all-namespaces -o json | jq '.items[] | select(.status.reason!=null) | select(.status.reason | contains("Evicted")) | "kubectl delete pods \(.metadata.name) -n \(.metadata.namespace)"' | xargs -n 1 bash -c
 `
 
+## cleanup stuck namespace
+`for ns in $(kubectl get ns --field-selector status.phase=Terminating -o jsonpath='{.items[*].metadata.name}'); do  kubectl get ns $ns -ojson | jq '.spec.finalizers = []' | kubectl replace --raw "/api/v1/namespaces/$ns/finalize" -f -; done
+`
+
 ## Cleanup old replicasets
 `kubectl get rs --all-namespaces | awk {' if ($3 == 0 && $4 == 0) system("kubectl delete rs "$2" --namespace="$1)'}`
 

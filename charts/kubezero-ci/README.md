@@ -25,6 +25,10 @@ Kubernetes: `>= 1.20.0`
 | https://gocd.github.io/helm-chart | gocd | 1.39.4 |
 
 # Jenkins
+- default build retention 10 builds, 32days
+- memory request 1.25GB
+- dark theme
+- trivy scanner incl. HTML reporting and publisher
    
 # goCD
    

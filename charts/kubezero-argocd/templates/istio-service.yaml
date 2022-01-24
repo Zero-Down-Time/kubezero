@@ -5,7 +5,7 @@ metadata:
   name: argocd-server
   namespace: {{ $.Release.Namespace }}
   labels:
-{{ include "kubezero-lib.labels" . | indent 4 }}
+    {{- include "kubezero-lib.labels" . | nindent 4 }}
 spec:
   gateways:
   - {{ .Values.istio.gateway }}

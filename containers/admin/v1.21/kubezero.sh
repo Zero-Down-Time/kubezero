@@ -211,27 +211,16 @@ elif [[ "$1" =~ "^(bootstrap|recover|join)$" ]]; then
 
   render_kubeadm
 
-  if [[ "$1" =~ "^(recover|join)$" ]]; then
+  if [[ "$1" =~ "^(bootstrap)$" ]]; then
+    # Create all certs during bootstrap
+    _kubeadm init phase certs all
 
+  else
     # Recert certificates for THIS node
     rm -f ${HOSTFS}/etc/kubernetes/pki/etcd/peer.* ${HOSTFS}/etc/kubernetes/pki/etcd/server.* ${HOSTFS}/etc/kubernetes/pki/apiserver.*
     _kubeadm init phase certs etcd-server
     _kubeadm init phase certs etcd-peer
     _kubeadm init phase certs apiserver
-
-    # Restore only etcd for desaster recovery
-    if [[ "$1" =~ "^(recover)$" ]]; then
-      etcdctl snapshot restore ${HOSTFS}/etc/kubernetes/etcd_snapshot \
-        --name $ETCD_NODENAME \
-        --data-dir="${HOSTFS}/var/lib/etcd" \
-        --initial-cluster-token etcd-${CLUSTERNAME} \
-        --initial-advertise-peer-urls https://${ETCD_NODENAME}:2380 \
-        --initial-cluster $ETCD_NODENAME=https://${ETCD_NODENAME}:2380
-    fi
-
-  # Create all certs during bootstrap
-  else
-    _kubeadm init phase certs all
   fi
 
   pre_kubeadm
@@ -329,7 +318,7 @@ elif [ "$1" == 'backup' ]; then
   restic snapshots || restic init
   restic backup ${WORKDIR} -H $CLUSTERNAME --tag $VERSION
 
-  echo "Backup complete"
+  echo "Backup complete."
 
   # Remove backups from previous versions
   restic forget --keep-tag $VERSION --prune
@@ -354,6 +343,16 @@ elif [ "$1" == 'restore' ]; then
 
   # Always use kubeadm kubectl config to never run into chicken egg with custom auth hooks
   cp ${WORKDIR}/admin.conf ${HOSTFS}/root/.kube/config
+
+  etcdctl snapshot restore ${HOSTFS}/etc/kubernetes/etcd_snapshot \
+    --name $ETCD_NODENAME \
+    --data-dir="${HOSTFS}/var/lib/etcd" \
+    --initial-cluster-token etcd-${CLUSTERNAME} \
+    --initial-advertise-peer-urls https://${ETCD_NODENAME}:2380 \
+    --initial-cluster $ETCD_NODENAME=https://${ETCD_NODENAME}:2380
+
+  echo "Backup restored."
+
 
 elif [ "$1" == 'debug_shell' ]; then
   echo "Entering debug shell"
