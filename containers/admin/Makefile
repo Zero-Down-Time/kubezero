@@ -1,4 +1,4 @@
-VERSION ?= 1.21.8
+VERSION ?= 1.21.9
 ALPINE_VERSION ?= 3.15
 REGISTRY := public.ecr.aws/zero-downtime
 REPOSITORY := kubezero-admin
