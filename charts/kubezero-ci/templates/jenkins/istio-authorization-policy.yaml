@@ -19,5 +19,8 @@ spec:
     to:
     - operation:
         hosts: ["{{ .Values.jenkins.istio.url }}"]
-        ports: [ "443" ]
+    when:
+    - key: connection.sni
+      values:
+      - '*'
 {{- end }}

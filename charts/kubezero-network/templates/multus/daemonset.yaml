@@ -105,6 +105,8 @@ spec:
       tolerations:
       - operator: Exists
         effect: NoSchedule
+      - operator: Exists
+        effect: NoExecute
       serviceAccountName: multus
       containers:
       - name: kube-multus
@@ -112,6 +114,7 @@ spec:
         command: ["/entrypoint.sh"]
         args:
         - "--multus-conf-file=auto"
+        - "--rename-conf-file=true"
         - "--cni-version=0.3.1"
         resources:
           requests:
@@ -133,23 +136,6 @@ spec:
           mountPath: /host/opt/cni/bin
         - name: multus-cfg
           mountPath: /tmp/multus-conf
-      initContainers:
-        - name: install-multus-binary
-          image: ghcr.io/k8snetworkplumbingwg/multus-cni:{{ .Values.multus.tag }}
-          command:
-            - "cp"
-            - "/usr/src/multus-cni/bin/multus"
-            - "/host/opt/cni/bin/multus"
-          resources:
-            requests:
-              cpu: "10m"
-              memory: "15Mi"
-          securityContext:
-            privileged: true
-          volumeMounts:
-            - name: cnibin
-              mountPath: /host/opt/cni/bin
-              mountPropagation: Bidirectional
       terminationGracePeriodSeconds: 10
       volumes:
         - name: run
