@@ -11,7 +11,7 @@ hairpinMode: hairpin-veth
 resolvConf: /run/systemd/resolve/resolv.conf
 {{- end }}
 protectKernelDefaults: {{ .Values.protectKernelDefaults }}
-eventRecordQPS: 0
+#eventRecordQPS: 0
 # Breaks kubelet at boot time
 # tlsCertFile: /var/lib/kubelet/pki/kubelet.crt
 # tlsPrivateKeyFile: /var/lib/kubelet/pki/kubelet.key
