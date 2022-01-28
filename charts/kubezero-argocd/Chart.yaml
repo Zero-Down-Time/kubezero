@@ -1,7 +1,7 @@
 apiVersion: v2
 description: KubeZero ArgoCD Helm chart to install ArgoCD itself and the KubeZero ArgoCD Application
 name: kubezero-argocd
-version: 0.9.3
+version: 0.9.4
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:

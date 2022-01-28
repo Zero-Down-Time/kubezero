@@ -19,5 +19,8 @@ spec:
     to:
     - operation:
         hosts: ["{{ .Values.gitea.istio.url }}"]
-        ports: [ "443", "22" ]
+    when:
+    - key: connection.sni
+      values:
+      - '*'
 {{- end }}

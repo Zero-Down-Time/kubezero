@@ -19,7 +19,7 @@ metallb:
 
 multus:
   enabled: false
-  tag: "v3.8"
+  tag: "v3.8.1"
 
 cilium:
   enabled: false

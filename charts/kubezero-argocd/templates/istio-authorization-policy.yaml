@@ -17,8 +17,12 @@ spec:
     - source:
         notIpBlocks:
         {{- toYaml .Values.istio.ipBlocks | nindent 8 }}
+    to:
+    - operation:
+        hosts: [{{ index .Values "argo-cd" "server" "config" "url" | quote }}]
     when:
     - key: connection.sni
-      values: ["{{ index .Values "argo-cd" "server" "config" "url" }}"]
+      values:
+      - '*'
 {{- end }}
 {{- end }}
