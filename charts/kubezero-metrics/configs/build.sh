@@ -9,7 +9,8 @@ which jb > /dev/null || { echo "Required jb ( json-bundler ) not found!"; exit 1
 if [ -r jsonnetfile.lock.json ]; then
   jb update
 else
-  jb install github.com/prometheus-operator/kube-prometheus/jsonnet/kube-prometheus@main
+  #jb install github.com/prometheus-operator/kube-prometheus/jsonnet/kube-prometheus@main
+  jb install github.com/prometheus-operator/kube-prometheus/jsonnet/kube-prometheus@release-0.9
 fi
 
 rm -rf dashboards && mkdir -p dashboards

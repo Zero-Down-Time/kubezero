@@ -1,8 +1,4 @@
 kube-prometheus-stack:
-  global:
-    rbac:
-      pspEnabled: false
-
   defaultRules:
     create: false
 
@@ -75,18 +71,17 @@ kube-prometheus-stack:
 
   nodeExporter:
     enabled: true
-    serviceMonitor:
-      relabelings:
-      - sourceLabels: [__meta_kubernetes_pod_node_name]
-        separator: ;
-        regex: ^(.*)$
-        targetLabel: node
-        replacement: $1
-        action: replace
 
   prometheus-node-exporter:
-    rbac:
-      pspEnabled: false
+    prometheus:
+      monitor:
+        relabelings:
+        - sourceLabels: [__meta_kubernetes_pod_node_name]
+          separator: ;
+          regex: ^(.*)$
+          targetLabel: node
+          replacement: $1
+          action: replace
     resources:
       requests:
         cpu: 20m
@@ -127,8 +122,6 @@ kube-prometheus-stack:
   # Custom Grafana tweaks
   grafana:
     enabled: true
-    rbac:
-      pspEnabled: false
 
     # Disabled as we use the upstream kube-mixin dashboards directly
     defaultDashboardsEnabled: false
@@ -190,8 +183,6 @@ kube-prometheus-stack:
 
   # Assign state metrics to control plane
   kube-state-metrics:
-    podSecurityPolicy:
-      enabled: false
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
@@ -209,6 +200,34 @@ kube-prometheus-stack:
         group_wait: 30s
         group_interval: 5m
         repeat_interval: 6h
+        routes:
+        - matchers:
+          - alertname = Watchdog
+          receiver: 'null'
+        - matchers:
+          - alertname = InfoInhibitor
+          receiver: 'null'
+      inhibit_rules:
+      - equal:
+        - namespace
+        - alertname
+        source_matchers:
+        - severity = critical
+        target_matchers:
+        - severity =~ warning|info
+      - equal:
+        - namespace
+        - alertname
+        source_matchers:
+        - severity = warning
+        target_matchers:
+        - severity = info
+      - equal:
+        - namespace
+        source_matchers:
+        - alertname = InfoInhibitor
+        target_matchers:
+        - severity = info
     alertmanagerSpec:
       # externalUrl:
       logFormat: json

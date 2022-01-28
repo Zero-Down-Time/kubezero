@@ -16,7 +16,8 @@ spec:
     - source:
         notIpBlocks:
         {{- toYaml .Values.jenkins.istio.ipBlocks | nindent 8 }}
-    when:
-    - key: connection.sni
-      values: ["{{ .Values.jenkins.istio.url }}"]
+    to:
+    - operation:
+        hosts: ["{{ .Values.jenkins.istio.url }}"]
+        ports: [ "443" ]
 {{- end }}
