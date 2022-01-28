@@ -3,18 +3,23 @@ clusterBackup:
 
   image:
     name: public.ecr.aws/zero-downtime/kubezero-admin
-    tag: v1.21.8
+    tag: v1.21.9
 
   repository: ""
   password: ""
   extraEnv: []
 
-tenjin:
+forseti:
   enabled: false
 
   image:
-    name: public.ecr.aws/zero-downtime/kubezero-tenjin
-    tag: v0.1.0
+    name: public.ecr.aws/zero-downtime/forseti
+    tag: v0.1.2
+
+  aws:
+    region: ""
+    # -- "arn:aws:iam::${AWS::AccountId}:role/${AWS::Region}.${ClusterName}.kubezeroForseti"
+    iamRoleArn: ""
 
 aws-node-termination-handler:
   enabled: false
@@ -36,10 +41,13 @@ aws-node-termination-handler:
 
   metadataTries: 0
   extraEnv:
-    # -- "arn:aws:iam::${AWS::AccountId}:role/${AWS::Region}.${ClusterName}.awsNth"
-    AWS_ROLE_ARN: ""
-    AWS_WEB_IDENTITY_TOKEN_FILE: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
-    AWS_STS_REGIONAL_ENDPOINTS: "regional"
+  # -- "arn:aws:iam::${AWS::AccountId}:role/${AWS::Region}.${ClusterName}.awsNth"
+  - name: AWS_ROLE_ARN
+    value: ""
+  - name: AWS_WEB_IDENTITY_TOKEN_FILE
+    value: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
+  - name: AWS_STS_REGIONAL_ENDPOINTS
+    value: "regional"
 
   enablePrometheusServer: false
   podMonitor:
