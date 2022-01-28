@@ -10,6 +10,9 @@ priorityClassName: {{ .Values.priorityClassName }}
 serviceAccountName: {{ include "fluentd.serviceAccountName" . }}
 securityContext:
   {{- toYaml .Values.podSecurityContext | nindent 2 }}
+{{- with .Values.terminationGracePeriodSeconds }}
+terminationGracePeriodSeconds: {{ . }}
+{{- end }}
 containers:
   - name: {{ .Chart.Name }}
     securityContext:
@@ -42,6 +45,10 @@ containers:
     - name: {{ $port.name }}
       containerPort: {{ $port.containerPort }}
       protocol: {{ $port.protocol }}
+    {{- end }}
+    {{- with .Values.lifecycle }}
+    lifecycle:
+      {{- toYaml . | nindent 6 }}
     {{- end }}
     livenessProbe:
       {{- toYaml .Values.livenessProbe | nindent 6 }}

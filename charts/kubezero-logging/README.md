@@ -1,6 +1,6 @@
 # kubezero-logging
 
-![Version: 0.7.16](https://img.shields.io/badge/Version-0.7.16-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6.0](https://img.shields.io/badge/AppVersion-1.6.0-informational?style=flat-square)
+![Version: 0.7.17](https://img.shields.io/badge/Version-0.7.17-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6.0](https://img.shields.io/badge/AppVersion-1.6.0-informational?style=flat-square)
 
 KubeZero Umbrella Chart for complete EFK stack
 
@@ -19,8 +19,8 @@ Kubernetes: `>= 1.18.0`
 | Repository | Name | Version |
 |------------|------|---------|
 |  | eck-operator | 1.6.0 |
-|  | fluent-bit | 0.19.2 |
-|  | fluentd | 0.3.0 |
+|  | fluent-bit | 0.19.18 |
+|  | fluentd | 0.3.5 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.3 |
 
 ## Changes from upstream
@@ -59,7 +59,7 @@ Kubernetes: `>= 1.18.0`
 |-----|------|---------|-------------|
 | eck-operator.enabled | bool | `false` |  |
 | eck-operator.installCRDs | bool | `false` |  |
-| eck-operator.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
+| eck-operator.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | eck-operator.tolerations[0].effect | string | `"NoSchedule"` |  |
 | eck-operator.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | elastic_password | string | `""` |  |
@@ -146,7 +146,7 @@ Kubernetes: `>= 1.18.0`
 | kibana.istio.enabled | bool | `false` |  |
 | kibana.istio.gateway | string | `"istio-system/ingressgateway"` |  |
 | kibana.istio.url | string | `""` |  |
-| version | string | `"7.13.4"` |  |
+| version | string | `"7.16.3"` |  |
 
 ## Resources:
 
