@@ -16,7 +16,8 @@ spec:
     - source:
         notIpBlocks:
         {{- toYaml .Values.gitea.istio.ipBlocks | nindent 8 }}
-    when:
-    - key: connection.sni
-      values: ["{{ .Values.gitea.istio.url }}"]
+    to:
+    - operation:
+        hosts: ["{{ .Values.gitea.istio.url }}"]
+        ports: [ "443", "22" ]
 {{- end }}

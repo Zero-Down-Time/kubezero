@@ -26,14 +26,13 @@
                "fillGradient": 0,
                "gridPos": { },
                "id": 2,
-               "interval": "1m",
                "legend": {
                   "alignAsTable": true,
                   "avg": true,
                   "current": true,
                   "max": true,
                   "min": true,
-                  "rightSide": true,
+                  "rightSide": false,
                   "show": true,
                   "sideWidth": null,
                   "total": false,
@@ -125,11 +124,7 @@
                },
                "gridPos": { },
                "id": 3,
-               "interval": "1m",
-               "legend": {
-                  "alignAsTable": true,
-                  "rightSide": true
-               },
+               "interval": null,
                "links": [ ],
                "mappingType": 1,
                "mappingTypes": [
@@ -212,14 +207,13 @@
                "fillGradient": 0,
                "gridPos": { },
                "id": 4,
-               "interval": "1m",
                "legend": {
                   "alignAsTable": true,
                   "avg": true,
                   "current": true,
                   "max": true,
                   "min": true,
-                  "rightSide": true,
+                  "rightSide": false,
                   "show": true,
                   "sideWidth": null,
                   "total": false,
@@ -311,11 +305,7 @@
                },
                "gridPos": { },
                "id": 5,
-               "interval": "1m",
-               "legend": {
-                  "alignAsTable": true,
-                  "rightSide": true
-               },
+               "interval": null,
                "links": [ ],
                "mappingType": 1,
                "mappingTypes": [
@@ -398,7 +388,7 @@
                "value": "default"
             },
             "hide": 0,
-            "label": "Data Source",
+            "label": null,
             "name": "datasource",
             "options": [ ],
             "query": "prometheus",
@@ -416,7 +406,7 @@
             "multi": false,
             "name": "cluster",
             "options": [ ],
-            "query": "label_values(kubelet_volume_stats_capacity_bytes{job=\"kubelet\"}, cluster)",
+            "query": "label_values(kubelet_volume_stats_capacity_bytes, cluster)",
             "refresh": 2,
             "regex": "",
             "sort": 1,

@@ -77,6 +77,7 @@ jenkins:
     enableRawHtmlMarkupFormatter: true
     # javaOpts: "-Xms512m -Xmx512m"
     javaOpts: "-XX:+UseStringDeduplication -Dhudson.model.DirectoryBrowserSupport.CSP=\"sandbox allow-popups; default-src 'none'; img-src 'self' cdn.zero-downtime.net; style-src 'unsafe-inline';\""
+    jenkinsOpts: "--sessionTimeout=180 --sessionEviction=3600"
 
     resources:
       requests:
@@ -129,7 +130,7 @@ jenkins:
   # Preconfigure agents to use zdt podman requires fuse/overlayfs
   agent:
     image: public.ecr.aws/zero-downtime/jenkins-podman
-    tag: v0.2.4-2
+    tag: v0.2.4-5
     resources:
       requests:
         cpu: "512m"
