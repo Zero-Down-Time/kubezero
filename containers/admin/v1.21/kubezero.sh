@@ -10,6 +10,8 @@ fi
 export WORKDIR=/tmp/kubezero
 export HOSTFS=/host
 export VERSION=v1.21
+export NETWORK_VERSION=0.1.7
+export ADDONS_VERSION=0.4.1
 
 export KUBECONFIG="${HOSTFS}/root/.kube/config"
 
@@ -145,13 +147,13 @@ if [ "$1" == 'upgrade' ]; then
 
   # network
   yq eval '.network // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
-  helm template kubezero/kubezero-network --version 0.1.3 --include-crds --namespace kube-system --name-template network \
-    -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply -f - $LOG
+  helm template kubezero/kubezero-network --version $NETWORK_VERSION --namespace kube-system --include-crds --name-template network \
+    -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply --namespace kube-system -f - $LOG
 
   # addons
   yq eval '.addons // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
-  helm template kubezero/kubezero-addons --version 0.2.4 --include-crds --namespace kube-system --name-template addons \
-    -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply -f - $LOG
+  helm template kubezero/kubezero-addons --version $ADDONS_VERSION --namespace kube-system --include-crds --name-template addons \
+    -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply --namespace kube-system -f - $LOG
 
   ######################
 
@@ -178,6 +180,9 @@ elif [[ "$1" == 'node-upgrade' ]]; then
 
   echo "Migrating kubezero.yaml"
   yq -i eval '.api.etcdServers = .api.allEtcdEndpoints | .network.multus.enabled = "true"' ${HOSTFS}/etc/kubernetes/kubezero.yaml
+
+  # remove old aws-node-termination-handler config, first new controller will do the right thing
+  yq -i eval 'del(.addons.aws-node-termination-handler)' ${HOSTFS}/etc/kubernetes/kubezero.yaml
 
   # AWS
   if [ -f ${HOSTFS}/etc/cloudbender/clusterBackup.passphrase ]; then
@@ -288,13 +293,13 @@ elif [[ "$1" =~ "^(bootstrap|recover|join)$" ]]; then
 
     # network
     yq eval '.network // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
-    helm template kubezero/kubezero-network --version 0.1.3 --include-crds --namespace kube-system --name-template network \
-      -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply -f - $LOG
+    helm template kubezero/kubezero-network --version $NETWORK_VERSION --namespace kube-system --include-crds --name-template network \
+      -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply --namespace kube-system -f - $LOG
 
     # addons
     yq eval '.addons // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
-    helm template kubezero/kubezero-addons --version 0.2.4 --include-crds --namespace kube-system --name-template addons \
-      -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply -f - $LOG
+    helm template kubezero/kubezero-addons --version $ADDONS_VERSION --namespace kube-system --include-crds --name-template addons \
+      -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply --namespace kube-system -f - $LOG
   fi
 
   post_kubeadm
