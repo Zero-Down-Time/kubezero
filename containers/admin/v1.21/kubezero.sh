@@ -11,7 +11,7 @@ export WORKDIR=/tmp/kubezero
 export HOSTFS=/host
 export VERSION=v1.21
 export NETWORK_VERSION=0.1.7
-export ADDONS_VERSION=0.4.1
+export ADDONS_VERSION=0.4.2
 
 export KUBECONFIG="${HOSTFS}/root/.kube/config"
 
@@ -142,6 +142,9 @@ if [ "$1" == 'upgrade' ]; then
   fi
 
   ### POST 1.21 specific
+  # Delete any previous aws-node-term config as they changed the labels ;-(
+  kubectl delete deployment aws-node-termination-handler -n kube-system || true
+  
   ######################
   helm repo add kubezero https://cdn.zero-downtime.net/charts/
 
@@ -236,8 +239,10 @@ elif [[ "$1" =~ "^(bootstrap|recover|join)$" ]]; then
     _kubeadm init phase kubeconfig all
     _kubeadm init phase kubelet-start
 
-    # first get current running etcd pods for etcdctl commands
-    # retry in case other nodes join / API fails / etcd leader changes etc.
+    # flush etcd data directory from restore
+    rm -rf ${HOSTFS}/var/lib/etcd/member
+
+    # get current running etcd pods for etcdctl commands
     while true; do
       etcd_endpoints=$(kubectl get pods -n kube-system -l component=etcd -o yaml | \
         yq eval '.items[].metadata.annotations."kubeadm.kubernetes.io/etcd.advertise-client-urls"' - | tr '\n' ',' | sed -e 's/,$//')

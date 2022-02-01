@@ -19,7 +19,7 @@ Kubernetes: `>= 1.20.0`
 | Repository | Name | Version |
 |------------|------|---------|
 |  | aws-ebs-csi-driver | 2.6.2 |
-|  | aws-efs-csi-driver | 2.2.1 |
+|  | aws-efs-csi-driver | 2.2.3 |
 |  | gemini | 0.0.8 |
 |  | lvm-localpv | 0.8.6 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.4 |

@@ -5,7 +5,7 @@ YAML=$1
 # Convert keys
 yq eval -i '
   .spec.source.repoURL="https://cdn.zero-downtime.net/charts" |
-  .spec.source.targetRevision="1.21.8-7" |
+  .spec.source.targetRevision="1.21.9-1" |
   del(.spec.source.helm.parameters)' $YAML
 
 # Extract values

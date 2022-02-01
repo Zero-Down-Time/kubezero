@@ -26,6 +26,9 @@ aws-node-termination-handler:
 
   fullnameOverride: "aws-node-termination-handler"
 
+  image:
+    tag: v1.14.1
+
   # -- "aws-node-termination-handler/${ClusterName}"
   managedAsgTag: "aws-node-termination-handler/managed"
 
