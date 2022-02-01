@@ -1,6 +1,6 @@
 # kubezero-argocd
 
-![Version: 0.9.4](https://img.shields.io/badge/Version-0.9.4-informational?style=flat-square)
+![Version: 0.9.5](https://img.shields.io/badge/Version-0.9.5-informational?style=flat-square)
 
 KubeZero ArgoCD Helm chart to install ArgoCD itself and the KubeZero ArgoCD Application
 
@@ -18,8 +18,7 @@ Kubernetes: `>= 1.20.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://argoproj.github.io/argo-helm | argo-cd | 3.29.5 |
-| https://argoproj.github.io/argo-helm | argocd-applicationset | 1.4.0 |
+| https://argoproj.github.io/argo-helm | argo-cd | 3.32.1 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.4 |
 
 ## Values
@@ -49,11 +48,6 @@ Kubernetes: `>= 1.20.0`
 | argo-cd.server.metrics.enabled | bool | `false` |  |
 | argo-cd.server.metrics.serviceMonitor.enabled | bool | `true` |  |
 | argo-cd.server.service.servicePortHttpsName | string | `"grpc"` |  |
-| argocd-applicationset.args.policy | string | `"create-update"` |  |
-| argocd-applicationset.enabled | bool | `false` |  |
-| argocd-applicationset.rbac.pspEnabled | bool | `false` |  |
-| argocd-applicationset.resources.requests.cpu | string | `"50m"` |  |
-| argocd-applicationset.resources.requests.memory | string | `"64Mi"` |  |
 | istio.enabled | bool | `false` | Deploy Istio VirtualService to expose ArgoCD |
 | istio.gateway | string | `"istio-ingress/ingressgateway"` | Name of the Istio gateway to add the VirtualService to |
 | istio.ipBlocks | list | `[]` |  |

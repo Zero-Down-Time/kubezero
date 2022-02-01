@@ -116,22 +116,3 @@ argo-cd:
 
   dex:
     enabled: false
-
-
-argocd-applicationset:
-  enabled: false
-
-  # Prevent accidental cascading deletes of Applications
-  args:
-    policy: create-update
-
-  rbac:
-    pspEnabled: false
-
-  resources:
-    # limits:
-      # cpu: 500m
-      # memory: 2048Mi
-    requests:
-      cpu: 50m
-      memory: 64Mi
