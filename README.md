@@ -18,14 +18,14 @@ KubeZero is a Kubernetes distribution providing an integrated container platform
 
 # Version / Support Matrix
 KubeZero releases track the same *minor* version of Kubernetes.  
-Any 1.20.X-Y release of Kubezero supports any Kubernetes cluster 1.20.X.
+Any 1.21.X-Y release of Kubezero supports any Kubernetes cluster 1.21.X.
 
 KubeZero is distributed as a collection of versioned Helm charts, allowing custom upgrade schedules and module versions as needed.
 
 | KubeZero Version | Kubernetes Version  | EOL         |
 |------------------|---------------------|-------------|
-| v1.21.0-alpha    | v1.21               | 28 Feb 2022 |
-| v1.20.8          | v1.20               | 30 Nov 2021 |
+| v1.21.9          | v1.21               | 31 Mar 2022 |
+| v1.20.8          | v1.20               | 31 Jan 2021 |
 | v1.19            | v1.19               | Jul 2021    |
 | v1.18            | v1.18               | Apr 2021    |
 | v1.17            | v1.17               | Jan 2021    |
@@ -46,15 +46,19 @@ KubeZero is distributed as a collection of versioned Helm charts, allowing custo
 ## GitOps
 - cli / cmd line install
 - optional full ArgoCD support and integration
+- fuse device plugin support to build containers as part of a CI pipeline leveraging rootless podman build agents
 
 ## AWS integrations
 - IAM roles for service accounts allowing each pod to assume individual IAM roles
 - access to meta-data services is blocked all workload containers on all nodes
-- system IAM roles are maintained via CloudBender automation
+- all IAM roles are maintained via CloudBender automation
+- aws-node-termination handler integrated
+- support for spot instances per worker group incl. early draining etc.
 
 ## Network
-- Calico using VxLAN incl. increased MTU
-- allows flexible / more containers per worker node compated to eg. AWS VPC CNI
+- Multus support for multiple network interfaces per pod, eg. additional AWS CNI
+- Calico using VxLAN incl. increased MTU  
+allows flexible / more containers per worker node compared to eg. AWS VPC CNI
 - isolates container traffic from VPC by using VxLAN overlay
 - no restrictions on IP space / sizing from the underlying VPC architecture
 
@@ -62,6 +66,7 @@ KubeZero is distributed as a collection of versioned Helm charts, allowing custo
 - flexible EBS support incl. zone awareness
 - EFS support via automated EFS provisioning for worker groups via CloudBender automation
 - local storage provider (OpenEBS LVM) for latency sensitive high performance workloads
+- CSI Snapshot controller and Gemini snapshot groups and retention
 
 ## Ingress
 - AWS Network Loadbalancer and Istio Ingress controllers
