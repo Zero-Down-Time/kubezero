@@ -1,6 +1,6 @@
 # kubezero-addons
 
-![Version: 0.2.2](https://img.shields.io/badge/Version-0.2.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.4.1](https://img.shields.io/badge/Version-0.4.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for various optional cluster addons
 
@@ -42,12 +42,16 @@ Create secret with the IAM user credential for ecr-renew to use, using the crede
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | aws-node-termination-handler.deleteLocalData | bool | `true` |  |
+| aws-node-termination-handler.emitKubernetesEvents | bool | `true` |  |
+| aws-node-termination-handler.enableProbesServer | bool | `true` |  |
 | aws-node-termination-handler.enablePrometheusServer | bool | `false` |  |
 | aws-node-termination-handler.enableSqsTerminationDraining | bool | `true` |  |
 | aws-node-termination-handler.enabled | bool | `false` |  |
-| aws-node-termination-handler.extraEnv.AWS_ROLE_ARN | string | `""` | "arn:aws:iam::${AWS::AccountId}:role/${AWS::Region}.${ClusterName}.awsNth" |
-| aws-node-termination-handler.extraEnv.AWS_STS_REGIONAL_ENDPOINTS | string | `"regional"` |  |
-| aws-node-termination-handler.extraEnv.AWS_WEB_IDENTITY_TOKEN_FILE | string | `"/var/run/secrets/sts.amazonaws.com/serviceaccount/token"` |  |
+| aws-node-termination-handler.extraEnv[0] | object | `{"name":"AWS_ROLE_ARN","value":""}` | "arn:aws:iam::${AWS::AccountId}:role/${AWS::Region}.${ClusterName}.awsNth" |
+| aws-node-termination-handler.extraEnv[1].name | string | `"AWS_WEB_IDENTITY_TOKEN_FILE"` |  |
+| aws-node-termination-handler.extraEnv[1].value | string | `"/var/run/secrets/sts.amazonaws.com/serviceaccount/token"` |  |
+| aws-node-termination-handler.extraEnv[2].name | string | `"AWS_STS_REGIONAL_ENDPOINTS"` |  |
+| aws-node-termination-handler.extraEnv[2].value | string | `"regional"` |  |
 | aws-node-termination-handler.fullnameOverride | string | `"aws-node-termination-handler"` |  |
 | aws-node-termination-handler.ignoreDaemonSets | bool | `true` |  |
 | aws-node-termination-handler.jsonLogging | bool | `true` |  |
@@ -63,8 +67,13 @@ Create secret with the IAM user credential for ecr-renew to use, using the crede
 | clusterBackup.enabled | bool | `false` |  |
 | clusterBackup.extraEnv | list | `[]` |  |
 | clusterBackup.image.name | string | `"public.ecr.aws/zero-downtime/kubezero-admin"` |  |
-| clusterBackup.image.tag | string | `"v1.21.8"` |  |
+| clusterBackup.image.tag | string | `"v1.21.9"` |  |
 | clusterBackup.password | string | `""` |  |
 | clusterBackup.repository | string | `""` |  |
+| forseti.aws.iamRoleArn | string | `""` | "arn:aws:iam::${AWS::AccountId}:role/${AWS::Region}.${ClusterName}.kubezeroForseti" |
+| forseti.aws.region | string | `""` |  |
+| forseti.enabled | bool | `false` |  |
+| forseti.image.name | string | `"public.ecr.aws/zero-downtime/forseti"` |  |
+| forseti.image.tag | string | `"v0.1.2"` |  |
 | fuseDevicePlugin.enabled | bool | `false` |  |
 | k8sEcrLoginRenew.enabled | bool | `false` |  |
