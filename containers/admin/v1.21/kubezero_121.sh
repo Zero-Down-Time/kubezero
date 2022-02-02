@@ -6,8 +6,9 @@ set -x
 kubectl patch application aws-ebs-csi-driver -n argocd --type=json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
 kubectl patch application aws-efs-csi-driver -n argocd --type=json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
 
-# Migrate ZeroDownTime helm repo
+# Migrate ZeroDownTime helm repo and fix project permissions
 kubectl patch appproject kubezero -n argocd --type=json -p='[{"op": "replace", "path": "/spec/sourceRepos/0", "value": "https://cdn.zero-downtime.net/charts" }]'
+kubectl patch appproject kubezero -n argocd --type=json -p='[{"op": "replace", "path": "/spec/destinations", "value": [{"namespace": "*", "server": "https://kubernetes.default.svc"}] }]'
 
 # Delete EBS and EFS Deployments and Daemonsets as we cannot change the lables while moving them to storage.
 # This will NOT affect provisioned volumes
