@@ -1,6 +1,6 @@
 // Common container builder by ZeroDownTime
 
-def call (Map: config) {
+def call(Map config) {
 	pipeline {
 		agent { node { label 'podman-aws-trivy' } }
 
