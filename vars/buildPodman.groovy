@@ -48,8 +48,14 @@ def call(Map config=[:]) {
               reportTitles: 'TrivyScan'
             ]
 
-            // Scan again and fail on CRITICAL vulns
-            sh "[ \"${config.trivyFail}\" == \"NONE\" ] || TRIVY_EXIT_CODE=1 TRIVY_SEVERITY=${config.trivyFail} make scan"
+            // Scan again and fail on CRITICAL vulns, if not overridden
+            script {
+              if (config.trivyFail == 'NONE') {
+                echo 'trivyFail == NONE, review Trivy report manually. Proceeding ...'
+              } else {
+                sh "TRIVY_EXIT_CODE=1 TRIVY_SEVERITY=${config.trivyFail} make scan"
+              }
+            }
           }
         }
 
