@@ -1,6 +1,6 @@
 // Common container builder by ZeroDownTime
 
-def call(Map config=[:], Closure extraSteps) {
+def call(Map config=[:]) {
     pipeline {
       agent {
         node {
@@ -60,7 +60,6 @@ def call(Map config=[:], Closure extraSteps) {
           }
         }
 
-				extraSteps()
       }
     }
   }
