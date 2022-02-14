@@ -26,7 +26,7 @@ scan: build
 	@echo "Scanning $(IMAGE):$(TAG) using Trivy"
 	@trivy $(TRIVY_OPTS) $(IMAGE):$(TAG)
 
-push: scan
+push: build
 	@aws ecr-public get-login-password --region $(REGION) | docker login --username AWS --password-stdin $(REGISTRY)
 	@docker tag $(IMAGE):$(TAG) $(REGISTRY)/$(IMAGE):$(TAG) $(REGISTRY)/$(IMAGE):latest
 	docker push $(REGISTRY)/$(IMAGE):$(TAG)
