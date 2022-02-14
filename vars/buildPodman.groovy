@@ -49,7 +49,7 @@ def call(Map config) {
             ]
 
             // Scan again and fail on CRITICAL vulns
-            sh 'TRIVY_EXIT_CODE=1 TRIVY_SEVERITY=CRITICAL make scan'
+            sh '[ "${config.trivyFail}" == "NONE" ] || TRIVY_EXIT_CODE=1 TRIVY_SEVERITY=${config.trivyFail} make scan'
           }
         }
 
