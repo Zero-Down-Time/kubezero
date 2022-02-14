@@ -1,6 +1,6 @@
 // Common container builder by ZeroDownTime
 
-def call(Map config) {
+def call(Map config=[:], Closure extraSteps) {
     pipeline {
       agent {
         node {
@@ -59,6 +59,8 @@ def call(Map config) {
             sh 'make push'
           }
         }
+
+				extraSteps()
       }
     }
   }
