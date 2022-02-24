@@ -19,7 +19,8 @@ build:
 
 test: build rm-test-image
 	@test -f Dockerfile.test && \
-		docker build --rm -t $(IMAGE):$(TAG)-test --from=$(IMAGE):$(TAG) -f Dockerfile.test . || \
+		{ docker build --rm -t $(IMAGE):$(TAG)-test --from=$(IMAGE):$(TAG) -f Dockerfile.test . && \
+			docker run --rm --env-host -t $(IMAGE):$(TAG)-test; } || \
 		echo "No Dockerfile.test found, skipping test"
 
 scan: build
