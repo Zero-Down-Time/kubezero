@@ -11,7 +11,7 @@ export WORKDIR=/tmp/kubezero
 export HOSTFS=/host
 export VERSION=v1.21
 export NETWORK_VERSION=0.1.7
-export ADDONS_VERSION=0.4.2
+export ADDONS_VERSION=0.4.3
 
 export KUBECONFIG="${HOSTFS}/root/.kube/config"
 
