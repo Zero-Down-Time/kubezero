@@ -1,6 +1,6 @@
 # kubezero-storage
 
-![Version: 0.5.3](https://img.shields.io/badge/Version-0.5.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.5.7](https://img.shields.io/badge/Version-0.5.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things storage incl. AWS EBS/EFS, openEBS-lvm, gemini
 
@@ -18,7 +18,7 @@ Kubernetes: `>= 1.20.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | aws-ebs-csi-driver | 2.6.2 |
+|  | aws-ebs-csi-driver | 2.6.3 |
 |  | aws-efs-csi-driver | 2.2.3 |
 |  | gemini | 0.0.8 |
 |  | lvm-localpv | 0.8.6 |
@@ -73,7 +73,6 @@ Kubernetes: `>= 1.20.0`
 | aws-efs-csi-driver.node.tolerations[0].key | string | `"kubezero-workergroup"` |  |
 | aws-efs-csi-driver.node.tolerations[0].operator | string | `"Exists"` |  |
 | aws-efs-csi-driver.replicaCount | int | `1` |  |
-| aws-efs-csi-driver.storageClasses[0].name | string | `"efs-sc"` |  |
 | gemini.enabled | bool | `false` |  |
 | gemini.resources.limits.cpu | string | `"400m"` |  |
 | gemini.resources.limits.memory | string | `"128Mi"` |  |
@@ -90,6 +89,7 @@ Kubernetes: `>= 1.20.0`
 | lvm-localpv.lvmNode.tolerations[0].effect | string | `"NoSchedule"` |  |
 | lvm-localpv.lvmNode.tolerations[0].key | string | `"kubezero-workergroup"` |  |
 | lvm-localpv.lvmNode.tolerations[0].operator | string | `"Exists"` |  |
+| lvm-localpv.prometheus.enabled | bool | `false` |  |
 | lvm-localpv.storageClass.default | bool | `false` |  |
 | lvm-localpv.storageClass.vgpattern | string | `""` |  |
 | snapshotController.enabled | bool | `true` |  |
@@ -107,3 +107,4 @@ Kubernetes: `>= 1.20.0`
 - https://kubernetes-csi.github.io/docs/snapshot-controller.html#deployment
 
 ## Resources
+- https://github.com/openebs/monitoring/blob/develop/docs/openebs-mixin-user-guide.md#install-openebs-mixin-in-existing-prometheus-stack

@@ -17,7 +17,7 @@ gitea:
   enabled: false
 
   image:
-    tag: 1.15.10
+    tag: 1.16.1
     rootless: true
 
   securityContext:
@@ -117,10 +117,10 @@ jenkins:
       - kubernetes:1.31.3
       - workflow-aggregator:2.6
       - git:4.10.3
-      - configuration-as-code:1.55.1
+      - configuration-as-code:1346.ve8cfa_3473c94
       - antisamy-markup-formatter:2.7
       - prometheus:2.0.10
-      - htmlpublisher:1.28
+      - htmlpublisher:1.29
       - build-discarder:60.v1747b0eb632a
 
   serviceAccountAgent:

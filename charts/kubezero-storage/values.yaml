@@ -44,6 +44,8 @@ lvm-localpv:
   analytics:
     enabled: false
 
+  prometheus:
+    enabled: false
 
 gemini:
   enabled: false
@@ -170,8 +172,12 @@ aws-efs-csi-driver:
       effect: NoSchedule
       operator: Exists
 
-  storageClasses:
-  - name: efs-sc
+  #storageClasses:
+  #- name: efs-sc
+  #  parameters:
+  #    provisioningMode: efs-ap
+  #    directoryPerms: "700"
+  #    fileSystemId: <efs-id-from-worker-cfn>
 
   #PersistentVolumes:
   #  - name: example-pv
