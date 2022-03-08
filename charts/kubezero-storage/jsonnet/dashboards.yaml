@@ -1,0 +1,10 @@
+configmap: openebs-lvmlocalpv-grafana-dashboard
+gzip: true
+folder: KubeZero
+condition: 'index .Values "lvm-localpv" "prometheus" "enabled"'
+dashboards:
+- name: openebs-localpv-pool
+  url: file://dashboards/openebs-lvmlocalpv-pool.json
+  tags:
+  - storage
+  - openEBS

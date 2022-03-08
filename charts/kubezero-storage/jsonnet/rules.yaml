@@ -1,0 +1,4 @@
+rules:
+- name: prometheus-rules
+  url: file://rules/openebs-mixin-prometheusRules
+  condition: 'index .Values "lvm-localpv" "prometheus" "enabled"'
