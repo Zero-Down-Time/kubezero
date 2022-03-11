@@ -24,8 +24,9 @@ KubeZero is distributed as a collection of versioned Helm charts, allowing custo
 
 | KubeZero Version | Kubernetes Version  | EOL         |
 |------------------|---------------------|-------------|
-| v1.21.9          | v1.21               | 31 Mar 2022 |
-| v1.20.8          | v1.20               | 31 Jan 2021 |
+| v1.22.X-Y        | v1.22.X             | 30 Sep 2022 |
+| v1.21.9-Y        | v1.21.9             | 31 May 2022 |
+| v1.20.8          | v1.20               | Feb 2022    |
 | v1.19            | v1.19               | Jul 2021    |
 | v1.18            | v1.18               | Apr 2021    |
 | v1.17            | v1.17               | Jan 2021    |
