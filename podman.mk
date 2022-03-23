@@ -52,5 +52,10 @@ rm-test-image:
 	@test -z "$$(docker image ls -q $(IMAGE):$(TAG)-test)" || docker image rm -f $(IMAGE):$(TAG)-test > /dev/null
 	@test -z "$$(docker image ls -q $(IMAGE):$(TAG)-test)" || echo "Error: Removing test image failed"
 
+# Convience task during dev of downstream projects
+.PHONY: ci-pull-upstream
+ci-pull-upstream:
+	git stash && git subtree pull --prefix .ci ssh://git@git.zero-downtime.net/ZeroDownTime/ci-tools-lib.git master --squash && git stash pop
+
 .DEFAULT:
 	@echo "$@ not implemented. NOOP"
