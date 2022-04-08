@@ -115,6 +115,7 @@ spec:
         args:
         - "--multus-conf-file=auto"
         - "--rename-conf-file=true"
+        - "--cni-bin-dir=/host/usr/libexec/cni"
         - "--cni-version=0.3.1"
         resources:
           requests:
@@ -133,7 +134,7 @@ spec:
         - name: cni
           mountPath: /host/etc/cni/net.d
         - name: cnibin
-          mountPath: /host/opt/cni/bin
+          mountPath: /host/usr/libexec/cni
         - name: multus-cfg
           mountPath: /tmp/multus-conf
       terminationGracePeriodSeconds: 10
@@ -146,7 +147,7 @@ spec:
             path: /etc/cni/net.d
         - name: cnibin
           hostPath:
-            path: /opt/cni/bin
+            path: /usr/libexec/cni
         - name: multus-cfg
           configMap:
             name: multus-cni-config

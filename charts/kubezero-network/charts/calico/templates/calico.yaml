@@ -518,7 +518,7 @@ spec:
               mountPath: /sys/fs/
               # Bidirectional means that, if we mount the BPF filesystem at /sys/fs/bpf it will propagate to the host.
               # If the host is known to mount that filesystem already then Bidirectional can be omitted.
-              mountPropagation: Bidirectional
+              # mountPropagation: Bidirectional
       volumes:
         # Used by calico-node.
         - name: lib-modules
@@ -541,7 +541,7 @@ spec:
         # Used to install CNI.
         - name: cni-bin-dir
           hostPath:
-            path: /opt/cni/bin
+            path: /usr/libexec/cni
         - name: cni-net-dir
           hostPath:
             path: /etc/cni/net.d

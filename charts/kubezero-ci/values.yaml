@@ -17,7 +17,7 @@ gitea:
   enabled: false
 
   image:
-    tag: 1.16.1
+    tag: 1.16.5
     rootless: true
 
   securityContext:
@@ -69,14 +69,14 @@ jenkins:
   enabled: false
 
   controller:
-    tagLabel: alpine
+    tag: 2.332.2-lts-jdk17-preview
+    #tagLabel: alpine
     disableRememberMe: true
     prometheus:
       enabled: false
     testEnabled: false
     enableRawHtmlMarkupFormatter: true
-    # javaOpts: "-Xms512m -Xmx512m"
-    javaOpts: "-XX:+UseStringDeduplication -Dhudson.model.DirectoryBrowserSupport.CSP=\"sandbox allow-popups; default-src 'none'; img-src 'self' cdn.zero-downtime.net; style-src 'unsafe-inline';\""
+    javaOpts: "-XX:+UseContainerSupport -XX:+UseStringDeduplication -Dhudson.model.DirectoryBrowserSupport.CSP=\"sandbox allow-popups; default-src 'none'; img-src 'self' cdn.zero-downtime.net; style-src 'unsafe-inline';\""
     jenkinsOpts: "--sessionTimeout=180 --sessionEviction=3600"
 
     resources:
@@ -114,14 +114,15 @@ jenkins:
                       numToKeepStr: "10"
 
     installPlugins:
-      - kubernetes:1.31.3
+      - kubernetes:3580.v78271e5631dc
       - workflow-aggregator:2.6
-      - git:4.10.3
-      - configuration-as-code:1346.ve8cfa_3473c94
+      - git:4.11.0
+      - configuration-as-code:1414.v878271fc496f
       - antisamy-markup-formatter:2.7
-      - prometheus:2.0.10
+      - prometheus:2.0.11
       - htmlpublisher:1.29
       - build-discarder:60.v1747b0eb632a
+      - dark-theme:156.v6cf16af6f9ef
 
   serviceAccountAgent:
     create: true
@@ -130,22 +131,22 @@ jenkins:
   # Preconfigure agents to use zdt podman requires fuse/overlayfs
   agent:
     image: public.ecr.aws/zero-downtime/jenkins-podman
-    tag: v0.2.4-6
+    tag: v0.2.4-21
     resources:
       requests:
         cpu: "512m"
-        memory: "512Mi"
+        memory: "1024Mi"
       limits:
-        cpu: "1"
-        memory: "2048Mi"
-    alwaysPullImage: true
+        cpu: "4"
+        memory: "6144Mi"
+    #alwaysPullImage: true
     podRetention: "Default"
     showRawYaml: false
     podName: "podman-aws"
     customJenkinsLabels:
     - podman-aws-trivy
     idleMinutes: 10
-    containerCap: 4
+    containerCap: 2
     annotations:
       container.apparmor.security.beta.kubernetes.io/jnlp: unconfined
     # envVars:

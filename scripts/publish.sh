@@ -13,30 +13,41 @@ mkdir -p $TMPDIR
 
 [ -z "$DEBUG" ] && trap 'rm -rf $TMPDIR' ERR EXIT
 
-for dir in $(find -L $SRCROOT/charts -mindepth 1 -maxdepth 1 -type d);
-do
-    name=$(basename $dir)
-    [[ $name =~ $CHARTS ]] || continue
 
-    #if [ $(helm dep list $dir 2>/dev/null| wc -l) -gt 1 ]
-    #then
-    #    echo "Processing chart dependencies"
-    #    rm -rf $dir/tmpcharts
-    #    helm dependency update --skip-refresh $dir
-    #fi
+function reset_index() {
+  aws s3 sync $REPO_URL_S3/ $TMPDIR/
+  helm repo index $TMPDIR --url $REPO_URL
+  aws s3 cp $TMPDIR/index.yaml $REPO_URL_S3/ --cache-control max-age=1
+}
 
-    echo "Processing $dir"
-    helm lint $dir
-    helm package -d $TMPDIR $dir
-done
 
-curl -L -s -o $TMPDIR/index.yaml ${REPO_URL}/index.yaml
+function publish_chart() {
+  for dir in $(find -L $SRCROOT/charts -mindepth 1 -maxdepth 1 -type d);
+  do
+      name=$(basename $dir)
+      [[ $name =~ $CHARTS ]] || continue
 
-helm repo index $TMPDIR --url $REPO_URL --merge $TMPDIR/index.yaml
+      #if [ $(helm dep list $dir 2>/dev/null| wc -l) -gt 1 ]
+      #then
+      #    echo "Processing chart dependencies"
+      #    rm -rf $dir/tmpcharts
+      #    helm dependency update --skip-refresh $dir
+      #fi
 
-for p in $TMPDIR/*.tgz; do
-  aws s3 cp $p $REPO_URL_S3/
-done
-aws s3 cp $TMPDIR/index.yaml $REPO_URL_S3/ --cache-control max-age=1
+      echo "Processing $dir"
+      helm lint $dir
+      helm package -d $TMPDIR $dir
+  done
 
-rm -rf $TMPDIR
+  curl -L -s -o $TMPDIR/index.yaml ${REPO_URL}/index.yaml
+  helm repo index $TMPDIR --url $REPO_URL --merge $TMPDIR/index.yaml
+
+  for p in $TMPDIR/*.tgz; do
+    aws s3 cp $p $REPO_URL_S3/
+  done
+  aws s3 cp $TMPDIR/index.yaml $REPO_URL_S3/ --cache-control max-age=1
+}
+
+
+publish_chart
+#reset_index

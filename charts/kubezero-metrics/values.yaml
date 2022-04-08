@@ -73,6 +73,8 @@ kube-prometheus-stack:
     enabled: true
 
   prometheus-node-exporter:
+    hostRootFsMount:
+      enabled: false
     prometheus:
       monitor:
         relabelings:
