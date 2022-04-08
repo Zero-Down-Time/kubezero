@@ -30,24 +30,30 @@ def traverse_json(obj):
 
 
 # read config file
-with open(config_file, 'r') as yaml_contents:
+with open(config_file, "r") as yaml_contents:
     config = yaml.safe_load(yaml_contents.read())
 
 
-configmap = ''
-if 'condition' in config:
+configmap = ""
+if "condition" in config:
     # use index function to make go template happy if '-' in names
-    if '-' in config['condition'] and "index" not in config['condition']:
-        tokens = config['condition'].split('.')
-        configmap = '''{{- if index .Values %(condition)s }}
-''' % {'condition': ' '.join(f'"{w}"' for w in tokens[2:])}
+    if "-" in config["condition"] and "index" not in config["condition"]:
+        tokens = config["condition"].split(".")
+        configmap = """{{- if index .Values %(condition)s }}
+""" % {
+            "condition": " ".join(f'"{w}"' for w in tokens[2:])
+        }
 
     else:
-        configmap = '''{{- if %(condition)s }}
-''' % config
+        configmap = (
+            """{{- if %(condition)s }}
+"""
+            % config
+        )
 
 # Base configmap for KubeZero
-configmap += '''apiVersion: v1
+configmap += (
+    """apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ printf "%%s-%%s" (include "kubezero-lib.fullname" $) "%(configmap)s" | trunc 63 | trimSuffix "-" }}
@@ -55,31 +61,39 @@ metadata:
   labels:
     grafana_dashboard: "1"
     {{- include "kubezero-lib.labels" . | nindent 4 }}
-''' % config
+"""
+    % config
+)
 
 # Put all dashboards into a folder ?
-if 'folder' in config:
-    configmap += '''  annotations:
+if "folder" in config:
+    configmap += (
+        """  annotations:
     k8s-sidecar-target-directory: %(folder)s
-''' % config
+"""
+        % config
+    )
 
 # compress ?
-if 'gzip' in config and config['gzip']:
-    configmap += '''binaryData:
-'''
+if "gzip" in config and config["gzip"]:
+    configmap += """binaryData:
+"""
 else:
-    configmap += '''data:
-'''
+    configmap += """data:
+"""
 
-for b in config['dashboards']:
-    if not b['url'].startswith('file://'):
-        response = requests.get(b['url'])
+for b in config["dashboards"]:
+    if not b["url"].startswith("file://"):
+        response = requests.get(b["url"])
         if response.status_code != 200:
-            print('Skipping the file, response code %s not equals 200' % response.status_code)
+            print(
+                "Skipping the file, response code %s not equals 200"
+                % response.status_code
+            )
             continue
         raw_text = response.text
     else:
-        with open(b['url'].replace('file://', ''), 'r') as file_contents:
+        with open(b["url"].replace("file://", ""), "r") as file_contents:
             raw_text = file_contents.read()
 
     obj = json.loads(raw_text)
@@ -88,39 +102,50 @@ for b in config['dashboards']:
     traverse_json(obj)
 
     # Set default tim in all charts to 1h
-    obj['time'] = {"from": "now-1h", "to": "now"}
-    obj['refresh'] = "30s"
+    obj["time"] = {"from": "now-1h", "to": "now"}
+    obj["refresh"] = "30s"
 
     # set tags
-    if 'tags' in b:
-        obj['tags'] = b['tags']
+    if "tags" in b:
+        obj["tags"] = b["tags"]
 
     text = json.dumps(obj, indent=2)
 
-    if 'gzip' in config and config['gzip']:
+    if "gzip" in config and config["gzip"]:
         # compress and base64 encode
         buf = io.BytesIO()
-        f = gzip.GzipFile(mode='w', fileobj=buf, mtime=0)
+        f = gzip.GzipFile(mode="w", fileobj=buf, mtime=0)
         f.write(text.encode())
         f.close()
 
-        textb64 = base64.b64encode(buf.getvalue()).decode('utf-8')
-        textb64 = textwrap.indent(textb64, ' '*4)
-        configmap += '''  %(name)s.json.gz:
-''' % b
-        configmap += textb64+'\n'
+        textb64 = base64.b64encode(buf.getvalue()).decode("utf-8")
+        textb64 = textwrap.indent(textb64, " " * 4)
+        configmap += (
+            """  %(name)s.json.gz:
+"""
+            % b
+        )
+        configmap += textb64 + "\n"
     else:
         # encode otherwise helm will mess with raw json
-        text = text.replace("{{", "{{`{{").replace("}}", "}}`}}").replace("{{`{{", "{{`{{`}}").replace("}}`}}", "{{`}}`}}")
-        text = textwrap.indent(text, ' '*4)
-        configmap += '''  %(name)s.json:
-''' % b
-        configmap += text+'\n'
+        text = (
+            text.replace("{{", "{{`{{")
+            .replace("}}", "}}`}}")
+            .replace("{{`{{", "{{`{{`}}")
+            .replace("}}`}}", "{{`}}`}}")
+        )
+        text = textwrap.indent(text, " " * 4)
+        configmap += (
+            """  %(name)s.json:
+"""
+            % b
+        )
+        configmap += text + "\n"
 
 
-if 'condition' in config:
-    configmap += '{{- end }}'+'\n'
+if "condition" in config:
+    configmap += "{{- end }}" + "\n"
 
 # Write Configmap
-with open(configmap_file, 'w') as f:
+with open(configmap_file, "w") as f:
     f.write(configmap)
