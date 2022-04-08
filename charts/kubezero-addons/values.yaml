@@ -3,7 +3,7 @@ clusterBackup:
 
   image:
     name: public.ecr.aws/zero-downtime/kubezero-admin
-    tag: v1.21.9
+    # tag: v1.22.8
 
   repository: ""
   password: ""
@@ -72,3 +72,43 @@ fuseDevicePlugin:
 
 k8sEcrLoginRenew:
   enabled: false
+
+external-dns:
+  enabled: false
+
+  interval: 3m
+  triggerLoopOnEvent: true
+
+  tolerations:
+  - key: node-role.kubernetes.io/master
+    effect: NoSchedule
+  nodeSelector:
+    node-role.kubernetes.io/control-plane: ""
+
+  logLevel: debug
+  sources:
+  - service
+  #- istio-gateway
+
+  provider: inmemory
+
+  extraVolumes:
+  - name: aws-token
+    projected:
+      sources:
+      - serviceAccountToken:
+          path: token
+          expirationSeconds: 86400
+          audience: "sts.amazonaws.com"
+  extraVolumeMounts:
+  - name: aws-token
+    mountPath: "/var/run/secrets/sts.amazonaws.com/serviceaccount/"
+    readOnly: true
+  env:
+  # -- "arn:aws:iam::${AWS::AccountId}:role/${AWS::Region}.${ClusterName}.externalDNS"
+  - name: AWS_ROLE_ARN
+    value: ""
+  - name: AWS_WEB_IDENTITY_TOKEN_FILE
+    value: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
+  - name: AWS_STS_REGIONAL_ENDPOINTS
+    value: "regional"

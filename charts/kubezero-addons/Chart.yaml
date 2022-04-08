@@ -2,7 +2,8 @@ apiVersion: v2
 name: kubezero-addons
 description: KubeZero umbrella chart for various optional cluster addons
 type: application
-version: 0.4.4
+version: 0.5.0
+appVersion: v1.22.8
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
@@ -10,6 +11,7 @@ keywords:
   - fuse-device-plugin
   - k8s-ecr-login-renew
   - aws-node-termination-handler
+  - external-dns
 maintainers:
   - name: Stefan Reimer
     email: stefan@zero-downtime.net
@@ -18,4 +20,8 @@ dependencies:
     version: 0.18.0
     # repository: https://aws.github.io/eks-charts
     condition: aws-node-termination-handler.enabled
+  - name: external-dns
+    version: 1.7.1
+    repository: https://kubernetes-sigs.github.io/external-dns/
+    condition: external-dns.enabled
 kubeVersion: ">= 1.20.0"
