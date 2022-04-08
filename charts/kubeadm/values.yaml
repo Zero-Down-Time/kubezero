@@ -35,6 +35,9 @@ addons:
     # -- /etc/cloudbender/clusterBackup.passphrase
     passwordFile: ""
 
+  external-dns:
+    enabled: false
+
 network:
   multus:
     enabled: false

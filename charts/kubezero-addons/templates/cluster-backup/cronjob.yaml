@@ -15,7 +15,7 @@ spec:
         spec:
           containers:
           - name: kubezero-admin
-            image: "{{ .Values.clusterBackup.image.name }}:{{ .Values.clusterBackup.image.tag }}"
+            image: "{{ .Values.clusterBackup.image.name }}:{{ default .Chart.AppVersion .Values.clusterBackup.image.tag }}"
             imagePullPolicy: Always
             command: ["kubezero.sh"]
             args:
