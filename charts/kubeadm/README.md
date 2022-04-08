@@ -1,6 +1,6 @@
 # kubeadm
 
-![Version: 1.21.9](https://img.shields.io/badge/Version-1.21.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 1.22.8](https://img.shields.io/badge/Version-1.22.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Kubeadm cluster config
 
@@ -14,7 +14,7 @@ KubeZero Kubeadm cluster config
 
 ## Requirements
 
-Kubernetes: `>= 1.20.0`
+Kubernetes: `>= 1.22.0`
 
 ## Values
 
@@ -47,8 +47,8 @@ Kubernetes: `>= 1.20.0`
 | network.multus.enabled | bool | `false` |  |
 | network.multus.tag | string | `"v3.8"` |  |
 | nodeName | string | `"kubezero-node"` | set to $HOSTNAME |
-| protectKernelDefaults | bool | `true` |  |
-| systemd | bool | `true` | Set to false for openrc, eg. on Gentoo or Alpine |
+| protectKernelDefaults | bool | `false` |  |
+| systemd | bool | `false` | Set to false for openrc, eg. on Gentoo or Alpine |
 
 ## Resources
 

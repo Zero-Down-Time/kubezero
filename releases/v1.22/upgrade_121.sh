@@ -8,6 +8,7 @@ VERSION="v1.21.9"
 unset AWS_DEFAULT_PROFILE
 
 nodes=$(kubectl get nodes -l node-role.kubernetes.io/control-plane -o json | jq .items[].metadata.name -r)
+nodes=""
 for node in $nodes; do
   echo "Deploying node upgrade job on $node..."
 

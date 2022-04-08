@@ -52,5 +52,5 @@ etcd:
   extraArgs: {}
 
 # -- Set to false for openrc, eg. on Gentoo or Alpine
-systemd: true
-protectKernelDefaults: true
+systemd: false
+protectKernelDefaults: false
