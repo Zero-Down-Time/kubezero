@@ -396,14 +396,7 @@ fluent-bit:
   - name: varlog
     hostPath:
       path: /var/log
-  - name: etcmachineid
-    hostPath:
-      path: /etc/machine-id
-      type: File
 
   daemonSetVolumeMounts:
   - name: varlog
     mountPath: /var/log
-  - name: etcmachineid
-    mountPath: /etc/machine-id
-    readOnly: true

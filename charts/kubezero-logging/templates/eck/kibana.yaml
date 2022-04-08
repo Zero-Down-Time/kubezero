@@ -16,6 +16,9 @@ spec:
   config:
     elasticsearch.requestTimeout: 180000
     elasticsearch.shardTimeout: 180000
+    {{- with .Values.kibana.istio.url }}
+    server.publicBaseUrl: https://{{ . }}
+    {{- end }}
     #xpack.monitoring.enabled: false
     #xpack.monitoring.ui.enabled: false
     #xpack.ml.enabled: false
