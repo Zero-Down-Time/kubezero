@@ -26,4 +26,4 @@ README.md.gotmpl
 *.patch
 *.sh
 *.py
-configs
+jsonnet

@@ -64,7 +64,7 @@ function _crds() {
 
   # Only apply if there are actually any crds
   if [ -s $TMPDIR/crds.yaml ]; then
-    kubectl apply -f $TMPDIR/crds.yaml
+    kubectl apply -f $TMPDIR/crds.yaml --server-side
   fi
 }
 
