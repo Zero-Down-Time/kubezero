@@ -20,11 +20,6 @@ cert-manager:
   namespace: cert-manager
   targetRevision: 0.8.2
 
-# deprecated - removed with 1.22
-kiam:
-  enabled: false
-  targetRevision: 0.3.5
-
 storage:
   enabled: false
   targetRevision: 0.5.7
@@ -54,7 +49,7 @@ metrics:
 logging:
   enabled: false
   namespace: logging
-  targetRevision: 0.7.18
+  targetRevision: 0.8.0
 
 argocd:
   enabled: false
