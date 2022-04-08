@@ -13,12 +13,12 @@ addons:
 network:
   enabled: false
   retain: true
-  targetRevision: 0.1.0
+  targetRevision: 0.1.7
 
 cert-manager:
   enabled: false
   namespace: cert-manager
-  targetRevision: 0.8.0
+  targetRevision: 0.8.2
 
 # deprecated - removed with 1.22
 kiam:
@@ -27,7 +27,7 @@ kiam:
 
 storage:
   enabled: false
-  targetRevision: 0.5.4
+  targetRevision: 0.5.7
   aws-ebs-csi-driver:
     enabled: false
   aws-efs-csi-driver:
@@ -54,11 +54,11 @@ metrics:
 logging:
   enabled: false
   namespace: logging
-  targetRevision: 0.7.17
+  targetRevision: 0.7.18
 
 argocd:
   enabled: false
   namespace: argocd
-  targetRevision: 0.9.5
+  targetRevision: 0.9.6
   istio:
     enabled: false
