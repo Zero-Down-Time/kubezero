@@ -85,7 +85,7 @@ external-dns:
   nodeSelector:
     node-role.kubernetes.io/control-plane: ""
 
-  logLevel: debug
+  #logLevel: debug
   sources:
   - service
   #- istio-gateway

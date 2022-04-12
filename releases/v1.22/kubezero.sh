@@ -184,7 +184,7 @@ elif [[ "$1" =~ "^(bootstrap|restore|join)$" ]]; then
     rm -rf ${HOSTFS}/var/lib/etcd/member
 
   else
-		restic restore latest --no-lock -t / --tag $VERSION
+		retry 10 60 30 restic restore latest --no-lock -t / --tag $VERSION
 
 		# Make last etcd snapshot available
 		cp ${WORKDIR}/etcd_snapshot ${HOSTFS}/etc/kubernetes
