@@ -137,7 +137,13 @@ if [ "$1" == 'upgrade' ]; then
     cp ${HOSTFS}/etc/kubernetes/admin.conf ${HOSTFS}/root/.kube/config
   fi
 
-  ### POST 1.21 specific
+  ### POST 1.22 specific
+  
+  # Remove all remaining kiam
+  helm repo add uswitch https://uswitch.github.io/kiam-helm-charts/charts/
+  helm repo update
+  helm template uswitch/kiam --name-template kiam --set server.prometheus.servicemonitor.enabled=true --set agent.prometheus.servicemonitor.enabled=true |
+    kubectl delete --namespace kube-system -f - || true
   
   ######################
   # network
@@ -306,7 +312,7 @@ elif [[ "$1" =~ "^(bootstrap|restore|join)$" ]]; then
     yq eval -M ".clusters[0].cluster.certificate-authority-data = \"$(cat ${HOSTFS}/etc/kubernetes/pki/ca.crt | base64 -w0)\"" ${WORKDIR}/kubeadm/templates/admin-aws-iam.yaml > ${HOSTFS}/etc/kubernetes/admin-aws-iam.yaml
   fi
 
-  # Install some basics on bootstrap and join for 1.21 to get new modules in place
+  # install / update network and addons
   if [[ "$1" =~ "^(bootstrap|join|restore)$" ]]; then
     # network
     yq eval '.network // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
