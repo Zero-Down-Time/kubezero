@@ -1,9 +1,9 @@
 # KubeZero 1.22
 
-## Release notes
+## What's new - Major themes
 
-### Custom AMIs
-Starting with 1.22, all KubeZero nodes will boot from custom pre-baked AMIs. These AMIs will be provided and shared by the Zero Down Time for all customers, all sources and build pipeline are freely [available](https://git.zero-downtime.net/ZeroDownTime/alpine-zdt-images).
+### Alpine - Custom AMIs
+Starting with 1.22, all KubeZero nodes will boot from custom pre-baked AMIs. These AMIs will be provided and shared by the Zero Down Time for all customers. All sources and the build pipeline are freely [available](https://git.zero-downtime.net/ZeroDownTime/alpine-zdt-images) as usual though.
 
 This eliminates *ALL* dependencies at boot time other than container registries. Gone are the days when Ubuntu, SuSE or Github decided to ruin your morning coffee.  
 
@@ -15,25 +15,28 @@ The [external-dns](https://github.com/kubernetes-sigs/external-dns) controller g
 
 Further usage of this controller to automate any DNS related configurations, like Ingress etc. is planned for following releases.
 
-### crun - container runtime
-got migrated from runc to crun, which reduces the memory overhead *per pod* from 16M to 4M, details at [crun intro](https://www.redhat.com/sysadmin/introduction-crun)
+### Container runtime
+Cri-o now uses crun rather than runc, which reduces the memory overhead *per pod* from 16M to 4M, details at [crun intro](https://www.redhat.com/sysadmin/introduction-crun)
 
-### Version upgrades
-- Istio to 1.13.2
+## Version upgrades
+- Istio to 1.13.2 using new upstream Helm charts
 - aws-termination-handler to 1.16
-- aws-iam-authenticator to 0.5.7
+- aws-iam-authenticator to 0.5.7, required for >1.22 allows using the latest version on the client side again 
 
-### Misc
+## Misc
 - new metrics and dashboards for openEBS LVM CSI drivers
 - new node label `node.kubernetes.io/instance-type` for all nodes containing the EC2 instance type
+- kubelet root moved to `/var/lib/containers` to ensure ephemeral storage is allocated from the configurable volume rather than the root fs of the worker
 
 
-## Upgrade
+# Upgrade
+`(No, really, you MUST read this before you upgrade)`
 
-*Ensure your Kube context points to the correct cluster !!!*
+- Ensure your Kube context points to the correct cluster !
+- Ensure any usage of Kiam has been migrated to OIDC providers as any remaining Kiam components will be deleted as part of the upgrade
 
 1. Trigger the cluster upgrade:  
-`./upgrade_122.sh`
+`./release/v1.22/upgrade_cluster.sh`
 
 2. Upgrade CFN stacks for the control plane and all worker groups
 Change Kubernetes version in controller config from `1.21.9` to `1.22.8`
