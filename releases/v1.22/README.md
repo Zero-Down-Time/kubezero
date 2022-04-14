@@ -10,6 +10,12 @@ This eliminates *ALL* dependencies at boot time other than container registries.
 KubeZero also migrates from Ubuntu 20.04 LTS to [Alpine v3.15](https://www.alpinelinux.org/releases/) as its base OS, which reduces the root file system size from 8GB to 2GB.  
 Additionally all AMIs are encrypted, which is ensures encryption at rest even for every instance's root file system. This closes the last gaps in achieving *full encryption at rest* for every volume within a default KubeZero deployment. 
 
+### Etcd
+On AWS a new dedicated EBS volume will be provisioned per controller and used as persistent etcd storage. These volumes will persist for the life time of the cluster and reused by future controller nodes in each AZ.  
+This ensure no data loss during upgrade or fail-overs of single controller clusters. The hourly backup on S3 will still be used as fallback in case the file system gets corrupted etc.  
+
+As these volumes are `GP3` they provide higher and dedicated IOPS for etcd as well.
+
 ### DNS
 The [external-dns](https://github.com/kubernetes-sigs/external-dns) controller got integrated and is used to provide DNS based loadbalacing for the apiserver itself. This allows high available control planes on AWS as well as bare-metal in combination with various DNS providers.  
 
