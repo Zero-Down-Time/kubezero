@@ -28,10 +28,10 @@ spec:
     server: {{ .Values.kubezero.server }}
     namespace: {{ default "kube-system" ( index .Values $name "namespace" ) }}
 
-  {{- with .Values.kubezero.syncPolicy }}
   syncPolicy:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+    syncOptions:
+      - CreateNamespace=true
+    {{- toYaml .Values.kubezero.syncPolicy | nindent 4 }}
 
 {{- include (print $name "-argo") $ }}
 {{- end }}
