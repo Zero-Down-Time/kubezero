@@ -1,21 +1,22 @@
+# Revision 115 = 1.13.3
 configmap: grafana-dashboards
 gzip: true
 folder: Istio
 condition: 'index .Values "istio-discovery" "telemetry" "enabled"'
 dashboards:
 - name: istio-control-plane
-  url: https://grafana.com/api/dashboards/7645/revisions/82/download
+  url: https://grafana.com/api/dashboards/7645/revisions/115/download
   tags:
   - Istio
 - name: istio-mesh
-  url: https://grafana.com/api/dashboards/7639/revisions/82/download
+  url: https://grafana.com/api/dashboards/7639/revisions/115/download
   tags:
   - Istio
 - name: istio-service
-  url: https://grafana.com/api/dashboards/7636/revisions/82/download
+  url: https://grafana.com/api/dashboards/7636/revisions/115/download
   tags:
   - Istio
 - name: istio-workload
-  url: https://grafana.com/api/dashboards/7630/revisions/82/download
+  url: https://grafana.com/api/dashboards/7630/revisions/115/download
   tags:
   - Istio
