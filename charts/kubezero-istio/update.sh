@@ -9,29 +9,18 @@ export KIALI_VERSION=$(yq eval '.dependencies[] | select(.name=="kiali-server") 
 
 helm dep update
 
-exit 0
-
 # Patch
 #exit 0
 #diff -tubr istio istio.zdt/
-patch -p0 -i zdt.patch --no-backup-if-mismatch
-
-### Create kubezero istio charts
-
-# remove previous charts
-rm -rf charts/base charts/istio-*
-
-# create istio main chart
-cp -r istio/manifests/charts/base charts/
-cp -r istio/manifests/charts/istio-control/istio-discovery charts/
+#patch -p0 -i zdt.patch --no-backup-if-mismatch
 
 # Create ingress charts
-rm -rf ../kubezero-istio-ingress/charts/istio-*
-cp -r istio/manifests/charts/gateways/istio-ingress ../kubezero-istio-ingress/charts/
-cp -r istio/manifests/charts/gateways/istio-ingress ../kubezero-istio-ingress/charts/istio-private-ingress
+#rm -rf ../kubezero-istio-ingress/charts/istio-*
+#cp -r istio/manifests/charts/gateways/istio-ingress ../kubezero-istio-ingress/charts/
+#cp -r istio/manifests/charts/gateways/istio-ingress ../kubezero-istio-ingress/charts/istio-private-ingress
 
 # Rename private chart
-sed -i -e 's/name: istio-ingress/name: istio-private-ingress/' ../kubezero-istio-ingress/charts/istio-private-ingress/Chart.yaml
+#sed -i -e 's/name: istio-ingress/name: istio-private-ingress/' ../kubezero-istio-ingress/charts/istio-private-ingress/Chart.yaml
 
 # Get matching istioctl
 [ -x istioctl ] && [ "$(./istioctl version --remote=false)" == $ISTIO_VERSION ] || { curl -sL https://github.com/istio/istio/releases/download/${ISTIO_VERSION}/istioctl-${ISTIO_VERSION}-linux-amd64.tar.gz | tar xz; chmod +x istioctl; }
