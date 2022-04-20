@@ -3,7 +3,7 @@
     dashboards+: {
       cStor: false,
       jiva: false,
-      localPV: false, 
+      localPV: false,
       lvmLocalPV: true,
       deviceLocalPV: false,
       zfsLocalPV: false,
@@ -13,7 +13,7 @@
     alertRules+: {
       cStor: false,
       jiva: false,
-      localPV: false, 
+      localPV: false,
       lvmLocalPV: true,
       deviceLocalPV: false,
       zfsLocalPV: false,
