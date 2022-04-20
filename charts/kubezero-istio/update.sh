@@ -7,13 +7,9 @@ set -ex
 export ISTIO_VERSION=$(yq eval '.dependencies[] | select(.name=="base") | .version' Chart.yaml)
 export KIALI_VERSION=$(yq eval '.dependencies[] | select(.name=="kiali-server") | .version' Chart.yaml)
 
-rm -rf istio
-curl -sL "https://github.com/istio/istio/releases/download/${ISTIO_VERSION}/istio-${ISTIO_VERSION}-linux-amd64.tar.gz" | tar xz
-mv istio-${ISTIO_VERSION} istio
+helm dep update
 
-# remove unused old telemetry filters
-rm -f istio/manifests/charts/istio-control/istio-discovery/templates/telemetryv2_1.[6789].yaml
-rm -f istio/manifests/charts/istio-control/istio-discovery/templates/telemetryv2_1.10.yaml
+exit 0
 
 # Patch
 #exit 0
