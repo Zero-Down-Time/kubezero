@@ -16,7 +16,9 @@ fmt:
 	find . -name 'vendor' -prune -o -name '*.libsonnet' -print -o -name '*.jsonnet' -print | \
 		xargs -n 1 -- $(JSONNET_FMT) -i
 
-generate: clean
+generate: clean build.sh
+	bash build.sh $<
+	patch -p0 -i rules-fix.patch
 	jsonnet -J vendor -m rules -e '(import "prometheusRules.libsonnet")'
 	jsonnet -J vendor -m dashboards -e '(import "dashboards.libsonnet")'
 
