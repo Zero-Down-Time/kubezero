@@ -1,4 +1,4 @@
-{{- if index .Values "istio-discovery" "telemetry" "enabled" }}
+{{- if .Values.istiod.telemetry.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

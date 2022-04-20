@@ -9,7 +9,7 @@ global:
 
   priorityClassName: "system-cluster-critical"
 
-istio-discovery:
+istiod:
   pilot:
     autoscaleEnabled: false
     replicaCount: 1
