@@ -16,8 +16,7 @@ patch -p0 -i zdt.patch --no-backup-if-mismatch
 patch -p0 -i zdt-pushgateway.patch --no-backup-if-mismatch
 
 # Create ZDT dashboard, alerts etc configmaps
-cd jsonnet
-./build.sh
+cd jsonnet && make
 
 ../sync_grafana_dashboards.py metrics-dashboards.yaml ../templates/grafana-dashboards-metrics.yaml
 ../sync_grafana_dashboards.py k8s-dashboards.yaml ../templates/grafana-dashboards-k8s.yaml

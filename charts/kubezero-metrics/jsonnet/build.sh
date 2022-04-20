@@ -12,9 +12,3 @@ else
   #jb install github.com/prometheus-operator/kube-prometheus/jsonnet/kube-prometheus@main
   jb install github.com/prometheus-operator/kube-prometheus/jsonnet/kube-prometheus@release-0.10
 fi
-
-make clean
-jsonnet -J vendor -m dashboards -e '(import "dashboards.libsonnet").grafanaDashboards'
-
-#jsonnet -J vendor -m rules rules.libsonnet | xargs -I{} sh -c 'cat {} | gojsontoyaml > {}.yaml' -- {}
-jsonnet -J vendor -m rules rules.libsonnet
