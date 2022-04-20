@@ -16,9 +16,10 @@ fmt:
 	find . -name 'vendor' -prune -o -name '*.libsonnet' -print -o -name '*.jsonnet' -print | \
 		xargs -n 1 -- $(JSONNET_FMT) -i
 
-generate: build.sh
+generate: clean build.sh
 	bash build.sh $<
-
+	jsonnet -J vendor -m dashboards -e '(import "dashboards.libsonnet").grafanaDashboards'
+	jsonnet -J vendor -m rules rules.libsonnet
 lint: 
 	find . -name 'vendor' -prune -o -name '*.libsonnet' -print -o -name '*.jsonnet' -print | \
 		while read f; do \
