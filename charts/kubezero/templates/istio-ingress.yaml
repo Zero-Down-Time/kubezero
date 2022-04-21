@@ -1,14 +1,10 @@
-{{- define "istio-private-ingress-values" }}
+{{- define "istio-ingress-values" }}
 
 gateway:
-  name: istio-private-ingressgateway
+  name: istio-ingressgateway
   labels:
-    app: istio-private-ingressgateway
-    istio: private-ingressgateway
-
-  {{- with index .Values "istio-private-ingress" "gateway" "replicaCount" }}
-  replicaCount: {{ . }}
-  {{- end }}
+    app: istio-ingressgateway
+    istio: ingressgateway
 
   # Only nodes who are fronted with matching private NLB
   affinity:
@@ -16,7 +12,7 @@ gateway:
       requiredDuringSchedulingIgnoredDuringExecution:
         nodeSelectorTerms:
         - matchExpressions:
-          - key: node.kubernetes.io/ingress.private
+          - key: node.kubernetes.io/ingress.public
             operator: Exists
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -25,32 +21,29 @@ gateway:
           - key: app
             operator: In
             values:
-            - istio-private-ingressgateway
+            - istio-ingressgateway
         topologyKey: "kubernetes.io/hostname"
 
   service:
     ports:
     - name: status-port
       port: 15021
-      nodePort: 31021
+      nodePort: 30021
       noGateway: true
     - name: http2
       port: 80
       targetPort: 8080
-      nodePort: 31080
+      nodePort: 30080
       gatewayProtocol: HTTP2
       tls:
         httpsRedirect: true
     - name: https
       port: 443
       targetPort: 8443
-      nodePort: 31443
+      nodePort: 30443
       gatewayProtocol: HTTPS
       tls:
         mode: SIMPLE
-  {{- with index .Values "istio-private-ingress" "gateway" "service" "ports" }}
-  {{- toYaml . | nindent 4 }}
-  {{- end }}
 
   # custom hardened bootstrap config
   env:
@@ -58,26 +51,30 @@ gateway:
   volumes:
     - name: custom-bootstrap-volume
       configMap:
-        name: private-ingressgateway-bootstrap-config
+        name: ingressgateway-bootstrap-config
   volumeMounts:
     - mountPath: /etc/istio/custom-bootstrap
       name: custom-bootstrap-volume
       readOnly: true
 
+  {{- with index .Values "istio-ingress" "gateway" }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+
 telemetry:
   enabled: {{ $.Values.metrics.enabled }}
 certificates:
-{{- range $cert := index .Values "istio-private-ingress" "certificates" }}
+{{- range $cert := index .Values "istio-ingress" "certificates" }}
 - name: {{ $cert.name }}
   dnsNames:
   {{- toYaml $cert.dnsNames | nindent 4 }}
 {{- end }}
-proxyProtocol: {{ default true (index .Values "istio-private-ingress" "proxyProtocol") }}
+proxyProtocol: {{ default true (index .Values "istio-ingress" "proxyProtocol") }}
 
 {{- end }}
 
 
-{{- define "istio-private-ingress-argo" }}
+{{- define "istio-ingress-argo" }}
 {{- end }}
 
 {{ include "kubezero-app.app" . }}

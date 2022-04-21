@@ -35,6 +35,7 @@ istio:
 
 istio-ingress:
   enabled: false
+  chart: kubezero-istio-gateway
   namespace: istio-ingress
   targetRevision: 0.8.0
 
