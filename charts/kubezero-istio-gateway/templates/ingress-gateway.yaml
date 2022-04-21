@@ -11,5 +11,5 @@ spec:
   selector:
     {{- include "gatewaySelectorLabels" . | nindent 4 }}
   servers:
-  {{- include "gatewayServers" (dict "certificates" .Values.certificates "ports" .Values.gateway.service.ports ) | nindent 2}}
+  {{- include "gatewayServers" (dict "certificates" .Values.certificates "ports" .Values.gateway.service.ports ) | nindent 2 }}
 {{- end }}
