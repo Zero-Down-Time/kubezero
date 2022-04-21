@@ -17,7 +17,11 @@ spec:
   project: kubezero
 
   source:
+    {{- if index .Values $name "chart" }}
+    chart: {{ index .Values $name "chart" }}
+    {{- else }}
     chart: kubezero-{{ $name }}
+    {{- end }}
     repoURL: {{ .Values.kubezero.repoURL }}
     targetRevision: {{ default .Values.kubezero.targetRevision ( index .Values $name "targetRevision" ) | quote }}
     helm:

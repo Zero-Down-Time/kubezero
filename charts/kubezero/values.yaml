@@ -31,12 +31,19 @@ storage:
 istio:
   enabled: false
   namespace: istio-system
-  targetRevision: 0.7.6
+  targetRevision: 0.8.0
 
 istio-ingress:
   enabled: false
+  chart: kubezero-istio-gateway
   namespace: istio-ingress
-  targetRevision: 0.7.6
+  targetRevision: 0.8.0
+
+istio-private-ingress:
+  enabled: false
+  chart: kubezero-istio-gateway
+  namespace: istio-ingress
+  targetRevision: 0.8.0
 
 metrics:
   enabled: false
@@ -49,11 +56,11 @@ metrics:
 logging:
   enabled: false
   namespace: logging
-  targetRevision: 0.7.19
+  targetRevision: 0.7.20
 
 argocd:
   enabled: false
   namespace: argocd
-  targetRevision: 0.9.6
+  targetRevision: 0.10.1
   istio:
     enabled: false

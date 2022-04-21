@@ -1,6 +1,6 @@
 # kubezero-metrics
 
-![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.8.0](https://img.shields.io/badge/Version-0.8.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Prometheus, Grafana and Alertmanager as well as all Kubernetes integrations.
 
@@ -10,7 +10,7 @@ KubeZero Umbrella Chart for Prometheus, Grafana and Alertmanager as well as all 
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Stefan Reimer | stefan@zero-downtime.net |  |
+| Stefan Reimer | <stefan@zero-downtime.net> |  |
 
 ## Requirements
 
@@ -18,10 +18,10 @@ Kubernetes: `>= 1.20.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | kube-prometheus-stack | 30.2.0 |
-|  | prometheus-pushgateway | 1.14.0 |
+|  | kube-prometheus-stack | 34.9.0 |
+|  | prometheus-pushgateway | 1.16.1 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.4 |
-| https://prometheus-community.github.io/helm-charts | prometheus-adapter | 3.0.1 |
+| https://prometheus-community.github.io/helm-charts | prometheus-adapter | 3.2.0 |
 
 ## Values
 
@@ -76,11 +76,26 @@ Kubernetes: `>= 1.20.0`
 | kube-prometheus-stack.alertmanager.alertmanagerSpec.volumes[0].projected.sources[0].serviceAccountToken.expirationSeconds | int | `86400` |  |
 | kube-prometheus-stack.alertmanager.alertmanagerSpec.volumes[0].projected.sources[0].serviceAccountToken.path | string | `"token"` |  |
 | kube-prometheus-stack.alertmanager.config.global.resolve_timeout | string | `"5m"` |  |
+| kube-prometheus-stack.alertmanager.config.inhibit_rules[0].equal[0] | string | `"namespace"` |  |
+| kube-prometheus-stack.alertmanager.config.inhibit_rules[0].equal[1] | string | `"alertname"` |  |
+| kube-prometheus-stack.alertmanager.config.inhibit_rules[0].source_matchers[0] | string | `"severity = critical"` |  |
+| kube-prometheus-stack.alertmanager.config.inhibit_rules[0].target_matchers[0] | string | `"severity =~ warning|info"` |  |
+| kube-prometheus-stack.alertmanager.config.inhibit_rules[1].equal[0] | string | `"namespace"` |  |
+| kube-prometheus-stack.alertmanager.config.inhibit_rules[1].equal[1] | string | `"alertname"` |  |
+| kube-prometheus-stack.alertmanager.config.inhibit_rules[1].source_matchers[0] | string | `"severity = warning"` |  |
+| kube-prometheus-stack.alertmanager.config.inhibit_rules[1].target_matchers[0] | string | `"severity = info"` |  |
+| kube-prometheus-stack.alertmanager.config.inhibit_rules[2].equal[0] | string | `"namespace"` |  |
+| kube-prometheus-stack.alertmanager.config.inhibit_rules[2].source_matchers[0] | string | `"alertname = InfoInhibitor"` |  |
+| kube-prometheus-stack.alertmanager.config.inhibit_rules[2].target_matchers[0] | string | `"severity = info"` |  |
 | kube-prometheus-stack.alertmanager.config.route.group_by[0] | string | `"severity"` |  |
 | kube-prometheus-stack.alertmanager.config.route.group_by[1] | string | `"clusterName"` |  |
 | kube-prometheus-stack.alertmanager.config.route.group_interval | string | `"5m"` |  |
 | kube-prometheus-stack.alertmanager.config.route.group_wait | string | `"30s"` |  |
 | kube-prometheus-stack.alertmanager.config.route.repeat_interval | string | `"6h"` |  |
+| kube-prometheus-stack.alertmanager.config.route.routes[0].matchers[0] | string | `"alertname = Watchdog"` |  |
+| kube-prometheus-stack.alertmanager.config.route.routes[0].receiver | string | `"null"` |  |
+| kube-prometheus-stack.alertmanager.config.route.routes[1].matchers[0] | string | `"alertname = InfoInhibitor"` |  |
+| kube-prometheus-stack.alertmanager.config.route.routes[1].receiver | string | `"null"` |  |
 | kube-prometheus-stack.alertmanager.enabled | bool | `false` |  |
 | kube-prometheus-stack.coreDns.enabled | bool | `true` |  |
 | kube-prometheus-stack.defaultRules.create | bool | `false` |  |
@@ -132,12 +147,13 @@ Kubernetes: `>= 1.20.0`
 | kube-prometheus-stack.kubelet.enabled | bool | `true` |  |
 | kube-prometheus-stack.kubelet.serviceMonitor.cAdvisor | bool | `true` |  |
 | kube-prometheus-stack.nodeExporter.enabled | bool | `true` |  |
-| kube-prometheus-stack.prometheus-node-exporter.prometheus.monitor.serviceMonitor.relabelings[0].action | string | `"replace"` |  |
-| kube-prometheus-stack.prometheus-node-exporter.prometheus.monitor.serviceMonitor.relabelings[0].regex | string | `"^(.*)$"` |  |
-| kube-prometheus-stack.prometheus-node-exporter.prometheus.monitor.serviceMonitor.relabelings[0].replacement | string | `"$1"` |  |
-| kube-prometheus-stack.prometheus-node-exporter.prometheus.monitor.serviceMonitor.relabelings[0].separator | string | `";"` |  |
-| kube-prometheus-stack.prometheus-node-exporter.prometheus.monitor.serviceMonitor.relabelings[0].sourceLabels[0] | string | `"__meta_kubernetes_pod_node_name"` |  |
-| kube-prometheus-stack.prometheus-node-exporter.prometheus.monitor.serviceMonitor.relabelings[0].targetLabel | string | `"node"` |  |
+| kube-prometheus-stack.prometheus-node-exporter.hostRootFsMount.enabled | bool | `false` |  |
+| kube-prometheus-stack.prometheus-node-exporter.prometheus.monitor.relabelings[0].action | string | `"replace"` |  |
+| kube-prometheus-stack.prometheus-node-exporter.prometheus.monitor.relabelings[0].regex | string | `"^(.*)$"` |  |
+| kube-prometheus-stack.prometheus-node-exporter.prometheus.monitor.relabelings[0].replacement | string | `"$1"` |  |
+| kube-prometheus-stack.prometheus-node-exporter.prometheus.monitor.relabelings[0].separator | string | `";"` |  |
+| kube-prometheus-stack.prometheus-node-exporter.prometheus.monitor.relabelings[0].sourceLabels[0] | string | `"__meta_kubernetes_pod_node_name"` |  |
+| kube-prometheus-stack.prometheus-node-exporter.prometheus.monitor.relabelings[0].targetLabel | string | `"node"` |  |
 | kube-prometheus-stack.prometheus-node-exporter.resources.requests.cpu | string | `"20m"` |  |
 | kube-prometheus-stack.prometheus-node-exporter.resources.requests.memory | string | `"16Mi"` |  |
 | kube-prometheus-stack.prometheus.enabled | bool | `true` |  |

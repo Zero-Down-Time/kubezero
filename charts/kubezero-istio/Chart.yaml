@@ -2,8 +2,7 @@ apiVersion: v2
 name: kubezero-istio
 description: KubeZero Umbrella Chart for Istio
 type: application
-version: 0.7.6
-appVersion: 1.11.5
+version: 0.8.0
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
@@ -17,9 +16,11 @@ dependencies:
     version: ">= 0.1.4"
     repository: https://cdn.zero-downtime.net/charts/
   - name: base
-    version: 1.11.5
-  - name: istio-discovery
-    version: 1.11.5
+    version: 1.13.3
+    repository: https://istio-release.storage.googleapis.com/charts
+  - name: istiod
+    version: 1.13.3
+    repository: https://istio-release.storage.googleapis.com/charts
   - name: kiali-server
     version: 1.38.1
     # repository: https://github.com/kiali/helm-charts/tree/master/docs

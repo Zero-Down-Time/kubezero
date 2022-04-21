@@ -1,6 +1,6 @@
 # kubezero-istio
 
-![Version: 0.7.5](https://img.shields.io/badge/Version-0.7.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.11.3](https://img.shields.io/badge/AppVersion-1.11.3-informational?style=flat-square)
+![Version: 0.8.0](https://img.shields.io/badge/Version-0.8.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Istio
 
@@ -12,18 +12,18 @@ Installs the Istio control plane
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Quarky9 |  |  |
+| Stefan Reimer | <stefan@zero-downtime.net> |  |
 
 ## Requirements
 
-Kubernetes: `>= 1.18.0`
+Kubernetes: `>= 1.20.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | base | 1.11.3 |
-|  | istio-discovery | 1.11.3 |
 |  | kiali-server | 1.38.1 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.4 |
+| https://istio-release.storage.googleapis.com/charts | base | 1.13.3 |
+| https://istio-release.storage.googleapis.com/charts | istiod | 1.13.3 |
 
 ## Values
 
@@ -32,18 +32,19 @@ Kubernetes: `>= 1.18.0`
 | global.defaultPodDisruptionBudget.enabled | bool | `false` |  |
 | global.logAsJson | bool | `true` |  |
 | global.priorityClassName | string | `"system-cluster-critical"` |  |
-| istio-discovery.meshConfig.accessLogEncoding | string | `"JSON"` |  |
-| istio-discovery.meshConfig.accessLogFile | string | `"/dev/stdout"` |  |
-| istio-discovery.meshConfig.tcpKeepalive.interval | string | `"60s"` |  |
-| istio-discovery.meshConfig.tcpKeepalive.time | string | `"120s"` |  |
-| istio-discovery.pilot.autoscaleEnabled | bool | `false` |  |
-| istio-discovery.pilot.nodeSelector."node-role.kubernetes.io/master" | string | `""` |  |
-| istio-discovery.pilot.replicaCount | int | `1` |  |
-| istio-discovery.pilot.resources.requests.cpu | string | `"100m"` |  |
-| istio-discovery.pilot.resources.requests.memory | string | `"128Mi"` |  |
-| istio-discovery.pilot.tolerations[0].effect | string | `"NoSchedule"` |  |
-| istio-discovery.pilot.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
-| istio-discovery.telemetry.enabled | bool | `false` |  |
+| global.tag | string | `"1.13.3-distroless"` |  |
+| istiod.meshConfig.accessLogEncoding | string | `"JSON"` |  |
+| istiod.meshConfig.accessLogFile | string | `"/dev/stdout"` |  |
+| istiod.meshConfig.tcpKeepalive.interval | string | `"60s"` |  |
+| istiod.meshConfig.tcpKeepalive.time | string | `"120s"` |  |
+| istiod.pilot.autoscaleEnabled | bool | `false` |  |
+| istiod.pilot.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
+| istiod.pilot.replicaCount | int | `1` |  |
+| istiod.pilot.resources.requests.cpu | string | `"100m"` |  |
+| istiod.pilot.resources.requests.memory | string | `"128Mi"` |  |
+| istiod.pilot.tolerations[0].effect | string | `"NoSchedule"` |  |
+| istiod.pilot.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| istiod.telemetry.enabled | bool | `false` |  |
 | kiali-server.auth.strategy | string | `"anonymous"` |  |
 | kiali-server.deployment.ingress_enabled | bool | `false` |  |
 | kiali-server.deployment.view_only_mode | bool | `true` |  |

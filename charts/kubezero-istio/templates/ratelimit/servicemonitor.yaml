@@ -1,4 +1,4 @@
-{{- if and (index .Values "istio-discovery" "telemetry" "enabled") .Values.rateLimiting.enabled }}
+{{- if and .Values.istiod.telemetry.enabled .Values.rateLimiting.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:

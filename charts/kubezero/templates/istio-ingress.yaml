@@ -1,46 +1,75 @@
-{{- define "_ingress" }}
-enabled: {{ .enabled }}
-{{- with .gateway }}
-gateways:
-  istio-ingressgateway:
-    {{- toYaml . | nindent 6 }}
-{{- end }}
+{{- define "istio-ingress-values" }}
+
+gateway:
+  name: istio-ingressgateway
+  labels:
+    app: istio-ingressgateway
+    istio: ingressgateway
+
+  # Only nodes who are fronted with matching private NLB
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: node.kubernetes.io/ingress.public
+            operator: Exists
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: app
+            operator: In
+            values:
+            - istio-ingressgateway
+        topologyKey: "kubernetes.io/hostname"
+
+  service:
+    ports:
+    - name: status-port
+      port: 15021
+      nodePort: 30021
+      noGateway: true
+    - name: http2
+      port: 80
+      targetPort: 8080
+      nodePort: 30080
+      gatewayProtocol: HTTP2
+      tls:
+        httpsRedirect: true
+    - name: https
+      port: 443
+      targetPort: 8443
+      nodePort: 30443
+      gatewayProtocol: HTTPS
+      tls:
+        mode: SIMPLE
+
+  # custom hardened bootstrap config
+  env:
+    ISTIO_BOOTSTRAP_OVERRIDE: /etc/istio/custom-bootstrap/custom_bootstrap.json
+  volumes:
+    - name: custom-bootstrap-volume
+      configMap:
+        name: ingressgateway-bootstrap-config
+  volumeMounts:
+    - mountPath: /etc/istio/custom-bootstrap
+      name: custom-bootstrap-volume
+      readOnly: true
+
+  {{- with index .Values "istio-ingress" "gateway" }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+
+telemetry:
+  enabled: {{ $.Values.metrics.enabled }}
 certificates:
-{{- with .dnsNames }}
-# Legacy to be removed with 1.21 !!
-- name: ingress-cert
-  dnsNames:
-  {{- toYaml . | nindent 4 }}
-{{- end }}
-{{- range $cert := .certificates }}
+{{- range $cert := index .Values "istio-ingress" "certificates" }}
 - name: {{ $cert.name }}
   dnsNames:
   {{- toYaml $cert.dnsNames | nindent 4 }}
 {{- end }}
-proxyProtocol: {{ default true .proxyProtocol }}
-{{- end }}
-
-
-{{- define "istio-ingress-values" }}
-
-{{- with index .Values "istio-ingress" "global" }}
-global:
-  {{- toYaml . | nindent 2 }}
-{{- end }}
-
-{{- with index .Values "istio-ingress" "public" }}
-istio-ingress:
-  telemetry:
-    enabled: {{ $.Values.metrics.enabled }}
-{{- include "_ingress" . | nindent 2 }}
-{{- end }}
-
-{{- with index .Values "istio-ingress" "private" }}
-istio-private-ingress:
-  telemetry:
-    enabled: {{ $.Values.metrics.enabled }}
-{{- include "_ingress" . | nindent 2 }}
-{{- end }}
+proxyProtocol: {{ default true (index .Values "istio-ingress" "proxyProtocol") }}
 
 {{- end }}
 

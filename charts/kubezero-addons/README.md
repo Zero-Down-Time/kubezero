@@ -1,6 +1,6 @@
 # kubezero-addons
 
-![Version: 0.4.1](https://img.shields.io/badge/Version-0.4.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.22.8](https://img.shields.io/badge/AppVersion-v1.22.8-informational?style=flat-square)
 
 KubeZero umbrella chart for various optional cluster addons
 
@@ -10,7 +10,7 @@ KubeZero umbrella chart for various optional cluster addons
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Stefan Reimer | stefan@zero-downtime.net |  |
+| Stefan Reimer | <stefan@zero-downtime.net> |  |
 
 ## Requirements
 
@@ -18,7 +18,8 @@ Kubernetes: `>= 1.20.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | aws-node-termination-handler | 0.16.0 |
+|  | aws-node-termination-handler | 0.18.0 |
+| https://kubernetes-sigs.github.io/external-dns/ | external-dns | 1.7.1 |
 
 # MetalLB   
    
@@ -67,9 +68,28 @@ Create secret with the IAM user credential for ecr-renew to use, using the crede
 | clusterBackup.enabled | bool | `false` |  |
 | clusterBackup.extraEnv | list | `[]` |  |
 | clusterBackup.image.name | string | `"public.ecr.aws/zero-downtime/kubezero-admin"` |  |
-| clusterBackup.image.tag | string | `"v1.21.9"` |  |
 | clusterBackup.password | string | `""` |  |
 | clusterBackup.repository | string | `""` |  |
+| external-dns.enabled | bool | `false` |  |
+| external-dns.env[0] | object | `{"name":"AWS_ROLE_ARN","value":""}` | "arn:aws:iam::${AWS::AccountId}:role/${AWS::Region}.${ClusterName}.externalDNS" |
+| external-dns.env[1].name | string | `"AWS_WEB_IDENTITY_TOKEN_FILE"` |  |
+| external-dns.env[1].value | string | `"/var/run/secrets/sts.amazonaws.com/serviceaccount/token"` |  |
+| external-dns.env[2].name | string | `"AWS_STS_REGIONAL_ENDPOINTS"` |  |
+| external-dns.env[2].value | string | `"regional"` |  |
+| external-dns.extraVolumeMounts[0].mountPath | string | `"/var/run/secrets/sts.amazonaws.com/serviceaccount/"` |  |
+| external-dns.extraVolumeMounts[0].name | string | `"aws-token"` |  |
+| external-dns.extraVolumeMounts[0].readOnly | bool | `true` |  |
+| external-dns.extraVolumes[0].name | string | `"aws-token"` |  |
+| external-dns.extraVolumes[0].projected.sources[0].serviceAccountToken.audience | string | `"sts.amazonaws.com"` |  |
+| external-dns.extraVolumes[0].projected.sources[0].serviceAccountToken.expirationSeconds | int | `86400` |  |
+| external-dns.extraVolumes[0].projected.sources[0].serviceAccountToken.path | string | `"token"` |  |
+| external-dns.interval | string | `"3m"` |  |
+| external-dns.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
+| external-dns.provider | string | `"inmemory"` |  |
+| external-dns.sources[0] | string | `"service"` |  |
+| external-dns.tolerations[0].effect | string | `"NoSchedule"` |  |
+| external-dns.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| external-dns.triggerLoopOnEvent | bool | `true` |  |
 | forseti.aws.iamRoleArn | string | `""` | "arn:aws:iam::${AWS::AccountId}:role/${AWS::Region}.${ClusterName}.kubezeroForseti" |
 | forseti.aws.region | string | `""` |  |
 | forseti.enabled | bool | `false` |  |

@@ -1,6 +1,6 @@
 # uptime-kuma
 
-![Version: 0.1.5](https://img.shields.io/badge/Version-0.1.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.8.0](https://img.shields.io/badge/AppVersion-1.8.0-informational?style=flat-square)
+![Version: 0.1.10](https://img.shields.io/badge/Version-0.1.10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.9.1](https://img.shields.io/badge/AppVersion-1.9.1-informational?style=flat-square)
 
 Chart for deploying uptime-kuma
 
@@ -18,7 +18,7 @@ Kubernetes: `>= 1.18.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://zero-down-time.github.io/kubezero/ | kubezero-lib | >= 0.1.4 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.4 |
 
 ## Values
 
@@ -32,7 +32,6 @@ Kubernetes: `>= 1.18.0`
 | nameOverride | string | `""` | override the name of the uptime-kuma chart |
 | service.port | int | `3001` | The port to be used by the uptime-kuma service |
 | serviceMonitor.enabled | bool | `false` |  |
-| version | string | `"1.8.0-alpine"` |  |
 
 ## Resources
 
