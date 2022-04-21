@@ -1,6 +1,6 @@
 diff -tubr charts/gateway.orig/templates/deployment.yaml charts/gateway/templates/deployment.yaml
---- charts/gateway.orig/templates/deployment.yaml	2022-04-21 01:00:49.624942235 +0200
-+++ charts/gateway/templates/deployment.yaml	2022-04-21 01:04:28.276506097 +0200
+--- charts/gateway.orig/templates/deployment.yaml	2022-04-21 17:33:30.042035869 +0200
++++ charts/gateway/templates/deployment.yaml	2022-04-21 18:17:15.130605952 +0200
 @@ -11,6 +11,9 @@
    {{- if not .Values.autoscaling.enabled }}
    replicas: {{ .Values.replicaCount }}
@@ -19,9 +19,28 @@ diff -tubr charts/gateway.orig/templates/deployment.yaml charts/gateway/template
        serviceAccountName: {{ include "gateway.serviceAccountName" . }}
        securityContext:
        {{- if .Values.securityContext }}
+@@ -86,6 +90,10 @@
+             name: http-envoy-prom
+           resources:
+             {{- toYaml .Values.resources | nindent 12 }}
++          {{- if .Values.volumeMounts }}
++          volumeMounts:
++          {{- toYaml .Values.volumeMounts | nindent 12 }}
++          {{- end }}
+       {{- with .Values.nodeSelector }}
+       nodeSelector:
+         {{- toYaml . | nindent 8 }}
+@@ -98,3 +106,7 @@
+       tolerations:
+         {{- toYaml . | nindent 8 }}
+       {{- end }}
++      {{- with .Values.volumes }}
++      volumes:
++        {{- toYaml . | nindent 8 }}
++      {{- end }}
 diff -tubr charts/gateway.orig/templates/service.yaml charts/gateway/templates/service.yaml
---- charts/gateway.orig/templates/service.yaml	2022-04-21 01:00:49.628275645 +0200
-+++ charts/gateway/templates/service.yaml	2022-04-21 01:08:56.785411051 +0200
+--- charts/gateway.orig/templates/service.yaml	2022-04-21 17:33:30.042035869 +0200
++++ charts/gateway/templates/service.yaml	2022-04-21 17:33:41.801806959 +0200
 @@ -38,7 +38,14 @@
      port: 15017
      targetPort: 15017
@@ -38,3 +57,19 @@ diff -tubr charts/gateway.orig/templates/service.yaml charts/gateway/templates/s
  {{- end }}
    selector:
      {{- include "gateway.selectorLabels" . | nindent 4 }}
+diff -tubr charts/gateway.orig/values.schema.json charts/gateway/values.schema.json
+--- charts/gateway.orig/values.schema.json	2022-04-21 17:33:30.042035869 +0200
++++ charts/gateway/values.schema.json	2022-04-21 17:52:51.007536238 +0200
+@@ -47,6 +47,12 @@
+     "labels": {
+       "type": "object"
+     },
++    "volumes": {
++      "type": "array"
++    },
++    "volumeMounts": {
++      "type": "array"
++    },
+     "name": {
+       "type": "string"
+     },
