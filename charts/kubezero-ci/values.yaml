@@ -17,7 +17,7 @@ gitea:
   enabled: false
 
   image:
-    tag: 1.16.5
+    tag: 1.16.6
     rootless: true
 
   securityContext:
