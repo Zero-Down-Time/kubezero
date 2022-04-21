@@ -1,0 +1,19 @@
+{{- range $cert := .Values.certificates }}
+{{- if $cert.dnsNames }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ $cert.name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+{{ include "kubezero-lib.labels" $ | indent 4 }}
+spec:
+  secretName: {{ $cert.name }}
+  issuerRef:
+    name: {{ default "letsencrypt-dns-prod" $cert.issuer }}
+    kind: ClusterIssuer
+  dnsNames:
+{{ toYaml $cert.dnsNames | indent 4 }}
+---
+{{- end }}
+{{- end }}

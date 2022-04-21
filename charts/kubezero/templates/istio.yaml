@@ -1,7 +1,7 @@
 {{- define "istio-values" }}
-istio-discovery:
+istiod:
   telemetry:
-    enabled: {{ .Values.metrics.enabled }}
+    enabled: {{ $.Values.metrics.enabled }}
 {{- if .Values.HighAvailableControlplane }}
   pilot:
     replicaCount: 2

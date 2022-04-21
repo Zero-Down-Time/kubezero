@@ -1,0 +1,40 @@
+diff -tubr charts/gateway.orig/templates/deployment.yaml charts/gateway/templates/deployment.yaml
+--- charts/gateway.orig/templates/deployment.yaml	2022-04-21 01:00:49.624942235 +0200
++++ charts/gateway/templates/deployment.yaml	2022-04-21 01:04:28.276506097 +0200
+@@ -11,6 +11,9 @@
+   {{- if not .Values.autoscaling.enabled }}
+   replicas: {{ .Values.replicaCount }}
+   {{- end }}
++  # Give the LB 120s to detect and take into service
++  # should only be 40s by we are on AWS so ...
++  minReadySeconds: 120
+   selector:
+     matchLabels:
+       {{- include "gateway.selectorLabels" . | nindent 6 }}
+@@ -31,6 +34,7 @@
+       imagePullSecrets:
+         {{- toYaml . | nindent 8 }}
+       {{- end }}
++      terminationGracePeriodSeconds: 120
+       serviceAccountName: {{ include "gateway.serviceAccountName" . }}
+       securityContext:
+       {{- if .Values.securityContext }}
+diff -tubr charts/gateway.orig/templates/service.yaml charts/gateway/templates/service.yaml
+--- charts/gateway.orig/templates/service.yaml	2022-04-21 01:00:49.628275645 +0200
++++ charts/gateway/templates/service.yaml	2022-04-21 01:08:56.785411051 +0200
+@@ -38,7 +38,14 @@
+     port: 15017
+     targetPort: 15017
+ {{- else }}
+-{{ .Values.service.ports | toYaml | indent 4 }}
++  {{- range $key, $val := .Values.service.ports }}
++  -
++    {{- range $pkey, $pval := $val }}
++    {{- if has $pkey (list "name" "nodePort" "port" "targetPort") }}
++    {{ $pkey}}: {{ $pval }}
++    {{- end }}
++    {{- end }}
++  {{- end }}
+ {{- end }}
+   selector:
+     {{- include "gateway.selectorLabels" . | nindent 4 }}

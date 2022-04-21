@@ -1,0 +1,87 @@
+gateway:
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 4
+    targetCPUUtilizationPercentage: 80
+
+  replicaCount: 1
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      # cpu: 100m
+      memory: 512Mi
+
+  service:
+    type: NodePort
+    externalTrafficPolicy: Local
+    # Map port 80/443 to 8080/8443 so we don't need to root
+
+    # ports is extended as follows:
+    # noGateway: true -> this port does NOT get mapped to a Gateway port
+    # tls: optional gateway port setting
+    # gatewayProtocol: Loadbalancer protocol which is NOT the same as Container Procotol !
+    ports:
+    - name: status-port
+      port: 15021
+      nodePort: 30021
+      noGateway: true
+    - name: http2
+      port: 80
+      targetPort: 8080
+      nodePort: 30080
+      gatewayProtocol: HTTP2
+      tls:
+        httpsRedirect: true
+    - name: https
+      port: 443
+      targetPort: 8443
+      nodePort: 30443
+      gatewayProtocol: HTTPS
+      tls:
+        mode: SIMPLE
+
+  affinity:
+    # Only nodes who are fronted with matching NLB
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: node.kubernetes.io/ingress.public
+            operator: Exists
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: app
+            operator: In
+            values:
+            - istio-ingressgateway
+        topologyKey: "kubernetes.io/hostname"
+
+  podAnnotations:
+    proxy.istio.io/config: '{ "terminationDrainDuration": "20s" }'
+
+  # TODO
+  # custom hardened bootstrap config
+  #env:
+  #  ISTIO_BOOTSTRAP_OVERRIDE: /etc/istio/custom-bootstrap/custom_bootstrap.json
+
+  #configVolumes:
+  #- name: custom-bootstrap-volume
+  #  mountPath: /etc/istio/custom-bootstrap
+  #  configMapName: istio-gateway-bootstrap-config
+
+
+certificates:
+- name: ingress-cert
+  dnsNames: []
+#  - '*.example.com'
+
+telemetry:
+  enabled: false
+
+proxyProtocol: true
