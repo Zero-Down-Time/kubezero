@@ -1,6 +1,6 @@
 # kubezero-logging
 
-![Version: 0.7.17](https://img.shields.io/badge/Version-0.7.17-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6.0](https://img.shields.io/badge/AppVersion-1.6.0-informational?style=flat-square)
+![Version: 0.7.20](https://img.shields.io/badge/Version-0.7.20-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6.0](https://img.shields.io/badge/AppVersion-1.6.0-informational?style=flat-square)
 
 KubeZero Umbrella Chart for complete EFK stack
 
@@ -19,8 +19,8 @@ Kubernetes: `>= 1.18.0`
 | Repository | Name | Version |
 |------------|------|---------|
 |  | eck-operator | 1.6.0 |
-|  | fluent-bit | 0.19.18 |
-|  | fluentd | 0.3.5 |
+|  | fluent-bit | 0.19.23 |
+|  | fluentd | 0.3.7 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.3 |
 
 ## Changes from upstream
@@ -81,16 +81,10 @@ Kubernetes: `>= 1.18.0`
 | fluent-bit.config.service | string | `"[SERVICE]\n    Flush {{ .Values.config.flushInterval }}\n    Daemon Off\n    Log_Level {{ .Values.config.logLevel }}\n    Parsers_File parsers.conf\n    Parsers_File custom_parsers.conf\n    HTTP_Server On\n    HTTP_Listen 0.0.0.0\n    HTTP_Port {{ .Values.service.port }}\n    Health_Check On\n"` |  |
 | fluent-bit.daemonSetVolumeMounts[0].mountPath | string | `"/var/log"` |  |
 | fluent-bit.daemonSetVolumeMounts[0].name | string | `"varlog"` |  |
-| fluent-bit.daemonSetVolumeMounts[1].mountPath | string | `"/etc/machine-id"` |  |
-| fluent-bit.daemonSetVolumeMounts[1].name | string | `"etcmachineid"` |  |
-| fluent-bit.daemonSetVolumeMounts[1].readOnly | bool | `true` |  |
 | fluent-bit.daemonSetVolumes[0].hostPath.path | string | `"/var/log"` |  |
 | fluent-bit.daemonSetVolumes[0].name | string | `"varlog"` |  |
-| fluent-bit.daemonSetVolumes[1].hostPath.path | string | `"/etc/machine-id"` |  |
-| fluent-bit.daemonSetVolumes[1].hostPath.type | string | `"File"` |  |
-| fluent-bit.daemonSetVolumes[1].name | string | `"etcmachineid"` |  |
 | fluent-bit.enabled | bool | `false` |  |
-| fluent-bit.image | string | `nil` |  |
+| fluent-bit.image.tag | string | `"1.9.2"` |  |
 | fluent-bit.luaScripts."kubezero.lua" | string | `"function nest_k8s_ns(tag, timestamp, record)\n    if not record['kubernetes']['namespace_name'] then\n        return 0, 0, 0\n    end\n    new_record = {}\n    for key, val in pairs(record) do\n        if key == 'kube' then\n            new_record[key] = {}\n            new_record[key][record['kubernetes']['namespace_name']] = record[key]\n        else\n            new_record[key] = record[key]\n        end\n    end\n    return 1, timestamp, new_record\nend\n"` |  |
 | fluent-bit.resources.limits.memory | string | `"64Mi"` |  |
 | fluent-bit.resources.requests.cpu | string | `"20m"` |  |

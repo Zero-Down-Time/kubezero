@@ -61,11 +61,6 @@ istio:
   {{- end }}
 {{- end }}
 
-{{- with index .Values "argocd" "argocd-applicationset" }}
-argocd-applicationset:
-  {{ toYaml . | nindent 2 }}
-{{- end }}
-
 {{- end }}
 
 {{- define "argocd-argo" }}
