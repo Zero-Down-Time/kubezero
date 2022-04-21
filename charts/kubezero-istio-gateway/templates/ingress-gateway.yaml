@@ -1,0 +1,15 @@
+# https://istio.io/latest/docs/tasks/traffic-management/ingress/secure-ingress/#configure-a-tls-ingress-gateway-for-multiple-hosts
+{{- if .Values.certificates }}
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: {{ include "gatewayName" . | trimPrefix "istio-" }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kubezero-lib.labels" . | nindent 4 }}
+spec:
+  selector:
+    {{- include "gatewaySelectorLabels" . | nindent 4 }}
+  servers:
+  {{- include "gatewayServers" (dict "certificates" .Values.certificates "ports" .Values.gateway.service.ports ) | nindent 2}}
+{{- end }}

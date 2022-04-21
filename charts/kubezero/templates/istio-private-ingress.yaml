@@ -1,0 +1,28 @@
+{{- define "istio-private-ingress-values" }}
+
+gateway:
+  name: istio-private-ingressgateway
+  labels:    
+    app: istio-private-ingressgateway
+    istio: private-ingressgateway
+  {{- with index .Values "istio-private-ingress" "gateway" }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+
+telemetry:
+  enabled: {{ $.Values.metrics.enabled }}
+certificates:
+{{- range $cert := index .Values "istio-private-ingress" "certificates" }}
+- name: {{ $cert.name }}
+  dnsNames:
+  {{- toYaml $cert.dnsNames | nindent 4 }}
+{{- end }}
+proxyProtocol: {{ default true (index .Values "istio-private-ingress" "proxyProtocol") }}
+
+{{- end }}
+
+
+{{- define "istio-private-ingress-argo" }}
+{{- end }}
+
+{{ include "kubezero-app.app" . }}
