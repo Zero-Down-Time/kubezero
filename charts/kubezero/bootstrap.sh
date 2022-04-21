@@ -93,7 +93,7 @@ function _helm() {
   local action=$1
   local module=$2
 
-  local chart="kubezero-${module}"
+  local chart="$(yq eval '.spec.source.chart' $TMPDIR/kubezero/templates/${module}.yaml)"
   local namespace="$(yq eval '.spec.destination.namespace' $TMPDIR/kubezero/templates/${module}.yaml)"
 
   targetRevision=""
@@ -123,7 +123,7 @@ function _helm() {
     apply
 
     # Delete dedicated namespace if not kube-system
-    delete_ns $namespace
+    [ -n "$DELETE_NS" ] && delete_ns $namespace
   fi
 
   return 0
