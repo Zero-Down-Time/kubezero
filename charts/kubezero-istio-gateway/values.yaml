@@ -28,10 +28,9 @@ gateway:
   podAnnotations:
     proxy.istio.io/config: '{ "terminationDrainDuration": "20s" }'
 
-certificates:
-- name: ingress-cert
-  dnsNames: []
-#  - '*.example.com'
+certificates: []
+#- name: ingress-cert
+#  dnsNames: []
 
 telemetry:
   enabled: falser

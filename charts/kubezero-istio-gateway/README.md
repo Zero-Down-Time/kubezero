@@ -27,8 +27,7 @@ Kubernetes: `>= 1.20.0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| certificates[0].dnsNames | list | `[]` |  |
-| certificates[0].name | string | `"ingress-cert"` |  |
+| certificates | list | `[]` |  |
 | gateway.autoscaling.enabled | bool | `false` |  |
 | gateway.autoscaling.maxReplicas | int | `4` |  |
 | gateway.autoscaling.minReplicas | int | `1` |  |
