@@ -47,6 +47,12 @@
     "labels": {
       "type": "object"
     },
+    "volumes": {
+      "type": "array"
+    },
+    "volumeMounts": {
+      "type": "array"
+    },
     "name": {
       "type": "string"
     },
