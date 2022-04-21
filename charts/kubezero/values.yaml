@@ -56,11 +56,11 @@ metrics:
 logging:
   enabled: false
   namespace: logging
-  targetRevision: 0.7.19
+  targetRevision: 0.7.20
 
 argocd:
   enabled: false
   namespace: argocd
-  targetRevision: 0.9.6
+  targetRevision: 0.10.0
   istio:
     enabled: false
