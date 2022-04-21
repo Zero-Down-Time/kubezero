@@ -1,6 +1,6 @@
 # kubezero-storage
 
-![Version: 0.5.7](https://img.shields.io/badge/Version-0.5.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things storage incl. AWS EBS/EFS, openEBS-lvm, gemini
 
@@ -10,7 +10,7 @@ KubeZero umbrella chart for all things storage incl. AWS EBS/EFS, openEBS-lvm, g
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Stefan Reimer | stefan@zero-downtime.net |  |
+| Stefan Reimer | <stefan@zero-downtime.net> |  |
 
 ## Requirements
 
@@ -18,10 +18,10 @@ Kubernetes: `>= 1.20.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | aws-ebs-csi-driver | 2.6.3 |
+|  | aws-ebs-csi-driver | 2.6.5 |
 |  | aws-efs-csi-driver | 2.2.3 |
-|  | gemini | 0.0.8 |
-|  | lvm-localpv | 0.8.6 |
+|  | gemini | 1.0.0 |
+|  | lvm-localpv | 0.9.0 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.4 |
 
 ## Values
