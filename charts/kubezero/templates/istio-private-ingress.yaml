@@ -10,7 +10,8 @@ gateway:
   replicaCount: {{ . }}
   {{- end }}
 
-  # Only nodes who are fronted with matching private NLB
+  {{- if not (index .Values "istio-private-ingress" "gateway" "affinity") }}
+  # Only nodes who are fronted with matching LB
   affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -27,6 +28,7 @@ gateway:
             values:
             - istio-private-ingressgateway
         topologyKey: "kubernetes.io/hostname"
+  {{- end }}
 
   service:
     ports:
