@@ -121,6 +121,8 @@ if [ "$1" == 'upgrade' ]; then
   ### PRE 1.22 specific
   #####################
 
+  kubectl delete runtimeclass crio
+
   #####################
 
   render_kubeadm
