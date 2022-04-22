@@ -140,7 +140,7 @@ Kubernetes: `>= 1.18.0`
 | kibana.istio.enabled | bool | `false` |  |
 | kibana.istio.gateway | string | `"istio-system/ingressgateway"` |  |
 | kibana.istio.url | string | `""` |  |
-| version | string | `"7.16.3"` |  |
+| version | string | `"7.17.3"` |  |
 
 ## Resources:
 
