@@ -6,7 +6,12 @@ gateway:
     app: istio-ingressgateway
     istio: ingressgateway
 
-  # Only nodes who are fronted with matching private NLB
+  {{- with index .Values "istio-ingress" "gateway" "replicaCount" }}
+  replicaCount: {{ . }}
+  {{- end }}
+
+  {{- if not (index .Values "istio-ingress" "gateway" "affinity") }}
+  # Only nodes who are fronted with matching LB
   affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -23,8 +28,12 @@ gateway:
             values:
             - istio-ingressgateway
         topologyKey: "kubernetes.io/hostname"
+  {{- end }}
 
   service:
+    {{- with index .Values "istio-ingress" "gateway" "service" "type" }}
+    type: {{ . }}
+    {{- end }}
     ports:
     - name: status-port
       port: 15021
@@ -44,6 +53,9 @@ gateway:
       gatewayProtocol: HTTPS
       tls:
         mode: SIMPLE
+    {{- with index .Values "istio-ingress" "gateway" "service" "ports" }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 
   # custom hardened bootstrap config
   env:
@@ -56,10 +68,6 @@ gateway:
     - mountPath: /etc/istio/custom-bootstrap
       name: custom-bootstrap-volume
       readOnly: true
-
-  {{- with index .Values "istio-ingress" "gateway" }}
-  {{- toYaml . | nindent 2 }}
-  {{- end }}
 
 telemetry:
   enabled: {{ $.Values.metrics.enabled }}

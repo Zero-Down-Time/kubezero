@@ -33,6 +33,6 @@ certificates: []
 #  dnsNames: []
 
 telemetry:
-  enabled: falser
+  enabled: false
 
 proxyProtocol: true
