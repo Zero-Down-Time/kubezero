@@ -9,7 +9,7 @@ LOCATION=${4:-""}
 which yq || { echo "yq not found!"; exit 1; }
 which helm || { echo "helm not found!"; exit 1; }
 helm_version=$(helm version --short)
-echo $helm_version | grep -qe "^v3.[5-9]" || { echo "Helm version >= 3.5 required!"; exit 1; }
+echo $helm_version | grep -qe "^v3.[7-9]" || { echo "Helm version >= 3.7 required!"; exit 1; }
 
 # Simulate well-known CRDs being available
 API_VERSIONS="-a monitoring.coreos.com/v1 -a snapshot.storage.k8s.io/v1"
