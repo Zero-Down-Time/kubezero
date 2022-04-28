@@ -44,4 +44,23 @@ spec:
       method:
         exact: "POST"
 {{- end }}
+{{- if .Values.jenkins.istio.agent.enabled }}
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ template "kubezero-lib.fullname" (merge (dict "subchart" "jenkins") .) }}-agent
+  namespace: {{ template "jenkins.namespace" . }}
+spec:
+  hosts:
+  - {{ .Values.jenkins.istio.agent.url }}
+  gateways:
+  - {{ .Values.jenkins.istio.agent.gateway }}
+  http:
+  - route:
+    - destination:
+        host: {{ template "kubezero-lib.fullname" (merge (dict "subchart" "jenkins") .) }}
+        port:
+          number: 50000
+{{- end }}
 {{- end }}

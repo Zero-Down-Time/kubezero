@@ -194,6 +194,12 @@ jenkins:
       gateway: istio-ingress/ingressgateway
       url: jenkins-webhook.example.com
 
+    # Remote Agents
+    agent:
+      enabled: false
+      gateway: istio-ingress/private-ingressgateway
+      url: jenkins-agent.example.com
+
 trivy:
   enabled: false
   persistence:
