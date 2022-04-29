@@ -140,13 +140,13 @@ if [ "$1" == 'upgrade' ]; then
   fi
 
   ### POST 1.22 specific
-  
+
   # Remove all remaining kiam
   helm repo add uswitch https://uswitch.github.io/kiam-helm-charts/charts/
   helm repo update
   helm template uswitch/kiam --name-template kiam --set server.prometheus.servicemonitor.enabled=true --set agent.prometheus.servicemonitor.enabled=true |
     kubectl delete --namespace kube-system -f - || true
-  
+
   ######################
   # network
   yq eval '.network // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
@@ -160,9 +160,9 @@ if [ "$1" == 'upgrade' ]; then
 
   ######################
 
+  # Could be removed with 1.23 as we now have persistent etcd
   # Execute cluster backup to allow new controllers to join
   kubectl create job backup-cluster-now --from=cronjob/kubezero-backup -n kube-system
-
   # That might take a while as the backup pod needs the CNIs to come online etc.
   retry 10 30 40 kubectl wait --for=condition=complete job/backup-cluster-now -n kube-system && kubectl delete job backup-cluster-now -n kube-system
 
@@ -192,28 +192,31 @@ elif [[ "$1" =~ "^(bootstrap|restore|join)$" ]]; then
     rm -rf ${HOSTFS}/var/lib/etcd/member
 
   else
-		retry 10 60 30 restic restore latest --no-lock -t / --tag $VERSION
+    # Todo: 1.23
+    # Workaround for 1.22 as the final backup is still tagged with the previous verion from the cronjob
+    #retry 10 60 30 restic restore latest --no-lock -t / --tag $VERSION
+    retry 10 60 30 restic restore latest --no-lock -t /
 
-		# Make last etcd snapshot available
-		cp ${WORKDIR}/etcd_snapshot ${HOSTFS}/etc/kubernetes
+    # Make last etcd snapshot available
+    cp ${WORKDIR}/etcd_snapshot ${HOSTFS}/etc/kubernetes
 
-		# Put PKI in place
-		cp -r ${WORKDIR}/pki ${HOSTFS}/etc/kubernetes
+    # Put PKI in place
+    cp -r ${WORKDIR}/pki ${HOSTFS}/etc/kubernetes
 
-		# Always use kubeadm kubectl config to never run into chicken egg with custom auth hooks
-		cp ${WORKDIR}/admin.conf ${HOSTFS}/root/.kube/config
+    # Always use kubeadm kubectl config to never run into chicken egg with custom auth hooks
+    cp ${WORKDIR}/admin.conf ${HOSTFS}/root/.kube/config
 
     # etcd needs to resync during join
-		if [[ "$1" =~ "^(restore)$" ]]; then
-			# Only restore etcd data set if none exists already
-			if [ ! -d ${HOSTFS}/var/lib/etcd/member ]; then 
-				etcdctl snapshot restore ${HOSTFS}/etc/kubernetes/etcd_snapshot \
-					--name $ETCD_NODENAME \
-					--data-dir="${HOSTFS}/var/lib/etcd" \
-					--initial-cluster-token etcd-${CLUSTERNAME} \
-					--initial-advertise-peer-urls https://${ETCD_NODENAME}:2380 \
-					--initial-cluster $ETCD_NODENAME=https://${ETCD_NODENAME}:2380
-			fi
+    if [[ "$1" =~ "^(restore)$" ]]; then
+      # Only restore etcd data set if none exists already
+      if [ ! -d ${HOSTFS}/var/lib/etcd/member ]; then
+        etcdctl snapshot restore ${HOSTFS}/etc/kubernetes/etcd_snapshot \
+          --name $ETCD_NODENAME \
+          --data-dir="${HOSTFS}/var/lib/etcd" \
+          --initial-cluster-token etcd-${CLUSTERNAME} \
+          --initial-advertise-peer-urls https://${ETCD_NODENAME}:2380 \
+          --initial-cluster $ETCD_NODENAME=https://${ETCD_NODENAME}:2380
+      fi
     fi
   fi
 
@@ -247,8 +250,8 @@ elif [[ "$1" =~ "^(bootstrap|restore|join)$" ]]; then
     # Failsafe / etcd on ephmeral: we were a member but our dataset is missing
     # -> remove former self so we can re-join
     if [ -n "$MY_ID" -a ! -d ${HOSTFS}/var/lib/etcd/member ]; then
-			# Remove former self first
-			[ -n "$MY_ID" ] && retry 12 5 5 etcdctl member remove $MY_ID --endpoints=$etcd_endpoints
+      # Remove former self first
+      [ -n "$MY_ID" ] && retry 12 5 5 etcdctl member remove $MY_ID --endpoints=$etcd_endpoints
       MY_ID=""
     fi
 
@@ -315,7 +318,7 @@ elif [[ "$1" =~ "^(bootstrap|restore|join)$" ]]; then
   fi
 
   # install / update network and addons
-  if [[ "$1" =~ "^(bootstrap|join|restore)$" ]]; then
+  if [[ "$1" =~ "^(bootstrap)$" ]]; then
     # network
     yq eval '.network // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
     helm template $CHARTS/kubezero-network --namespace kube-system --include-crds --name-template network \

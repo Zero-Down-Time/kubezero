@@ -56,11 +56,13 @@ spec:
   - {{ .Values.jenkins.istio.agent.url }}
   gateways:
   - {{ .Values.jenkins.istio.agent.gateway }}
-  http:
-  - route:
-    - destination:
-        host: {{ template "kubezero-lib.fullname" (merge (dict "subchart" "jenkins") .) }}
-        port:
-          number: 50000
+  tcp:
+    - match:
+      - port: 50000
+      route:
+      - destination:
+          host: {{ template "kubezero-lib.fullname" (merge (dict "subchart" "jenkins") .) }}-agent
+          port:
+            number: 50000
 {{- end }}
 {{- end }}

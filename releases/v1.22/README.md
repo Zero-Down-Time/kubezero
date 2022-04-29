@@ -52,8 +52,12 @@ Wait each time for controller to join and all pods running.
 Might take a while ...
 
 4. Migrate ArgoCD config for the cluster  
-`./migrate_argo.sh <cluster/env/kubezero/application.yaml>`  
-Adjust as needed, eg. ensure eck-operator is enabled if needed.  
+```cat <cluster/env/kubezero/application.yaml> | ./release/v1.22/migrate_agro.py```  
+Adjust as needed...  
+
+If ECK operator is running in your cluster make sure to replace the CRDs *BEFORE* committing the new kubezero config !  
+```kubectl replace -f https://download.elastic.co/downloads/eck/2.1.0/crds.yaml```
+
 git add / commit / push  
 Watch ArgoCD do its work.
 
@@ -63,4 +67,3 @@ once all new workers joined, drain old workers one by one,
 finally reset `desired` for each worker ASG which will terminate the old workers.
 
 ## Known issues
-

@@ -2,10 +2,51 @@
 
 VERSION="v1.22.8"
 
-[ -n "$DEBUG" ] && DEBUG=1
+[ -n "$DEBUG" ] && set -x
 
 # unset any AWS_DEFAULT_PROFILE as it will break aws-iam-auth
 unset AWS_DEFAULT_PROFILE
+
+echo "Deploying node upgrade daemonSet..."
+cat <<EOF | kubectl apply -f -
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: kubezero-upgrade-${VERSION//.}
+  namespace: kube-system
+  labels:
+    app: kubezero-upgrade
+spec:
+  selector:
+    matchLabels:
+      name: kubezero-upgrade-${VERSION//.}
+  template:
+    metadata:
+      labels:
+        name: kubezero-upgrade-${VERSION//.}
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      containers:
+      - name: kubezero-upgrade-${VERSION//.}
+        image: busybox
+        command: ["/bin/sh"]
+        args: ["-c", "[ -d /host/opt/cni/bin ] && mkdir -p /host/usr/libexec/cni && cp /host/opt/cni/bin/* /host/usr/libexec/cni ; sleep 300" ]
+        volumeMounts:
+        - name: host
+          mountPath: /host
+      volumes:
+      - name: host
+        hostPath:
+          path: /
+          type: Directory
+EOF
+
+kubectl rollout status daemonset -n kube-system kubezero-upgrade-${VERSION//.} --timeout 300s
+kubectl delete ds kubezero-upgrade-${VERSION//.} -n kube-system
+
 
 echo "Deploying cluster upgrade job ..."
 

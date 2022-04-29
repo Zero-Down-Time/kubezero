@@ -35,7 +35,9 @@ spec:
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
-    {{- toYaml .Values.kubezero.syncPolicy | nindent 4 }}
+    {{- with .Values.kubezero.syncPolicy }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 
 {{- include (print $name "-argo") $ }}
 {{- end }}

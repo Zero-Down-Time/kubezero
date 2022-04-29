@@ -30,3 +30,5 @@ patch -i efs.patch -p0 --no-backup-if-mismatch
 # Metrics
 cd jsonnet
 make render
+
+helm-docs
