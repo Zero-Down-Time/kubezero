@@ -115,12 +115,12 @@ jenkins:
 
     installPlugins:
       - kubernetes:3580.v78271e5631dc
-      - workflow-aggregator:2.6
-      - git:4.11.0
-      - configuration-as-code:1414.v878271fc496f
+      - workflow-aggregator:2.7
+      - git:4.11.1
+      - configuration-as-code:1429.v09b_044a_c93de
       - antisamy-markup-formatter:2.7
       - prometheus:2.0.11
-      - htmlpublisher:1.29
+      - htmlpublisher:1.30
       - build-discarder:60.v1747b0eb632a
       - dark-theme:156.v6cf16af6f9ef
 

@@ -18,7 +18,7 @@ Kubernetes: `>= 1.20.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | aws-ebs-csi-driver | 2.6.5 |
+|  | aws-ebs-csi-driver | 2.6.6 |
 |  | aws-efs-csi-driver | 2.2.3 |
 |  | gemini | 1.0.0 |
 |  | lvm-localpv | 0.9.0 |
