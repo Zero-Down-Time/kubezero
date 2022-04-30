@@ -3,18 +3,36 @@
 ## What's new - Major themes
 
 ### Alpine - Custom AMIs
-Starting with 1.22, all KubeZero nodes will boot from custom pre-baked AMIs. These AMIs will be provided and shared by the Zero Down Time for all customers. All sources and the build pipeline are freely [available](https://git.zero-downtime.net/ZeroDownTime/alpine-zdt-images) as usual though.
+Starting with 1.22, all KubeZero nodes boot using custom AMIs. These AMIs will be provided and shared by the Zero Down Time for all customers. As always, all sources incl. the build pipeline are freely available [here](https://git.zero-downtime.net/ZeroDownTime/alpine-zdt-images).
 
 This eliminates *ALL* dependencies at boot time other than container registries. Gone are the days when Ubuntu, SuSE or Github decided to ruin your morning coffee.  
 
-KubeZero also migrates from Ubuntu 20.04 LTS to [Alpine v3.15](https://www.alpinelinux.org/releases/) as its base OS, which reduces the root file system size from 8GB to 2GB.  
-Additionally all AMIs are encrypted, which is ensures encryption at rest even for every instance's root file system. This closes the last gaps in achieving *full encryption at rest* for every volume within a default KubeZero deployment. 
+KubeZero migrates from Ubuntu 20.04 LTS to [Alpine v3.15](https://www.alpinelinux.org/releases/) as its base OS.  
+#### Highlights:
+- minimal attack surface by removing all unnecessary bloat,  
+like all things SystemD, Ubuntu's snap, etc
+- reduced root file system size from 8GB to 2GB
+- minimal memory consumption of about 12MB fully booted
+
+  *Minimal* fully booted instance incl. SSH and Monit:
+
+  | | Ubuntu | Alpine|
+  |-|--------|-----|
+  | Memory used | 60MB | 12 MB |
+  | RootFS used | 1.1GB | 330 MB |
+  | RootFS encrypted | no | yes |
+  | Kernel | 5.11 | 5.15 |
+  | Init | Systemd | OpenRC |
+  | AMI / EBS size | 8GB | 1GB |
+  | Boot time | ~120s | ~45s |
+
+- Encrypted AMIs:  
+This closes the last gaps you might have in achieving *full encryption at rest* for every volume within a default KubeZero deployment. 
 
 ### Etcd
-On AWS a new dedicated EBS volume will be provisioned per controller and used as persistent etcd storage. These volumes will persist for the life time of the cluster and reused by future controller nodes in each AZ.  
-This ensure no data loss during upgrade or fail-overs of single controller clusters. The hourly backup on S3 will still be used as fallback in case the file system gets corrupted etc.  
+On AWS a new dedicated GP3 EBS volume gets provisioned per controller and is used as persistent etcd storage. These volumes will persist for the life time of the cluster and reused by future controller nodes in each AZ.  
+This ensure no data loss during upgrade or restore situations of single controller clusters. The hourly backup on S3 will still be used as fallback / disaster recovery option in case the file system gets corrupted etc.  
 
-As these volumes are `GP3` they provide higher and dedicated IOPS for etcd as well.
 
 ### DNS
 The [external-dns](https://github.com/kubernetes-sigs/external-dns) controller got integrated and is used to provide DNS based loadbalacing for the apiserver itself. This allows high available control planes on AWS as well as bare-metal in combination with various DNS providers.  
@@ -22,12 +40,19 @@ The [external-dns](https://github.com/kubernetes-sigs/external-dns) controller g
 Further usage of this controller to automate any DNS related configurations, like Ingress etc. is planned for following releases.
 
 ### Container runtime
-Cri-o now uses crun rather than runc, which reduces the memory overhead *per pod* from 16M to 4M, details at [crun intro](https://www.redhat.com/sysadmin/introduction-crun)
+Cri-o now uses crun rather than runc, which reduces the memory overhead *per pod* from 16M to 4M, details at [crun intro](https://www.redhat.com/sysadmin/introduction-crun)  
+
+With 1.22 and the switch to crun, support for [CgroupV2](https://www.kernel.org/doc/Documentation/cgroup-v2.txt) has been enabled.
 
 ## Version upgrades
-- Istio to 1.13.2 using new upstream Helm charts
+- Istio to 1.13.3 using the new Helm [gateway charts](https://istio.io/latest/docs/setup/additional-setup/gateway/)
+- Logging: ECK operator upgraded from 1.6 to 2.1, fluent-bit 1.9.3
+- Metrics: Prometheus and all Grafana charts to latest to match V1.22
+- ArgoCD to V2.3
+- AWS EBS/EFS CSI drivers to latest versions
+- cert-manager to V1.8
 - aws-termination-handler to 1.16
-- aws-iam-authenticator to 0.5.7, required for >1.22 allows using the latest version on the client side again 
+- aws-iam-authenticator to 0.5.7, required for >1.22 which allows using the latest version on the client side again
 
 ## Misc
 - new metrics and dashboards for openEBS LVM CSI drivers
@@ -51,15 +76,14 @@ Change Kubernetes version in controller config from `1.21.9` to `1.22.8`
 Wait each time for controller to join and all pods running.
 Might take a while ...
 
-4. Migrate ArgoCD config for the cluster  
+4. Migrate ArgoCD KubeZero config for your cluster:  
 ```cat <cluster/env/kubezero/application.yaml> | ./release/v1.22/migrate_agro.py```  
 Adjust as needed...  
-
-If ECK operator is running in your cluster make sure to replace the CRDs *BEFORE* committing the new kubezero config !  
+If the ECK operator is running in your cluster make sure to replace the CRDs *BEFORE* committing the new kubezero config !  
 ```kubectl replace -f https://download.elastic.co/downloads/eck/2.1.0/crds.yaml```
 
-git add / commit / push  
-Watch ArgoCD do its work.
+- git add / commit / push  
+- Watch ArgoCD do its work.
 
 5. Replace worker nodes
 Eg. by doubling `desired` for each worker ASG,  
