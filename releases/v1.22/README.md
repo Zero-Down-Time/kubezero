@@ -44,6 +44,11 @@ Cri-o now uses crun rather than runc, which reduces the memory overhead *per pod
 
 With 1.22 and the switch to crun, support for [CgroupV2](https://www.kernel.org/doc/Documentation/cgroup-v2.txt) has been enabled.
 
+### AWS Neuron INF support
+Initial support for [Inf1 instances](https://aws.amazon.com/ec2/instance-types/inf1/) part of [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/).  
+
+Workers automatically load the custom kernel module on these instance types and expose the `/dev/neuron*` devices.
+
 ## Version upgrades
 - Istio to 1.13.3 using the new Helm [gateway charts](https://istio.io/latest/docs/setup/additional-setup/gateway/)
 - Logging: ECK operator upgraded from 1.6 to 2.1, fluent-bit 1.9.3
