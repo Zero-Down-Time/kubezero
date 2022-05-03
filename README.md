@@ -5,6 +5,7 @@ KubeZero is a Kubernetes distribution providing an integrated container platform
 # Design philosophy
 
 - Cloud provider agnostic, bare-metal/self-hosted
+- Focus on security and simplicity before feature bloat
 - No vendor lock in, most components are optional and could be exchanged
 - Organic Open Source / open and permissive licenses over closed-source solutions
 - No premium services / subscriptions required
@@ -24,22 +25,29 @@ KubeZero is distributed as a collection of versioned Helm charts, allowing custo
 
 | KubeZero Version | Kubernetes Version  | EOL         |
 |------------------|---------------------|-------------|
-| v1.22.X-Y        | v1.22.X             | 30 Sep 2022 |
+| v1.23.X-Y        | v1.23.X             | Alpha       |
+| v1.22.8-Y        | v1.22.8             | 30 Sep 2022 |
 | v1.21.9-Y        | v1.21.9             | 31 May 2022 |
 | v1.20.8          | v1.20               | Feb 2022    |
 | v1.19            | v1.19               | Jul 2021    |
 | v1.18            | v1.18               | Apr 2021    |
-| v1.17            | v1.17               | Jan 2021    |
-| v1.16            | v1.16               | Nov 2020    |
 
 [Upstream release policy](https://kubernetes.io/releases/)
 
 # Components
 
+## OS
+- all nodes are based on Alpine V3.15
+- 2 GB encrypted root filesystem
+- no 3rd party dependencies at boot ( other than container registries )
+- minimal attack surface
+- extremely small memory footprint / overhead
+
 ## Container runtime
 - cri-o rather than Docker for improved security and performance
 
 ## Control plane
+- all Kubernetes components compiled against Alpine OS using `buildmode=pie`
 - support for single node control plane for small clusters / test environments to reduce costs
 - access to control plane from within the VPC only by default ( VPN access required for Admin tasks )
 - controller nodes are used for various platform admin controllers / operators to reduce costs and noise on worker nodes
@@ -55,6 +63,7 @@ KubeZero is distributed as a collection of versioned Helm charts, allowing custo
 - all IAM roles are maintained via CloudBender automation
 - aws-node-termination handler integrated
 - support for spot instances per worker group incl. early draining etc.
+- support for [Inf1 instances](https://aws.amazon.com/ec2/instance-types/inf1/) part of [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/).
 
 ## Network
 - Multus support for multiple network interfaces per pod, eg. additional AWS CNI
@@ -70,12 +79,12 @@ allows flexible / more containers per worker node compared to eg. AWS VPC CNI
 - CSI Snapshot controller and Gemini snapshot groups and retention
 
 ## Ingress
-- AWS Network Loadbalancer and Istio Ingress controllers
-- optional rate limiting support
-- No additional costs per exposed service
-- Automated SSL Certificate handling via cert-manager incl. renewal etc.
+- AWS Network Loadbalancer and Istio Ingress controllers  
+- no additional costs per exposed service
+- real client source IP available to workloads via HTTP header and access logs
+- ACME SSL Certificate handling via cert-manager incl. renewal etc.
 - support for TCP services
-- Client source IP available to workloads via HTTP header
+- optional rate limiting support 
 - optional full service mesh
 
 ## Metrics
