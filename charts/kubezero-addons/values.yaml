@@ -70,8 +70,12 @@ aws-node-termination-handler:
 fuseDevicePlugin:
   enabled: false
 
-k8sEcrLoginRenew:
+awsNeuron:
   enabled: false
+
+  image:
+    name: public.ecr.aws/neuron/neuron-device-plugin
+    tag: 1.9.0.0
 
 external-dns:
   enabled: false
