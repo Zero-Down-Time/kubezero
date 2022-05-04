@@ -25,19 +25,9 @@ Kubernetes: `>= 1.20.0`
    
 # device-plugins   
    
-# k8s-ecr-login-renew   
+## AWS Neuron
+Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) - [Inf1 instances](https://aws.amazon.com/ec2/instance-types/inf1/)
    
-## IAM setup   
- - Create IAM user for ECR read-only access and attach the following managed policy: `AmazonEC2ContainerRegistryReadOnly`   
- - create AWS credentials for the IAM users   
-   
-## Kubernetes secret   
-Create secret with the IAM user credential for ecr-renew to use, using the credentials from the previous step:   
-`kubectl create secret -n kube-system generic ecr-renew-cred --from-literal=AWS_REGION=<AWS_REGION> --from-literal=AWS_ACCESS_KEY_ID=<AWS_SECRET_ID> --from-literal=AWS_SECRET_ACCESS_KEY=<AWS_SECRET_KEY>`   
-   
-## Resources   
-- https://github.com/nabsul/k8s-ecr-login-renew
-
 ## Values
 
 | Key | Type | Default | Description |
@@ -65,6 +55,7 @@ Create secret with the IAM user credential for ecr-renew to use, using the crede
 | aws-node-termination-handler.taintNode | bool | `true` |  |
 | aws-node-termination-handler.tolerations[0].effect | string | `"NoSchedule"` |  |
 | aws-node-termination-handler.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| awsNeuron.enabled | bool | `false` |  |
 | clusterBackup.enabled | bool | `false` |  |
 | clusterBackup.extraEnv | list | `[]` |  |
 | clusterBackup.image.name | string | `"public.ecr.aws/zero-downtime/kubezero-admin"` |  |
@@ -96,4 +87,3 @@ Create secret with the IAM user credential for ecr-renew to use, using the crede
 | forseti.image.name | string | `"public.ecr.aws/zero-downtime/forseti"` |  |
 | forseti.image.tag | string | `"v0.1.2"` |  |
 | fuseDevicePlugin.enabled | bool | `false` |  |
-| k8sEcrLoginRenew.enabled | bool | `false` |  |
