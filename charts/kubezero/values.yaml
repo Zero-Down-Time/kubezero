@@ -8,7 +8,7 @@ HighAvailableControlplane: false
 
 addons:
   enabled: false
-  targetRevision: 0.5.0
+  targetRevision: 0.5.1
 
 network:
   enabled: false
@@ -22,7 +22,7 @@ cert-manager:
 
 storage:
   enabled: false
-  targetRevision: 0.6.0
+  targetRevision: 0.6.2
   aws-ebs-csi-driver:
     enabled: false
   aws-efs-csi-driver:
