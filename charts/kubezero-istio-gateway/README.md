@@ -40,7 +40,7 @@ Kubernetes: `>= 1.20.0`
 | gateway.service.externalTrafficPolicy | string | `"Local"` |  |
 | gateway.service.type | string | `"NodePort"` |  |
 | proxyProtocol | bool | `true` |  |
-| telemetry.enabled | string | `"falser"` |  |
+| telemetry.enabled | bool | `false` |  |
 
 ## Resources
 

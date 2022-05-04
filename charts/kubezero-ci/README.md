@@ -1,6 +1,6 @@
 # kubezero-ci
 
-![Version: 0.4.45](https://img.shields.io/badge/Version-0.4.45-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.4.50](https://img.shields.io/badge/Version-0.4.50-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things CI
 
@@ -20,7 +20,7 @@ Kubernetes: `>= 1.20.0`
 |------------|------|---------|
 | https://aquasecurity.github.io/helm-charts/ | trivy | 0.4.12 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
-| https://charts.jenkins.io | jenkins | 3.11.10 |
+| https://charts.jenkins.io | jenkins | 3.12.0 |
 | https://dl.gitea.io/charts/ | gitea | 5.0.5 |
 | https://gocd.github.io/helm-chart | gocd | 1.40.8 |
 
@@ -96,12 +96,12 @@ Kubernetes: `>= 1.20.0`
 | jenkins.controller.initContainerResources.requests.cpu | string | `"50m"` |  |
 | jenkins.controller.initContainerResources.requests.memory | string | `"256Mi"` |  |
 | jenkins.controller.installPlugins[0] | string | `"kubernetes:3580.v78271e5631dc"` |  |
-| jenkins.controller.installPlugins[1] | string | `"workflow-aggregator:2.6"` |  |
-| jenkins.controller.installPlugins[2] | string | `"git:4.11.0"` |  |
-| jenkins.controller.installPlugins[3] | string | `"configuration-as-code:1414.v878271fc496f"` |  |
+| jenkins.controller.installPlugins[1] | string | `"workflow-aggregator:2.7"` |  |
+| jenkins.controller.installPlugins[2] | string | `"git:4.11.1"` |  |
+| jenkins.controller.installPlugins[3] | string | `"configuration-as-code:1429.v09b_044a_c93de"` |  |
 | jenkins.controller.installPlugins[4] | string | `"antisamy-markup-formatter:2.7"` |  |
 | jenkins.controller.installPlugins[5] | string | `"prometheus:2.0.11"` |  |
-| jenkins.controller.installPlugins[6] | string | `"htmlpublisher:1.29"` |  |
+| jenkins.controller.installPlugins[6] | string | `"htmlpublisher:1.30"` |  |
 | jenkins.controller.installPlugins[7] | string | `"build-discarder:60.v1747b0eb632a"` |  |
 | jenkins.controller.installPlugins[8] | string | `"dark-theme:156.v6cf16af6f9ef"` |  |
 | jenkins.controller.javaOpts | string | `"-XX:+UseContainerSupport -XX:+UseStringDeduplication -Dhudson.model.DirectoryBrowserSupport.CSP=\"sandbox allow-popups; default-src 'none'; img-src 'self' cdn.zero-downtime.net; style-src 'unsafe-inline';\""` |  |
@@ -114,6 +114,9 @@ Kubernetes: `>= 1.20.0`
 | jenkins.controller.tag | string | `"2.332.2-lts-jdk17-preview"` |  |
 | jenkins.controller.testEnabled | bool | `false` |  |
 | jenkins.enabled | bool | `false` |  |
+| jenkins.istio.agent.enabled | bool | `false` |  |
+| jenkins.istio.agent.gateway | string | `"istio-ingress/private-ingressgateway"` |  |
+| jenkins.istio.agent.url | string | `"jenkins-agent.example.com"` |  |
 | jenkins.istio.enabled | bool | `false` |  |
 | jenkins.istio.gateway | string | `"istio-ingress/private-ingressgateway"` |  |
 | jenkins.istio.url | string | `"jenkins.example.com"` |  |
