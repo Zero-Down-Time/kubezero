@@ -84,8 +84,6 @@ Might take a while ...
 4. Migrate ArgoCD KubeZero config for your cluster:  
 ```cat <cluster/env/kubezero/application.yaml> | ./release/v1.22/migrate_agro.py```  
 Adjust as needed...  
-If the ECK operator is running in your cluster make sure to replace the CRDs *BEFORE* committing the new kubezero config !  
-```kubectl replace -f https://download.elastic.co/downloads/eck/2.1.0/crds.yaml```
 
 - git add / commit / push  
 - Watch ArgoCD do its work.
@@ -96,3 +94,10 @@ once all new workers joined, drain old workers one by one,
 finally reset `desired` for each worker ASG which will terminate the old workers.
 
 ## Known issues
+
+### Metrics
+- `metrics-prometheus-node-exporter` will go into `CreateContainerError`
+on 1.21 nodes until the metrics module is upgraded, due to underlying OS changes
+
+### Logging
+- `logging-fluent-bit` will go into `CrashLoopBackoff` on 1.21 nodes, until logging module is upgraded, due to underlying OS changes
