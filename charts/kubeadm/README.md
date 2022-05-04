@@ -10,11 +10,11 @@ KubeZero Kubeadm cluster config
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Stefan Reimer | stefan@zero-downtime.net |  |
+| Stefan Reimer | <stefan@zero-downtime.net> |  |
 
 ## Requirements
 
-Kubernetes: `>= 1.22.0`
+Kubernetes: `>= 1.20.0`
 
 ## Values
 
@@ -25,6 +25,7 @@ Kubernetes: `>= 1.22.0`
 | addons.clusterBackup.enabled | bool | `false` |  |
 | addons.clusterBackup.passwordFile | string | `""` | /etc/cloudbender/clusterBackup.passphrase |
 | addons.clusterBackup.repository | string | `""` | s3:https://s3.amazonaws.com/${CFN[ConfigBucket]}/k8s/${CLUSTERNAME}/clusterBackup |
+| addons.external-dns.enabled | bool | `false` |  |
 | api.apiAudiences | string | `"istio-ca"` |  |
 | api.awsIamAuth.enabled | bool | `false` |  |
 | api.awsIamAuth.kubeAdminRole | string | `"arn:aws:iam::000000000000:role/KubernetesNode"` |  |

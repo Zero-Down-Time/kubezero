@@ -29,14 +29,18 @@ spec:
       - key: node-role.kubernetes.io/master
         operator: Exists
         effect: NoSchedule
-      containers:
+      initContainers:
       - name: kubezero-upgrade-${VERSION//.}
         image: busybox
         command: ["/bin/sh"]
-        args: ["-c", "[ -d /host/opt/cni/bin ] && mkdir -p /host/usr/libexec/cni && cp /host/opt/cni/bin/* /host/usr/libexec/cni ; sleep 300" ]
+        args: ["-x", "-c", "[ -d /host/opt/cni/bin ] && { mkdir -p /host/usr/libexec/cni && cp /host/opt/cni/bin/* /host/usr/libexec/cni; } || true" ]
         volumeMounts:
         - name: host
           mountPath: /host
+      containers:
+      - name: kubezero-upgrade-${VERSION//.}-wait
+        image: busybox
+        command: ["sleep", "3600"]
       volumes:
       - name: host
         hostPath:
