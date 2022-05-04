@@ -1,6 +1,6 @@
 # kubezero-addons
 
-![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.22.8](https://img.shields.io/badge/AppVersion-v1.22.8-informational?style=flat-square)
+![Version: 0.5.1](https://img.shields.io/badge/Version-0.5.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.22.8](https://img.shields.io/badge/AppVersion-v1.22.8-informational?style=flat-square)
 
 KubeZero umbrella chart for various optional cluster addons
 
@@ -56,6 +56,8 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | aws-node-termination-handler.tolerations[0].effect | string | `"NoSchedule"` |  |
 | aws-node-termination-handler.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | awsNeuron.enabled | bool | `false` |  |
+| awsNeuron.image.name | string | `"public.ecr.aws/neuron/neuron-device-plugin"` |  |
+| awsNeuron.image.tag | string | `"1.9.0.0"` |  |
 | clusterBackup.enabled | bool | `false` |  |
 | clusterBackup.extraEnv | list | `[]` |  |
 | clusterBackup.image.name | string | `"public.ecr.aws/zero-downtime/kubezero-admin"` |  |
