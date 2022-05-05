@@ -25,8 +25,22 @@ aws-ebs-csi-driver:
     - name: AWS_STS_REGIONAL_ENDPOINTS
       value: regional
 
+    {{- if .Values.HighAvailableControlplane }}
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+            - key: app
+              operator: In
+              values:
+              - ebs-csi-controller
+          topologyKey: "kubernetes.io/hostname"
+    {{- end }}
+
 aws-efs-csi-driver:
   enabled: {{ default false (index .Values "storage" "aws-efs-csi-driver" "enabled")}}
+  replicaCount: {{ ternary 2 1 .Values.HighAvailableControlplane }}
   controller:
     extraEnv:
     - name: AWS_ROLE_ARN
@@ -35,6 +49,23 @@ aws-efs-csi-driver:
       value: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
     - name: AWS_STS_REGIONAL_ENDPOINTS
       value: regional
+
+    # The EFS controller steel needs hostnetwork and cannot update on single node control planes otherwise
+    {{- if not .Values.HighAvailableControlplane }}
+    updateStrategy: Recreate
+    {{- else }}
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+            - key: app
+              operator: In
+              values:
+              - efs-csi-controller
+          topologyKey: "kubernetes.io/hostname"
+    {{- end }}
+
   # Dynamic Provisioning
   {{- with index .Values "storage" "aws-efs-csi-driver" "storageClasses" }}
   storageClasses:
