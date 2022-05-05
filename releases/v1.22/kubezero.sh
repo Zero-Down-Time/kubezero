@@ -144,8 +144,7 @@ if [ "$1" == 'upgrade' ]; then
   # Remove all remaining kiam
   helm repo add uswitch https://uswitch.github.io/kiam-helm-charts/charts/
   helm repo update
-  helm template uswitch/kiam --name-template kiam --set server.prometheus.servicemonitor.enabled=true --set agent.prometheus.servicemonitor.enabled=true |
-    kubectl delete --namespace kube-system -f - || true
+  helm template uswitch/kiam --name-template kiam --set server.deployment.enabled=true --set server.prometheus.servicemonitor.enabled=true --set agent.prometheus.servicemonitor.enabled=true | kubectl delete --namespace kube-system -f - || true
 
   ######################
   # network
@@ -318,7 +317,7 @@ elif [[ "$1" =~ "^(bootstrap|restore|join)$" ]]; then
   fi
 
   # install / update network and addons
-  if [[ "$1" =~ "^(bootstrap)$" ]]; then
+  if [[ "$1" =~ "^(bootstrap|join)$" ]]; then
     # network
     yq eval '.network // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
     helm template $CHARTS/kubezero-network --namespace kube-system --include-crds --name-template network \
