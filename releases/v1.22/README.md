@@ -84,7 +84,7 @@ Might take a while ...
 4. Migrate ArgoCD KubeZero config:  
   `cat <cluster/env/kubezero/application.yaml> | ./release/v1.22/migrate_agro.py` and adjust if needed and replace the original.
 
-5. Upgrade via boostrap.sh
+5. Upgrade via boostrap.sh  
 As the changes around Istio are substantial in this release we need to upgrade some parts step by step to prevent service outages, especially for private-ingress.
 
 - `./bootstrap.sh crds all <env>` to deploy all new CRDs first  
@@ -93,9 +93,8 @@ As the changes around Istio are substantial in this release we need to upgrade s
 - `./bootstrap.sh apply istio-private-ingress <env>` to deploy the new private-ingress gateways first
 - `./bootstrap.sh apply istio-ingress <env>` to update the public ingress and also remove the 1.21 private-ingress gateways
 
-6. Finalize via ArgoCD
-
-  git add / commit / push `<cluster/env/kubezero/application.yaml>` and watch ArgoCD do its work.
+6. Finalize via ArgoCD  
+  git add / commit / pusSh `<cluster/env/kubezero/application.yaml>` and watch ArgoCD do its work.
 
 7. Replace worker nodes
 Eg. by doubling `desired` for each worker ASG,  
