@@ -1,6 +1,6 @@
 # kubezero-ci
 
-![Version: 0.4.50](https://img.shields.io/badge/Version-0.4.50-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.4.51](https://img.shields.io/badge/Version-0.4.51-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things CI
 
@@ -20,7 +20,7 @@ Kubernetes: `>= 1.20.0`
 |------------|------|---------|
 | https://aquasecurity.github.io/helm-charts/ | trivy | 0.4.12 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
-| https://charts.jenkins.io | jenkins | 3.12.0 |
+| https://charts.jenkins.io | jenkins | 3.12.2 |
 | https://dl.gitea.io/charts/ | gitea | 5.0.5 |
 | https://gocd.github.io/helm-chart | gocd | 1.40.8 |
 
@@ -111,7 +111,7 @@ Kubernetes: `>= 1.20.0`
 | jenkins.controller.resources.limits.memory | string | `"4096Mi"` |  |
 | jenkins.controller.resources.requests.cpu | string | `"250m"` |  |
 | jenkins.controller.resources.requests.memory | string | `"1280Mi"` |  |
-| jenkins.controller.tag | string | `"2.332.2-lts-jdk17-preview"` |  |
+| jenkins.controller.tag | string | `"2.332.3-lts-jdk17-preview"` |  |
 | jenkins.controller.testEnabled | bool | `false` |  |
 | jenkins.enabled | bool | `false` |  |
 | jenkins.istio.agent.enabled | bool | `false` |  |

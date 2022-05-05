@@ -1,6 +1,6 @@
 # kubezero-storage
 
-![Version: 0.6.2](https://img.shields.io/badge/Version-0.6.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.6.3](https://img.shields.io/badge/Version-0.6.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things storage incl. AWS EBS/EFS, openEBS-lvm, gemini
 
@@ -38,6 +38,7 @@ Kubernetes: `>= 1.20.0`
 | aws-ebs-csi-driver.controller.tolerations[0].effect | string | `"NoSchedule"` |  |
 | aws-ebs-csi-driver.controller.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | aws-ebs-csi-driver.enabled | bool | `false` |  |
+| aws-ebs-csi-driver.image.tag | string | `"v1.5.3"` |  |
 | aws-ebs-csi-driver.node.resources.limits.memory | string | `"32Mi"` |  |
 | aws-ebs-csi-driver.node.resources.requests.cpu | string | `"10m"` |  |
 | aws-ebs-csi-driver.node.resources.requests.memory | string | `"16Mi"` |  |

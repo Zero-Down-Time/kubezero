@@ -69,7 +69,7 @@ jenkins:
   enabled: false
 
   controller:
-    tag: 2.332.2-lts-jdk17-preview
+    tag: 2.332.3-lts-jdk17-preview
     #tagLabel: alpine
     disableRememberMe: true
     prometheus:

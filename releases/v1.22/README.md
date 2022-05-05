@@ -81,14 +81,23 @@ Change Kubernetes version in controller config from `1.21.9` to `1.22.8`
 Wait each time for controller to join and all pods running.
 Might take a while ...
 
-4. Migrate ArgoCD KubeZero config for your cluster:  
-```cat <cluster/env/kubezero/application.yaml> | ./release/v1.22/migrate_agro.py```  
-Adjust as needed...  
+4. Migrate ArgoCD KubeZero config:  
+  `cat <cluster/env/kubezero/application.yaml> | ./release/v1.22/migrate_agro.py` and adjust if needed and replace the original.
 
-- git add / commit / push  
-- Watch ArgoCD do its work.
+5. Upgrade via boostrap.sh
+As the changes around Istio are substantial in this release we need to upgrade some parts step by step to prevent service outages, especially for private-ingress.
 
-5. Replace worker nodes
+- `./bootstrap.sh crds all <env>` to deploy all new CRDs first  
+- `./bootstrap.sh apply cert-manager <env>` to update cert-manager, required for Istio  
+- `./bootstrap.sh apply istio <env>` to update the Istio control plane  
+- `./bootstrap.sh apply istio-private-ingress <env>` to deploy the new private-ingress gateways first
+- `./bootstrap.sh apply istio-ingress <env>` to update the public ingress and also remove the 1.21 private-ingress gateways
+
+6. Finalize via ArgoCD
+
+  git add / commit / push `<cluster/env/kubezero/application.yaml>` and watch ArgoCD do its work.
+
+7. Replace worker nodes
 Eg. by doubling `desired` for each worker ASG,  
 once all new workers joined, drain old workers one by one,  
 finally reset `desired` for each worker ASG which will terminate the old workers.
@@ -100,4 +109,5 @@ finally reset `desired` for each worker ASG which will terminate the old workers
 on 1.21 nodes until the metrics module is upgraded, due to underlying OS changes
 
 ### Logging
-- `logging-fluent-bit` will go into `CrashLoopBackoff` on 1.21 nodes, until logging module is upgraded, due to underlying OS changes
+- `elastic-operator-0` might be stuck in `CrashLoopBackoff` until all of the controllers are updated due to the CRD removals in 1.22
+- `logging-fluent-bit` will go into `CrashLoopBackoff` or stuck in `ContainerCreating` on 1.21 nodes, until logging module is upgraded, due to underlying OS changes
