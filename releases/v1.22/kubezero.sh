@@ -86,7 +86,7 @@ pre_kubeadm() {
 
     # Initialize webhook
     if [ ! -f ${HOSTFS}/etc/kubernetes/pki/aws-iam-authenticator.crt ]; then
-      aws-iam-authenticator init -i ${CLUSTERNAME}
+      ${HOSTFS}/usr/bin/aws-iam-authenticator init -i ${CLUSTERNAME}
       mv key.pem ${HOSTFS}/etc/kubernetes/pki/aws-iam-authenticator.key
       mv cert.pem ${HOSTFS}/etc/kubernetes/pki/aws-iam-authenticator.crt
     fi
