@@ -72,7 +72,7 @@ Workers automatically load the custom kernel module on these instance types and 
 - Ensure any usage of Kiam has been migrated to OIDC providers as any remaining Kiam components will be deleted as part of the upgrade
 
 1. Migrate ArgoCD KubeZero config:  
-  `cat <cluster/env/kubezero/application.yaml> | ./release/v1.22/migrate_agro.py` and adjust if needed and replace the original. Do NOT commit yet !
+  `cat <cluster/env/kubezero/application.yaml> | ./releases/v1.22/migrate_agro.py` and adjust if needed and replace the original. Do NOT commit yet !
 
 2. Upgrade `logging` and `metrics` module
 - `./bootstrap.sh crds logging <env>` CRDs for logging  
