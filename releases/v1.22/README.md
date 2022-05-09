@@ -71,20 +71,26 @@ Workers automatically load the custom kernel module on these instance types and 
 - Ensure your Kube context points to the correct cluster !
 - Ensure any usage of Kiam has been migrated to OIDC providers as any remaining Kiam components will be deleted as part of the upgrade
 
-1. Trigger the cluster upgrade:  
+1. Migrate ArgoCD KubeZero config:  
+  `cat <cluster/env/kubezero/application.yaml> | ./release/v1.22/migrate_agro.py` and adjust if needed and replace the original. Do NOT commit yet !
+
+2. Upgrade `logging` and `metrics` module
+- `./bootstrap.sh crds logging <env>` CRDs for logging  
+- `./bootstrap.sh apply logging <env>` logging module to support new OS coming with 1.22  
+- `./bootstrap.sh crds metrics <env>` CRDs for metrics
+- `./bootstrap.sh apply metrics <env>` to get new exporters in place to support 1.22
+
+3. Trigger the cluster upgrade:  
 `./release/v1.22/upgrade_cluster.sh`
 
-2. Upgrade CFN stacks for the control plane and all worker groups
+4. Upgrade CFN stacks for the control plane and all worker groups
 Change Kubernetes version in controller config from `1.21.9` to `1.22.8`
 
-3. Reboot controller(s) one by one
+5. Reboot controller(s) one by one
 Wait each time for controller to join and all pods running.
 Might take a while ...
 
-4. Migrate ArgoCD KubeZero config:  
-  `cat <cluster/env/kubezero/application.yaml> | ./release/v1.22/migrate_agro.py` and adjust if needed and replace the original.
-
-5. Upgrade via boostrap.sh  
+6. Upgrade via boostrap.sh  
 As the changes around Istio are substantial in this release we need to upgrade some parts step by step to prevent service outages, especially for private-ingress.
 
 - `./bootstrap.sh crds all <env>` to deploy all new CRDs first  
@@ -93,10 +99,10 @@ As the changes around Istio are substantial in this release we need to upgrade s
 - `./bootstrap.sh apply istio-private-ingress <env>` to deploy the new private-ingress gateways first
 - `./bootstrap.sh apply istio-ingress <env>` to update the public ingress and also remove the 1.21 private-ingress gateways
 
-6. Finalize via ArgoCD  
+7. Finalize via ArgoCD  
   git add / commit / pusSh `<cluster/env/kubezero/application.yaml>` and watch ArgoCD do its work.
 
-7. Replace worker nodes
+8. Replace worker nodes
 Eg. by doubling `desired` for each worker ASG,  
 once all new workers joined, drain old workers one by one,  
 finally reset `desired` for each worker ASG which will terminate the old workers.
