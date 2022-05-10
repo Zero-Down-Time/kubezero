@@ -12,8 +12,6 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      annotations:
-        scheduler.alpha.kubernetes.io/critical-pod: ""
       labels:
         name: neuron-device-plugin-ds
     spec:
@@ -33,14 +31,6 @@ spec:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
-              - matchExpressions:
-                  - key: "beta.kubernetes.io/instance-type"
-                    operator: In
-                    values:
-                      - inf1.xlarge
-                      - inf1.2xlarge
-                      - inf1.6xlarge
-                      - inf1.4xlarge
               - matchExpressions:
                   - key: "node.kubernetes.io/instance-type"
                     operator: In
