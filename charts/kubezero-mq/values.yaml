@@ -30,6 +30,9 @@ rabbitmq:
   # rabbitmq.hosts -- hostnames of rabbitmq services, used for Istio and TLS
   hosts: []
 
+  # Disable trying to change ulimits, not permitted anyways
+  ulimitNofiles: ''
+
   istio:
     enabled: false
     gateway: istio-ingress/private-ingressgateway

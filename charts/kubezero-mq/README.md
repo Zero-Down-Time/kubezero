@@ -1,6 +1,6 @@
 # kubezero-mq
 
-![Version: 0.2.2](https://img.shields.io/badge/Version-0.2.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.2.3](https://img.shields.io/badge/Version-0.2.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for MQ systems like NATS, RabbitMQ
 
@@ -10,17 +10,17 @@ KubeZero umbrella chart for MQ systems like NATS, RabbitMQ
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Quarky9 |  |  |
+| Stefan Reimer | <stefan@zero-downtime.net> |  |
 
 ## Requirements
 
-Kubernetes: `>= 1.18.0`
+Kubernetes: `>= 1.20.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
 |  | nats | 0.8.4 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.3 |
-| https://charts.bitnami.com/bitnami | rabbitmq | 8.13.1 |
+| https://charts.bitnami.com/bitnami | rabbitmq | 9.0.3 |
 
 ## Values
 
@@ -53,6 +53,7 @@ Kubernetes: `>= 1.18.0`
 | rabbitmq.resources.requests.cpu | string | `"100m"` |  |
 | rabbitmq.resources.requests.memory | string | `"256Mi"` |  |
 | rabbitmq.topologySpreadConstraints | string | `"- maxSkew: 1\n  topologyKey: topology.kubernetes.io/zone\n  whenUnsatisfiable: DoNotSchedule\n  labelSelector:\n    matchLabels: {{- include \"common.labels.matchLabels\" . | nindent 6 }}\n- maxSkew: 1\n  topologyKey: kubernetes.io/hostname\n  whenUnsatisfiable: DoNotSchedule\n  labelSelector:\n    matchLabels: {{- include \"common.labels.matchLabels\" . | nindent 6 }}"` |  |
+| rabbitmq.ulimitNofiles | string | `""` |  |
 
 ## Resources
 
