@@ -26,7 +26,7 @@ Kubernetes: `>= 1.20.0`
 |-----|------|---------|-------------|
 | HighAvailableControlplane | bool | `false` |  |
 | addons.enabled | bool | `false` |  |
-| addons.targetRevision | string | `"0.5.1"` |  |
+| addons.targetRevision | string | `"0.5.2"` |  |
 | argocd.enabled | bool | `false` |  |
 | argocd.istio.enabled | bool | `false` |  |
 | argocd.namespace | string | `"argocd"` |  |
