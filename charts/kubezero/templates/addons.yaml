@@ -5,6 +5,11 @@ clusterBackup:
   {{- toYaml . | nindent 2 }}
 {{- end }}
 
+{{- with .Values.addons.forseti }}
+forseti:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+
 {{- with index .Values "addons" "aws-node-termination-handler" }}
 aws-node-termination-handler:
   {{- toYaml . | nindent 2 }}
@@ -16,8 +21,13 @@ fuseDevicePlugin:
   {{- toYaml . | nindent 2 }}
 {{- end }}
 
-{{- with .Values.addons.k8sEcrLoginRenew }}
-k8sEcrLoginRenew:
+{{- with .Values.addons.awsNeuron }}
+awsNeuron:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+
+{{- with index .Values "addons" "external-dns" }}
+external-dns:
   {{- toYaml . | nindent 2 }}
 {{- end }}
 
