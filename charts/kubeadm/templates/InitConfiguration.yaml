@@ -6,6 +6,7 @@ localAPIEndpoint:
 patches:
   directory: /tmp/patches
 nodeRegistration:
+  criSocket: "unix:///var/run/crio/crio.sock"
   ignorePreflightErrors:
   - DirAvailable--var-lib-etcd
   - DirAvailable--etc-kubernetes-manifests
