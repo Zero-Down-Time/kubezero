@@ -130,7 +130,7 @@ if [ "$1" == 'upgrade' ]; then
   pre_kubeadm
 
   # Upgrade
-  _kubeadm upgrade apply -y
+  _kubeadm upgrade apply -y --patches /tmp/patches
 
   post_kubeadm
 

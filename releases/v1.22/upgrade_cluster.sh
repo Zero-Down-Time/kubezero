@@ -48,7 +48,7 @@ spec:
           type: Directory
 EOF
 
-kubectl rollout status daemonset -n kube-system kubezero-upgrade-${VERSION//.} --timeout 300s
+#kubectl rollout status daemonset -n kube-system kubezero-upgrade-${VERSION//.} --timeout 300s
 kubectl delete ds kubezero-upgrade-${VERSION//.} -n kube-system
 
 
