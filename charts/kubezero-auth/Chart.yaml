@@ -2,7 +2,7 @@ apiVersion: v2
 name: kubezero-auth
 description: KubeZero umbrella chart for all things Authentication and Identity management
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: 18.0.0
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
