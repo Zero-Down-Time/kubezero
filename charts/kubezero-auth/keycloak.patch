@@ -1,0 +1,12 @@
+--- templates/keycloak-operator/all.yaml.orig	2022-05-11 12:46:15.860204871 +0200
++++ templates/keycloak-operator/all.yaml	2022-05-11 12:46:02.840068240 +0200
+@@ -1,3 +1,4 @@
++{{- if .Values.keycloak.enabled }}
+ ---
+ apiVersion: v1
+ kind: ServiceAccount
+@@ -233,3 +234,4 @@
+             successThreshold: 1
+             timeoutSeconds: 10
+       serviceAccountName: keycloak-operator
++{{- end }}
