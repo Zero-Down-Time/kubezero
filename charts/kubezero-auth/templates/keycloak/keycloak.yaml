@@ -1,0 +1,29 @@
+{{- if .Values.keycloak.enabled }}
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: Keycloak
+metadata:
+  name: {{ template "kubezero-lib.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  instances: 1
+  # Wait for next release, already fixed
+  #disableDefaultIngress: true
+  serverConfiguration:
+    - name: cache
+      value: local
+    - name: db
+      value: dev-mem
+    - name: hostname-strict-https
+      value: "false"
+    - name: proxy
+      value: passthrough
+    - name: http-enabled
+      value: "true"
+
+  #hostname: INSECURE-DISABLE
+  hostname: {{ default "keycloak" .Values.keycloak.istio.url }}
+    
+  # We use Istio Ingress to terminate TLS
+  # mTls down the road
+  tlsSecret: INSECURE-DISABLE
+{{- end }}
