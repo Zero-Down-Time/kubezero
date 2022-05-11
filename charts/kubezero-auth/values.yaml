@@ -1,2 +1,10 @@
 keycloak:
   enabled: false
+
+  istio:
+    enabled: false
+    gateway: istio-ingress/private-ingressgateway
+    url: ""
+
+  metrics:
+    enabled: false

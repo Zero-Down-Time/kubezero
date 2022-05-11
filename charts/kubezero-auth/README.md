@@ -1,6 +1,6 @@
 # kubezero-auth
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 18.0.0](https://img.shields.io/badge/AppVersion-18.0.0-informational?style=flat-square)
+![Version: 0.1.4](https://img.shields.io/badge/Version-0.1.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 18.0.0](https://img.shields.io/badge/AppVersion-18.0.0-informational?style=flat-square)
 
 KubeZero umbrella chart for all things Authentication and Identity management
 
@@ -36,3 +36,7 @@ https://github.com/keycloak/keycloak/tree/main/operator
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | keycloak.enabled | bool | `false` |  |
+| keycloak.istio.enabled | bool | `false` |  |
+| keycloak.istio.gateway | string | `"istio-ingress/private-ingressgateway"` |  |
+| keycloak.istio.url | string | `""` |  |
+| keycloak.metrics.enabled | bool | `false` |  |
