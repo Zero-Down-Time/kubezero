@@ -14,18 +14,18 @@ all: test
 
 
 build:
-	@docker image exists $(IMAGE):$(TAG) || \
-		docker build --rm -t $(IMAGE):$(TAG) --build-arg TAG=$(TAG) .
+	@docker image exists $(REGISTRY)/$(IMAGE):$(TAG) || \
+		docker build --rm -t $(REGISTRY)/$(IMAGE):$(TAG) --build-arg TAG=$(TAG) .
 
 test: build rm-test-image
 	@test -f Dockerfile.test && \
-		{ docker build --rm -t $(IMAGE):$(TAG)-test --from=$(IMAGE):$(TAG) -f Dockerfile.test . && \
-			docker run --rm --env-host -t $(IMAGE):$(TAG)-test; } || \
+		{ docker build --rm -t $(REGISTRY)/$(IMAGE):$(TAG)-test --from=$(REGISTRY)/$(IMAGE):$(TAG) -f Dockerfile.test . && \
+			docker run --rm --env-host -t $(REGISTRY)/$(IMAGE):$(TAG)-test; } || \
 		echo "No Dockerfile.test found, skipping test"
 
 scan: build
-	@echo "Scanning $(IMAGE):$(TAG) using Trivy"
-	@trivy $(TRIVY_OPTS) $(IMAGE):$(TAG)
+	@echo "Scanning $(REGISTRY)/$(IMAGE):$(TAG) using Trivy"
+	@trivy $(TRIVY_OPTS) $(REGISTRY)/$(IMAGE):$(TAG)
 
 push: build
 	@aws ecr-public get-login-password --region $(REGION) | docker login --username AWS --password-stdin $(REGISTRY)
