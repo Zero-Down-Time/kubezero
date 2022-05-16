@@ -68,7 +68,7 @@ spec:
   hostPID: true
   containers:
   - name: kubezero-admin
-    image: public.ecr.aws/zero-downtime/kubezero-admin:${VERSION}
+    image: public.ecr.aws/zero-downtime/kubezero-admin:${VERSION}-9
     imagePullPolicy: Always
     command: ["kubezero.sh"]
     args:
