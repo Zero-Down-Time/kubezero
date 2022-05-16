@@ -8,7 +8,7 @@ HighAvailableControlplane: false
 
 addons:
   enabled: false
-  targetRevision: 0.5.2
+  targetRevision: 0.5.3
 
 network:
   enabled: false
@@ -18,7 +18,7 @@ network:
 cert-manager:
   enabled: false
   namespace: cert-manager
-  targetRevision: 0.9.0
+  targetRevision: 0.9.1
 
 storage:
   enabled: false

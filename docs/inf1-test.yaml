@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: neuron-top
+  name: neuron-top
+  namespace: default
+spec:
+  containers:
+  - image: public.ecr.aws/zero-downtime/dumpster:latest
+    command:
+    - "bash"
+    - "-c"
+    - "/opt/aws/neuron/bin/neuron-ls && sleep 3600"
+    imagePullPolicy: IfNotPresent
+    name: neuron-top
+    resources:
+      limits:
+        #hugepages-2Mi: 256Mi
+        aws.amazon.com/neuron: 1
+      requests:
+        memory: 1024Mi
+  tolerations:
+  - effect: NoSchedule
+    key: kubezero-workergroup
+    operator: Equal
+    value: public

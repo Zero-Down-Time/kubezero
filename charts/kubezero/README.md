@@ -26,14 +26,14 @@ Kubernetes: `>= 1.20.0`
 |-----|------|---------|-------------|
 | HighAvailableControlplane | bool | `false` |  |
 | addons.enabled | bool | `false` |  |
-| addons.targetRevision | string | `"0.5.2"` |  |
+| addons.targetRevision | string | `"0.5.3"` |  |
 | argocd.enabled | bool | `false` |  |
 | argocd.istio.enabled | bool | `false` |  |
 | argocd.namespace | string | `"argocd"` |  |
 | argocd.targetRevision | string | `"0.10.1"` |  |
 | cert-manager.enabled | bool | `false` |  |
 | cert-manager.namespace | string | `"cert-manager"` |  |
-| cert-manager.targetRevision | string | `"0.9.0"` |  |
+| cert-manager.targetRevision | string | `"0.9.1"` |  |
 | istio-ingress.chart | string | `"kubezero-istio-gateway"` |  |
 | istio-ingress.enabled | bool | `false` |  |
 | istio-ingress.gateway.service | object | `{}` |  |

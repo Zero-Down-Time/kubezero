@@ -16,6 +16,7 @@ RUN cd /etc/apk/keys && \
       cri-tools@kubezero \
       kubeadm@kubezero~=${KUBE_VERSION} \
       kubectl@kubezero~=${KUBE_VERSION} \
+      etcdhelper@kubezero \
       etcd-ctl@testing \
       restic@testing \
       helm@testing
