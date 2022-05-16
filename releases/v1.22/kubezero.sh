@@ -186,7 +186,7 @@ elif [[ "$1" =~ "^(bootstrap|restore|join)$" ]]; then
 
   render_kubeadm
 
-  # Esnure clean slate if bootstrap, restore PKI otherwise
+  # Ensure clean slate if bootstrap, restore PKI otherwise
   if [[ "$1" =~ "^(bootstrap)$" ]]; then
     rm -rf ${HOSTFS}/var/lib/etcd/member
 
@@ -235,6 +235,11 @@ elif [[ "$1" =~ "^(bootstrap|restore|join)$" ]]; then
   _kubeadm init phase kubeconfig all
 
   if [[ "$1" =~ "^(join)$" ]]; then
+    # Delete any former self in case forseti did not delete yet
+    kubectl delete node ${NODENAME} --wait=true || true
+    # Wait for all pods to be deleted otherwise we end up with stale pods eg. kube-proxy and all goes to ....
+    kubectl delete pods -n kube-system --field-selector spec.nodeName=${NODENAME}
+
     # get current running etcd pods for etcdctl commands
     while true; do
       etcd_endpoints=$(kubectl get pods -n kube-system -l component=etcd -o yaml | \
@@ -273,9 +278,6 @@ elif [[ "$1" =~ "^(bootstrap|restore|join)$" ]]; then
       | .etcd.initialCluster = strenv(ETCD_INITIAL_CLUSTER)
       ' ${HOSTFS}/etc/kubernetes/kubezero.yaml
     render_kubeadm
-
-    # Delete any former self in case forseti did not delete yet
-    kubectl delete node ${NODENAME} --wait=true || true
   fi
 
   # Generate our custom etcd yaml
@@ -289,6 +291,19 @@ elif [[ "$1" =~ "^(bootstrap|restore|join)$" ]]; then
   # Wait for api to be online
   echo "Waiting for Kubernetes API to be online ..."
   retry 0 5 30 kubectl cluster-info --request-timeout 3 >/dev/null
+
+  # Update providerID as underlying VM changed during restore
+  if [[ "$1" =~ "^(restore)$" ]]; then
+    PROVIDER_ID=$(yq eval '.providerID' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
+    if [ -n "$PROVIDER_ID" ]; then
+      etcdhelper \
+        -cacert ${HOSTFS}/etc/kubernetes/pki/etcd/ca.crt \
+        -cert ${HOSTFS}/etc/kubernetes/pki/etcd/server.crt \
+        -key ${HOSTFS}/etc/kubernetes/pki/etcd/server.key \
+        -endpoint https://${ETCD_NODENAME}:2379 \
+        change-provider-id ${NODENAME} $PROVIDER_ID
+    fi
+  fi
 
   if [[ ! "$1" =~ "^(join)$" ]]; then
     _kubeadm init phase upload-config all

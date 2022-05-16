@@ -160,7 +160,7 @@ Kubernetes: `>= 1.20.0`
 | kube-prometheus-stack.prometheus.prometheusSpec.logFormat | string | `"json"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues | bool | `false` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.portName | string | `"http-prometheus"` |  |
-| kube-prometheus-stack.prometheus.prometheusSpec.resources.limits.memory | string | `"3Gi"` |  |
+| kube-prometheus-stack.prometheus.prometheusSpec.resources.limits.memory | string | `"4Gi"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.resources.requests.cpu | string | `"500m"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.resources.requests.memory | string | `"512Mi"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.retention | string | `"8d"` |  |
