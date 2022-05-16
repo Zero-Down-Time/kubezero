@@ -1,6 +1,8 @@
 #!/bin/bash
 set -ex
 
+helm dep update
+
 NTH_VERSION=$(yq eval '.dependencies[] | select(.name=="aws-node-termination-handler") | .version' Chart.yaml)
 
 rm -rf charts/aws-node-termination-handler

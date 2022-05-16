@@ -32,7 +32,10 @@ aws-node-termination-handler:
   # -- "aws-node-termination-handler/${ClusterName}"
   managedAsgTag: "aws-node-termination-handler/managed"
 
+  useProviderId: true
   enableSqsTerminationDraining: true
+  # otherwise pds fails trying to reach IMDS
+  enableSpotInterruptionDraining: false
   enableProbesServer: true
   deleteLocalData: true
   ignoreDaemonSets: true

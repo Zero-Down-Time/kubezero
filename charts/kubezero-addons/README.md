@@ -1,6 +1,6 @@
 # kubezero-addons
 
-![Version: 0.5.2](https://img.shields.io/badge/Version-0.5.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.22.8](https://img.shields.io/badge/AppVersion-v1.22.8-informational?style=flat-square)
+![Version: 0.5.3](https://img.shields.io/badge/Version-0.5.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.22.8](https://img.shields.io/badge/AppVersion-v1.22.8-informational?style=flat-square)
 
 KubeZero umbrella chart for various optional cluster addons
 
@@ -18,7 +18,7 @@ Kubernetes: `>= 1.20.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | aws-node-termination-handler | 0.18.0 |
+|  | aws-node-termination-handler | 0.18.3 |
 | https://kubernetes-sigs.github.io/external-dns/ | external-dns | 1.7.1 |
 
 # MetalLB   
@@ -36,6 +36,7 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | aws-node-termination-handler.emitKubernetesEvents | bool | `true` |  |
 | aws-node-termination-handler.enableProbesServer | bool | `true` |  |
 | aws-node-termination-handler.enablePrometheusServer | bool | `false` |  |
+| aws-node-termination-handler.enableSpotInterruptionDraining | bool | `false` |  |
 | aws-node-termination-handler.enableSqsTerminationDraining | bool | `true` |  |
 | aws-node-termination-handler.enabled | bool | `false` |  |
 | aws-node-termination-handler.extraEnv[0] | object | `{"name":"AWS_ROLE_ARN","value":""}` | "arn:aws:iam::${AWS::AccountId}:role/${AWS::Region}.${ClusterName}.awsNth" |
@@ -55,6 +56,7 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | aws-node-termination-handler.taintNode | bool | `true` |  |
 | aws-node-termination-handler.tolerations[0].effect | string | `"NoSchedule"` |  |
 | aws-node-termination-handler.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| aws-node-termination-handler.useProviderId | bool | `true` |  |
 | awsNeuron.enabled | bool | `false` |  |
 | awsNeuron.image.name | string | `"public.ecr.aws/neuron/neuron-device-plugin"` |  |
 | awsNeuron.image.tag | string | `"1.9.0.0"` |  |
