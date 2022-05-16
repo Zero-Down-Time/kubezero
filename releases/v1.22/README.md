@@ -75,7 +75,7 @@ Workers automatically load the custom kernel module on these instance types and 
   `cat <cluster/env/kubezero/application.yaml> | ./releases/v1.22/migrate_agro.py` and adjust if needed and replace the original. Do NOT commit yet !
 
 2. Upgrade `logging` and `metrics` module
-- `./bootstrap.sh crds logging <env>` CRDs for logging  
+- `kubectl get crd elasticsearches.elasticsearch.k8s.elastic.co && kubectl replace -f https://download.elastic.co/downloads/eck/2.1.0/crds.yaml` CRDs for logging  
 - `./bootstrap.sh apply logging <env>` logging module to support new OS coming with 1.22  
 - `./bootstrap.sh crds metrics <env>` CRDs for metrics
 - `./bootstrap.sh apply metrics <env>` to get new exporters in place to support 1.22
