@@ -11,7 +11,7 @@ spec:
     command:
     - "bash"
     - "-c"
-    - "/opt/aws/neuron/bin/neuron-ls && sleep 3600"
+    - "sleep 3600"
     imagePullPolicy: IfNotPresent
     name: neuron-top
     resources:

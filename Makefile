@@ -2,6 +2,9 @@ REGISTRY := public.ecr.aws/zero-downtime
 IMAGE := kubezero-admin
 REGION := us-east-1
 
+# Also tag as Kubernetes major version
+EXTRA_TAGS = $(shell echo $(TAG) | awk -F '.' '{ print $$1 "." $$2 }')
+
 include .ci/podman.mk
 
 update-charts:
