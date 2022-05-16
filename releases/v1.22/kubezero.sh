@@ -349,9 +349,11 @@ elif [[ "$1" =~ "^(bootstrap|restore|join)$" ]]; then
   echo "${1} cluster $CLUSTERNAME successfull."
 
 
-# Since 1.21 we only need to backup etcd + /etc/kubernetes/pki !
+# backup etcd + /etc/kubernetes/pki
 elif [ "$1" == 'backup' ]; then
   restic snapshots || restic init || exit 1
+
+  CLUSTER_VERSION="v1.$(kubectl version --short=true -o json | jq .serverVersion.minor -r)"
 
   etcdctl --endpoints=https://${ETCD_NODENAME}:2379 snapshot save ${WORKDIR}/etcd_snapshot
 
@@ -361,12 +363,12 @@ elif [ "$1" == 'backup' ]; then
 
   # Backup via restic
   restic snapshots || restic init
-  restic backup ${WORKDIR} -H $CLUSTERNAME --tag $VERSION
+  restic backup ${WORKDIR} -H $CLUSTERNAME --tag $CLUSTER_VERSION
 
   echo "Backup complete."
 
   # Remove backups from previous versions
-  restic forget --keep-tag $VERSION --prune
+  restic forget --keep-tag $CLUSTER_VERSION --prune
 
   # Regular retention
   restic forget --keep-hourly 24 --keep-daily ${RESTIC_RETENTION:-7} --prune
