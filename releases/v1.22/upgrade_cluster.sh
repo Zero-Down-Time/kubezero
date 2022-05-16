@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-VERSION="v1.22.8"
+VERSION="v1.22"
 
 [ -n "$DEBUG" ] && set -x
 
@@ -68,7 +68,7 @@ spec:
   hostPID: true
   containers:
   - name: kubezero-admin
-    image: public.ecr.aws/zero-downtime/kubezero-admin:${VERSION}-9
+    image: public.ecr.aws/zero-downtime/kubezero-admin:${VERSION}
     imagePullPolicy: Always
     command: ["kubezero.sh"]
     args:
