@@ -109,10 +109,3 @@ finally reset `desired` for each worker ASG which will terminate the old workers
 
 ## Known issues
 
-### Metrics
-- `metrics-prometheus-node-exporter` will go into `CreateContainerError`
-on 1.21 nodes until the metrics module is upgraded, due to underlying OS changes
-
-### Logging
-- `elastic-operator-0` might be stuck in `CrashLoopBackoff` until all of the controllers are updated due to the CRD removals in 1.22
-- `logging-fluent-bit` will go into `CrashLoopBackoff` or stuck in `ContainerCreating` on 1.21 nodes, until logging module is upgraded, due to underlying OS changes
