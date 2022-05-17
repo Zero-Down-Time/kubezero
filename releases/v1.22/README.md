@@ -53,7 +53,7 @@ Workers automatically load the custom kernel module on these instance types and 
 - Istio to 1.13.3 using the new Helm [gateway charts](https://istio.io/latest/docs/setup/additional-setup/gateway/)
 - Logging: ECK operator upgraded from 1.6 to 2.1, fluent-bit 1.9.3
 - Metrics: Prometheus and all Grafana charts to latest to match V1.22
-- ArgoCD to V2.3
+- ArgoCD to V2.2.5
 - AWS EBS/EFS CSI drivers to latest versions
 - cert-manager to V1.8
 - aws-termination-handler to 1.16
