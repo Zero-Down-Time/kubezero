@@ -90,7 +90,10 @@ Change Kubernetes version in controller config from `1.21.9` to `1.22.8`
 Wait each time for controller to join and all pods running.
 Might take a while ...
 
-6. Upgrade via boostrap.sh  
+6. Launch new set of workers, at least enough to host new Istio Ingress gateways due to Kernel requirements
+Eg. by doubling `desired` for each worker ASG,  
+
+7. Upgrade via boostrap.sh  
 As the changes around Istio are substantial in this release we need to upgrade some parts step by step to prevent service outages, especially for private-ingress.
 
 - `./bootstrap.sh crds all <env>` to deploy all new CRDs first  
@@ -99,13 +102,8 @@ As the changes around Istio are substantial in this release we need to upgrade s
 - `./bootstrap.sh apply istio-private-ingress <env>` to deploy the new private-ingress gateways first
 - `./bootstrap.sh apply istio-ingress <env>` to update the public ingress and also remove the 1.21 private-ingress gateways
 
-7. Finalize via ArgoCD  
+8. Finalize via ArgoCD  
   git add / commit / pusSh `<cluster/env/kubezero/application.yaml>` and watch ArgoCD do its work.
 
-8. Replace worker nodes
-Eg. by doubling `desired` for each worker ASG,  
-once all new workers joined, drain old workers one by one,  
-finally reset `desired` for each worker ASG which will terminate the old workers.
-
-## Known issues
-
+9. Drain old workers
+   Drain one by one and reset each ASG to initial "desired" value.
