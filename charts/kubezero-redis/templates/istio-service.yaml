@@ -16,7 +16,7 @@ spec:
     - port: {{ default 6379 .Values.istio.port }}
     route:
     - destination:
-        host: redis-cluster-headless
+        host: {{ default "redis-cluster-headless" .Values.istio.destinationHost }}
         port:
           number: 6379
 {{- end }}
