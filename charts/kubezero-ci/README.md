@@ -54,7 +54,7 @@ Kubernetes: `>= 1.20.0`
 | gitea.gitea.metrics.enabled | bool | `false` |  |
 | gitea.gitea.metrics.serviceMonitor.enabled | bool | `false` |  |
 | gitea.image.rootless | bool | `true` |  |
-| gitea.image.tag | string | `"1.16.6"` |  |
+| gitea.image.tag | string | `"1.16.8"` |  |
 | gitea.istio.enabled | bool | `false` |  |
 | gitea.istio.gateway | string | `"istio-ingress/private-ingressgateway"` |  |
 | gitea.istio.url | string | `"git.example.com"` |  |
@@ -95,9 +95,9 @@ Kubernetes: `>= 1.20.0`
 | jenkins.controller.initContainerResources.limits.memory | string | `"1024Mi"` |  |
 | jenkins.controller.initContainerResources.requests.cpu | string | `"50m"` |  |
 | jenkins.controller.initContainerResources.requests.memory | string | `"256Mi"` |  |
-| jenkins.controller.installPlugins[0] | string | `"kubernetes:3580.v78271e5631dc"` |  |
-| jenkins.controller.installPlugins[1] | string | `"workflow-aggregator:2.7"` |  |
-| jenkins.controller.installPlugins[2] | string | `"git:4.11.1"` |  |
+| jenkins.controller.installPlugins[0] | string | `"kubernetes:3600.v144b_cd192ca_a_"` |  |
+| jenkins.controller.installPlugins[1] | string | `"workflow-aggregator:581.v0c46fa_697ffd"` |  |
+| jenkins.controller.installPlugins[2] | string | `"git:4.11.3"` |  |
 | jenkins.controller.installPlugins[3] | string | `"configuration-as-code:1429.v09b_044a_c93de"` |  |
 | jenkins.controller.installPlugins[4] | string | `"antisamy-markup-formatter:2.7"` |  |
 | jenkins.controller.installPlugins[5] | string | `"prometheus:2.0.11"` |  |

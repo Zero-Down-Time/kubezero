@@ -8,7 +8,7 @@ HighAvailableControlplane: false
 
 addons:
   enabled: false
-  targetRevision: 0.5.3
+  targetRevision: 0.5.5
 
 network:
   enabled: false
@@ -31,13 +31,13 @@ storage:
 istio:
   enabled: false
   namespace: istio-system
-  targetRevision: 0.8.0
+  targetRevision: 0.8.1
 
 istio-ingress:
   enabled: false
   chart: kubezero-istio-gateway
   namespace: istio-ingress
-  targetRevision: 0.8.0
+  targetRevision: 0.8.1
   gateway:
     service: {}
 
@@ -60,7 +60,7 @@ metrics:
 logging:
   enabled: false
   namespace: logging
-  targetRevision: 0.8.0
+  targetRevision: 0.8.1
 
 argocd:
   enabled: false

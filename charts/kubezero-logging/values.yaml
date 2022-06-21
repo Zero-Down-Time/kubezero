@@ -396,7 +396,12 @@ fluent-bit:
   - name: varlog
     hostPath:
       path: /var/log
+  - name: newlog
+    hostPath:
+      path: /var/lib/containers/logs
 
   daemonSetVolumeMounts:
   - name: varlog
     mountPath: /var/log
+  - name: newlog
+    mountPath: /var/lib/containers/logs

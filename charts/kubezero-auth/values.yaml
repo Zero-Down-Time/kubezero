@@ -8,3 +8,17 @@ keycloak:
 
   metrics:
     enabled: false
+
+postgresql:
+  enabled: false
+
+  auth:
+    username: keycloak
+    database: keycloak
+
+  primary:
+    persistence:
+      size: 1Gi
+
+  readReplicas:
+    replicaCount: 0

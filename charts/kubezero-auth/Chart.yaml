@@ -2,8 +2,8 @@ apiVersion: v2
 name: kubezero-auth
 description: KubeZero umbrella chart for all things Authentication and Identity management
 type: application
-version: 0.1.4
-appVersion: 18.0.0
+version: 0.2.2
+appVersion: 18.0.1
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
@@ -16,4 +16,8 @@ dependencies:
   - name: kubezero-lib
     version: ">= 0.1.4"
     repository: https://cdn.zero-downtime.net/charts/
+  - name: postgresql
+    version: 11.6.7
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
 kubeVersion: ">= 1.20.0"

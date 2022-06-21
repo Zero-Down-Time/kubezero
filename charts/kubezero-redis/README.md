@@ -1,6 +1,6 @@
 # kubezero-redis
 
-![Version: 0.3.5](https://img.shields.io/badge/Version-0.3.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Redis HA
 
@@ -10,17 +10,17 @@ KubeZero Umbrella Chart for Redis HA
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Quarky9 |  |  |
+| Stefan Reimer | <stefan@zero-downtime.net> |  |
 
 ## Requirements
 
-Kubernetes: `>= 1.18.0`
+Kubernetes: `>= 1.20.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.3 |
-| https://charts.bitnami.com/bitnami | redis | 15.5.4 |
-| https://charts.bitnami.com/bitnami | redis-cluster | 6.3.9 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.4 |
+| https://charts.bitnami.com/bitnami | redis | 16.10.1 |
+| https://charts.bitnami.com/bitnami | redis-cluster | 7.6.1 |
 
 ## Values
 

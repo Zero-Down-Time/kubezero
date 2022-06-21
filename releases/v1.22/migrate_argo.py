@@ -15,7 +15,7 @@ parser = argparse.ArgumentParser(description="Update Route53 entries")
 parser.add_argument(
     "--version",
     dest="version",
-		default="1.22.8-8",
+		default="1.22.8-10",
     action="store",
     required=False,
     help="Update KubeZero version",
