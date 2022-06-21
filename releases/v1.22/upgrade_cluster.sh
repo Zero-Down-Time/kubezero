@@ -110,6 +110,9 @@ while true; do
 done
 kubectl delete pod kubezero-upgrade-${VERSION//.} -n kube-system
 
+# Fix backup cron for proper version
+kubectl set image cronjob/kubezero-backup kubezero-admin=public.ecr.aws/zero-downtime/kubezero-admin:${VERSION} -n kube-system
+
 # Now lets rolling restart bunch of ds to make sure they picked up the changes
 for ds in calico-node kube-multus-ds kube-proxy ebs-csi-node; do
   kubectl rollout restart daemonset/$ds -n kube-system

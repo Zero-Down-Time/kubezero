@@ -4,8 +4,7 @@ kind: KubeletConfiguration
 failSwapOn: false
 cgroupDriver: cgroupfs
 logging:
-  # We already have syslog-ng logging json
-  # format: json
+  format: json
 hairpinMode: hairpin-veth
 {{- if .Values.systemd }}
 resolvConf: /run/systemd/resolve/resolv.conf

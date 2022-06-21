@@ -1,6 +1,6 @@
 # kubezero-istio
 
-![Version: 0.8.0](https://img.shields.io/badge/Version-0.8.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.8.1](https://img.shields.io/badge/Version-0.8.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Istio
 
@@ -22,8 +22,8 @@ Kubernetes: `>= 1.20.0`
 |------------|------|---------|
 |  | kiali-server | 1.38.1 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.4 |
-| https://istio-release.storage.googleapis.com/charts | base | 1.13.3 |
-| https://istio-release.storage.googleapis.com/charts | istiod | 1.13.3 |
+| https://istio-release.storage.googleapis.com/charts | base | 1.13.5 |
+| https://istio-release.storage.googleapis.com/charts | istiod | 1.13.5 |
 
 ## Values
 
@@ -32,7 +32,7 @@ Kubernetes: `>= 1.20.0`
 | global.defaultPodDisruptionBudget.enabled | bool | `false` |  |
 | global.logAsJson | bool | `true` |  |
 | global.priorityClassName | string | `"system-cluster-critical"` |  |
-| global.tag | string | `"1.13.3-distroless"` |  |
+| global.tag | string | `"1.13.5-distroless"` |  |
 | istiod.meshConfig.accessLogEncoding | string | `"JSON"` |  |
 | istiod.meshConfig.accessLogFile | string | `"/dev/stdout"` |  |
 | istiod.meshConfig.tcpKeepalive.interval | string | `"60s"` |  |

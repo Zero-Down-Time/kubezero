@@ -1,6 +1,6 @@
 # kubezero
 
-![Version: 1.22.8-8](https://img.shields.io/badge/Version-1.22.8--8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 1.22.8-10](https://img.shields.io/badge/Version-1.22.8--10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero - Root App of Apps chart
 
@@ -26,7 +26,7 @@ Kubernetes: `>= 1.20.0`
 |-----|------|---------|-------------|
 | HighAvailableControlplane | bool | `false` |  |
 | addons.enabled | bool | `false` |  |
-| addons.targetRevision | string | `"0.5.3"` |  |
+| addons.targetRevision | string | `"0.5.5"` |  |
 | argocd.enabled | bool | `false` |  |
 | argocd.istio.enabled | bool | `false` |  |
 | argocd.namespace | string | `"argocd"` |  |
@@ -38,7 +38,7 @@ Kubernetes: `>= 1.20.0`
 | istio-ingress.enabled | bool | `false` |  |
 | istio-ingress.gateway.service | object | `{}` |  |
 | istio-ingress.namespace | string | `"istio-ingress"` |  |
-| istio-ingress.targetRevision | string | `"0.8.0"` |  |
+| istio-ingress.targetRevision | string | `"0.8.1"` |  |
 | istio-private-ingress.chart | string | `"kubezero-istio-gateway"` |  |
 | istio-private-ingress.enabled | bool | `false` |  |
 | istio-private-ingress.gateway.service | object | `{}` |  |
@@ -46,14 +46,14 @@ Kubernetes: `>= 1.20.0`
 | istio-private-ingress.targetRevision | string | `"0.8.0"` |  |
 | istio.enabled | bool | `false` |  |
 | istio.namespace | string | `"istio-system"` |  |
-| istio.targetRevision | string | `"0.8.0"` |  |
+| istio.targetRevision | string | `"0.8.1"` |  |
 | kubezero.defaultTargetRevision | string | `"*"` |  |
 | kubezero.gitSync | object | `{}` |  |
 | kubezero.repoURL | string | `"https://cdn.zero-downtime.net/charts"` |  |
 | kubezero.server | string | `"https://kubernetes.default.svc"` |  |
 | logging.enabled | bool | `false` |  |
 | logging.namespace | string | `"logging"` |  |
-| logging.targetRevision | string | `"0.8.0"` |  |
+| logging.targetRevision | string | `"0.8.1"` |  |
 | metrics.enabled | bool | `false` |  |
 | metrics.istio.grafana | object | `{}` |  |
 | metrics.istio.prometheus | object | `{}` |  |

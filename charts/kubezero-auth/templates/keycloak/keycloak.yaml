@@ -6,19 +6,34 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   instances: 1
-  # Wait for next release, already fixed
-  #disableDefaultIngress: true
+  disableDefaultIngress: true
+
   serverConfiguration:
     - name: cache
       value: local
+    {{- if .Values.postgresql.enabled }}
     - name: db
-      value: dev-mem
+      value: postgres
+    - name: db-url-host
+      value: {{ template "kubezero-lib.fullname" . }}-postgresql
+    - name: db-username
+      value: keycloak
+    - name: db-password
+      secret:
+        name: {{ template "kubezero-lib.fullname" . }}-postgresql
+        key: password
+    {{- else }}
+    # Fallback to local file within the pod - dev ONLY !! 
+    - name: db
+      value: dev-file
+    {{- end }}
     - name: hostname-strict-https
       value: "false"
     - name: proxy
       value: passthrough
     - name: http-enabled
       value: "true"
+
 
   #hostname: INSECURE-DISABLE
   hostname: {{ default "keycloak" .Values.keycloak.istio.url }}
