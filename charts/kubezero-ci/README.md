@@ -1,6 +1,6 @@
 # kubezero-ci
 
-![Version: 0.4.51](https://img.shields.io/badge/Version-0.4.51-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.4.54](https://img.shields.io/badge/Version-0.4.54-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things CI
 
@@ -18,9 +18,9 @@ Kubernetes: `>= 1.20.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://aquasecurity.github.io/helm-charts/ | trivy | 0.4.12 |
+| https://aquasecurity.github.io/helm-charts/ | trivy | 0.4.15 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
-| https://charts.jenkins.io | jenkins | 3.12.2 |
+| https://charts.jenkins.io | jenkins | 4.1.10 |
 | https://dl.gitea.io/charts/ | gitea | 5.0.5 |
 | https://gocd.github.io/helm-chart | gocd | 1.40.8 |
 
@@ -85,7 +85,7 @@ Kubernetes: `>= 1.20.0`
 | jenkins.agent.resources.requests.cpu | string | `"512m"` |  |
 | jenkins.agent.resources.requests.memory | string | `"1024Mi"` |  |
 | jenkins.agent.showRawYaml | bool | `false` |  |
-| jenkins.agent.tag | string | `"v0.2.4-21"` |  |
+| jenkins.agent.tag | string | `"v0.2.5-1"` |  |
 | jenkins.agent.yamlMergeStrategy | string | `"merge"` |  |
 | jenkins.agent.yamlTemplate | string | `"apiVersion: v1\nkind: Pod\nspec:\n  serviceAccountName: jenkins-podman-aws\n  containers:\n  - name: jnlp\n    resources:\n      limits:\n        github.com/fuse: 1\n    volumeMounts:\n    - name: aws-token\n      mountPath: \"/var/run/secrets/sts.amazonaws.com/serviceaccount/\"\n      readOnly: true\n  volumes:\n  - name: aws-token\n    projected:\n      sources:\n      - serviceAccountToken:\n          path: token\n          expirationSeconds: 86400\n          audience: \"sts.amazonaws.com\""` |  |
 | jenkins.controller.JCasC.configScripts.zdt-settings | string | `"jenkins:\n  noUsageStatistics: true\n  disabledAdministrativeMonitors:\n  - \"jenkins.security.ResourceDomainRecommendation\"\nunclassified:\n  buildDiscarders:\n    configuredBuildDiscarders:\n    - \"jobBuildDiscarder\"\n    - defaultBuildDiscarder:\n        discarder:\n          logRotator:\n            artifactDaysToKeepStr: \"32\"\n            artifactNumToKeepStr: \"10\"\n            daysToKeepStr: \"100\"\n            numToKeepStr: \"10\"\n"` |  |
@@ -95,7 +95,7 @@ Kubernetes: `>= 1.20.0`
 | jenkins.controller.initContainerResources.limits.memory | string | `"1024Mi"` |  |
 | jenkins.controller.initContainerResources.requests.cpu | string | `"50m"` |  |
 | jenkins.controller.initContainerResources.requests.memory | string | `"256Mi"` |  |
-| jenkins.controller.installPlugins[0] | string | `"kubernetes:3600.v144b_cd192ca_a_"` |  |
+| jenkins.controller.installPlugins[0] | string | `"kubernetes:3651.v908e7db_10d06"` |  |
 | jenkins.controller.installPlugins[1] | string | `"workflow-aggregator:581.v0c46fa_697ffd"` |  |
 | jenkins.controller.installPlugins[2] | string | `"git:4.11.3"` |  |
 | jenkins.controller.installPlugins[3] | string | `"configuration-as-code:1429.v09b_044a_c93de"` |  |
@@ -111,7 +111,7 @@ Kubernetes: `>= 1.20.0`
 | jenkins.controller.resources.limits.memory | string | `"4096Mi"` |  |
 | jenkins.controller.resources.requests.cpu | string | `"250m"` |  |
 | jenkins.controller.resources.requests.memory | string | `"1280Mi"` |  |
-| jenkins.controller.tag | string | `"2.332.3-lts-jdk17-preview"` |  |
+| jenkins.controller.tag | string | `"2.356-alpine-jdk17"` |  |
 | jenkins.controller.testEnabled | bool | `false` |  |
 | jenkins.enabled | bool | `false` |  |
 | jenkins.istio.agent.enabled | bool | `false` |  |

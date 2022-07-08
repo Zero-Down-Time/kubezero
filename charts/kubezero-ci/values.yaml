@@ -69,7 +69,7 @@ jenkins:
   enabled: false
 
   controller:
-    tag: 2.332.3-lts-jdk17-preview
+    tag: 2.356-alpine-jdk17
     #tagLabel: alpine
     disableRememberMe: true
     prometheus:
@@ -114,15 +114,15 @@ jenkins:
                       numToKeepStr: "10"
 
     installPlugins:
-      - kubernetes:3600.v144b_cd192ca_a_
+      - kubernetes:3651.v908e7db_10d06
       - workflow-aggregator:581.v0c46fa_697ffd
       - git:4.11.3
-      - configuration-as-code:1429.v09b_044a_c93de
+      - configuration-as-code:1462.v069a_b_57ff5c8
       - antisamy-markup-formatter:2.7
       - prometheus:2.0.11
       - htmlpublisher:1.30
       - build-discarder:60.v1747b0eb632a
-      - dark-theme:156.v6cf16af6f9ef
+      - dark-theme:185.v276b_5a_8966a_e
 
   serviceAccountAgent:
     create: true
@@ -131,7 +131,7 @@ jenkins:
   # Preconfigure agents to use zdt podman requires fuse/overlayfs
   agent:
     image: public.ecr.aws/zero-downtime/jenkins-podman
-    tag: v0.2.4-21
+    tag: v0.2.5-1
     resources:
       requests:
         cpu: "512m"
