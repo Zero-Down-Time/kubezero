@@ -117,7 +117,7 @@ jenkins:
       - kubernetes:3651.v908e7db_10d06
       - workflow-aggregator:581.v0c46fa_697ffd
       - git:4.11.3
-      - configuration-as-code:1464.vd8507b_82e41a_
+      - configuration-as-code:1466.v2d4119502006
       - antisamy-markup-formatter:2.7
       - prometheus:2.0.11
       - htmlpublisher:1.30
@@ -131,7 +131,7 @@ jenkins:
   # Preconfigure agents to use zdt podman requires fuse/overlayfs
   agent:
     image: public.ecr.aws/zero-downtime/jenkins-podman
-    tag: v0.2.5-1
+    tag: v0.3.2
     resources:
       requests:
         cpu: "512m"
