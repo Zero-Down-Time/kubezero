@@ -2,10 +2,10 @@
 GTAG=$(shell git describe --tags --match v*.*.* 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
 TAG ?= $(shell echo $(GTAG) | awk -F '-' '{ print $$1 "-" $$2 }' | sed -e 's/-$$//')
 
-ifeq ($(TRIVY_REMOTE),)
-  TRIVY_OPTS := image
-else
-  TRIVY_OPTS := client --remote ${TRIVY_REMOTE}
+# EXTRA_TAGS supposed to be set at the caller, eg. $(shell echo $(TAG) | awk -F '.' '{ print $$1 "." $$2 }')
+
+ifneq ($(TRIVY_REMOTE),)
+  TRIVY_OPTS := --server ${TRIVY_REMOTE}
 endif
 
 .PHONY: build test scan push clean
@@ -24,7 +24,7 @@ test: build rm-test-image
 
 scan: build
 	@echo "Scanning $(REGISTRY)/$(IMAGE):$(TAG) using Trivy"
-	@trivy $(TRIVY_OPTS) $(REGISTRY)/$(IMAGE):$(TAG)
+	@trivy image $(TRIVY_OPTS) $(REGISTRY)/$(IMAGE):$(TAG)
 
 push: build
 	@aws ecr-public get-login-password --region $(REGION) | docker login --username AWS --password-stdin $(REGISTRY)
@@ -53,6 +53,10 @@ rm-test-image:
 .PHONY: ci-pull-upstream
 ci-pull-upstream:
 	git stash && git subtree pull --prefix .ci ssh://git@git.zero-downtime.net/ZeroDownTime/ci-tools-lib.git master --squash && git stash pop
+
+.PHONY: create-repo
+create-repo:
+	aws ecr-public create-repository --repository-name $(IMAGE) --region $(REGION)
 
 .DEFAULT:
 	@echo "$@ not implemented. NOOP"
