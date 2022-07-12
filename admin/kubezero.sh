@@ -9,7 +9,7 @@ fi
 export WORKDIR=/tmp/kubezero
 export HOSTFS=/host
 export CHARTS=/charts
-export VERSION=v1.22
+export VERSION=v1.23
 
 export KUBECONFIG="${HOSTFS}/root/.kube/config"
 
@@ -118,10 +118,8 @@ post_kubeadm() {
 parse_kubezero
 
 if [ "$1" == 'upgrade' ]; then
-  ### PRE 1.22 specific
+  ### PRE 1.23 specific
   #####################
-
-  kubectl delete runtimeclass crio
 
   #####################
 
@@ -139,14 +137,11 @@ if [ "$1" == 'upgrade' ]; then
     cp ${HOSTFS}/etc/kubernetes/admin.conf ${HOSTFS}/root/.kube/config
   fi
 
-  ### POST 1.22 specific
-
-  # Remove all remaining kiam
-  helm repo add uswitch https://uswitch.github.io/kiam-helm-charts/charts/
-  helm repo update
-  helm template uswitch/kiam --name-template kiam --set server.deployment.enabled=true --set server.prometheus.servicemonitor.enabled=true --set agent.prometheus.servicemonitor.enabled=true | kubectl delete --namespace kube-system -f - || true
+  ### POST 1.23 specific
+  #####################
 
   ######################
+
   # network
   yq eval '.network // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
   helm template $CHARTS/kubezero-network --namespace kube-system --include-crds --name-template network \
@@ -156,14 +151,6 @@ if [ "$1" == 'upgrade' ]; then
   yq eval '.addons // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
   helm template $CHARTS/kubezero-addons --namespace kube-system --include-crds --name-template addons \
     -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply --namespace kube-system -f - $LOG
-
-  ######################
-
-  # Could be removed with 1.23 as we now have persistent etcd
-  # Execute cluster backup to allow new controllers to join
-  kubectl create job backup-cluster-now --from=cronjob/kubezero-backup -n kube-system
-  # That might take a while as the backup pod needs the CNIs to come online etc.
-  retry 10 30 40 kubectl wait --for=condition=complete job/backup-cluster-now -n kube-system && kubectl delete job backup-cluster-now -n kube-system
 
   # Cleanup after kubeadm on the host
   rm -rf ${HOSTFS}/etc/kubernetes/tmp
@@ -191,10 +178,8 @@ elif [[ "$1" =~ "^(bootstrap|restore|join)$" ]]; then
     rm -rf ${HOSTFS}/var/lib/etcd/member
 
   else
-    # Todo: 1.23
-    # Workaround for 1.22 as the final backup is still tagged with the previous verion from the cronjob
-    #retry 10 60 30 restic restore latest --no-lock -t / --tag $VERSION
-    retry 10 60 30 restic restore latest --no-lock -t /
+    # restore latest backup
+    retry 10 60 30 restic restore latest --no-lock -t / --tag $VERSION
 
     # Make last etcd snapshot available
     cp ${WORKDIR}/etcd_snapshot ${HOSTFS}/etc/kubernetes
@@ -205,9 +190,8 @@ elif [[ "$1" =~ "^(bootstrap|restore|join)$" ]]; then
     # Always use kubeadm kubectl config to never run into chicken egg with custom auth hooks
     cp ${WORKDIR}/admin.conf ${HOSTFS}/root/.kube/config
 
-    # etcd needs to resync during join
+    # Only restore etcd data during "restore" and none exists already
     if [[ "$1" =~ "^(restore)$" ]]; then
-      # Only restore etcd data set if none exists already
       if [ ! -d ${HOSTFS}/var/lib/etcd/member ]; then
         etcdctl snapshot restore ${HOSTFS}/etc/kubernetes/etcd_snapshot \
           --name $ETCD_NODENAME \
@@ -353,7 +337,11 @@ elif [[ "$1" =~ "^(bootstrap|restore|join)$" ]]; then
 elif [ "$1" == 'backup' ]; then
   restic snapshots || restic init || exit 1
 
-  CLUSTER_VERSION="v1.$(kubectl version --short=true -o json | jq .serverVersion.minor -r)"
+  CV=$(kubectl version --short=true -o json | jq .serverVersion.minor -r)
+  let PCV=$CV-1
+
+  CLUSTER_VERSION="v1.$CV"
+  PREVIOUS_VERSION="v1.$PCV"
 
   etcdctl --endpoints=https://${ETCD_NODENAME}:2379 snapshot save ${WORKDIR}/etcd_snapshot
 
@@ -367,8 +355,8 @@ elif [ "$1" == 'backup' ]; then
 
   echo "Backup complete."
 
-  # Remove backups from previous versions
-  restic forget --keep-tag $CLUSTER_VERSION --prune
+  # Remove backups from pre-previous versions
+  restic forget --keep-tag $CLUSTER_VERSION --keep-tag $PREVIOUS_VERSION --prune
 
   # Regular retention
   restic forget --keep-hourly 24 --keep-daily ${RESTIC_RETENTION:-7} --prune
