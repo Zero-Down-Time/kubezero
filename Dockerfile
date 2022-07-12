@@ -1,9 +1,9 @@
-ARG ALPINE_VERSION=3.15
+ARG ALPINE_VERSION=3.16
 
 FROM alpine:${ALPINE_VERSION}
 
 ARG ALPINE_VERSION
-ARG KUBE_VERSION=1.22
+ARG KUBE_VERSION=1.23
 
 RUN cd /etc/apk/keys && \
     wget "https://cdn.zero-downtime.net/alpine/stefan@zero-downtime.net-61bb6bfb.rsa.pub" && \
@@ -21,7 +21,7 @@ RUN cd /etc/apk/keys && \
       restic@testing \
       helm@testing
 
-ADD releases/v${KUBE_VERSION}/kubezero.sh /usr/bin
+ADD admin/kubezero.sh /usr/bin
 ADD charts/kubeadm /charts/kubeadm
 ADD charts/kubezero-addons /charts/kubezero-addons
 ADD charts/kubezero-network /charts/kubezero-network
