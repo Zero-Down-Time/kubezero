@@ -2,13 +2,14 @@ apiVersion: kubeadm.k8s.io/v1beta3
 kind: ClusterConfiguration
 kubernetesVersion: {{ .Chart.Version }}
 clusterName: {{ .Values.clusterName }}
+featureGates:
+  UnversionedKubeletConfigMap: true
 controlPlaneEndpoint: {{ .Values.api.endpoint }}
 networking:
   podSubnet: 10.244.0.0/16
 etcd:
   local:
-    # As 3.5 is not recommended stick with 3.4.13 till 1.23
-    imageTag: 3.4.13-0
+    imageTag: 3.5.4-0
     extraArgs:
       ### DNS discovery
       #discovery-srv: {{ .Values.domain }}

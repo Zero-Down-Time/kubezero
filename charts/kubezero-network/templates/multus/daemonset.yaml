@@ -1,105 +1,21 @@
 {{- if .Values.multus.enabled }}
-kind: ClusterRole
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: multus
-rules:
-  - apiGroups: ["k8s.cni.cncf.io"]
-    resources:
-      - '*'
-    verbs:
-      - '*'
-  - apiGroups:
-      - ""
-    resources:
-      - pods
-      - pods/status
-    verbs:
-      - get
-      - update
-  - apiGroups:
-      - ""
-      - events.k8s.io
-    resources:
-      - events
-    verbs:
-      - create
-      - patch
-      - update
----
-kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: multus
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: multus
-subjects:
-- kind: ServiceAccount
-  name: multus
-  namespace: kube-system
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: multus
-  namespace: kube-system
----
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: multus-cni-config
-  namespace: kube-system
-  labels:
-    tier: node
-    app: multus
-data:
-  # NOTE: If you'd prefer to manually apply a configuration file, you may create one here.
-  # In the case you'd like to customize the Multus installation, you should change the arguments to the Multus pod
-  # change the "args" line below from
-  # - "--multus-conf-file=auto"
-  # to:
-  # "--multus-conf-file=/tmp/multus-conf/70-multus.conf"
-  # Additionally -- you should ensure that the name "70-multus.conf" is the alphabetically first name in the
-  # /etc/cni/net.d/ directory on each node, otherwise, it will not be used by the Kubelet.
-  cni-conf.json: |
-    {
-      "cniVersion": "0.3.1",
-      "name": "multus-cni-network",
-      "type": "multus",
-      "kubeconfig": "/etc/cni/net.d/multus.d/multus.kubeconfig",
-      "delegates": [
-        {
-          "cniVersion": "0.3.1",
-          "name": "cilium",
-          "type": "cilium-cni",
-          "enable-debug": false
-        }
-      ]
-    }
----
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: kube-multus-ds
   namespace: kube-system
   labels:
-    tier: node
-    app: multus
-    name: multus
+    {{- include "kubezero-lib.labels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      name: multus
+      {{- include "kubezero-lib.selectorLabels" . | nindent 6 }}
   updateStrategy:
     type: RollingUpdate
   template:
     metadata:
       labels:
-        tier: node
-        app: multus
-        name: multus
+        {{- include "kubezero-lib.labels" . | nindent 8 }}
     spec:
       hostNetwork: true
       tolerations:
@@ -113,8 +29,8 @@ spec:
         image: ghcr.io/k8snetworkplumbingwg/multus-cni:{{ .Values.multus.tag }}
         command: ["/entrypoint.sh"]
         args:
-        - "--multus-conf-file=auto"
-        - "--rename-conf-file=true"
+        - "--multus-conf-file=/tmp/multus-conf/00-multus.conf"
+        - "--rename-conf-file=false"
         - "--cni-bin-dir=/host/usr/libexec/cni"
         - "--cni-version=0.3.1"
         resources:
@@ -153,5 +69,5 @@ spec:
             name: multus-cni-config
             items:
             - key: cni-conf.json
-              path: 70-multus.conf
+              path: 00-multus.conf
 {{- end }}

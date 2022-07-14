@@ -1,6 +1,6 @@
 {{- /* Feature gates for all control plane components */ -}}
 {{- define "kubeadm.featuregates" }}
-{{- $gates := list "CustomCPUCFSQuotaPeriod" "GenericEphemeralVolume" "KubeletCredentialProviders"}}
+{{- $gates := list "CustomCPUCFSQuotaPeriod" "KubeletCredentialProviders"}}
 {{- if eq .return "csv" }}
 {{- range $key := $gates }}
 {{- $key }}=true,

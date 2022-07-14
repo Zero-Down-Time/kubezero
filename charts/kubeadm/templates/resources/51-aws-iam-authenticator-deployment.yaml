@@ -95,11 +95,11 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      annotations:
-        scheduler.alpha.kubernetes.io/critical-pod: ""
       labels:
         k8s-app: aws-iam-authenticator
     spec:
+      priorityClassName: system-cluster-critical
+
       # use service account with access to
       serviceAccountName: aws-iam-authenticator
 

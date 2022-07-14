@@ -1,0 +1,25 @@
+{{- if .Values.calico.enabled }}
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: calico
+  namespace: kube-system
+spec:
+  config: '{
+      "type": "calico",
+      "cniVersion": "0.3.1",
+      "log_level": "info",
+      "log_file_path": "/var/log/calico/cni/cni.log",
+      "datastore_type": "kubernetes",
+      "mtu": 8941,
+      "ipam": {
+          "type": "calico-ipam"
+      },
+      "policy": {
+          "type": "k8s"
+      },
+      "kubernetes": {
+          "kubeconfig": "/etc/cni/net.d/calico-kubeconfig"
+      }
+    }'
+{{- end }}
