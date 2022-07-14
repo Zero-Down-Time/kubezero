@@ -319,6 +319,11 @@ elif [[ "$1" =~ "^(bootstrap|restore|join)$" ]]; then
   if [[ "$1" =~ "^(bootstrap|join)$" ]]; then
     # network
     yq eval '.network // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
+
+    # Ensure multus is first
+    helm template $CHARTS/kubezero-network --namespace kube-system --include-crds --name-template network \
+      --set multus.enabled=true --kube-version $KUBE_VERSION | kubectl apply -f - $LOG
+
     helm template $CHARTS/kubezero-network --namespace kube-system --include-crds --name-template network \
       -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply --namespace kube-system -f - $LOG
 
