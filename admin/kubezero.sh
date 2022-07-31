@@ -9,7 +9,7 @@ fi
 export WORKDIR=/tmp/kubezero
 export HOSTFS=/host
 export CHARTS=/charts
-export VERSION=v1.23
+export VERSION=$(kubeadm version --output json | jq -r .clientVersion.gitVersion)
 
 export KUBECONFIG="${HOSTFS}/root/.kube/config"
 

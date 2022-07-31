@@ -33,6 +33,27 @@ cilium:
     #-- Ensure this is false if multus is enabled
     exclusive: false
 
+  cluster:
+    # This should match the second octet + 1 of clusterPoolIPv4PodCIDRList,
+    # to prevent IP space overlap and easy tracking
+    id: 1
+    name: default
+
+  ipam:
+    operator:
+      clusterPoolIPv4PodCIDRList:
+        - 10.0.0.0/16
+
+  hostServices:
+    enabled: true
+
+  # Does this conflict with Calico in parallel ?
+  nodePort:
+    enabled: true
+
+  # Keep it simple for now
+  l7Proxy: false
+
   cgroup:
     autoMount:
       enabled: false
