@@ -23,14 +23,20 @@ Any 1.21.X-Y release of Kubezero supports any Kubernetes cluster 1.21.X.
 
 KubeZero is distributed as a collection of versioned Helm charts, allowing custom upgrade schedules and module versions as needed.
 
-| KubeZero Version | Kubernetes Version  | EOL         |
-|------------------|---------------------|-------------|
-| v1.23.X-Y        | v1.23.X             | Alpha       |
-| v1.22.8-Y        | v1.22.8             | 30 Sep 2022 |
-| v1.21.9-Y        | v1.21.9             | 31 May 2022 |
-| v1.20.8          | v1.20               | Feb 2022    |
-| v1.19            | v1.19               | Jul 2021    |
-| v1.18            | v1.18               | Apr 2021    |
+```mermaid
+gantt
+    title KubeZero Support Timeline
+    dateFormat  YYYY-MM-DD
+    section 1.22
+    beta     :122b, 2022-05-01, 2022-06-01
+    live     :after 122b, 2022-10-01
+    section 1.23
+    beta     :123b, 2022-08-01, 2022-09-01
+    live     :after 123b, 2022-12-31
+    section 1.24
+    beta     :124b, 2022-11-01, 2022-11-30
+    live     :after 124b, 2023-03-01
+```
 
 [Upstream release policy](https://kubernetes.io/releases/)
 
