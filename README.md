@@ -30,13 +30,13 @@ gantt
     dateFormat  YYYY-MM-DD
     section 1.22
     beta     :122b, 2022-05-01, 2022-06-01
-    live     :after 122b, 2022-10-01
+    release  :after 122b, 2022-10-28
     section 1.23
-    beta     :123b, 2022-08-01, 2022-09-01
-    live     :after 123b, 2022-12-31
+    beta     :123b, 2022-08-01, 2022-10-01
+    release  :after 123b, 2023-02-28
     section 1.24
-    beta     :124b, 2022-11-01, 2022-11-30
-    live     :after 124b, 2023-03-01
+    beta     :124b, 2022-12-01, 2022-12-31
+    release  :after 124b, 2023-05-01
 ```
 
 [Upstream release policy](https://kubernetes.io/releases/)
