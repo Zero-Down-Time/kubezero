@@ -24,6 +24,7 @@ Any 1.21.X-Y release of Kubezero supports any Kubernetes cluster 1.21.X.
 KubeZero is distributed as a collection of versioned Helm charts, allowing custom upgrade schedules and module versions as needed.
 
 ```mermaid
+%%{init: {'theme':'dark'}}%%
 gantt
     title KubeZero Support Timeline
     dateFormat  YYYY-MM-DD
