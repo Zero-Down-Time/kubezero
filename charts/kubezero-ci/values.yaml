@@ -113,7 +113,6 @@ jenkins:
                       daysToKeepStr: "100"
                       numToKeepStr: "10"
 
-    initializeOnce: true
     installPlugins:
       - kubernetes:3670.v6ca_059233222
       - workflow-aggregator:581.v0c46fa_697ffd
@@ -124,6 +123,7 @@ jenkins:
       - htmlpublisher:1.30
       - build-discarder:60.v1747b0eb632a
       - dark-theme:185.v276b_5a_8966a_e
+      - kubernetes-credentials-provider:1.196.va_55f5e31e3c2
 
   serviceAccountAgent:
     create: true
@@ -182,6 +182,9 @@ jenkins:
                 path: token
                 expirationSeconds: 86400
                 audience: "sts.amazonaws.com"
+
+  rbac:
+    readSecrets: true
 
   persistence:
     size: "4Gi"
