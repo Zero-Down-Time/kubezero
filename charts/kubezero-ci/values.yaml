@@ -17,7 +17,7 @@ gitea:
   enabled: false
 
   image:
-    tag: 1.17.0
+    tag: 1.17.1
     rootless: true
 
   securityContext:
@@ -174,6 +174,9 @@ jenkins:
           - name: aws-token
             mountPath: "/var/run/secrets/sts.amazonaws.com/serviceaccount/"
             readOnly: true
+          - name: host-registries-conf
+            mountPath: "/home/jenkins/.config/containers/registries.conf"
+            readOnly: true
         volumes:
         - name: aws-token
           projected:
@@ -182,6 +185,10 @@ jenkins:
                 path: token
                 expirationSeconds: 86400
                 audience: "sts.amazonaws.com"
+        - name: host-registries-conf
+          hostPath:
+            path: /etc/containers/registries.conf
+            type: File
 
   rbac:
     readSecrets: true
