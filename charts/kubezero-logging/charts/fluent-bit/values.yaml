@@ -36,6 +36,14 @@ podSecurityPolicy:
   create: false
   annotations: {}
 
+openShift:
+  # Sets Openshift support
+  enabled: false
+  # Creates SCC for Fluent-bit when Openshift support is enabled
+  securityContextConstraints:
+    create: true
+    annotations: {}
+
 podSecurityContext: {}
 #   fsGroup: 2000
 
@@ -72,6 +80,7 @@ service:
   port: 2020
   labels: {}
   # nodePort: 30020
+  # clusterIP: 172.16.10.1
   annotations: {}
 #   prometheus.io/path: "/api/v1/metrics/prometheus"
 #   prometheus.io/port: "2020"
@@ -321,6 +330,17 @@ config:
         Logstash_Format On
         Logstash_Prefix node
         Retry_Limit False
+
+  ## https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/classic-mode/upstream-servers
+  upstream: {}
+#      upstream.conf: |
+#        [UPSTREAM]
+#            upstream1
+#
+#        [NODE]
+#            name       node-1
+#            host       127.0.0.1
+#            port       43000
 
   ## https://docs.fluentbit.io/manual/pipeline/parsers
   customParsers: |

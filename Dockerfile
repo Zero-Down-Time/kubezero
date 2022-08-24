@@ -13,6 +13,7 @@ RUN cd /etc/apk/keys && \
     apk --no-cache add \
       jq \
       yq \
+      diffutils \
       cri-tools@kubezero \
       kubeadm@kubezero~=${KUBE_VERSION} \
       kubectl@kubezero~=${KUBE_VERSION} \

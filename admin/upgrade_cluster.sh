@@ -1,14 +1,15 @@
 #!/bin/bash -e
 
-VERSION="v1.22"
+VERSION="v1.23"
 
 [ -n "$DEBUG" ] && set -x
 
 # unset any AWS_DEFAULT_PROFILE as it will break aws-iam-auth
 unset AWS_DEFAULT_PROFILE
 
-echo "Deploying node upgrade daemonSet..."
-cat <<EOF | kubectl apply -f -
+controller_nodes_upgrade() {
+  echo "Deploying node upgrade daemonSet..."
+  cat <<EOF | kubectl apply -f -
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -48,9 +49,9 @@ spec:
           type: Directory
 EOF
 
-#kubectl rollout status daemonset -n kube-system kubezero-upgrade-${VERSION//.} --timeout 300s
-kubectl delete ds kubezero-upgrade-${VERSION//.} -n kube-system
-
+  #kubectl rollout status daemonset -n kube-system kubezero-upgrade-${VERSION//.} --timeout 300s
+  kubectl delete ds kubezero-upgrade-${VERSION//.} -n kube-system
+}
 
 echo "Deploying cluster upgrade job ..."
 
@@ -72,7 +73,9 @@ spec:
     imagePullPolicy: Always
     command: ["kubezero.sh"]
     args:
-    - upgrade
+    - cluster_upgrade
+    - apply_network
+    - apply_addons
     env:
     - name: DEBUG
       value: "$DEBUG"
@@ -109,15 +112,3 @@ while true; do
   sleep 3
 done
 kubectl delete pod kubezero-upgrade-${VERSION//.} -n kube-system
-
-# Fix backup cron for proper version
-kubectl set image cronjob/kubezero-backup kubezero-admin=public.ecr.aws/zero-downtime/kubezero-admin:${VERSION} -n kube-system
-
-# Now lets rolling restart bunch of ds to make sure they picked up the changes
-for ds in calico-node kube-multus-ds kube-proxy ebs-csi-node; do
-  kubectl rollout restart daemonset/$ds -n kube-system
-  kubectl rollout status  daemonset/$ds -n kube-system
-done
-
-# Force replace the ECK CRDs
-kubectl get crd elasticsearches.elasticsearch.k8s.elastic.co && kubectl replace -f https://download.elastic.co/downloads/eck/2.1.0/crds.yaml

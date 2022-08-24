@@ -47,6 +47,11 @@ spec:
     {{- end }}
   {{- end }}
 {{- end }}
+{{- if .Values.service.externalIPs }}
+  externalIPs: {{- range .Values.service.externalIPs }}
+    - {{.}}
+  {{- end }}
+{{- end }}
   selector:
     {{- include "gateway.selectorLabels" . | nindent 4 }}
 {{- end }}

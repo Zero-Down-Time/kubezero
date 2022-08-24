@@ -5,8 +5,11 @@ clusterBackup:
     name: public.ecr.aws/zero-downtime/kubezero-admin
     # tag: v1.22.8
 
+  # -- s3:https://s3.amazonaws.com/${CFN[ConfigBucket]}/k8s/${CLUSTERNAME}/clusterBackup
   repository: ""
+  # -- /etc/cloudbender/clusterBackup.passphrase
   password: ""
+
   extraEnv: []
 
 forseti:

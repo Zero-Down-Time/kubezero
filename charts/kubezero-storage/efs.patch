@@ -1,6 +1,6 @@
 diff -tuNr charts/aws-efs-csi-driver.orig/templates/controller-deployment.yaml charts/aws-efs-csi-driver/templates/controller-deployment.yaml
---- charts/aws-efs-csi-driver.orig/templates/controller-deployment.yaml	2022-04-28 01:41:15.000000000 +0200
-+++ charts/aws-efs-csi-driver/templates/controller-deployment.yaml	2022-05-05 17:10:49.708746126 +0200
+--- charts/aws-efs-csi-driver.orig/templates/controller-deployment.yaml	2022-08-24 13:58:54.208936918 +0200
++++ charts/aws-efs-csi-driver/templates/controller-deployment.yaml	2022-08-24 14:02:53.031437096 +0200
 @@ -13,6 +13,10 @@
        app: efs-csi-controller
        app.kubernetes.io/name: {{ include "aws-efs-csi-driver.name" . }}
@@ -12,10 +12,10 @@ diff -tuNr charts/aws-efs-csi-driver.orig/templates/controller-deployment.yaml c
    template:
      metadata:
        labels:
-@@ -57,9 +61,14 @@
-           env:
-             - name: CSI_ENDPOINT
-               value: unix:///var/lib/csi/sockets/pluginproxy/csi.sock
+@@ -65,9 +69,14 @@
+               valueFrom:
+                 fieldRef:
+                   fieldPath: spec.nodeName
 +          {{- if .Values.controller.extraEnv }}
 +            {{- toYaml .Values.controller.extraEnv | nindent 12 }}
 +          {{- end }}
@@ -27,7 +27,7 @@ diff -tuNr charts/aws-efs-csi-driver.orig/templates/controller-deployment.yaml c
            ports:
              - name: healthz
                containerPort: {{ .Values.controller.healthPort }}
-@@ -110,6 +119,13 @@
+@@ -118,6 +127,13 @@
        volumes:
          - name: socket-dir
            emptyDir: {}
@@ -42,8 +42,8 @@ diff -tuNr charts/aws-efs-csi-driver.orig/templates/controller-deployment.yaml c
        affinity: {{- toYaml . | nindent 8 }}
        {{- end }}
 diff -tuNr charts/aws-efs-csi-driver.orig/templates/node-daemonset.yaml charts/aws-efs-csi-driver/templates/node-daemonset.yaml
---- charts/aws-efs-csi-driver.orig/templates/node-daemonset.yaml	2022-04-28 01:41:15.000000000 +0200
-+++ charts/aws-efs-csi-driver/templates/node-daemonset.yaml	2022-05-05 17:09:28.361227665 +0200
+--- charts/aws-efs-csi-driver.orig/templates/node-daemonset.yaml	2022-08-24 13:58:54.208936918 +0200
++++ charts/aws-efs-csi-driver/templates/node-daemonset.yaml	2022-08-24 14:03:42.095284086 +0200
 @@ -40,15 +40,10 @@
          {{- with .Values.node.nodeSelector }}
          {{- toYaml . | nindent 8 }}

@@ -1,6 +1,6 @@
 # kubezero-metrics
 
-![Version: 0.8.0](https://img.shields.io/badge/Version-0.8.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.8.1](https://img.shields.io/badge/Version-0.8.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Prometheus, Grafana and Alertmanager as well as all Kubernetes integrations.
 
@@ -18,10 +18,10 @@ Kubernetes: `>= 1.20.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | kube-prometheus-stack | 34.9.0 |
-|  | prometheus-pushgateway | 1.16.1 |
-| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.4 |
-| https://prometheus-community.github.io/helm-charts | prometheus-adapter | 3.2.0 |
+|  | kube-prometheus-stack | 39.9.0 |
+|  | prometheus-pushgateway | 1.18.2 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
+| https://prometheus-community.github.io/helm-charts | prometheus-adapter | 3.4.0 |
 
 ## Values
 

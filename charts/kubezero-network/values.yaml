@@ -18,7 +18,7 @@ metallb:
 
 multus:
   enabled: false
-  tag: "v3.9"
+  tag: "v3.9.1"
 
   clusterNetwork: "calico"
   defaultNetworks: []

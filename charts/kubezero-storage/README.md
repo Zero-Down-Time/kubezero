@@ -1,6 +1,6 @@
 # kubezero-storage
 
-![Version: 0.6.4](https://img.shields.io/badge/Version-0.6.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things storage incl. AWS EBS/EFS, openEBS-lvm, gemini
 
@@ -18,11 +18,11 @@ Kubernetes: `>= 1.20.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | aws-ebs-csi-driver | 2.6.7 |
-|  | aws-efs-csi-driver | 2.2.6 |
+|  | aws-ebs-csi-driver | 2.10.1 |
+|  | aws-efs-csi-driver | 2.2.7 |
 |  | gemini | 1.0.0 |
-|  | lvm-localpv | 0.9.0 |
-| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.4 |
+|  | lvm-localpv | 1.0.0 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
 
 ## Values
 
@@ -38,7 +38,6 @@ Kubernetes: `>= 1.20.0`
 | aws-ebs-csi-driver.controller.tolerations[0].effect | string | `"NoSchedule"` |  |
 | aws-ebs-csi-driver.controller.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | aws-ebs-csi-driver.enabled | bool | `false` |  |
-| aws-ebs-csi-driver.image.tag | string | `"v1.5.3"` |  |
 | aws-ebs-csi-driver.node.resources.limits.memory | string | `"32Mi"` |  |
 | aws-ebs-csi-driver.node.resources.requests.cpu | string | `"10m"` |  |
 | aws-ebs-csi-driver.node.resources.requests.memory | string | `"16Mi"` |  |

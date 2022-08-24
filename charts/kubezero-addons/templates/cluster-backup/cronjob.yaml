@@ -27,7 +27,7 @@ spec:
               mountPath: /tmp
             env: 
             - name: DEBUG
-              value: "1"
+              value: ""
             - name: RESTIC_REPOSITORY
               valueFrom: 
                 secretKeyRef: 
