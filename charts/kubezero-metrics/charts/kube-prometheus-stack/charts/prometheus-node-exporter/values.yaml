@@ -7,6 +7,9 @@ image:
   tag: ""
   pullPolicy: IfNotPresent
 
+imagePullSecrets: []
+# - name: "image-pull-secret"
+
 service:
   type: ClusterIP
   port: 9100
@@ -31,6 +34,7 @@ prometheus:
     jobLabel: ""
 
     scheme: http
+    basicAuth: {}
     bearerTokenFile:
     tlsConfig: {}
 
@@ -203,3 +207,27 @@ sidecarVolumeMount: []
 ## Additional InitContainers to initialize the pod
 ##
 extraInitContainers: []
+
+## Liveness probe
+##
+livenessProbe:
+  failureThreshold: 3
+  httpGet:
+    httpHeaders: []
+    scheme: http
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 1
+
+## Readiness probe
+##
+readinessProbe:
+  failureThreshold: 3
+  httpGet:
+    httpHeaders: []
+    scheme: http
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 1

@@ -244,7 +244,7 @@ fluent-bit:
 
   image:
     #repository: public.ecr.aws/zero-downtime/fluent-bit
-    tag: 1.9.3
+    tag: 1.9.7
 
   serviceMonitor:
     enabled: false

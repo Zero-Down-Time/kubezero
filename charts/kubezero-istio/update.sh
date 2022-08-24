@@ -11,7 +11,3 @@ helm dep update
 
 # Fetch dashboards from Grafana.com and update ZDT CM
 ../kubezero-metrics/sync_grafana_dashboards.py dashboards.yaml templates/grafana-dashboards.yaml
-
-# Kiali
-rm -rf charts/kiali-server
-curl -sL https://github.com/kiali/helm-charts/blob/master/docs/kiali-server-${KIALI_VERSION}.tgz?raw=true | tar xz -C charts

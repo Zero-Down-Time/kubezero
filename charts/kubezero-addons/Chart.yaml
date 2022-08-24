@@ -2,8 +2,8 @@ apiVersion: v2
 name: kubezero-addons
 description: KubeZero umbrella chart for various optional cluster addons
 type: application
-version: 0.5.5
-appVersion: v1.22.8
+version: 0.6.0
+appVersion: v1.23.10
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
@@ -20,7 +20,7 @@ dependencies:
     # repository: https://aws.github.io/eks-charts
     condition: aws-node-termination-handler.enabled
   - name: external-dns
-    version: 1.7.1
+    version: 1.11.0
     repository: https://kubernetes-sigs.github.io/external-dns/
     condition: external-dns.enabled
 kubeVersion: ">= 1.20.0"

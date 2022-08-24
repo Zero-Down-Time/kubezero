@@ -19,47 +19,65 @@ sidecars:
     image:
       pullPolicy: IfNotPresent
       repository: k8s.gcr.io/sig-storage/csi-provisioner
-      tag: "v2.1.1"
+      tag: "v3.1.0"
     logLevel: 2
     resources: {}
+    securityContext:
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
   attacher:
     env: []
     image:
       pullPolicy: IfNotPresent
       repository: k8s.gcr.io/sig-storage/csi-attacher
-      tag: "v3.1.0"
+      tag: "v3.4.0"
     logLevel: 2
     resources: {}
+    securityContext:
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
   snapshotter:
     env: []
     image:
       pullPolicy: IfNotPresent
       repository: k8s.gcr.io/sig-storage/csi-snapshotter
-      tag: "v3.0.3"
+      tag: "v6.0.1"
     logLevel: 2
     resources: {}
+    securityContext:
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
   livenessProbe:
     image:
       pullPolicy: IfNotPresent
       repository: k8s.gcr.io/sig-storage/livenessprobe
-      tag: "v2.4.0"
+      tag: "v2.6.0"
     resources: {}
+    securityContext:
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
   resizer:
     env: []
     image:
       pullPolicy: IfNotPresent
       repository: k8s.gcr.io/sig-storage/csi-resizer
-      tag: "v1.1.0"
+      tag: "v1.4.0"
     logLevel: 2
     resources: {}
+    securityContext:
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
   nodeDriverRegistrar:
     env: []
     image:
       pullPolicy: IfNotPresent
       repository: k8s.gcr.io/sig-storage/csi-node-driver-registrar
-      tag: "v2.1.0"
+      tag: "v2.5.1"
     logLevel: 2
     resources: {}
+    securityContext:
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
 
 proxy:
   http_proxy:
@@ -77,6 +95,8 @@ controller:
   # If the default is not set and fstype is unset in the StorageClass, then no fstype will be set
   defaultFsType: ext4
   env: []
+  # Use envFrom to reference ConfigMaps and Secrets across all containers in the deployment
+  envFrom: []
   # If set, add pv/pvc metadata to plugin create requests as parameters.
   extraCreateMetadata: true
   # Extra volume tags to attach to each dynamically provisioned volume.
@@ -134,15 +154,32 @@ controller:
   #    topologyKey: kubernetes.io/hostname
   #    whenUnsatisfiable: ScheduleAnyway
   topologySpreadConstraints: []
-  securityContext: {}
-  #  AWS EKS /var/run/secrets/eks.amazonaws.com/serviceaccount/token FS group is nogroup (65534) - required for Kubernetes 1.18.x and below
-  #  fsGroup: 65534
+  # securityContext on the controller pod
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+  # securityContext on the controller container (see sidecars for securityContext on sidecar containers)
+  containerSecurityContext:
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
 
 node:
   env: []
+  envFrom: []
   kubeletPath: /var/lib/kubelet
   logLevel: 2
   priorityClassName:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: eks.amazonaws.com/compute-type
+            operator: NotIn
+            values:
+            - fargate
   nodeSelector: {}
   podAnnotations: {}
   podLabels: {}
@@ -160,6 +197,17 @@ node:
     type: RollingUpdate
     rollingUpdate:
       maxUnavailable: "10%"
+  # securityContext on the node pod
+  securityContext:
+    # The node pod must be run as root to bind to the registration/driver sockets
+    runAsNonRoot: false
+    runAsUser: 0
+    runAsGroup: 0
+    fsGroup: 0
+  # securityContext on the node container (see sidecars for securityContext on sidecar containers)
+  containerSecurityContext:
+    readOnlyRootFilesystem: true
+    privileged: true
 
 storageClasses: []
 # Add StorageClass resources like:

@@ -1,6 +1,6 @@
 # kubeadm
 
-![Version: 1.22.8](https://img.shields.io/badge/Version-1.22.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 1.23.10](https://img.shields.io/badge/Version-1.23.10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Kubeadm cluster config
 
@@ -20,12 +20,6 @@ Kubernetes: `>= 1.20.0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| addons.aws-node-termination-handler.enabled | bool | `false` |  |
-| addons.aws-node-termination-handler.queueURL | string | `""` | arn:aws:sqs:${REGION}:${AWS_ACCOUNT_ID}:${CLUSTERNAME}_Nth |
-| addons.clusterBackup.enabled | bool | `false` |  |
-| addons.clusterBackup.passwordFile | string | `""` | /etc/cloudbender/clusterBackup.passphrase |
-| addons.clusterBackup.repository | string | `""` | s3:https://s3.amazonaws.com/${CFN[ConfigBucket]}/k8s/${CLUSTERNAME}/clusterBackup |
-| addons.external-dns.enabled | bool | `false` |  |
 | api.apiAudiences | string | `"istio-ca"` |  |
 | api.awsIamAuth.enabled | bool | `false` |  |
 | api.awsIamAuth.kubeAdminRole | string | `"arn:aws:iam::000000000000:role/KubernetesNode"` |  |
@@ -43,10 +37,6 @@ Kubernetes: `>= 1.20.0`
 | etcd.state | string | `"new"` |  |
 | highAvailable | bool | `false` |  |
 | listenAddress | string | `"0.0.0.0"` | Needs to be set to primary node IP |
-| network.calico.enabled | bool | `false` |  |
-| network.cilium.enabled | bool | `false` |  |
-| network.multus.enabled | bool | `false` |  |
-| network.multus.tag | string | `"v3.8"` |  |
 | nodeName | string | `"kubezero-node"` | set to $HOSTNAME |
 | protectKernelDefaults | bool | `false` |  |
 | systemd | bool | `false` | Set to false for openrc, eg. on Gentoo or Alpine |

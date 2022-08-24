@@ -9,7 +9,8 @@ fi
 export WORKDIR=/tmp/kubezero
 export HOSTFS=/host
 export CHARTS=/charts
-export VERSION=$(kubeadm version --output json | jq -r .clientVersion.gitVersion)
+export KUBE_VERSION=$(kubeadm version -o json | jq -r .clientVersion.gitVersion)
+export KUBE_VERSION_MINOR="v1.$(kubectl version -o json | jq .clientVersion.minor -r)"
 
 export KUBECONFIG="${HOSTFS}/root/.kube/config"
 
@@ -63,13 +64,11 @@ render_kubeadm() {
 parse_kubezero() {
   [ -f ${HOSTFS}/etc/kubernetes/kubezero.yaml ] || { echo "Missing /etc/kubernetes/kubezero.yaml!"; return 1; }
 
-  export KUBE_VERSION=$(kubeadm version -o yaml | yq eval .clientVersion.gitVersion -)
   export CLUSTERNAME=$(yq eval '.clusterName' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
   export ETCD_NODENAME=$(yq eval '.etcd.nodeName' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
   export NODENAME=$(yq eval '.nodeName' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
-
+  export PROVIDER_ID=$(yq eval '.providerID' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
   export AWS_IAM_AUTH=$(yq eval '.api.awsIamAuth.enabled' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
-  export AWS_NTH=$(yq eval '.addons.aws-node-termination-handler.enabled' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
 
   # From here on bail out, allows debug_shell even in error cases
   set -e
@@ -114,12 +113,15 @@ post_kubeadm() {
 }
 
 
-# First parse kubezero.yaml
-parse_kubezero
-
-if [ "$1" == 'upgrade' ]; then
+cluster_upgrade() {
   ### PRE 1.23 specific
   #####################
+
+  # Migrate addons and network values into CM from kubezero.yaml
+  kubectl get cm -n kube-system kubezero-values || \
+  kubectl create configmap -n kube-system kubezero-values \
+    --from-literal addons="$(yq e '.addons | del .clusterBackup.repository | del .clusterBackup.password' ${HOSTFS}/etc/kubernetes/kubezero.yaml)" \
+    --from-literal network="$(yq e .network ${HOSTFS}/etc/kubernetes/kubezero.yaml)"
 
   #####################
 
@@ -142,16 +144,6 @@ if [ "$1" == 'upgrade' ]; then
 
   ######################
 
-  # network
-  yq eval '.network // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
-  helm template $CHARTS/kubezero-network --namespace kube-system --include-crds --name-template network \
-    -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply --namespace kube-system -f - $LOG
-
-  # addons
-  yq eval '.addons // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
-  helm template $CHARTS/kubezero-addons --namespace kube-system --include-crds --name-template addons \
-    -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply --namespace kube-system -f - $LOG
-
   # Cleanup after kubeadm on the host
   rm -rf ${HOSTFS}/etc/kubernetes/tmp
 
@@ -163,23 +155,28 @@ if [ "$1" == 'upgrade' ]; then
 
   # Removed:
   # - update oidc do we need that ?
+}
 
-elif [[ "$1" == 'node-upgrade' ]]; then
+
+node_upgrade() {
   echo "Starting node upgrade ..."
 
   echo "All done."
+}
 
-elif [[ "$1" =~ "^(bootstrap|restore|join)$" ]]; then
+
+control_plane_node() {
+  CMD=$1
 
   render_kubeadm
 
   # Ensure clean slate if bootstrap, restore PKI otherwise
-  if [[ "$1" =~ "^(bootstrap)$" ]]; then
+  if [[ "$CMD" =~ "^(bootstrap)$" ]]; then
     rm -rf ${HOSTFS}/var/lib/etcd/member
 
   else
     # restore latest backup
-    retry 10 60 30 restic restore latest --no-lock -t / --tag $VERSION
+    retry 10 60 30 restic restore latest --no-lock -t / --tag $KUBE_VERSION_MINOR
 
     # Make last etcd snapshot available
     cp ${WORKDIR}/etcd_snapshot ${HOSTFS}/etc/kubernetes
@@ -191,7 +188,7 @@ elif [[ "$1" =~ "^(bootstrap|restore|join)$" ]]; then
     cp ${WORKDIR}/admin.conf ${HOSTFS}/root/.kube/config
 
     # Only restore etcd data during "restore" and none exists already
-    if [[ "$1" =~ "^(restore)$" ]]; then
+    if [[ "$CMD" =~ "^(restore)$" ]]; then
       if [ ! -d ${HOSTFS}/var/lib/etcd/member ]; then
         etcdctl snapshot restore ${HOSTFS}/etc/kubernetes/etcd_snapshot \
           --name $ETCD_NODENAME \
@@ -218,7 +215,7 @@ elif [[ "$1" =~ "^(bootstrap|restore|join)$" ]]; then
   _kubeadm init phase preflight
   _kubeadm init phase kubeconfig all
 
-  if [[ "$1" =~ "^(join)$" ]]; then
+  if [[ "$CMD" =~ "^(join)$" ]]; then
     # Delete any former self in case forseti did not delete yet
     kubectl delete node ${NODENAME} --wait=true || true
     # Wait for all pods to be deleted otherwise we end up with stale pods eg. kube-proxy and all goes to ....
@@ -277,8 +274,7 @@ elif [[ "$1" =~ "^(bootstrap|restore|join)$" ]]; then
   retry 0 5 30 kubectl cluster-info --request-timeout 3 >/dev/null
 
   # Update providerID as underlying VM changed during restore
-  if [[ "$1" =~ "^(restore)$" ]]; then
-    PROVIDER_ID=$(yq eval '.providerID' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
+  if [[ "$CMD" =~ "^(restore)$" ]]; then
     if [ -n "$PROVIDER_ID" ]; then
       etcdhelper \
         -cacert ${HOSTFS}/etc/kubernetes/pki/etcd/ca.crt \
@@ -289,7 +285,7 @@ elif [[ "$1" =~ "^(bootstrap|restore|join)$" ]]; then
     fi
   fi
 
-  if [[ ! "$1" =~ "^(join)$" ]]; then
+  if [[ "$CMD" =~ "^(bootstrap|restore)$" ]]; then
     _kubeadm init phase upload-config all
     _kubeadm init phase upload-certs --skip-certificate-key-print
 
@@ -300,7 +296,7 @@ elif [[ "$1" =~ "^(bootstrap|restore|join)$" ]]; then
   _kubeadm init phase mark-control-plane
   _kubeadm init phase kubelet-finalize all
 
-  if [[ ! "$1" =~ "^(join)$" ]]; then
+  if [[ "$CMD" =~ "^(bootstrap|restore)$" ]]; then
     _kubeadm init phase addon all
   fi
 
@@ -315,34 +311,42 @@ elif [[ "$1" =~ "^(bootstrap|restore|join)$" ]]; then
     yq eval -M ".clusters[0].cluster.certificate-authority-data = \"$(cat ${HOSTFS}/etc/kubernetes/pki/ca.crt | base64 -w0)\"" ${WORKDIR}/kubeadm/templates/admin-aws-iam.yaml > ${HOSTFS}/etc/kubernetes/admin-aws-iam.yaml
   fi
 
-  # install / update network and addons
-  if [[ "$1" =~ "^(bootstrap|join)$" ]]; then
-    # network
-    yq eval '.network // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
-
-    # Ensure multus is first
-    helm template $CHARTS/kubezero-network --namespace kube-system --include-crds --name-template network \
-      --set multus.enabled=true --kube-version $KUBE_VERSION | kubectl apply -f - $LOG
-
-    helm template $CHARTS/kubezero-network --namespace kube-system --include-crds --name-template network \
-      -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply --namespace kube-system -f - $LOG
-
-    # addons
-    yq eval '.addons // ""' ${HOSTFS}/etc/kubernetes/kubezero.yaml > _values.yaml
-    helm template $CHARTS/kubezero-addons --namespace kube-system --include-crds --name-template addons \
-      -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply --namespace kube-system -f - $LOG
-  fi
-
   post_kubeadm
 
   echo "${1} cluster $CLUSTERNAME successfull."
+}
+
+
+apply_module() {
+  MODULE=$1
+
+  # network
+  kubectl get configmap -n kube-system kubezero-values  -o custom-columns=NAME:".data.$MODULE" --no-headers=true > _values.yaml
+
+  helm template $CHARTS/kubezero-$MODULE --namespace kube-system --name-template $MODULE --skip-crds --set installCRDs=false -f _values.yaml --kube-version $KUBE_VERSION > helm-no-crds.yaml
+  helm template $CHARTS/kubezero-$MODULE --namespace kube-system --name-template $MODULE --include-crds --set installCRDs=true -f _values.yaml --kube-version $KUBE_VERSION > helm-crds.yaml
+  diff -e helm-no-crds.yaml helm-crds.yaml | head -n-1 | tail -n+2 > crds.yaml
+
+  # Only apply if there are actually any crds
+  if [ -s crds.yaml ]; then
+    kubectl apply -f crds.yaml --server-side $LOG
+  fi
+
+  helm template $CHARTS/kubezero-$MODULE --namespace kube-system --include-crds --name-template $MODULE \
+    -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply --namespace kube-system -f - $LOG
+
+  echo "Applied KubeZero module: $MODULE"
+}
 
 
 # backup etcd + /etc/kubernetes/pki
-elif [ "$1" == 'backup' ]; then
+backup() {
+	# Display all ENVs, careful this exposes the password !
+  [ -n "$DEBUG" ] && env 
+
   restic snapshots || restic init || exit 1
 
-  CV=$(kubectl version --short=true -o json | jq .serverVersion.minor -r)
+  CV=$(kubectl version -o json | jq .serverVersion.minor -r)
   let PCV=$CV-1
 
   CLUSTER_VERSION="v1.$CV"
@@ -368,16 +372,32 @@ elif [ "$1" == 'backup' ]; then
 
   # Defrag etcd backend
   etcdctl --endpoints=https://${ETCD_NODENAME}:2379 defrag
+}
 
 
-elif [ "$1" == 'debug_shell' ]; then
+debug_shell() {
   echo "Entering debug shell"
 
   printf "For manual etcdctl commands use:\n  # export ETCDCTL_ENDPOINTS=$ETCD_NODENAME:2379\n"
 
   /bin/sh
+}
 
-else
-  echo "Unknown command!"
-  exit 1
-fi
+# First parse kubezero.yaml
+parse_kubezero
+
+# Execute tasks
+for t in $@; do
+  case "$t" in
+    cluster_upgrade) cluster_upgrade;;
+    node_upgrade) node_upgrade;;
+    bootstrap) control_plane_node bootstrap;;
+    join) control_plane_node join;;
+    restore) control_plane_node restore;;
+    apply_network) apply_module network;;
+    apply_addons) apply_module addons;;
+    backup) backup;;
+    debug_shell) debug_shell;;
+    *) echo "Unknown command: '$t'";;
+  esac
+done

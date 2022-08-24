@@ -22,31 +22,6 @@ api:
     workerNodeRole: "arn:aws:iam::000000000000:role/KubernetesNode"
     kubeAdminRole: "arn:aws:iam::000000000000:role/KubernetesNode"
 
-addons:
-  aws-node-termination-handler:
-    enabled: false
-    # -- arn:aws:sqs:${REGION}:${AWS_ACCOUNT_ID}:${CLUSTERNAME}_Nth
-    queueURL: ""
-
-  clusterBackup:
-    enabled: false
-    # -- s3:https://s3.amazonaws.com/${CFN[ConfigBucket]}/k8s/${CLUSTERNAME}/clusterBackup
-    repository: ""
-    # -- /etc/cloudbender/clusterBackup.passphrase
-    passwordFile: ""
-
-  external-dns:
-    enabled: false
-
-network:
-  multus:
-    enabled: false
-    tag: "v3.8"
-  cilium:
-    enabled: false
-  calico:
-    enabled: false
-
 highAvailable: false
 
 etcd:

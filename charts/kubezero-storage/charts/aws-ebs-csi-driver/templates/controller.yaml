@@ -61,7 +61,7 @@ spec:
       {{- with .Values.controller.securityContext }}
       securityContext:  
         {{- toYaml . | nindent 8 }}
-      {{- end }} 
+      {{- end }}
       containers:
         - name: ebs-plugin
           image: {{ printf "%s:%s" .Values.image.repository (default (printf "v%s" .Chart.AppVersion) (.Values.image.tag | toString)) }}
@@ -106,6 +106,12 @@ spec:
                   name: aws-secret
                   key: access_key
                   optional: true
+            - name: AWS_EC2_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: aws-meta
+                  key: endpoint
+                  optional: true
             {{- with .Values.controller.region }}
             - name: AWS_REGION
               value: {{ . }}
@@ -114,6 +120,10 @@ spec:
             {{- include "aws-ebs-csi-driver.http-proxy" . | nindent 12 }}
             {{- end }}
             {{- with .Values.controller.env }}
+            {{- . | toYaml | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- with .Values.controller.envFrom }}
             {{- . | toYaml | nindent 12 }}
             {{- end }}
           volumeMounts:
@@ -146,6 +156,10 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- with .Values.controller.containerSecurityContext }}
+          securityContext:  
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
         - name: csi-provisioner
           image: {{ printf "%s:%s" .Values.sidecars.provisioner.image.repository .Values.sidecars.provisioner.image.tag }}
           imagePullPolicy: {{ default .Values.image.pullPolicy .Values.sidecars.provisioner.image.pullPolicy }}
@@ -167,11 +181,19 @@ spec:
             {{- with .Values.sidecars.provisioner.env }}
             {{- . | toYaml | nindent 12 }}
             {{- end }}
+          envFrom:
+            {{- with .Values.controller.envFrom }}
+            {{- . | toYaml | nindent 12 }}
+            {{- end }}
           volumeMounts:
             - name: socket-dir
               mountPath: /var/lib/csi/sockets/pluginproxy/
           {{- with default .Values.controller.resources .Values.sidecars.provisioner.resources }}
           resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.sidecars.provisioner.securityContext }}
+          securityContext:  
             {{- toYaml . | nindent 12 }}
           {{- end }}
         - name: csi-attacher
@@ -190,11 +212,19 @@ spec:
             {{- with .Values.sidecars.attacher.env }}
             {{- . | toYaml | nindent 12 }}
             {{- end }}
+          envFrom:
+            {{- with .Values.controller.envFrom }}
+            {{- . | toYaml | nindent 12 }}
+            {{- end }}
           volumeMounts:
             - name: socket-dir
               mountPath: /var/lib/csi/sockets/pluginproxy/
           {{- with default .Values.controller.resources .Values.sidecars.attacher.resources }}
           resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.sidecars.attacher.securityContext }}
+          securityContext:  
             {{- toYaml . | nindent 12 }}
           {{- end }}
         {{- if or (.Capabilities.APIVersions.Has "snapshot.storage.k8s.io/v1beta1") (.Capabilities.APIVersions.Has "snapshot.storage.k8s.io/v1") }}
@@ -213,11 +243,19 @@ spec:
             {{- with .Values.sidecars.snapshotter.env }}
             {{- . | toYaml | nindent 12 }}
             {{- end }}
+          envFrom:
+            {{- with .Values.controller.envFrom }}
+            {{- . | toYaml | nindent 12 }}
+            {{- end }}
           volumeMounts:
             - name: socket-dir
               mountPath: /var/lib/csi/sockets/pluginproxy/
           {{- with default .Values.controller.resources .Values.sidecars.snapshotter.resources }}
           resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.sidecars.snapshotter.securityContext }}
+          securityContext:  
             {{- toYaml . | nindent 12 }}
           {{- end }}
         {{- end }}
@@ -227,6 +265,7 @@ spec:
           args:
             - --csi-address=$(ADDRESS)
             - --v={{ .Values.sidecars.resizer.logLevel }}
+            - --handle-volume-inuse-error=false
           env:
             - name: ADDRESS
               value: /var/lib/csi/sockets/pluginproxy/csi.sock
@@ -236,6 +275,10 @@ spec:
             {{- with .Values.sidecars.resizer.env }}
             {{- . | toYaml | nindent 12 }}
             {{- end }}
+          envFrom:
+            {{- with .Values.controller.envFrom }}
+            {{- . | toYaml | nindent 12 }}
+            {{- end }}
           volumeMounts:
             - name: socket-dir
               mountPath: /var/lib/csi/sockets/pluginproxy/
@@ -243,16 +286,28 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- with .Values.sidecars.resizer.securityContext }}
+          securityContext:  
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
         - name: liveness-probe
           image: {{ printf "%s:%s" .Values.sidecars.livenessProbe.image.repository .Values.sidecars.livenessProbe.image.tag }}
           imagePullPolicy: {{ default .Values.image.pullPolicy .Values.sidecars.livenessProbe.image.pullPolicy }}
           args:
             - --csi-address=/csi/csi.sock
+          envFrom:
+            {{- with .Values.controller.envFrom }}
+            {{- . | toYaml | nindent 12 }}
+            {{- end }}
           volumeMounts:
             - name: socket-dir
               mountPath: /csi
           {{- with default .Values.controller.resources .Values.sidecars.livenessProbe.resources }}
           resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.sidecars.livenessProbe.securityContext }}
+          securityContext:  
             {{- toYaml . | nindent 12 }}
           {{- end }}
       {{- if .Values.imagePullSecrets }}

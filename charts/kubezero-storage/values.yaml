@@ -65,8 +65,8 @@ aws-ebs-csi-driver:
 
   # starting with 1.6 the ebs-plugin panics with "could not get number of attached ENIs"
   # somewhere related to metadata / volumeattach limits and nitro instances ... AWS as usual
-  image:
-    tag: v1.5.3
+  #image:
+  #  tag: v1.5.3
 
   controller:
     replicaCount: 1

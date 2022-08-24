@@ -1,6 +1,6 @@
 # kubezero-logging
 
-![Version: 0.8.1](https://img.shields.io/badge/Version-0.8.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6.0](https://img.shields.io/badge/AppVersion-1.6.0-informational?style=flat-square)
+![Version: 0.8.2](https://img.shields.io/badge/Version-0.8.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6.0](https://img.shields.io/badge/AppVersion-1.6.0-informational?style=flat-square)
 
 KubeZero Umbrella Chart for complete EFK stack
 
@@ -10,18 +10,18 @@ KubeZero Umbrella Chart for complete EFK stack
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Quarky9 |  |  |
+| Stefan Reimer | <stefan@zero-downtime.net> |  |
 
 ## Requirements
 
-Kubernetes: `>= 1.18.0`
+Kubernetes: `>= 1.20.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | eck-operator | 2.1.0 |
-|  | fluent-bit | 0.19.23 |
-|  | fluentd | 0.3.7 |
-| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.3 |
+|  | eck-operator | 2.4.0 |
+|  | fluent-bit | 0.20.6 |
+|  | fluentd | 0.3.9 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
 
 ## Changes from upstream
 ### ECK

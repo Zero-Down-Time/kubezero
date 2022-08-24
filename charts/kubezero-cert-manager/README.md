@@ -1,6 +1,6 @@
 # kubezero-cert-manager
 
-![Version: 0.9.1](https://img.shields.io/badge/Version-0.9.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.9.2](https://img.shields.io/badge/Version-0.9.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for cert-manager
 
@@ -18,8 +18,8 @@ Kubernetes: `>= 1.20.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.4 |
-| https://charts.jetstack.io | cert-manager | 1.8.0 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
+| https://charts.jetstack.io | cert-manager | 1.9.1 |
 
 ## AWS - OIDC IAM roles
 

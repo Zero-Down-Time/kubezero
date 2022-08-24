@@ -8,21 +8,21 @@ HighAvailableControlplane: false
 
 addons:
   enabled: false
-  targetRevision: 0.5.5
+  targetRevision: 0.6.0
 
 network:
   enabled: false
   retain: true
-  targetRevision: 0.2.1
+  targetRevision: 0.3.2
 
 cert-manager:
   enabled: false
   namespace: cert-manager
-  targetRevision: 0.9.1
+  targetRevision: 0.9.2
 
 storage:
   enabled: false
-  targetRevision: 0.6.4
+  targetRevision: 0.7.0
   aws-ebs-csi-driver:
     enabled: false
   aws-efs-csi-driver:
@@ -31,13 +31,13 @@ storage:
 istio:
   enabled: false
   namespace: istio-system
-  targetRevision: 0.8.1
+  targetRevision: 0.8.2
 
 istio-ingress:
   enabled: false
   chart: kubezero-istio-gateway
   namespace: istio-ingress
-  targetRevision: 0.8.1
+  targetRevision: 0.8.2
   gateway:
     service: {}
 
@@ -45,14 +45,14 @@ istio-private-ingress:
   enabled: false
   chart: kubezero-istio-gateway
   namespace: istio-ingress
-  targetRevision: 0.8.0
+  targetRevision: 0.8.2
   gateway:
     service: {}
 
 metrics:
   enabled: false
   namespace: monitoring
-  targetRevision: 0.8.0
+  targetRevision: 0.8.1
   istio:
     grafana: {}
     prometheus: {}
@@ -60,11 +60,11 @@ metrics:
 logging:
   enabled: false
   namespace: logging
-  targetRevision: 0.8.1
+  targetRevision: 0.8.2
 
 argocd:
   enabled: false
   namespace: argocd
-  targetRevision: 0.10.1
+  targetRevision: 0.10.2
   istio:
     enabled: false

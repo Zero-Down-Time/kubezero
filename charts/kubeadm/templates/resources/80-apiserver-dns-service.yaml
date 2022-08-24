@@ -1,4 +1,3 @@
-{{- if index .Values "addons" "external-dns" "enabled" }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -13,4 +12,3 @@ spec:
   selector:
     component: kube-apiserver
     tier: control-plane
-{{- end }}

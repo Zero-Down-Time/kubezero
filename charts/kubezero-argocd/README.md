@@ -1,6 +1,6 @@
 # kubezero-argocd
 
-![Version: 0.10.1](https://img.shields.io/badge/Version-0.10.1-informational?style=flat-square)
+![Version: 0.10.2](https://img.shields.io/badge/Version-0.10.2-informational?style=flat-square)
 
 KubeZero ArgoCD Helm chart to install ArgoCD itself and the KubeZero ArgoCD Application
 
@@ -18,8 +18,8 @@ Kubernetes: `>= 1.20.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://argoproj.github.io/argo-helm | argo-cd | 4.5.4 |
-| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.4 |
+| https://argoproj.github.io/argo-helm | argo-cd | 4.10.9 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
 
 ## Values
 

@@ -1,6 +1,6 @@
 # kubezero-addons
 
-![Version: 0.5.5](https://img.shields.io/badge/Version-0.5.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.22.8](https://img.shields.io/badge/AppVersion-v1.22.8-informational?style=flat-square)
+![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.23.10](https://img.shields.io/badge/AppVersion-v1.23.10-informational?style=flat-square)
 
 KubeZero umbrella chart for various optional cluster addons
 
@@ -19,7 +19,7 @@ Kubernetes: `>= 1.20.0`
 | Repository | Name | Version |
 |------------|------|---------|
 |  | aws-node-termination-handler | 0.18.5 |
-| https://kubernetes-sigs.github.io/external-dns/ | external-dns | 1.7.1 |
+| https://kubernetes-sigs.github.io/external-dns/ | external-dns | 1.11.0 |
 
 # MetalLB   
    
@@ -63,8 +63,8 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | clusterBackup.enabled | bool | `false` |  |
 | clusterBackup.extraEnv | list | `[]` |  |
 | clusterBackup.image.name | string | `"public.ecr.aws/zero-downtime/kubezero-admin"` |  |
-| clusterBackup.password | string | `""` |  |
-| clusterBackup.repository | string | `""` |  |
+| clusterBackup.password | string | `""` | /etc/cloudbender/clusterBackup.passphrase |
+| clusterBackup.repository | string | `""` | s3:https://s3.amazonaws.com/${CFN[ConfigBucket]}/k8s/${CLUSTERNAME}/clusterBackup |
 | external-dns.enabled | bool | `false` |  |
 | external-dns.env[0] | object | `{"name":"AWS_ROLE_ARN","value":""}` | "arn:aws:iam::${AWS::AccountId}:role/${AWS::Region}.${ClusterName}.externalDNS" |
 | external-dns.env[1].name | string | `"AWS_WEB_IDENTITY_TOKEN_FILE"` |  |
