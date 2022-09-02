@@ -13,6 +13,7 @@ postgresql:
   enabled: false
 
   auth:
+    existingSecret: kubezero-auth-postgresql
     username: keycloak
     database: keycloak
 
