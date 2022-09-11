@@ -1,4 +1,7 @@
-clusterName: pleasechangeme
+global:
+  clusterName: pleasechangeme
+  highAvailable: false
+
 # -- set to $HOSTNAME
 nodeName: kubezero-node
 domain: changeme.org
@@ -21,8 +24,6 @@ api:
     enabled: false
     workerNodeRole: "arn:aws:iam::000000000000:role/KubernetesNode"
     kubeAdminRole: "arn:aws:iam::000000000000:role/KubernetesNode"
-
-highAvailable: false
 
 etcd:
   nodeName: etcd

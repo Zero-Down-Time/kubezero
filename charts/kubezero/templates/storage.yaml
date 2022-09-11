@@ -16,7 +16,7 @@ aws-ebs-csi-driver:
   enabled: {{ default false (index .Values "storage" "aws-ebs-csi-driver" "enabled")}}
   controller:
     replicaCount: {{ ternary 2 1 .Values.HighAvailableControlplane }}
-    k8sTagClusterId: {{ .Values.ClusterName }}
+    k8sTagClusterId: {{ .Values.global.clusterName }}
     env:
     - name: AWS_ROLE_ARN
       value: {{ index .Values "storage" "aws-ebs-csi-driver" "IamArn" | quote }}

@@ -28,13 +28,30 @@ multus:
 cilium:
   enabled: false
 
+  containerRuntime:
+    integration: crio
+
+  # Until we figured out AppArmore on Alpine and Gentoo
+  securityContext:
+    privileged: true
+
   cni:
     binPath: "/usr/libexec/cni"
     #-- Ensure this is false if multus is enabled
     exclusive: false
+  # chainingMode: generic-veth
+
+  # Until we switch to Cilium
+  #bpf:
+  #  hostLegacyRouting: true
+  #  tproxy: false
+
+  # enableIPv4Masquerade: false
+  # enableIdentityMark: false
+  policyEnforcementMode: "audit"
 
   cluster:
-    # This should match the second octet + 1 of clusterPoolIPv4PodCIDRList,
+    # This should match the second octet of clusterPoolIPv4PodCIDRList
     # to prevent IP space overlap and easy tracking
     id: 1
     name: default
@@ -42,17 +59,16 @@ cilium:
   ipam:
     operator:
       clusterPoolIPv4PodCIDRList:
-        - 10.0.0.0/16
+        - 10.1.0.0/16
 
-  hostServices:
-    enabled: true
-
-  # Does this conflict with Calico in parallel ?
+  # Should be handled by multus
   nodePort:
-    enabled: true
+    enabled: false
 
   # Keep it simple for now
   l7Proxy: false
+  l2NeighDiscovery:
+    enabled: false
 
   cgroup:
     autoMount:

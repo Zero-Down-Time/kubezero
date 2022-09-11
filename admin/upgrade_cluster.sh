@@ -1,13 +1,16 @@
 #!/bin/bash -e
 
-VERSION="v1.23"
+VERSION="v1.23.10-1"
 
 [ -n "$DEBUG" ] && set -x
 
 # unset any AWS_DEFAULT_PROFILE as it will break aws-iam-auth
 unset AWS_DEFAULT_PROFILE
 
-controller_nodes_upgrade() {
+
+all_nodes_upgrade() {
+  CMD="$1"
+
   echo "Deploying node upgrade daemonSet..."
   cat <<EOF | kubectl apply -f -
 apiVersion: apps/v1
@@ -34,10 +37,13 @@ spec:
       - name: kubezero-upgrade-${VERSION//.}
         image: busybox
         command: ["/bin/sh"]
-        args: ["-x", "-c", "[ -d /host/opt/cni/bin ] && { mkdir -p /host/usr/libexec/cni && cp /host/opt/cni/bin/* /host/usr/libexec/cni; } || true" ]
+        args: ["-x", "-c", "$CMD" ]
         volumeMounts:
         - name: host
           mountPath: /host
+        securityContext:
+          capabilities:
+            add: ["SYS_ADMIN"]
       containers:
       - name: kubezero-upgrade-${VERSION//.}-wait
         image: busybox
@@ -49,13 +55,16 @@ spec:
           type: Directory
 EOF
 
-  #kubectl rollout status daemonset -n kube-system kubezero-upgrade-${VERSION//.} --timeout 300s
+  kubectl rollout status daemonset -n kube-system kubezero-upgrade-${VERSION//.} --timeout 300s
   kubectl delete ds kubezero-upgrade-${VERSION//.} -n kube-system
 }
 
-echo "Deploying cluster upgrade job ..."
 
-cat <<EOF | kubectl apply -f -
+control_plane_upgrade() {
+  TASKS="$1"
+
+  echo "Deploying cluster upgrade job ..."
+  cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Pod
 metadata:
@@ -72,10 +81,7 @@ spec:
     image: public.ecr.aws/zero-downtime/kubezero-admin:${VERSION}
     imagePullPolicy: Always
     command: ["kubezero.sh"]
-    args:
-    - cluster_upgrade
-    - apply_network
-    - apply_addons
+    args: [$TASKS]
     env:
     - name: DEBUG
       value: "$DEBUG"
@@ -106,9 +112,27 @@ spec:
   restartPolicy: Never
 EOF
 
-kubectl wait pod kubezero-upgrade-${VERSION//.} -n kube-system --timeout 120s --for=condition=initialized 2>/dev/null
-while true; do
-  kubectl logs kubezero-upgrade-${VERSION//.} -n kube-system -f 2>/dev/null && break
-  sleep 3
-done
-kubectl delete pod kubezero-upgrade-${VERSION//.} -n kube-system
+  kubectl wait pod kubezero-upgrade-${VERSION//.} -n kube-system --timeout 120s --for=condition=initialized 2>/dev/null
+  while true; do
+    kubectl logs kubezero-upgrade-${VERSION//.} -n kube-system -f 2>/dev/null && break
+    sleep 3
+  done
+  kubectl delete pod kubezero-upgrade-${VERSION//.} -n kube-system
+}
+
+all_nodes_upgrade "mount --make-shared /host/sys/fs/cgroup; mount --make-shared /host/sys;"
+
+control_plane_upgrade cluster_upgrade
+
+echo "Adjust kubezero-values CM !!"
+read
+
+#kubectl delete ds kube-multus-ds -n kube-system
+
+control_plane_upgrade "apply_network, apply_addons"
+exit 0
+
+kubectl rollout restart daemonset/calico-node -n kube-system
+kubectl rollout restart daemonset/cilium -n kube-system
+
+kubectl rollout restart daemonset/kube-multus-ds -n kube-system 

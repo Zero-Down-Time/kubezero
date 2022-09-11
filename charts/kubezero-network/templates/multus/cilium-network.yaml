@@ -1,4 +1,4 @@
-{{- if .Values.cilium.enabled }}
+{{- if and .Values.multus.enabled .Values.cilium.enabled }}
 apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
 metadata:

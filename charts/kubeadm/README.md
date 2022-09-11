@@ -30,12 +30,12 @@ Kubernetes: `>= 1.20.0`
 | api.listenPort | int | `6443` |  |
 | api.oidcEndpoint | string | `""` | s3://${CFN[ConfigBucket]}/k8s/$CLUSTERNAME |
 | api.serviceAccountIssuer | string | `""` | https://s3.${REGION}.amazonaws.com/${CFN[ConfigBucket]}/k8s/$CLUSTERNAME |
-| clusterName | string | `"pleasechangeme"` |  |
 | domain | string | `"changeme.org"` |  |
 | etcd.extraArgs | object | `{}` |  |
 | etcd.nodeName | string | `"etcd"` |  |
 | etcd.state | string | `"new"` |  |
-| highAvailable | bool | `false` |  |
+| global.clusterName | string | `"pleasechangeme"` |  |
+| global.highAvailable | bool | `false` |  |
 | listenAddress | string | `"0.0.0.0"` | Needs to be set to primary node IP |
 | nodeName | string | `"kubezero-node"` | set to $HOSTNAME |
 | protectKernelDefaults | bool | `false` |  |

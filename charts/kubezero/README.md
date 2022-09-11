@@ -1,6 +1,6 @@
 # kubezero
 
-![Version: 1.23.10](https://img.shields.io/badge/Version-1.23.10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 1.23.10-1](https://img.shields.io/badge/Version-1.23.10--1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero - Root App of Apps chart
 
@@ -25,8 +25,8 @@ Kubernetes: `>= 1.20.0`
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | HighAvailableControlplane | bool | `false` |  |
-| addons.enabled | bool | `false` |  |
-| addons.targetRevision | string | `"0.6.0"` |  |
+| addons.enabled | bool | `true` |  |
+| addons.targetRevision | string | `"0.6.1"` |  |
 | argocd.enabled | bool | `false` |  |
 | argocd.istio.enabled | bool | `false` |  |
 | argocd.namespace | string | `"argocd"` |  |
@@ -59,7 +59,7 @@ Kubernetes: `>= 1.20.0`
 | metrics.istio.prometheus | object | `{}` |  |
 | metrics.namespace | string | `"monitoring"` |  |
 | metrics.targetRevision | string | `"0.8.1"` |  |
-| network.enabled | bool | `false` |  |
+| network.enabled | bool | `true` |  |
 | network.retain | bool | `true` |  |
 | network.targetRevision | string | `"0.3.2"` |  |
 | storage.aws-ebs-csi-driver.enabled | bool | `false` |  |

@@ -11,11 +11,34 @@ yaml.explicit_start = True
 yaml.indent(mapping=2, sequence=4, offset=2)
 
 
-parser = argparse.ArgumentParser(description="Update Route53 entries")
+def rec_sort(d):
+    if isinstance(d, dict):
+        res = dict()
+
+        # Always have "enabled" first if present
+        if "enabled" in d.keys():
+            res["enabled"] = rec_sort(d["enabled"])
+            d.pop("enabled")
+
+        # next is "name" if present
+        if "name" in d.keys():
+            res["name"] = rec_sort(d["name"])
+            d.pop("name")
+
+        for k in sorted(d.keys()):
+            res[k] = rec_sort(d[k])
+        return res
+    if isinstance(d, list):
+        for idx, elem in enumerate(d):
+            d[idx] = rec_sort(elem)
+    return d
+
+
+parser = argparse.ArgumentParser(description="Migrate ArgoCD Kubezero values to new cluster config")
 parser.add_argument(
     "--version",
     dest="version",
-		default="1.22.8-10",
+		default="1.23.10",
     action="store",
     required=False,
     help="Update KubeZero version",
@@ -34,62 +57,25 @@ values = yaml.load(application["spec"]["source"]["helm"]["values"])
 
 ### Do your thing
 
-# New Istio Gateway charts
-if "private" in values["istio-ingress"]:
-    values["istio-private-ingress"] = {
-        "enabled": True,
-        "certificates": values["istio-ingress"]["private"]["certificates"].copy()
-    }
+# migrate ClusterName to clusterName
+if "ClusterName" in values:
+    values["clusterName"] = values["ClusterName"]
+    values.pop("ClusterName")
 
-    if "gateway" in values["istio-ingress"]["private"]:
-        values["istio-private-ingress"]["gateway"] = {}
-
-        try:
-            values["istio-private-ingress"]["gateway"]["replicaCount"] = values["istio-ingress"]["private"]["gateway"]["replicaCount"]
-        except KeyError:
-            pass
-
-        if "ports" in values["istio-ingress"]["private"]["gateway"]:
-            values["istio-private-ingress"]["gateway"]["service"] = {}
-            values["istio-private-ingress"]["gateway"]["service"]["ports"] = []
-            for port in values["istio-ingress"]["private"]["gateway"]["ports"]:
-                if port["name"] not in ["status-port", "http2", "https"]:
-                    values["istio-private-ingress"]["gateway"]["service"]["ports"].append(port)
-
-    values["istio-ingress"].pop("private")
-
-if "public" in values["istio-ingress"]:
-    values["istio-ingress"]["certificates"] = values["istio-ingress"]["public"]["certificates"].copy()
-
-    if "gateway" in values["istio-ingress"]["public"]:
-        values["istio-ingress"]["gateway"] = {}
-
-        try:
-            values["istio-ingress"]["gateway"]["replicaCount"] = values["istio-ingress"]["public"]["gateway"]["replicaCount"]
-        except KeyError:
-            pass
-
-        if "ports" in values["istio-ingress"]["public"]["gateway"]:
-            values["istio-ingress"]["gateway"]["service"] = {}
-            values["istio-ingress"]["gateway"]["service"]["ports"] = []
-            for port in values["istio-ingress"]["public"]["gateway"]["ports"]:
-                if port["name"] not in ["status-port", "http2", "https"]:
-                    values["istio-ingress"]["gateway"]["service"]["ports"].append(port)
-
-    values["istio-ingress"].pop("public")
-
-if "global" in values["istio-ingress"]:
-    values["istio-ingress"].pop("global")
-
-# Remove Kiam
-if "kiam" in values:
-    values.pop("kiam")
+# Create new clusterwide cloudprovider data if possible
+try:
+    if values["cert-manager"]["clusterIssuer"]["solvers"][0]["dns01"]["route53"]["regions"]:
+        if "aws" not in values:
+            values["aws"] = {}
+        values["aws"]["region"] = values["cert-manager"]["clusterIssuer"]["solvers"][0]["dns01"]["route53"]["region"]
+except KeyError:
+    pass
 
 ### End
 
 # Merge new values
 buffer = io.StringIO()
-yaml.dump(values, buffer)
+yaml.dump(rec_sort(values), buffer)
 application["spec"]["source"]["helm"]["values"] = buffer.getvalue()
 
 # Dump final yaml

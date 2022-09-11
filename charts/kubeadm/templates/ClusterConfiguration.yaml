@@ -1,7 +1,7 @@
 apiVersion: kubeadm.k8s.io/v1beta3
 kind: ClusterConfiguration
 kubernetesVersion: {{ .Chart.Version }}
-clusterName: {{ .Values.clusterName }}
+clusterName: {{ .Values.global.clusterName }}
 featureGates:
   UnversionedKubeletConfigMap: true
 controlPlaneEndpoint: {{ .Values.api.endpoint }}
@@ -13,12 +13,12 @@ etcd:
     extraArgs:
       ### DNS discovery
       #discovery-srv: {{ .Values.domain }}
-      #discovery-srv-name: {{ .Values.clusterName }}
+      #discovery-srv-name: {{ .Values.global.clusterName }}
       advertise-client-urls: https://{{ .Values.etcd.nodeName }}:2379
       initial-advertise-peer-urls: https://{{ .Values.etcd.nodeName }}:2380
       initial-cluster: {{ include "kubeadm.etcd.initialCluster" .Values.etcd | quote }}
       initial-cluster-state: {{ .Values.etcd.state }}
-      initial-cluster-token: etcd-{{ .Values.clusterName }}
+      initial-cluster-token: etcd-{{ .Values.global.clusterName }}
       name: {{ .Values.etcd.nodeName }}
       listen-peer-urls: https://{{ .Values.listenAddress }}:2380
       listen-client-urls: https://{{ .Values.listenAddress }}:2379
@@ -40,13 +40,13 @@ controllerManager:
   extraArgs:
     profiling: "false"
     terminated-pod-gc-threshold: "300"
-    leader-elect: {{ .Values.highAvailable | quote }}
+    leader-elect: {{ .Values.global.highAvailable | quote }}
     logging-format: json
     feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" ) | trimSuffix "," | quote }}
 scheduler:
   extraArgs:
     profiling: "false"
-    leader-elect: {{ .Values.highAvailable | quote }}
+    leader-elect: {{ .Values.global.highAvailable | quote }}
     logging-format: json
     feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" ) | trimSuffix "," | quote }}
 apiServer:
@@ -73,7 +73,7 @@ apiServer:
     {{- end }}
     feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" ) | trimSuffix "," | quote }}
     enable-admission-plugins: DenyServiceExternalIPs,NodeRestriction,EventRateLimit
-    # {{- if .Values.highAvailable }}
+    # {{- if .Values.global.highAvailable }}
     # goaway-chance: ".001"
     # {{- end }}
     logging-format: json

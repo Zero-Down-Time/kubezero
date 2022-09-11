@@ -7,11 +7,11 @@ kubezero:
 HighAvailableControlplane: false
 
 addons:
-  enabled: false
-  targetRevision: 0.6.0
+  enabled: true
+  targetRevision: 0.6.1
 
 network:
-  enabled: false
+  enabled: true
   retain: true
   targetRevision: 0.3.2
 
