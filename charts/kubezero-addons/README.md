@@ -1,6 +1,6 @@
 # kubezero-addons
 
-![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.23.10](https://img.shields.io/badge/AppVersion-v1.23.10-informational?style=flat-square)
+![Version: 0.6.1](https://img.shields.io/badge/Version-0.6.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.23.10](https://img.shields.io/badge/AppVersion-v1.23.10-informational?style=flat-square)
 
 KubeZero umbrella chart for various optional cluster addons
 
@@ -20,6 +20,7 @@ Kubernetes: `>= 1.20.0`
 |------------|------|---------|
 |  | aws-node-termination-handler | 0.18.5 |
 | https://kubernetes-sigs.github.io/external-dns/ | external-dns | 1.11.0 |
+| https://kubernetes.github.io/autoscaler | cluster-autoscaler | 9.21.0 |
 
 # MetalLB   
    
@@ -59,7 +60,17 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | aws-node-termination-handler.useProviderId | bool | `true` |  |
 | awsNeuron.enabled | bool | `false` |  |
 | awsNeuron.image.name | string | `"public.ecr.aws/neuron/neuron-device-plugin"` |  |
-| awsNeuron.image.tag | string | `"1.9.0.0"` |  |
+| awsNeuron.image.tag | string | `"1.9.3.0"` |  |
+| cluster-autoscaler.autoDiscovery.clusterName | string | `""` |  |
+| cluster-autoscaler.awsRegion | string | `"us-west-2"` |  |
+| cluster-autoscaler.enabled | bool | `false` |  |
+| cluster-autoscaler.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
+| cluster-autoscaler.podDisruptionBudget | bool | `false` |  |
+| cluster-autoscaler.prometheusRule.enabled | bool | `false` |  |
+| cluster-autoscaler.serviceMonitor.enabled | bool | `false` |  |
+| cluster-autoscaler.serviceMonitor.interval | string | `"30s"` |  |
+| cluster-autoscaler.tolerations[0].effect | string | `"NoSchedule"` |  |
+| cluster-autoscaler.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | clusterBackup.enabled | bool | `false` |  |
 | clusterBackup.extraEnv | list | `[]` |  |
 | clusterBackup.image.name | string | `"public.ecr.aws/zero-downtime/kubezero-admin"` |  |

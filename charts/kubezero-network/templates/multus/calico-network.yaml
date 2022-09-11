@@ -1,4 +1,4 @@
-{{- if .Values.calico.enabled }}
+{{- if and .Values.multus.enabled .Values.calico.enabled }}
 apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
 metadata:
@@ -11,7 +11,7 @@ spec:
       "log_level": "info",
       "log_file_path": "/var/log/calico/cni/cni.log",
       "datastore_type": "kubernetes",
-      "mtu": 8941,
+      "mtu": {{ .Values.calico.mtu }},
       "ipam": {
           "type": "calico-ipam"
       },

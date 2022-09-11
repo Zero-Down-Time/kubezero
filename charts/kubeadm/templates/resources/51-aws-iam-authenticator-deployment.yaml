@@ -75,7 +75,7 @@ metadata:
     k8s-app: aws-iam-authenticator
 data:
   config.yaml: |
-    clusterID: {{ .Values.clusterName }}
+    clusterID: {{ .Values.global.clusterName }}
 
 ---
 apiVersion: apps/v1

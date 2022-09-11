@@ -1,9 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ -n "$DEBUG" ]; then
   set -x
   LOG="--v=5"
 fi
+
+# include helm lib
+. libhelm.sh
 
 # Export vars to ease use in debug_shell etc
 export WORKDIR=/tmp/kubezero
@@ -44,7 +47,7 @@ _kubeadm() {
 
 # Render cluster config
 render_kubeadm() {
-  helm template $CHARTS/kubeadm --output-dir ${WORKDIR} -f ${HOSTFS}/etc/kubernetes/kubezero.yaml
+  helm template $CHARTS/kubeadm --output-dir ${WORKDIR} -f ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml
 
   # Assemble kubeadm config
   cat /dev/null > ${HOSTFS}/etc/kubernetes/kubeadm.yaml
@@ -62,13 +65,17 @@ render_kubeadm() {
 
 
 parse_kubezero() {
-  [ -f ${HOSTFS}/etc/kubernetes/kubezero.yaml ] || { echo "Missing /etc/kubernetes/kubezero.yaml!"; return 1; }
+  # remove with 1.24
+  if [ ! -f ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml ]; then
+    [ -f ${HOSTFS}/etc/kubernetes/kubezero.yaml ] && cp ${HOSTFS}/etc/kubernetes/kubezero.yaml ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml
+  fi
 
-  export CLUSTERNAME=$(yq eval '.clusterName' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
-  export ETCD_NODENAME=$(yq eval '.etcd.nodeName' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
-  export NODENAME=$(yq eval '.nodeName' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
-  export PROVIDER_ID=$(yq eval '.providerID' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
-  export AWS_IAM_AUTH=$(yq eval '.api.awsIamAuth.enabled' ${HOSTFS}/etc/kubernetes/kubezero.yaml)
+  export CLUSTERNAME=$(yq eval '.global.clusterName' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml)
+  export HIGHAVAILABLE=$(yq eval '.global.highAvailable // "false"' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml)
+  export ETCD_NODENAME=$(yq eval '.etcd.nodeName' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml)
+  export NODENAME=$(yq eval '.nodeName' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml)
+  export PROVIDER_ID=$(yq eval '.providerID' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml)
+  export AWS_IAM_AUTH=$(yq eval '.api.awsIamAuth.enabled // "false"' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml)
 
   # From here on bail out, allows debug_shell even in error cases
   set -e
@@ -117,11 +124,27 @@ cluster_upgrade() {
   ### PRE 1.23 specific
   #####################
 
-  # Migrate addons and network values into CM from kubezero.yaml
+  # Migrate addons and network values from local kubeadm-values.yaml on controllers into CM
+  # - remove secrets from addons
+  # - enable cilium
+
+  if [[ $PROVIDER_ID =~ ^aws ]]; then
+    REGION=$(echo $PROVIDER_ID | sed -e 's,aws:///,,' -e 's,/.*,,' -e 's/\w$//')
+  fi
+
   kubectl get cm -n kube-system kubezero-values || \
   kubectl create configmap -n kube-system kubezero-values \
-    --from-literal addons="$(yq e '.addons | del .clusterBackup.repository | del .clusterBackup.password' ${HOSTFS}/etc/kubernetes/kubezero.yaml)" \
-    --from-literal network="$(yq e .network ${HOSTFS}/etc/kubernetes/kubezero.yaml)"
+    --from-literal values.yaml="$(yq e 'del .addons.clusterBackup.repository | del .addons.clusterBackup.password | \
+                                   .addons.clusterBackup.image.tag =strenv(KUBE_VERSION) | \
+                                   .network.cilium.enabled = true | .network.multus.defaultNetworks = ["cilium"] | \
+                                   .network.cilium.cluster.name = strenv(CLUSTERNAME) | \
+                                   .global.clusterName = strenv(CLUSTERNAME) | \
+				   .global.highAvailable = strenv(HIGHAVAILABLE) | \
+				   .global.aws.region = strenv(REGION)' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml)"
+
+  # Create kubeadm-values CM if not available
+  kubectl get cm -n kube-system kubeadm-values || \
+  kubectl create configmap -n kube-system kubeadm-values
 
   #####################
 
@@ -254,10 +277,10 @@ control_plane_node() {
       export ETCD_INITIAL_CLUSTER=$(echo ${_cluster%%,} | sed -e 's/ //g')
     fi
 
-    # Patch kubezero.yaml and re-render to get etcd manifest patched
+    # Patch kubeadm-values.yaml and re-render to get etcd manifest patched
     yq eval -i '.etcd.state = "existing"
       | .etcd.initialCluster = strenv(ETCD_INITIAL_CLUSTER)
-      ' ${HOSTFS}/etc/kubernetes/kubezero.yaml
+      ' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml
     render_kubeadm
   fi
 
@@ -318,30 +341,33 @@ control_plane_node() {
 
 
 apply_module() {
-  MODULE=$1
+  MODULES=$1
 
-  # network
-  kubectl get configmap -n kube-system kubezero-values  -o custom-columns=NAME:".data.$MODULE" --no-headers=true > _values.yaml
+  kubectl get configmap -n kube-system kubezero-values -o yaml | yq '.data."values.yaml"' > $WORKDIR/_values.yaml
 
-  helm template $CHARTS/kubezero-$MODULE --namespace kube-system --name-template $MODULE --skip-crds --set installCRDs=false -f _values.yaml --kube-version $KUBE_VERSION > helm-no-crds.yaml
-  helm template $CHARTS/kubezero-$MODULE --namespace kube-system --name-template $MODULE --include-crds --set installCRDs=true -f _values.yaml --kube-version $KUBE_VERSION > helm-crds.yaml
-  diff -e helm-no-crds.yaml helm-crds.yaml | head -n-1 | tail -n+2 > crds.yaml
+  # Always use embedded kubezero chart
+  helm template $CHARTS/kubezero -f $WORKDIR/_values.yaml --version ~$KUBE_VERSION --devel --output-dir $WORKDIR
 
-  # Only apply if there are actually any crds
-  if [ -s crds.yaml ]; then
-    kubectl apply -f crds.yaml --server-side $LOG
-  fi
+  # Resolve all the all enabled modules
 
-  helm template $CHARTS/kubezero-$MODULE --namespace kube-system --include-crds --name-template $MODULE \
-    -f _values.yaml --kube-version $KUBE_VERSION | kubectl apply --namespace kube-system -f - $LOG
+  [ -z "$MODULES" ] && MODULES="$(ls ${WORKDIR}/kubezero/templates | sed -e 's/.yaml//g')"
 
-  echo "Applied KubeZero module: $MODULE"
+  # CRDs first
+  for t in $MODULES; do
+    _helm crds $t
+  done
+
+  for t in $MODULES; do
+    _helm apply $t
+  done
+
+  echo "Applied KubeZero modules: $MODULES"
 }
 
 
 # backup etcd + /etc/kubernetes/pki
 backup() {
-	# Display all ENVs, careful this exposes the password !
+  # Display all ENVs, careful this exposes the password !
   [ -n "$DEBUG" ] && env 
 
   restic snapshots || restic init || exit 1
@@ -380,10 +406,10 @@ debug_shell() {
 
   printf "For manual etcdctl commands use:\n  # export ETCDCTL_ENDPOINTS=$ETCD_NODENAME:2379\n"
 
-  /bin/sh
+  /bin/bash
 }
 
-# First parse kubezero.yaml
+# First parse kubeadm-values.yaml
 parse_kubezero
 
 # Execute tasks

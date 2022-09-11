@@ -14,6 +14,9 @@ RUN cd /etc/apk/keys && \
       jq \
       yq \
       diffutils \
+      bash \
+      python3 \
+      py3-yaml \
       cri-tools@kubezero \
       kubeadm@kubezero~=${KUBE_VERSION} \
       kubectl@kubezero~=${KUBE_VERSION} \
@@ -22,9 +25,10 @@ RUN cd /etc/apk/keys && \
       restic@testing \
       helm@testing
 
-ADD admin/kubezero.sh /usr/bin
+RUN helm repo add kubezero https://cdn.zero-downtime.net/charts
+
+ADD admin/kubezero.sh admin/libhelm.sh /usr/bin
 ADD charts/kubeadm /charts/kubeadm
-ADD charts/kubezero-addons /charts/kubezero-addons
-ADD charts/kubezero-network /charts/kubezero-network
+ADD charts/kubezero /charts/kubezero
 
 ENTRYPOINT ["kubezero.sh"]

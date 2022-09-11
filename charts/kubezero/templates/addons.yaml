@@ -13,7 +13,9 @@ forseti:
 {{- with index .Values "addons" "aws-node-termination-handler" }}
 aws-node-termination-handler:
   {{- toYaml . | nindent 2 }}
-  enablePrometheusServer: {{ .Values.metrics.enabled }}
+  {{- with $.Values.metrics }}
+  enablePrometheusServer: {{ .enabled }}
+  {{- end }}
 {{- end }}
 
 {{- with .Values.addons.fuseDevicePlugin }}
@@ -29,6 +31,44 @@ awsNeuron:
 {{- with index .Values "addons" "external-dns" }}
 external-dns:
   {{- toYaml . | nindent 2 }}
+{{- end }}
+
+{{- with index .Values "addons" "cluster-autoscaler" }}
+cluster-autoscaler:
+  {{- toYaml . | nindent 2 }}
+  autoDiscovery:
+    clusterName: {{ $.Values.global.clusterName }}
+
+  {{- with $.Values.global.aws }}
+  awsRegion: {{ .region }}
+  {{- end }}
+
+  {{- with $.Values.metrics }}
+  serviceMonitor:
+    enabled: {{ .enabled }}
+  prometheusRule:
+    enabled: {{ .enabled }}
+  {{- end }}
+
+  {{- with .IamArn }}
+  extraEnv:
+    AWS_ROLE_ARN: "{{ . }}"
+    AWS_WEB_IDENTITY_TOKEN_FILE: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
+    AWS_STS_REGIONAL_ENDPOINTS: "regional"
+  extraVolumes:
+  - name: aws-token
+    projected:
+      sources:
+      - serviceAccountToken:
+          path: token
+          expirationSeconds: 86400
+          audience: "sts.amazonaws.com"
+  extraVolumeMounts:
+  - name: aws-token
+    mountPath: "/var/run/secrets/sts.amazonaws.com/serviceaccount/"
+    readOnly: true
+  {{- end }}
+
 {{- end }}
 
 {{- end }}

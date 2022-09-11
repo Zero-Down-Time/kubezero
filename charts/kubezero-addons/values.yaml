@@ -81,7 +81,53 @@ awsNeuron:
 
   image:
     name: public.ecr.aws/neuron/neuron-device-plugin
-    tag: 1.9.0.0
+    tag: 1.9.3.0
+
+cluster-autoscaler:
+  enabled: false
+
+  autoDiscovery:
+    clusterName: ""
+  awsRegion: "us-west-2"
+
+  serviceMonitor:
+    enabled: false
+    interval: 30s
+
+  prometheusRule:
+    enabled: false
+
+  # Disable pdb for now
+  podDisruptionBudget: false
+
+  #securityContext:
+  #  runAsNonRoot: true
+
+  nodeSelector:
+    node-role.kubernetes.io/control-plane: ""
+  tolerations:
+  - key: node-role.kubernetes.io/master
+    effect: NoSchedule
+
+  # On AWS enable Projected Service Accounts to assume IAM role
+  #extraEnv:
+  # AWS_ROLE_ARN: <IamArn>
+  # AWS_WEB_IDENTITY_TOKEN_FILE: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token" 
+  # AWS_STS_REGIONAL_ENDPOINTS: "regional"
+
+  #extraVolumes:
+  #- name: aws-token
+  #  projected:
+  #    sources:
+  #    - serviceAccountToken:
+  #        path: token
+  #        expirationSeconds: 86400
+  #        audience: "sts.amazonaws.com"
+
+  #extraVolumeMounts:
+  #- name: aws-token
+  #  mountPath: "/var/run/secrets/sts.amazonaws.com/serviceaccount/"
+  #  readOnly: true
 
 external-dns:
   enabled: false

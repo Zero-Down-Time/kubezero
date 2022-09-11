@@ -88,7 +88,7 @@ Kubernetes: `>= 1.20.0`
 | fluent-bit.daemonSetVolumes[1].hostPath.path | string | `"/var/lib/containers/logs"` |  |
 | fluent-bit.daemonSetVolumes[1].name | string | `"newlog"` |  |
 | fluent-bit.enabled | bool | `false` |  |
-| fluent-bit.image.tag | string | `"1.9.3"` |  |
+| fluent-bit.image.tag | string | `"1.9.8"` |  |
 | fluent-bit.luaScripts."kubezero.lua" | string | `"function nest_k8s_ns(tag, timestamp, record)\n    if not record['kubernetes']['namespace_name'] then\n        return 0, 0, 0\n    end\n    new_record = {}\n    for key, val in pairs(record) do\n        if key == 'kube' then\n            new_record[key] = {}\n            new_record[key][record['kubernetes']['namespace_name']] = record[key]\n        else\n            new_record[key] = record[key]\n        end\n    end\n    return 1, timestamp, new_record\nend\n"` |  |
 | fluent-bit.resources.limits.memory | string | `"64Mi"` |  |
 | fluent-bit.resources.requests.cpu | string | `"20m"` |  |

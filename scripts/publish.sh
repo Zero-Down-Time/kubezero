@@ -50,4 +50,8 @@ function publish_chart() {
 
 
 publish_chart
+
+CF_DIST=E1YFUJXMCXT2RN
+aws cloudfront create-invalidation --distribution $CF_DIST --paths "/charts/*"
+
 #reset_index
