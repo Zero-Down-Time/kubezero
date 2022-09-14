@@ -20,6 +20,53 @@ function chart_location() {
 }
 
 
+function argo_used() {
+  kubectl get application kubezero -n argocd && rc=$? || rc=$?
+  return $rc
+}
+
+
+# get kubezero-values from ArgoCD if available or use in-cluster CM without Argo
+function get_kubezero_values() {
+  argo_used && \
+    { kubectl get application kubezero -n argocd -o yaml | yq .spec.source.helm.values > ${WORKDIR}/kubezero-values.yaml; } || \
+    { kubectl get configmap -n kube-system kubezero-values -o yaml | yq '.data."values.yaml"' > ${WORKDIR}/kubezero-values.yaml ;}
+}
+
+
+function disable_argo() {
+  cat > _argoapp_patch.yaml <<EOF
+spec:
+  syncWindows:
+    - kind: deny
+      schedule: '0 * * * *'
+      duration: 24h
+      namespaces:
+      - '*'
+EOF
+  kubectl patch appproject kubezero -n argocd --patch-file _argoapp_patch.yaml --type=merge && rm _argoapp_patch.yaml
+}
+
+
+function enable_argo() {
+  kubectl patch appproject kubezero -n argocd --type json -p='[{"op": "remove", "path": "/spec/syncWindows"}]' || true
+}
+
+
+function argo_app_synced() {
+  APP=$1
+
+  # Ensure we are synced otherwise bail out
+  status=$(kubectl get application $APP -n argocd -o yaml | yq .status.sync.status)
+  if [ "$status" != "Synced" ]; then
+    echo "ArgoCD Application $APP not 'Synced'!"
+    return 1
+  fi
+
+  return 0
+}
+
+
 # make sure namespace exists prior to calling helm as the create-namespace options doesn't work
 function create_ns() {
   local namespace=$1
@@ -82,6 +129,9 @@ function _helm() {
   [ -n "$_version" ] && targetRevision="--version $_version"
 
   yq eval '.spec.source.helm.values' $WORKDIR/kubezero/templates/${module}.yaml > $WORKDIR/values.yaml
+
+  echo "using values for $module: "
+  cat $WORKDIR/values.yaml
 
   if [ $action == "crds" ]; then
     # Allow custom CRD handling

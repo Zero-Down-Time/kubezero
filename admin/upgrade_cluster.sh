@@ -1,6 +1,9 @@
 #!/bin/bash -e
 
-VERSION="v1.23.10-1"
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+. $SCRIPT_DIR/libhelm.sh
+
+VERSION="v1.23.10-2"
 
 [ -n "$DEBUG" ] && set -x
 
@@ -120,19 +123,21 @@ EOF
   kubectl delete pod kubezero-upgrade-${VERSION//.} -n kube-system
 }
 
-all_nodes_upgrade "mount --make-shared /host/sys/fs/cgroup; mount --make-shared /host/sys;"
+argo_used && disable_argo
 
-control_plane_upgrade cluster_upgrade
+#all_nodes_upgrade "mount --make-shared /host/sys/fs/cgroup; mount --make-shared /host/sys;"
 
-echo "Adjust kubezero-values CM !!"
-read
+control_plane_upgrade upgrade_cluster
+
+#echo "Adjust kubezero-values CM !!"
+#read
 
 #kubectl delete ds kube-multus-ds -n kube-system
 
 control_plane_upgrade "apply_network, apply_addons"
-exit 0
 
-kubectl rollout restart daemonset/calico-node -n kube-system
-kubectl rollout restart daemonset/cilium -n kube-system
+#kubectl rollout restart daemonset/calico-node -n kube-system
+#kubectl rollout restart daemonset/cilium -n kube-system
+#kubectl rollout restart daemonset/kube-multus-ds -n kube-system 
 
-kubectl rollout restart daemonset/kube-multus-ds -n kube-system 
+argo_used && enable_argo

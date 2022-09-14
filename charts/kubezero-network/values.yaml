@@ -1,7 +1,5 @@
 metallb:
   enabled: false
-  psp:
-    create: false
 
   controller:
     tolerations:

@@ -6,7 +6,7 @@ if [ -n "$DEBUG" ]; then
 fi
 
 # include helm lib
-. libhelm.sh
+. /var/lib/kubezero/libhelm.sh
 
 # Export vars to ease use in debug_shell etc
 export WORKDIR=/tmp/kubezero
@@ -70,11 +70,11 @@ parse_kubezero() {
     [ -f ${HOSTFS}/etc/kubernetes/kubezero.yaml ] && cp ${HOSTFS}/etc/kubernetes/kubezero.yaml ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml
   fi
 
-  export CLUSTERNAME=$(yq eval '.global.clusterName' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml)
-  export HIGHAVAILABLE=$(yq eval '.global.highAvailable // "false"' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml)
+  export CLUSTERNAME=$(yq eval '.global.clusterName // .clusterName' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml)
+  export HIGHAVAILABLE=$(yq eval '.global.highAvailable // .highAvailable // "false"' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml)
   export ETCD_NODENAME=$(yq eval '.etcd.nodeName' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml)
   export NODENAME=$(yq eval '.nodeName' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml)
-  export PROVIDER_ID=$(yq eval '.providerID' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml)
+  export PROVIDER_ID=$(yq eval '.providerID // ""' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml)
   export AWS_IAM_AUTH=$(yq eval '.api.awsIamAuth.enabled // "false"' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml)
 
   # From here on bail out, allows debug_shell even in error cases
@@ -120,33 +120,9 @@ post_kubeadm() {
 }
 
 
-cluster_upgrade() {
-  ### PRE 1.23 specific
-  #####################
-
-  # Migrate addons and network values from local kubeadm-values.yaml on controllers into CM
-  # - remove secrets from addons
-  # - enable cilium
-
-  if [[ $PROVIDER_ID =~ ^aws ]]; then
-    REGION=$(echo $PROVIDER_ID | sed -e 's,aws:///,,' -e 's,/.*,,' -e 's/\w$//')
-  fi
-
-  kubectl get cm -n kube-system kubezero-values || \
-  kubectl create configmap -n kube-system kubezero-values \
-    --from-literal values.yaml="$(yq e 'del .addons.clusterBackup.repository | del .addons.clusterBackup.password | \
-                                   .addons.clusterBackup.image.tag =strenv(KUBE_VERSION) | \
-                                   .network.cilium.enabled = true | .network.multus.defaultNetworks = ["cilium"] | \
-                                   .network.cilium.cluster.name = strenv(CLUSTERNAME) | \
-                                   .global.clusterName = strenv(CLUSTERNAME) | \
-				   .global.highAvailable = strenv(HIGHAVAILABLE) | \
-				   .global.aws.region = strenv(REGION)' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml)"
-
-  # Create kubeadm-values CM if not available
-  kubectl get cm -n kube-system kubeadm-values || \
-  kubectl create configmap -n kube-system kubeadm-values
-
-  #####################
+upgrade_cluster() {
+  # pre upgrade hook
+  [ -f /var/lib/kubezero/pre-upgrade.sh ] && . /var/lib/kubezero/pre-upgrade.sh
 
   render_kubeadm
 
@@ -162,10 +138,8 @@ cluster_upgrade() {
     cp ${HOSTFS}/etc/kubernetes/admin.conf ${HOSTFS}/root/.kube/config
   fi
 
-  ### POST 1.23 specific
-  #####################
-
-  ######################
+  # post upgrade hook
+  [ -f /var/lib/kubezero/post-upgrade.sh ] && . /var/lib/kubezero/post-upgrade.sh
 
   # Cleanup after kubeadm on the host
   rm -rf ${HOSTFS}/etc/kubernetes/tmp
@@ -181,7 +155,7 @@ cluster_upgrade() {
 }
 
 
-node_upgrade() {
+upgrade_node() {
   echo "Starting node upgrade ..."
 
   echo "All done."
@@ -194,7 +168,7 @@ control_plane_node() {
   render_kubeadm
 
   # Ensure clean slate if bootstrap, restore PKI otherwise
-  if [[ "$CMD" =~ "^(bootstrap)$" ]]; then
+  if [[ "$CMD" =~ ^(bootstrap)$ ]]; then
     rm -rf ${HOSTFS}/var/lib/etcd/member
 
   else
@@ -211,7 +185,7 @@ control_plane_node() {
     cp ${WORKDIR}/admin.conf ${HOSTFS}/root/.kube/config
 
     # Only restore etcd data during "restore" and none exists already
-    if [[ "$CMD" =~ "^(restore)$" ]]; then
+    if [[ "$CMD" =~ ^(restore)$ ]]; then
       if [ ! -d ${HOSTFS}/var/lib/etcd/member ]; then
         etcdctl snapshot restore ${HOSTFS}/etc/kubernetes/etcd_snapshot \
           --name $ETCD_NODENAME \
@@ -238,7 +212,7 @@ control_plane_node() {
   _kubeadm init phase preflight
   _kubeadm init phase kubeconfig all
 
-  if [[ "$CMD" =~ "^(join)$" ]]; then
+  if [[ "$CMD" =~ ^(join)$ ]]; then
     # Delete any former self in case forseti did not delete yet
     kubectl delete node ${NODENAME} --wait=true || true
     # Wait for all pods to be deleted otherwise we end up with stale pods eg. kube-proxy and all goes to ....
@@ -297,7 +271,7 @@ control_plane_node() {
   retry 0 5 30 kubectl cluster-info --request-timeout 3 >/dev/null
 
   # Update providerID as underlying VM changed during restore
-  if [[ "$CMD" =~ "^(restore)$" ]]; then
+  if [[ "$CMD" =~ ^(restore)$ ]]; then
     if [ -n "$PROVIDER_ID" ]; then
       etcdhelper \
         -cacert ${HOSTFS}/etc/kubernetes/pki/etcd/ca.crt \
@@ -308,7 +282,7 @@ control_plane_node() {
     fi
   fi
 
-  if [[ "$CMD" =~ "^(bootstrap|restore)$" ]]; then
+  if [[ "$CMD" =~ ^(bootstrap|restore)$ ]]; then
     _kubeadm init phase upload-config all
     _kubeadm init phase upload-certs --skip-certificate-key-print
 
@@ -319,7 +293,7 @@ control_plane_node() {
   _kubeadm init phase mark-control-plane
   _kubeadm init phase kubelet-finalize all
 
-  if [[ "$CMD" =~ "^(bootstrap|restore)$" ]]; then
+  if [[ "$CMD" =~ ^(bootstrap|restore)$ ]]; then
     _kubeadm init phase addon all
   fi
 
@@ -343,14 +317,10 @@ control_plane_node() {
 apply_module() {
   MODULES=$1
 
-  kubectl get configmap -n kube-system kubezero-values -o yaml | yq '.data."values.yaml"' > $WORKDIR/_values.yaml
+  get_kubezero_values
 
   # Always use embedded kubezero chart
-  helm template $CHARTS/kubezero -f $WORKDIR/_values.yaml --version ~$KUBE_VERSION --devel --output-dir $WORKDIR
-
-  # Resolve all the all enabled modules
-
-  [ -z "$MODULES" ] && MODULES="$(ls ${WORKDIR}/kubezero/templates | sed -e 's/.yaml//g')"
+  helm template $CHARTS/kubezero -f $WORKDIR/kubezero-values.yaml --version ~$KUBE_VERSION --devel --output-dir $WORKDIR
 
   # CRDs first
   for t in $MODULES; do
@@ -415,8 +385,8 @@ parse_kubezero
 # Execute tasks
 for t in $@; do
   case "$t" in
-    cluster_upgrade) cluster_upgrade;;
-    node_upgrade) node_upgrade;;
+    upgrade_cluster) upgrade_cluster;;
+    upgrade_node) upgrade_node;;
     bootstrap) control_plane_node bootstrap;;
     join) control_plane_node join;;
     restore) control_plane_node restore;;

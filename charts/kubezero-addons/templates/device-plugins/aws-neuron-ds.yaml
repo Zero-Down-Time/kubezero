@@ -17,8 +17,6 @@ spec:
     spec:
       serviceAccount: neuron-device-plugin
       tolerations:
-      - key: CriticalAddonsOnly
-        operator: Exists
       - key: aws.amazon.com/neuron
         operator: Exists
         effect: NoSchedule
