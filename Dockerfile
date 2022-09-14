@@ -25,9 +25,12 @@ RUN cd /etc/apk/keys && \
       restic@testing \
       helm@testing
 
-RUN helm repo add kubezero https://cdn.zero-downtime.net/charts
+RUN helm repo add kubezero https://cdn.zero-downtime.net/charts && \
+    mkdir -p /var/lib/kubezero
 
-ADD admin/kubezero.sh admin/libhelm.sh /usr/bin
+ADD admin/kubezero.sh admin/libhelm.sh admin/migrate_argo.py /usr/bin
+ADD admin/libhelm.sh admin/v${KUBE_VERSION}/* /var/lib/kubezero
+
 ADD charts/kubeadm /charts/kubeadm
 ADD charts/kubezero /charts/kubezero
 

@@ -8,12 +8,12 @@ HighAvailableControlplane: false
 
 addons:
   enabled: true
-  targetRevision: 0.6.1
+  targetRevision: 0.6.2
 
 network:
   enabled: true
   retain: true
-  targetRevision: 0.3.2
+  targetRevision: 0.3.3
 
 cert-manager:
   enabled: false
@@ -31,7 +31,7 @@ storage:
 istio:
   enabled: false
   namespace: istio-system
-  targetRevision: 0.8.2
+  targetRevision: 0.8.3
 
 istio-ingress:
   enabled: false

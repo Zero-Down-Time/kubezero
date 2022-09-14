@@ -72,7 +72,7 @@ apiServer:
     authentication-token-webhook-config-file: /etc/kubernetes/apiserver/aws-iam-authenticator.yaml
     {{- end }}
     feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" ) | trimSuffix "," | quote }}
-    enable-admission-plugins: DenyServiceExternalIPs,NodeRestriction,EventRateLimit
+    enable-admission-plugins: DenyServiceExternalIPs,NodeRestriction,EventRateLimit,ExtendedResourceToleration
     # {{- if .Values.global.highAvailable }}
     # goaway-chance: ".001"
     # {{- end }}
