@@ -1,6 +1,6 @@
 # kubezero-sql
 
-![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for SQL databases like MariaDB, PostgreSQL
 
@@ -10,16 +10,16 @@ KubeZero umbrella chart for SQL databases like MariaDB, PostgreSQL
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Quarky9 |  |  |
+| Stefan Reimer | <stefan@zero-downtime.net> |  |
 
 ## Requirements
 
-Kubernetes: `>= 1.18.0`
+Kubernetes: `>= 1.20.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.3 |
-| https://charts.bitnami.com/bitnami | mariadb-galera | 5.11.1 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
+| https://charts.bitnami.com/bitnami | mariadb-galera | 7.4.2 |
 
 ## Values
 

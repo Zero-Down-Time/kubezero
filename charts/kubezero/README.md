@@ -1,6 +1,6 @@
 # kubezero
 
-![Version: 1.23.10-1](https://img.shields.io/badge/Version-1.23.10--1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 1.23.10-3](https://img.shields.io/badge/Version-1.23.10--3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero - Root App of Apps chart
 
@@ -26,7 +26,7 @@ Kubernetes: `>= 1.20.0`
 |-----|------|---------|-------------|
 | HighAvailableControlplane | bool | `false` |  |
 | addons.enabled | bool | `true` |  |
-| addons.targetRevision | string | `"0.6.1"` |  |
+| addons.targetRevision | string | `"0.6.2"` |  |
 | argocd.enabled | bool | `false` |  |
 | argocd.istio.enabled | bool | `false` |  |
 | argocd.namespace | string | `"argocd"` |  |
@@ -46,7 +46,7 @@ Kubernetes: `>= 1.20.0`
 | istio-private-ingress.targetRevision | string | `"0.8.2"` |  |
 | istio.enabled | bool | `false` |  |
 | istio.namespace | string | `"istio-system"` |  |
-| istio.targetRevision | string | `"0.8.2"` |  |
+| istio.targetRevision | string | `"0.8.3"` |  |
 | kubezero.defaultTargetRevision | string | `"*"` |  |
 | kubezero.gitSync | object | `{}` |  |
 | kubezero.repoURL | string | `"https://cdn.zero-downtime.net/charts"` |  |
@@ -61,7 +61,7 @@ Kubernetes: `>= 1.20.0`
 | metrics.targetRevision | string | `"0.8.1"` |  |
 | network.enabled | bool | `true` |  |
 | network.retain | bool | `true` |  |
-| network.targetRevision | string | `"0.3.2"` |  |
+| network.targetRevision | string | `"0.3.3"` |  |
 | storage.aws-ebs-csi-driver.enabled | bool | `false` |  |
 | storage.aws-efs-csi-driver.enabled | bool | `false` |  |
 | storage.enabled | bool | `false` |  |

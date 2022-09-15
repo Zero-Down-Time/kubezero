@@ -1,6 +1,6 @@
 # kubezero-istio
 
-![Version: 0.8.2](https://img.shields.io/badge/Version-0.8.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.8.3](https://img.shields.io/badge/Version-0.8.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Istio
 
@@ -32,7 +32,7 @@ Kubernetes: `>= 1.20.0`
 | global.defaultPodDisruptionBudget.enabled | bool | `false` |  |
 | global.logAsJson | bool | `true` |  |
 | global.priorityClassName | string | `"system-cluster-critical"` |  |
-| global.tag | string | `"1.14.3-distroless"` |  |
+| global.tag | string | `"1.14.4-distroless"` |  |
 | istiod.meshConfig.accessLogEncoding | string | `"JSON"` |  |
 | istiod.meshConfig.accessLogFile | string | `"/dev/stdout"` |  |
 | istiod.meshConfig.tcpKeepalive.interval | string | `"60s"` |  |
