@@ -31,7 +31,7 @@ yq e '.network |
       {"network": .}' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml > $WORKDIR/network-values.yaml
 
 # get current argo cd values
-kubectl get application kubezero -n argocd -o yaml | yq .spec.source.helm.values > ${WORKDIR}/argo-values.yaml
+kubectl get application kubezero -n argocd -o yaml | yq '.spec.source.helm.values' > ${WORKDIR}/argo-values.yaml
 
 # merge all into new CM
 yq ea '. as $item ireduce ({}; . * $item ) |
@@ -45,28 +45,8 @@ kubectl get cm -n kube-system kubezero-values -o=yaml | \
   kubectl replace -f -
 
 
-kubezero_chart_version=$(yq .version /charts/kubezero/Chart.yaml)
-
-# update argo app, create new from scratch as Argo is really picky being patched
-# autosync DISABLED !!!
-
-cat > $WORKDIR/kube-argo.yaml <<EOF
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: kubezero
-  namespace: argocd
-spec:
-  project: kubezero
-  source:
-    repoURL: https://cdn.zero-downtime.net/charts
-    chart: kubezero
-    targetRevision: $kubezero_chart_version
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: argocd
-  syncPolicy: {}
-EOF
-
-yq eval -i '.spec.source.helm.values |= load_str("/tmp/kubezero/kubezero-values.yaml")' $WORKDIR/kube-argo.yaml
-kubectl apply -f $WORKDIR/kube-argo.yaml
+# update argo app
+kubectl get application kubezero -n argocd -o yaml | \
+  kubezero_chart_version=$(yq .version /charts/kubezero/Chart.yaml) \
+  yq '.spec.source.helm.values |= load_str("/tmp/kubezero/kubezero-values.yaml") | .spec.source.targetRevision = strenv(kubezero_chart_version)' | \
+  kubectl apply -f -

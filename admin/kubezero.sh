@@ -120,7 +120,7 @@ post_kubeadm() {
 }
 
 
-upgrade_cluster() {
+kubeadm_upgrade() {
   # pre upgrade hook
   [ -f /var/lib/kubezero/pre-upgrade.sh ] && . /var/lib/kubezero/pre-upgrade.sh
 
@@ -144,7 +144,7 @@ upgrade_cluster() {
   # Cleanup after kubeadm on the host
   rm -rf ${HOSTFS}/etc/kubernetes/tmp
 
-  echo "Successfully upgraded cluster."
+  echo "Successfully upgraded kubeadm control plane."
 
   # TODO
   # Send Notification currently done via CloudBender -> SNS -> Slack
@@ -152,13 +152,6 @@ upgrade_cluster() {
 
   # Removed:
   # - update oidc do we need that ?
-}
-
-
-upgrade_node() {
-  echo "Starting node upgrade ..."
-
-  echo "All done."
 }
 
 
@@ -385,8 +378,7 @@ parse_kubezero
 # Execute tasks
 for t in $@; do
   case "$t" in
-    upgrade_cluster) upgrade_cluster;;
-    upgrade_node) upgrade_node;;
+    kubeadm_upgrade) kubeadm_upgrade;;
     bootstrap) control_plane_node bootstrap;;
     join) control_plane_node join;;
     restore) control_plane_node restore;;

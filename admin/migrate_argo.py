@@ -4,7 +4,7 @@ import argparse
 import io
 import yaml
 
-DEFAULT_VERSION = "1.23.10-2"
+DEFAULT_VERSION = "1.23.10-3"
 
 
 def migrate(values):
