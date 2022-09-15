@@ -1,6 +1,6 @@
 # kubezero-addons
 
-![Version: 0.6.1](https://img.shields.io/badge/Version-0.6.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.23.10](https://img.shields.io/badge/AppVersion-v1.23.10-informational?style=flat-square)
+![Version: 0.6.2](https://img.shields.io/badge/Version-0.6.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.23.10](https://img.shields.io/badge/AppVersion-v1.23.10-informational?style=flat-square)
 
 KubeZero umbrella chart for various optional cluster addons
 
@@ -21,6 +21,7 @@ Kubernetes: `>= 1.20.0`
 |  | aws-node-termination-handler | 0.18.5 |
 | https://kubernetes-sigs.github.io/external-dns/ | external-dns | 1.11.0 |
 | https://kubernetes.github.io/autoscaler | cluster-autoscaler | 9.21.0 |
+| https://nvidia.github.io/k8s-device-plugin | nvidia-device-plugin | 0.12.2 |
 
 # MetalLB   
    
@@ -29,6 +30,11 @@ Kubernetes: `>= 1.20.0`
 ## AWS Neuron
 Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) - [Inf1 instances](https://aws.amazon.com/ec2/instance-types/inf1/)
    
+## Nvidia
+
+## Cluster AutoScaler
+- https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/cloudprovider/aws/README.md
+
 ## Values
 
 | Key | Type | Default | Description |
@@ -102,3 +108,20 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | forseti.image.name | string | `"public.ecr.aws/zero-downtime/forseti"` |  |
 | forseti.image.tag | string | `"v0.1.2"` |  |
 | fuseDevicePlugin.enabled | bool | `false` |  |
+| nvidia-device-plugin.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key | string | `"node.kubernetes.io/instance-type"` |  |
+| nvidia-device-plugin.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator | string | `"In"` |  |
+| nvidia-device-plugin.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[0] | string | `"g5.xlarge"` |  |
+| nvidia-device-plugin.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[1] | string | `"g5.2xlarge"` |  |
+| nvidia-device-plugin.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[2] | string | `"g5.4xlarge"` |  |
+| nvidia-device-plugin.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[3] | string | `"g5.8xlarge"` |  |
+| nvidia-device-plugin.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[4] | string | `"g5.12xlarge"` |  |
+| nvidia-device-plugin.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[5] | string | `"g5.16xlarge"` |  |
+| nvidia-device-plugin.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[6] | string | `"g5.24xlarge"` |  |
+| nvidia-device-plugin.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[7] | string | `"g5.48xlarge"` |  |
+| nvidia-device-plugin.enabled | bool | `false` |  |
+| nvidia-device-plugin.tolerations[0].effect | string | `"NoSchedule"` |  |
+| nvidia-device-plugin.tolerations[0].key | string | `"nvidia.com/gpu"` |  |
+| nvidia-device-plugin.tolerations[0].operator | string | `"Exists"` |  |
+| nvidia-device-plugin.tolerations[1].effect | string | `"NoSchedule"` |  |
+| nvidia-device-plugin.tolerations[1].key | string | `"kubezero-workergroup"` |  |
+| nvidia-device-plugin.tolerations[1].operator | string | `"Exists"` |  |
