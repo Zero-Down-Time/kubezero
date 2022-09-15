@@ -139,3 +139,9 @@ kubectl rollout restart daemonset/cilium -n kube-system
 kubectl rollout restart daemonset/kube-multus-ds -n kube-system
 
 argo_used && enable_argo
+
+# Final step is to commit the new argocd kubezero app
+kubectl get app kubezero -n argocd -o yaml | yq 'del(.status) | del(.metadata) | .metadata.name="kubezero" | .metadata.namespace="argocd"' | yq 'sort_keys(..) | .spec.source.helm.values |= (from_yaml | to_yaml)' > /tmp/new-kubezero-argoapp.yaml
+
+echo "Please commit /tmp/new-kubezero-argoapp.yaml as the updated kubezero/application.yaml for your cluster!"
+echo "Then head over to ArgoCD for this cluster and sync all KubeZero modules to apply remaining upgrades."

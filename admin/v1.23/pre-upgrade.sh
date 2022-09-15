@@ -36,8 +36,10 @@ kubectl get application kubezero -n argocd -o yaml | yq '.spec.source.helm.value
 # merge all into new CM
 yq ea '. as $item ireduce ({}; . * $item ) |
        .global.clusterName = strenv(CLUSTERNAME) |
-       .global.highAvailable = env(HIGHAVAILABLE)' $WORKDIR/addons-values.yaml ${WORKDIR}/network-values.yaml $WORKDIR/argo-values.yaml > $WORKDIR/kubezero-values.yaml
+       .global.highAvailable = env(HIGHAVAILABLE)' $WORKDIR/addons-values.yaml ${WORKDIR}/network-values.yaml $WORKDIR/argo-values.yaml > $WORKDIR/kubezero-pre-values.yaml
 
+# tumble new config via migrate.py
+cat $WORKDIR/kubezero-pre-values.yaml | migrate_argo_values.py > $WORKDIR/kubezero-values.yaml
 
 # Update kubezero-values CM
 kubectl get cm -n kube-system kubezero-values -o=yaml | \
