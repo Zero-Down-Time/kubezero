@@ -1,7 +1,8 @@
 #!/bin/bash -e
 
-#VERSION="v1.23.10-3"
-VERSION="latest"
+VERSION="v1.23"
+#VERSION="latest"
+ARGO_APP=${1:-/tmp/new-kubezero-argoapp.yaml}
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 . $SCRIPT_DIR/libhelm.sh
@@ -143,5 +144,5 @@ argo_used && enable_argo
 # Final step is to commit the new argocd kubezero app
 kubectl get app kubezero -n argocd -o yaml | yq 'del(.status) | del(.metadata) | .metadata.name="kubezero" | .metadata.namespace="argocd"' | yq 'sort_keys(..) | .spec.source.helm.values |= (from_yaml | to_yaml)' > /tmp/new-kubezero-argoapp.yaml
 
-echo "Please commit /tmp/new-kubezero-argoapp.yaml as the updated kubezero/application.yaml for your cluster!"
+echo "Please commit $ARGO_APP as the updated kubezero/application.yaml for your cluster."
 echo "Then head over to ArgoCD for this cluster and sync all KubeZero modules to apply remaining upgrades."

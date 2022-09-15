@@ -26,6 +26,8 @@ yq e '.addons |
 # extract network
 yq e '.network |
       .cilium.enabled = true |
+      .calico.enabled = true |
+      .multus.enabled = true |
       .multus.defaultNetworks = ["cilium"] |
       .cilium.cluster.name = strenv(CLUSTERNAME) |
       {"network": .}' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml > $WORKDIR/network-values.yaml
@@ -52,3 +54,6 @@ kubectl get application kubezero -n argocd -o yaml | \
   kubezero_chart_version=$(yq .version /charts/kubezero/Chart.yaml) \
   yq '.spec.source.helm.values |= load_str("/tmp/kubezero/kubezero-values.yaml") | .spec.source.targetRevision = strenv(kubezero_chart_version)' | \
   kubectl apply -f -
+
+# finally remove annotation to allow argo to sync again
+kubectl patch app kubezero -n argocd --type json -p='[{"op": "remove", "path": "/metadata/annotations"}]'
