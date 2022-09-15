@@ -21,7 +21,7 @@ function chart_location() {
 
 
 function argo_used() {
-  kubectl get application kubezero -n argocd && rc=$? || rc=$?
+  kubectl get application kubezero -n argocd >/dev/null && rc=$? || rc=$?
   return $rc
 }
 
@@ -45,11 +45,13 @@ spec:
       - '*'
 EOF
   kubectl patch appproject kubezero -n argocd --patch-file _argoapp_patch.yaml --type=merge && rm _argoapp_patch.yaml
+  echo "Enabled service window for ArgoCD project kubezero"
 }
 
 
 function enable_argo() {
   kubectl patch appproject kubezero -n argocd --type json -p='[{"op": "remove", "path": "/spec/syncWindows"}]' || true
+  echo "Removed service window for ArgoCD project kubezero"
 }
 
 
@@ -130,7 +132,7 @@ function _helm() {
 
   yq eval '.spec.source.helm.values' $WORKDIR/kubezero/templates/${module}.yaml > $WORKDIR/values.yaml
 
-  echo "using values for $module: "
+  echo "using values to $action of module $module: "
   cat $WORKDIR/values.yaml
 
   if [ $action == "crds" ]; then
