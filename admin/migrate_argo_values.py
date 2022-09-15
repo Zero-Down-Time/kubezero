@@ -4,8 +4,6 @@ import argparse
 import io
 import yaml
 
-DEFAULT_VERSION = "1.23.10-3"
-
 
 def migrate(values):
     """Actual changes here"""
@@ -30,16 +28,17 @@ def migrate(values):
     return values
 
 
+class MyDumper(yaml.Dumper):
+    """
+    Required to add additional indent for arrays to match yq behaviour to reduce noise in diffs
+    """
+    def increase_indent(self, flow=False, indentless=False):
+        return super(MyDumper, self).increase_indent(flow, False)
+
 def str_presenter(dumper, data):
     if len(data.splitlines()) > 1:  # check for multiline string
         return dumper.represent_scalar("tag:yaml.org,2002:str", data, style="|")
     return dumper.represent_scalar("tag:yaml.org,2002:str", data)
-
-
-yaml.add_representer(str, str_presenter)
-
-# to use with safe_dump:
-yaml.representer.SafeRepresenter.add_representer(str, str_presenter)
 
 
 def rec_sort(d):
@@ -66,39 +65,21 @@ def rec_sort(d):
     return d
 
 
-parser = argparse.ArgumentParser(
-    description="Migrate ArgoCD Kubezero values to new cluster config"
-)
-parser.add_argument(
-    "--version",
-    dest="version",
-    default=DEFAULT_VERSION,
-    action="store",
-    required=False,
-    help="Update KubeZero version",
-)
+yaml.add_representer(str, str_presenter)
 
-args = parser.parse_args()
+# to use with safe_dump:
+yaml.representer.SafeRepresenter.add_representer(str, str_presenter)
 
-application = yaml.safe_load(sys.stdin)
+# Read values
+values = yaml.safe_load(sys.stdin)
 
-# Set version from cmd line
-if args.version:
-    application["spec"]["source"]["targetRevision"] = args.version
-
-# Extract Helm values
-values = yaml.safe_load(application["spec"]["source"]["helm"]["values"])
-
-# Merge new values
+# Output new values
 buffer = io.StringIO()
-yaml.safe_dump(
+yaml.dump(
     rec_sort(migrate(values)),
-    buffer,
+    sys.stdout,
     default_flow_style=False,
     indent=2,
     sort_keys=False,
+    Dumper=MyDumper
 )
-application["spec"]["source"]["helm"]["values"] = buffer.getvalue()
-
-# Output new Application resource
-yaml.dump(application, sys.stdout, default_flow_style=False)
