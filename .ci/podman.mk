@@ -26,9 +26,11 @@ scan: build
 	@echo "Scanning $(REGISTRY)/$(IMAGE):$(TAG) using Trivy"
 	@trivy image $(TRIVY_OPTS) $(REGISTRY)/$(IMAGE):$(TAG)
 
-push: build
-	@aws ecr-public get-login-password --region $(REGION) | docker login --username AWS --password-stdin $(REGISTRY)
+push: ecr-login build
 	@for t in $(TAG) latest $(EXTRA_TAGS); do echo "tag and push: $$t"; docker tag $(IMAGE):$(TAG) $(REGISTRY)/$(IMAGE):$$t && docker push $(REGISTRY)/$(IMAGE):$$t; done
+
+ecr-login:
+	@aws ecr-public get-login-password --region $(REGION) | docker login --username AWS --password-stdin $(REGISTRY)
 
 clean: rm-test-image rm-image
 
