@@ -22,7 +22,7 @@ cert-manager:
 
 storage:
   enabled: false
-  targetRevision: 0.7.0
+  targetRevision: 0.7.1
   aws-ebs-csi-driver:
     enabled: false
   aws-efs-csi-driver:
@@ -52,7 +52,7 @@ istio-private-ingress:
 metrics:
   enabled: false
   namespace: monitoring
-  targetRevision: 0.8.1
+  targetRevision: 0.8.4
   istio:
     grafana: {}
     prometheus: {}
