@@ -133,6 +133,9 @@ control_plane_upgrade kubeadm_upgrade
 
 kubectl delete ds kube-multus-ds -n kube-system
 
+# Required due to chart upgrade to 4.X part of prometheus-stack 40.X
+kubectl delete daemonset metrics-prometheus-node-exporter -n monitoring
+
 control_plane_upgrade "apply_network, apply_addons"
 
 kubectl rollout restart daemonset/calico-node -n kube-system

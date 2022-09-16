@@ -6,10 +6,10 @@ dashboards:
   url: https://grafana.com/api/dashboards/12539/revisions/5/download
   tags: ['kubernetes', 'DNS']
 - name: etcd
-  url: https://grafana.com/api/dashboards/3070/revisions/3/download
+  url: https://grafana.com/api/dashboards/15308/revisions/1/download
   tags: ['kubernetes', 'etcd']
 - name: node
-  url: https://grafana.com/api/dashboards/1860/revisions/23/download
+  url: https://grafana.com/api/dashboards/1860/revisions/27/download
   tags: ['kubernetes']
 # cd dashboards; for f in *.json; do echo "- name: ${f%%.json}" >> ../dashboards.yaml; echo "  url: file://dashboards/$f" >> ../dashboards.yaml; done; cd -
 - name: apiserver

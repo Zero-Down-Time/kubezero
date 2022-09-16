@@ -4,9 +4,10 @@
    "metadata": {
       "labels": {
          "app.kubernetes.io/component": "alert-router",
+         "app.kubernetes.io/instance": "main",
          "app.kubernetes.io/name": "alertmanager",
          "app.kubernetes.io/part-of": "kube-prometheus",
-         "app.kubernetes.io/version": "0.22.2",
+         "app.kubernetes.io/version": "0.24.0",
          "prometheus": "k8s",
          "role": "alert-rules"
       },

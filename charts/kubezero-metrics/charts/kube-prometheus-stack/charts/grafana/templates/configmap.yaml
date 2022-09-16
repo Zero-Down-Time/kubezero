@@ -56,6 +56,14 @@ data:
   {{- end -}}
 {{- end -}}
 
+{{- if .Values.alerting }}
+{{ $root := . }}
+  {{- range $key, $value := .Values.alerting }}
+  {{ $key }}: |
+{{ tpl $value $root | indent 4 }}
+  {{- end -}}
+{{- end -}}
+
 {{- if .Values.dashboardProviders }}
   {{- range $key, $value := .Values.dashboardProviders }}
   {{ $key }}: |
@@ -85,6 +93,12 @@ data:
     -H "Accept: application/json" \
         {{- if $value.token }}
     -H "Authorization: token {{ $value.token }}" \
+        {{- end }}
+        {{- if $value.bearerToken }}
+    -H "Authorization: Bearer {{ $value.bearerToken }}" \
+        {{- end }}
+        {{- if $value.gitlabToken }}
+    -H "PRIVATE-TOKEN: {{ $value.gitlabToken }}" \
         {{- end }}
     -H "Content-Type: application/json;charset=UTF-8" \
       {{ end }}
