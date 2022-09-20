@@ -1,15 +1,30 @@
 {{- define "network-values" }}
 
+# until 1.24
+calico:
+  enabled: true
+
+# since 1.22
+multus:
+  enabled: true
+  defaultNetworks:
+    - "cilium"
+
+# since 1.23
+cilium:
+  enabled: true
+
+  cluster:
+    {{- with .Values.network.cilium.cluster.id }}
+    id: {{ . }}
+    {{- end }}
+    name: {{ $.Values.global.clusterName }}
+
+  prometheus:
+    enabled: {{ $.Values.metrics.enabled }}
+
 {{- with index .Values "network" "metallb" }}
 metallb:
-  {{- toYaml . | nindent 2 }}
-{{- end }}
-{{- with index .Values "network" "multus" }}
-multus:
-  {{- toYaml . | nindent 2 }}
-{{- end }}
-{{- with index .Values "network" "cilium" }}
-cilium:
   {{- toYaml . | nindent 2 }}
 {{- end }}
 

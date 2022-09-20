@@ -9,11 +9,17 @@ HighAvailableControlplane: false
 addons:
   enabled: true
   targetRevision: 0.6.2
+  external-dns: {}
+  forseti: {}
+  clusterBackup: {}
+  aws-node-termination-handler: {}
 
 network:
   enabled: true
   retain: true
   targetRevision: 0.3.3
+  cilium:
+    cluster: {}
 
 cert-manager:
   enabled: false
@@ -52,7 +58,7 @@ istio-private-ingress:
 metrics:
   enabled: false
   namespace: monitoring
-  targetRevision: 0.8.4
+  targetRevision: 0.8.5
   istio:
     grafana: {}
     prometheus: {}
