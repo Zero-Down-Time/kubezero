@@ -15,7 +15,7 @@ gemini:
 aws-ebs-csi-driver:
   enabled: {{ default false (index .Values "storage" "aws-ebs-csi-driver" "enabled")}}
   controller:
-    replicaCount: {{ ternary 2 1 .Values.HighAvailableControlplane }}
+    replicaCount: {{ ternary 2 1 .Values.global.highAvailable }}
     k8sTagClusterId: {{ .Values.global.clusterName }}
     env:
     - name: AWS_ROLE_ARN
@@ -25,7 +25,7 @@ aws-ebs-csi-driver:
     - name: AWS_STS_REGIONAL_ENDPOINTS
       value: regional
 
-    {{- if .Values.HighAvailableControlplane }}
+    {{- if .Values.global.highAvailable }}
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -40,7 +40,7 @@ aws-ebs-csi-driver:
 
 aws-efs-csi-driver:
   enabled: {{ default false (index .Values "storage" "aws-efs-csi-driver" "enabled")}}
-  replicaCount: {{ ternary 2 1 .Values.HighAvailableControlplane }}
+  replicaCount: {{ ternary 2 1 .Values.global.highAvailable }}
   controller:
     extraEnv:
     - name: AWS_ROLE_ARN
@@ -51,7 +51,7 @@ aws-efs-csi-driver:
       value: regional
 
     # The EFS controller steel needs hostnetwork and cannot update on single node control planes otherwise
-    {{- if not .Values.HighAvailableControlplane }}
+    {{- if not .Values.global.highAvailable }}
     updateStrategy: Recreate
     {{- else }}
     affinity:

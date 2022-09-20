@@ -2,7 +2,7 @@
 istiod:
   telemetry:
     enabled: {{ $.Values.metrics.enabled }}
-{{- if .Values.HighAvailableControlplane }}
+{{- if .Values.global.highAvailable }}
   pilot:
     replicaCount: 2
 global:

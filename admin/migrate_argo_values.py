@@ -13,15 +13,27 @@ def migrate(values):
         values["clusterName"] = values["ClusterName"]
         values.pop("ClusterName")
 
-    # Create new clusterwide cloudprovider data if possible
+    # Remove HighAvailableControlplane
     try:
-        if values["cert-manager"]["clusterIssuer"]["solvers"][0]["dns01"]["route53"]["regions"]:
+        values["global"]["highAvailable"] = values["HighAvailableControlplane"]
+        values.pop("HighAvailableControlplane")
+    except KeyError:
+        pass
+
+    # Create new clusterwide cloudprovider data if possible
+    # IamArn: arn:aws:iam::<ACCOUNT_ID>:role/<REGION>.<CLUSTERNAME>.cert-manager
+    try:
+        if values["cert-manager"]["IamArn"]:
+            account_id = values["cert-manager"]["IamArn"].split(":")[4]
+            region = values["cert-manager"]["IamArn"].split(":")[5].split('.')[0].split('/')[1]
             if "global" not in values:
                 values["global"] = {}
             if "aws" not in values["global"]:
                 values["global"]["aws"] = {}
 
-            values["global"]["aws"]["region"] = values["cert-manager"]["clusterIssuer"]["solvers"][0]["dns01"]["route53"]["region"]
+            values["global"]["aws"]["region"] = region
+            values["global"]["aws"]["accountId"] = account_id
+
     except KeyError:
         pass
 

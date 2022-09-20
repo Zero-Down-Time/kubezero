@@ -7,8 +7,8 @@ clusterBackup:
   {{- toYaml . | nindent 2 }}
   {{- end }}
 
-  # AWS
   {{- if .Values.global.aws }}
+  # AWS
   extraEnv:
     - name: AWS_DEFAULT_REGION
       value: {{ .Values.global.aws.region }}
@@ -21,8 +21,8 @@ forseti:
   {{- toYaml . | nindent 2 }}
   {{- end }}
 
-  # AWS
   {{- if .Values.global.aws }}
+  # AWS
   aws:
     region: {{ $.Values.global.aws.region }}
     iamRoleArn: "arn:aws:iam::{{ .Values.global.aws.accountId }}:role/{{ .Values.global.aws.region }}.{{ .Values.global.clusterName }}.kubezeroForseti"

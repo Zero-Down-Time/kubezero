@@ -128,9 +128,8 @@ all_nodes_upgrade "mount --make-shared /host/sys/fs/cgroup; mount --make-shared 
 
 control_plane_upgrade kubeadm_upgrade
 
-echo "Adjust kubezero-values as needed: (eg. set cilium cluster id etc)"
-echo "kubectl edit cm kubezero-values -n kube-system"
-read
+echo "Adjust kubezero-values as needed: (eg. set cilium cluster id etc):"
+kubectl edit cm kubezero-values -n kube-system
 
 # Remove multus DS due to label changes, if this fails:
 # kubezero-network $ helm template . --set multus.enabled=true | kubectl apply -f -
