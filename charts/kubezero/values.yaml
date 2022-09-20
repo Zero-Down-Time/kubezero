@@ -4,15 +4,21 @@ kubezero:
   defaultTargetRevision: '*'
   gitSync: {}
 
-HighAvailableControlplane: false
+global:
+  highAvailable: false
+  clusterName: zdt-trial-cluster
 
 addons:
   enabled: true
   targetRevision: 0.6.2
-  external-dns: {}
-  forseti: {}
-  clusterBackup: {}
-  aws-node-termination-handler: {}
+  external-dns:
+    enabled: false
+  forseti:
+    enabled: false
+  clusterBackup:
+    enabled: false
+  aws-node-termination-handler:
+    enabled: false
 
 network:
   enabled: true

@@ -15,13 +15,17 @@ cilium:
   enabled: true
 
   cluster:
+    name: {{ .Values.global.clusterName }}
     {{- with .Values.network.cilium.cluster.id }}
     id: {{ . }}
+  ipam:
+    operator:
+      clusterPoolIPv4PodCIDRList:
+        - 10.{{ . }}.0.0/16
     {{- end }}
-    name: {{ $.Values.global.clusterName }}
 
   prometheus:
-    enabled: {{ $.Values.metrics.enabled }}
+    enabled: {{ .Values.metrics.enabled }}
 
 {{- with index .Values "network" "metallb" }}
 metallb:
