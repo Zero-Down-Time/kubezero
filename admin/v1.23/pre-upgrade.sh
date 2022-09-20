@@ -4,12 +4,12 @@
 # - remove secrets from addons
 # - enable cilium
         
-# Create kubeadm-values CM if not available
-kubectl get cm -n kube-system kubeadm-values || \
-kubectl create configmap -n kube-system kubeadm-values
-
+# Create emtpy CM if not exists yet
 kubectl get cm -n kube-system kubezero-values || \
 kubectl create configmap -n kube-system kubezero-values
+
+kubectl get cm -n kube-system kubeadm-values || \
+kubectl create configmap -n kube-system kubeadm-values
 
 # tweak local kubeadm for upgrade later on
 yq eval -i '.global.clusterName = strenv(CLUSTERNAME) |
@@ -40,7 +40,7 @@ yq ea '. as $item ireduce ({}; . * $item ) |
        .global.clusterName = strenv(CLUSTERNAME) |
        .global.highAvailable = env(HIGHAVAILABLE)' $WORKDIR/addons-values.yaml ${WORKDIR}/network-values.yaml $WORKDIR/argo-values.yaml > $WORKDIR/kubezero-pre-values.yaml
 
-# tumble new config via migrate.py
+# tumble new config through migrate.py
 cat $WORKDIR/kubezero-pre-values.yaml | migrate_argo_values.py > $WORKDIR/kubezero-values.yaml
 
 # Update kubezero-values CM

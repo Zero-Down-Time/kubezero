@@ -1,52 +1,90 @@
 {{- define "addons-values" }}
 
-{{- with .Values.addons.clusterBackup }}
 clusterBackup:
-  {{- toYaml . | nindent 2 }}
-{{- end }}
+  enabled: {{ ternary "true" "false" (or (hasKey .Values.global "aws") .Values.addons.clusterBackup.enabled) }}
 
-{{- with .Values.addons.forseti }}
+  {{- with omit .Values.addons.clusterBackup "enabled" }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+
+  # AWS
+  {{- if .Values.global.aws }}
+  extraEnv:
+    - name: AWS_DEFAULT_REGION
+      value: {{ .Values.global.aws.region }}
+  {{- end }}
+
 forseti:
-  {{- toYaml . | nindent 2 }}
-{{- end }}
+  enabled: {{ ternary "true" "false" (or (hasKey .Values.global "aws") .Values.addons.forseti.enabled) }}
 
-{{- with index .Values "addons" "aws-node-termination-handler" }}
-aws-node-termination-handler:
+  {{- with omit .Values.addons.forseti "enabled" }}
   {{- toYaml . | nindent 2 }}
-  {{- with $.Values.metrics }}
+  {{- end }}
+
+  # AWS
+  {{- if .Values.global.aws }}
+  aws:
+    region: {{ $.Values.global.aws.region }}
+    iamRoleArn: "arn:aws:iam::{{ .Values.global.aws.accountId }}:role/{{ .Values.global.aws.region }}.{{ .Values.global.clusterName }}.kubezeroForseti"
+  {{- end }}
+
+aws-node-termination-handler:
+  enabled: {{ ternary "true" "false" (or (hasKey .Values.global "aws") (index .Values "addons" "aws-node-termination-handler" "enabled")) }}
+
+  {{- with omit (index .Values "addons" "aws-node-termination-handler") "enabled" }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+
+  {{- with .Values.metrics }}
   enablePrometheusServer: {{ .enabled }}
   {{- end }}
-{{- end }}
 
-{{- with .Values.addons.fuseDevicePlugin }}
-fuseDevicePlugin:
-  {{- toYaml . | nindent 2 }}
-{{- end }}
+  {{- if .Values.global.aws }}
+  # AWS
+  queueURL: "https://sqs.{{ .Values.global.aws.region }}.amazonaws.com/{{ .Values.global.aws.accountId }}/{{ .Values.global.clusterName }}_Nth"
+  managedAsgTag: "aws-node-termination-handler/{{ .Values.global.clusterName }}"
+  extraEnv:
+    - name: AWS_ROLE_ARN
+      value: "arn:aws:iam::{{ .Values.global.aws.accountId }}:role/{{ .Values.global.aws.region }}.{{ .Values.global.clusterName }}.awsNth"
+    - name: AWS_WEB_IDENTITY_TOKEN_FILE
+      value: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
+    - name: AWS_STS_REGIONAL_ENDPOINTS
+      value: "regional"
+    - name: METADATA_TRIES
+      value: "0"
+  {{- end }}
 
-{{- with .Values.addons.awsNeuron }}
-awsNeuron:
-  {{- toYaml . | nindent 2 }}
-{{- end }}
-
-{{- with index .Values "addons" "nvidia-device-plugin" }}
-nvidia-device-plugin:
-  {{- toYaml . | nindent 2 }}
-{{- end }}
-
-{{- with index .Values "addons" "external-dns" }}
 external-dns:
+  enabled: {{ ternary "true" "false" (or (hasKey .Values.global "aws") (index .Values "addons" "external-dns" "enabled")) }}
+
+  {{- with omit (index .Values "addons" "external-dns") "enabled" }}
   {{- toYaml . | nindent 2 }}
-{{- end }}
+  {{- end }}
+
+  {{- if .Values.global.aws }}
+  # AWS
+  txtOwnerId: {{ .Values.global.clusterName }}
+  provider: aws
+  extraArgs:
+    - "--aws-zone-type=public"
+    - "--aws-zones-cache-duration=1h"
+  env:
+    - name: AWS_ROLE_ARN
+      value: "arn:aws:iam::{{ .Values.global.aws.accountId }}:role/{{ .Values.global.aws.region }}.{{ .Values.global.clusterName }}.externalDNS"
+    - name: AWS_WEB_IDENTITY_TOKEN_FILE
+      value: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
+    - name: AWS_STS_REGIONAL_ENDPOINTS
+      value: "regional"
+    - name: METADATA_TRIES
+      value: "0"
+  {{- end }}
+
 
 {{- with index .Values "addons" "cluster-autoscaler" }}
 cluster-autoscaler:
   {{- toYaml . | nindent 2 }}
   autoDiscovery:
     clusterName: {{ $.Values.global.clusterName }}
-
-  {{- with $.Values.global.aws }}
-  awsRegion: {{ .region }}
-  {{- end }}
 
   {{- with $.Values.metrics }}
   serviceMonitor:
@@ -55,9 +93,12 @@ cluster-autoscaler:
     enabled: {{ .enabled }}
   {{- end }}
 
-  {{- with .IamArn }}
+  # AWS
+  {{- if $.Values.global.aws }}
+  awsRegion: {{ $.Values.global.aws.region }}
+
   extraEnv:
-    AWS_ROLE_ARN: "{{ . }}"
+    AWS_ROLE_ARN: "arn:aws:iam::{{ $.Values.global.aws.accountId }}:role/{{ $.Values.global.aws.region }}.{{ $.Values.global.clusterName }}.clusterAutoScaler"
     AWS_WEB_IDENTITY_TOKEN_FILE: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
     AWS_STS_REGIONAL_ENDPOINTS: "regional"
   extraVolumes:
@@ -74,6 +115,21 @@ cluster-autoscaler:
     readOnly: true
   {{- end }}
 
+{{- end }}
+
+{{- with .Values.addons.fuseDevicePlugin }}
+fuseDevicePlugin:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+
+{{- with .Values.addons.awsNeuron }}
+awsNeuron:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+
+{{- with index .Values "addons" "nvidia-device-plugin" }}
+nvidia-device-plugin:
+  {{- toYaml . | nindent 2 }}
 {{- end }}
 
 {{- end }}

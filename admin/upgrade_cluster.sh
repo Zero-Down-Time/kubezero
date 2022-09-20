@@ -128,13 +128,19 @@ all_nodes_upgrade "mount --make-shared /host/sys/fs/cgroup; mount --make-shared 
 
 control_plane_upgrade kubeadm_upgrade
 
-#echo "Adjust kubezero-values CM !!"
-#read
+echo "Adjust kubezero-values as needed: (eg. set cilium cluster id etc)"
+echo "kubectl edit cm kubezero-values -n kube-system"
+read
 
-kubectl delete ds kube-multus-ds -n kube-system
+# Remove multus DS due to label changes, if this fails:
+# kubezero-network $ helm template . --set multus.enabled=true | kubectl apply -f -
+kubectl delete ds kube-multus-ds -n kube-system || true
 
 # Required due to chart upgrade to 4.X part of prometheus-stack 40.X
-kubectl delete daemonset metrics-prometheus-node-exporter -n monitoring
+kubectl delete daemonset metrics-prometheus-node-exporter -n monitoring || true
+
+# AWS EBS CSI driver change their fsGroupPolicy
+kubectl delete CSIDriver ebs.csi.aws.com || true
 
 control_plane_upgrade "apply_network, apply_addons"
 
