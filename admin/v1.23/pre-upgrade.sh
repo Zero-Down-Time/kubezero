@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Migrate addons and network values from local kubeadm-values.yaml on controllers into CM
-# - remove secrets from addons
 # - enable cilium
         
 # Create emtpy CM if not exists yet
@@ -16,13 +15,6 @@ yq eval -i '.global.clusterName = strenv(CLUSTERNAME) |
             .global.highAvailable = env(HIGHAVAILABLE)' \
   ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml
 
-# extract addons
-yq e '.addons |
-      del .clusterBackup.repository |
-      del .clusterBackup.password |
-      .clusterBackup.image.tag = strenv(KUBE_VERSION) |
-      {"addons": .}' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml > $WORKDIR/addons-values.yaml
-
 # extract network
 yq e '.network |
       .cilium.enabled = true |
@@ -35,10 +27,11 @@ yq e '.network |
 # get current argo cd values
 kubectl get application kubezero -n argocd -o yaml | yq '.spec.source.helm.values' > ${WORKDIR}/argo-values.yaml
 
-# merge all into new CM
+# merge all into new CM and set new minimal addons
 yq ea '. as $item ireduce ({}; . * $item ) |
        .global.clusterName = strenv(CLUSTERNAME) |
-       .global.highAvailable = env(HIGHAVAILABLE)' $WORKDIR/addons-values.yaml ${WORKDIR}/network-values.yaml $WORKDIR/argo-values.yaml > $WORKDIR/kubezero-pre-values.yaml
+       .global.highAvailable = env(HIGHAVAILABLE) |
+       .addons.clusterBackup.image.tag = "v1.23" ' ${WORKDIR}/network-values.yaml $WORKDIR/argo-values.yaml > $WORKDIR/kubezero-pre-values.yaml
 
 # tumble new config through migrate.py
 cat $WORKDIR/kubezero-pre-values.yaml | migrate_argo_values.py > $WORKDIR/kubezero-values.yaml

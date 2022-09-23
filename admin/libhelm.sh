@@ -55,6 +55,21 @@ function enable_argo() {
 }
 
 
+function cntFailedPods() {
+  NS=$1
+
+  NR=$(kubectl get pods -n $NS --field-selector="status.phase!=Succeeded,status.phase!=Running" -o custom-columns="POD:metadata.name" -o json | jq '.items | length')
+  echo $NR
+}
+
+
+function waitSystemPodsRunning() {
+  while true; do
+    [ "$(cntFailedPods kube-system)" -eq 0 ] && break
+    sleep 3
+  done
+}
+
 function argo_app_synced() {
   APP=$1
 
@@ -93,7 +108,7 @@ function _crds() {
 
   # Only apply if there are actually any crds
   if [ -s $WORKDIR/crds.yaml ]; then
-    kubectl apply -f $WORKDIR/crds.yaml --server-side
+    kubectl apply -f $WORKDIR/crds.yaml --server-side --force-conflicts
   fi
 }
 
@@ -114,7 +129,7 @@ for manifest in yaml.safe_load_all(sys.stdin):
         print("---")
         print(yaml.dump(manifest))' $namespace > $WORKDIR/helm.yaml
 
-  kubectl $action -f $WORKDIR/helm.yaml && rc=$? || rc=$?
+  kubectl $action -f $WORKDIR/helm.yaml --server-side --force-conflicts && rc=$? || rc=$?
 }
 
 

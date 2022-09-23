@@ -166,7 +166,7 @@ control_plane_node() {
 
   else
     # restore latest backup
-    retry 10 60 30 restic restore latest --no-lock -t / --tag $KUBE_VERSION_MINOR
+    retry 10 60 30 restic restore latest --no-lock -t / #Review: Use latest no matter what for now: --tag $KUBE_VERSION_MINOR
 
     # Make last etcd snapshot available
     cp ${WORKDIR}/etcd_snapshot ${HOSTFS}/etc/kubernetes
@@ -382,8 +382,7 @@ for t in $@; do
     bootstrap) control_plane_node bootstrap;;
     join) control_plane_node join;;
     restore) control_plane_node restore;;
-    apply_network) apply_module network;;
-    apply_addons) apply_module addons;;
+    apply_*) apply_module ${t##apply_};;
     backup) backup;;
     debug_shell) debug_shell;;
     *) echo "Unknown command: '$t'";;

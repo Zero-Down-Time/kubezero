@@ -19,11 +19,13 @@ addons:
     enabled: false
   aws-node-termination-handler:
     enabled: false
+  cluster-autoscaler:
+    enabled: false
 
 network:
   enabled: true
   retain: true
-  targetRevision: 0.3.3
+  targetRevision: 0.3.4
   cilium:
     cluster: {}
 

@@ -37,27 +37,27 @@ cilium:
     binPath: "/usr/libexec/cni"
     #-- Ensure this is false if multus is enabled
     exclusive: false
-  # chainingMode: generic-veth
+    chainingMode: generic-veth
 
-  # Until we switch to Cilium
-  #bpf:
-  #  hostLegacyRouting: true
+  bpf:
+    hostLegacyRouting: true
   #  tproxy: false
 
   # enableIPv4Masquerade: false
   # enableIdentityMark: false
-  policyEnforcementMode: "audit"
+  policyEnforcementMode: "never"
 
   cluster:
     # This should match the second octet of clusterPoolIPv4PodCIDRList
     # to prevent IP space overlap and easy tracking
-    id: 1
+    # use 240 as default, less likely to clash with 1, do NOT use 244 used by calico until 1.25
+    id: 240
     name: default
 
   ipam:
     operator:
       clusterPoolIPv4PodCIDRList:
-        - 10.1.0.0/16
+        - 10.240.0.0/16
 
   # Should be handled by multus
   nodePort:
