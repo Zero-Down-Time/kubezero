@@ -31,6 +31,9 @@ spec:
       labels:
         name: kubezero-all-nodes-upgrade
     spec:
+      hostNetwork: true
+      hostIPC: true
+      hostPID: true
       tolerations:
       - key: node-role.kubernetes.io/master
         operator: Exists
@@ -43,7 +46,10 @@ spec:
         volumeMounts:
         - name: host
           mountPath: /host
+        - name: hostproc
+          mountPath: /hostproc
         securityContext:
+          privileged: true
           capabilities:
             add: ["SYS_ADMIN"]
       containers:
@@ -54,6 +60,10 @@ spec:
       - name: host
         hostPath:
           path: /
+          type: Directory
+      - name: hostproc
+        hostPath:
+          path: /proc
           type: Directory
 EOF
 
@@ -122,14 +132,18 @@ EOF
   kubectl delete pod kubezero-upgrade -n kube-system
 }
 
+
+echo "Checking that all pods in kube-system are running ..."
+waitSystemPodsRunning
+
 argo_used && disable_argo
 
-all_nodes_upgrade "mount --make-shared /host/sys/fs/cgroup; mount --make-shared /host/sys;"
+all_nodes_upgrade "nsenter -m/hostproc/1/ns/mnt mount --make-shared /sys/fs/cgroup; mount --make-shared /sys; sleep 3;"
 
 control_plane_upgrade kubeadm_upgrade
 
-echo "Adjust kubezero-values as needed: (eg. set cilium cluster id etc):"
-kubectl edit cm kubezero-values -n kube-system
+echo "Adjust kubezero values as needed: (eg. set cilium cluster id and ensure no IP space overlap !!):"
+argo_used && kubectl edit app kubezero -n argocd || kubectl edit cm kubezero-values -n kube-system
 
 # Remove multus DS due to label changes, if this fails:
 # kubezero-network $ helm template . --set multus.enabled=true | kubectl apply -f -
@@ -141,16 +155,25 @@ kubectl delete daemonset metrics-prometheus-node-exporter -n monitoring || true
 # AWS EBS CSI driver change their fsGroupPolicy
 kubectl delete CSIDriver ebs.csi.aws.com || true
 
-control_plane_upgrade "apply_network, apply_addons"
+control_plane_upgrade "apply_network, apply_addons, apply_storage"
 
 kubectl rollout restart daemonset/calico-node -n kube-system
 kubectl rollout restart daemonset/cilium -n kube-system
 kubectl rollout restart daemonset/kube-multus-ds -n kube-system
 
-argo_used && enable_argo
+echo "Checking that all pods in kube-system are running ..."
+waitSystemPodsRunning
+
+echo "Applying remaining KubeZero modules..."
+control_plane_upgrade "apply_cert-manager, apply_istio, apply_istio-ingress, apply_istio-private-ingress, apply_logging, apply_metrics, apply_argocd"
 
 # Final step is to commit the new argocd kubezero app
-kubectl get app kubezero -n argocd -o yaml | yq 'del(.status) | del(.metadata) | .metadata.name="kubezero" | .metadata.namespace="argocd"' | yq 'sort_keys(..) | .spec.source.helm.values |= (from_yaml | to_yaml)' > /tmp/new-kubezero-argoapp.yaml
+kubectl get app kubezero -n argocd -o yaml | yq 'del(.status) | del(.metadata) | del(.operation) | .metadata.name="kubezero" | .metadata.namespace="argocd"' | yq 'sort_keys(..) | .spec.source.helm.values |= (from_yaml | to_yaml)' > $ARGO_APP
 
 echo "Please commit $ARGO_APP as the updated kubezero/application.yaml for your cluster."
 echo "Then head over to ArgoCD for this cluster and sync all KubeZero modules to apply remaining upgrades."
+
+echo "<Return> to continue and re-enable ArgoCD:"
+read
+
+argo_used && enable_argo

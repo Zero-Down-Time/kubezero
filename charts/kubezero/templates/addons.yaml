@@ -79,26 +79,29 @@ external-dns:
       value: "0"
   {{- end }}
 
-
-{{- with index .Values "addons" "cluster-autoscaler" }}
 cluster-autoscaler:
-  {{- toYaml . | nindent 2 }}
-  autoDiscovery:
-    clusterName: {{ $.Values.global.clusterName }}
+  enabled: {{ default "false" (index .Values "addons" "cluster-autoscaler" "enabled") }}
 
-  {{- with $.Values.metrics }}
+  {{- with omit (index .Values "addons" "cluster-autoscaler") "enabled" }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+
+  autoDiscovery:
+    clusterName: {{ .Values.global.clusterName }}
+
+  {{- with .Values.metrics }}
   serviceMonitor:
     enabled: {{ .enabled }}
   prometheusRule:
     enabled: {{ .enabled }}
   {{- end }}
 
+  {{- if .Values.global.aws }}
   # AWS
-  {{- if $.Values.global.aws }}
-  awsRegion: {{ $.Values.global.aws.region }}
+  awsRegion: {{ .Values.global.aws.region }}
 
   extraEnv:
-    AWS_ROLE_ARN: "arn:aws:iam::{{ $.Values.global.aws.accountId }}:role/{{ $.Values.global.aws.region }}.{{ $.Values.global.clusterName }}.clusterAutoScaler"
+    AWS_ROLE_ARN: "arn:aws:iam::{{ .Values.global.aws.accountId }}:role/{{ .Values.global.aws.region }}.{{ .Values.global.clusterName }}.clusterAutoScaler"
     AWS_WEB_IDENTITY_TOKEN_FILE: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
     AWS_STS_REGIONAL_ENDPOINTS: "regional"
   extraVolumes:
@@ -114,8 +117,6 @@ cluster-autoscaler:
     mountPath: "/var/run/secrets/sts.amazonaws.com/serviceaccount/"
     readOnly: true
   {{- end }}
-
-{{- end }}
 
 {{- with .Values.addons.fuseDevicePlugin }}
 fuseDevicePlugin:
