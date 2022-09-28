@@ -1,6 +1,6 @@
 # kubezero-ci
 
-![Version: 0.5.13](https://img.shields.io/badge/Version-0.5.13-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.5.14](https://img.shields.io/badge/Version-0.5.14-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things CI
 
@@ -18,9 +18,9 @@ Kubernetes: `>= 1.20.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://aquasecurity.github.io/helm-charts/ | trivy | 0.4.16 |
+| https://aquasecurity.github.io/helm-charts/ | trivy | 0.4.17 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
-| https://charts.jenkins.io | jenkins | 4.2.1 |
+| https://charts.jenkins.io | jenkins | 4.2.6 |
 | https://dl.gitea.io/charts/ | gitea | 5.0.9 |
 | https://gocd.github.io/helm-chart | gocd | 1.40.8 |
 
@@ -95,13 +95,13 @@ Kubernetes: `>= 1.20.0`
 | jenkins.controller.initContainerResources.limits.memory | string | `"1024Mi"` |  |
 | jenkins.controller.initContainerResources.requests.cpu | string | `"50m"` |  |
 | jenkins.controller.initContainerResources.requests.memory | string | `"256Mi"` |  |
-| jenkins.controller.installPlugins[0] | string | `"kubernetes:3704.va_08f0206b_95e"` |  |
+| jenkins.controller.installPlugins[0] | string | `"kubernetes:3706.vdfb_d599579f3"` |  |
 | jenkins.controller.installPlugins[1] | string | `"workflow-aggregator:581.v0c46fa_697ffd"` |  |
-| jenkins.controller.installPlugins[2] | string | `"git:4.11.5"` |  |
+| jenkins.controller.installPlugins[2] | string | `"git:4.12.1"` |  |
 | jenkins.controller.installPlugins[3] | string | `"configuration-as-code:1512.vb_79d418d5fc8"` |  |
 | jenkins.controller.installPlugins[4] | string | `"antisamy-markup-formatter:2.7"` |  |
 | jenkins.controller.installPlugins[5] | string | `"prometheus:2.0.11"` |  |
-| jenkins.controller.installPlugins[6] | string | `"htmlpublisher:1.30"` |  |
+| jenkins.controller.installPlugins[6] | string | `"htmlpublisher:1.31"` |  |
 | jenkins.controller.installPlugins[7] | string | `"build-discarder:139.v05696a_7fe240"` |  |
 | jenkins.controller.installPlugins[8] | string | `"dark-theme:245.vb_a_2b_b_010ea_96"` |  |
 | jenkins.controller.installPlugins[9] | string | `"kubernetes-credentials-provider:1.196.va_55f5e31e3c2"` |  |
@@ -112,7 +112,7 @@ Kubernetes: `>= 1.20.0`
 | jenkins.controller.resources.limits.memory | string | `"4096Mi"` |  |
 | jenkins.controller.resources.requests.cpu | string | `"250m"` |  |
 | jenkins.controller.resources.requests.memory | string | `"1280Mi"` |  |
-| jenkins.controller.tag | string | `"2.362-alpine-jdk17"` |  |
+| jenkins.controller.tag | string | `"2.370-alpine-jdk17"` |  |
 | jenkins.controller.testEnabled | bool | `false` |  |
 | jenkins.enabled | bool | `false` |  |
 | jenkins.istio.agent.enabled | bool | `false` |  |

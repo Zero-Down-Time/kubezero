@@ -1,6 +1,6 @@
 # kubezero-storage
 
-![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.7.1](https://img.shields.io/badge/Version-0.7.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things storage incl. AWS EBS/EFS, openEBS-lvm, gemini
 
@@ -18,7 +18,7 @@ Kubernetes: `>= 1.20.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | aws-ebs-csi-driver | 2.10.1 |
+|  | aws-ebs-csi-driver | 2.11.0 |
 |  | aws-efs-csi-driver | 2.2.7 |
 |  | gemini | 1.0.0 |
 |  | lvm-localpv | 1.0.0 |

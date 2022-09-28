@@ -10,7 +10,7 @@ global:
 
 addons:
   enabled: true
-  targetRevision: 0.6.2
+  targetRevision: 0.6.3
   external-dns:
     enabled: false
   forseti:
@@ -74,7 +74,7 @@ metrics:
 logging:
   enabled: false
   namespace: logging
-  targetRevision: 0.8.2
+  targetRevision: 0.8.3
 
 argocd:
   enabled: false

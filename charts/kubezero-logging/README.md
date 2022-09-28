@@ -1,6 +1,6 @@
 # kubezero-logging
 
-![Version: 0.8.2](https://img.shields.io/badge/Version-0.8.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6.0](https://img.shields.io/badge/AppVersion-1.6.0-informational?style=flat-square)
+![Version: 0.8.3](https://img.shields.io/badge/Version-0.8.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6.0](https://img.shields.io/badge/AppVersion-1.6.0-informational?style=flat-square)
 
 KubeZero Umbrella Chart for complete EFK stack
 
@@ -96,10 +96,7 @@ Kubernetes: `>= 1.20.0`
 | fluent-bit.serviceMonitor.enabled | bool | `false` |  |
 | fluent-bit.serviceMonitor.selector.release | string | `"metrics"` |  |
 | fluent-bit.tolerations[0].effect | string | `"NoSchedule"` |  |
-| fluent-bit.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
-| fluent-bit.tolerations[1].effect | string | `"NoSchedule"` |  |
-| fluent-bit.tolerations[1].key | string | `"kubezero-workergroup"` |  |
-| fluent-bit.tolerations[1].operator | string | `"Exists"` |  |
+| fluent-bit.tolerations[0].operator | string | `"Exists"` |  |
 | fluentd.dashboards.enabled | bool | `false` |  |
 | fluentd.enabled | bool | `false` |  |
 | fluentd.env[0].name | string | `"FLUENTD_CONF"` |  |

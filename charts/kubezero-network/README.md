@@ -1,6 +1,6 @@
 # kubezero-network
 
-![Version: 0.3.3](https://img.shields.io/badge/Version-0.3.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.3.4](https://img.shields.io/badge/Version-0.3.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things network
 
@@ -28,16 +28,18 @@ Kubernetes: `>= 1.20.0`
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | calico.enabled | bool | `false` |  |
+| cilium.bpf.hostLegacyRouting | bool | `true` |  |
 | cilium.cgroup.autoMount.enabled | bool | `false` |  |
 | cilium.cgroup.hostRoot | string | `"/sys/fs/cgroup"` |  |
-| cilium.cluster.id | int | `1` |  |
+| cilium.cluster.id | int | `240` |  |
 | cilium.cluster.name | string | `"default"` |  |
 | cilium.cni.binPath | string | `"/usr/libexec/cni"` |  |
+| cilium.cni.chainingMode | string | `"generic-veth"` |  |
 | cilium.cni.exclusive | bool | `false` |  |
 | cilium.containerRuntime.integration | string | `"crio"` |  |
 | cilium.enabled | bool | `false` |  |
 | cilium.hubble.enabled | bool | `false` |  |
-| cilium.ipam.operator.clusterPoolIPv4PodCIDRList[0] | string | `"10.1.0.0/16"` |  |
+| cilium.ipam.operator.clusterPoolIPv4PodCIDRList[0] | string | `"10.240.0.0/16"` |  |
 | cilium.l2NeighDiscovery.enabled | bool | `false` |  |
 | cilium.l7Proxy | bool | `false` |  |
 | cilium.nodePort.enabled | bool | `false` |  |
@@ -45,7 +47,7 @@ Kubernetes: `>= 1.20.0`
 | cilium.operator.replicas | int | `1` |  |
 | cilium.operator.tolerations[0].effect | string | `"NoSchedule"` |  |
 | cilium.operator.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
-| cilium.policyEnforcementMode | string | `"audit"` |  |
+| cilium.policyEnforcementMode | string | `"never"` |  |
 | cilium.prometheus.enabled | bool | `false` |  |
 | cilium.prometheus.port | int | `9091` |  |
 | cilium.securityContext.privileged | bool | `true` |  |

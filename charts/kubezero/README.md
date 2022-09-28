@@ -24,12 +24,13 @@ Kubernetes: `>= 1.20.0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| addons.aws-node-termination-handler | object | `{}` |  |
-| addons.clusterBackup | object | `{}` |  |
+| addons.aws-node-termination-handler.enabled | bool | `false` |  |
+| addons.cluster-autoscaler.enabled | bool | `false` |  |
+| addons.clusterBackup.enabled | bool | `false` |  |
 | addons.enabled | bool | `true` |  |
-| addons.external-dns | object | `{}` |  |
-| addons.forseti | object | `{}` |  |
-| addons.targetRevision | string | `"0.6.2"` |  |
+| addons.external-dns.enabled | bool | `false` |  |
+| addons.forseti.enabled | bool | `false` |  |
+| addons.targetRevision | string | `"0.6.3"` |  |
 | argocd.enabled | bool | `false` |  |
 | argocd.istio.enabled | bool | `false` |  |
 | argocd.namespace | string | `"argocd"` |  |
@@ -58,7 +59,7 @@ Kubernetes: `>= 1.20.0`
 | kubezero.server | string | `"https://kubernetes.default.svc"` |  |
 | logging.enabled | bool | `false` |  |
 | logging.namespace | string | `"logging"` |  |
-| logging.targetRevision | string | `"0.8.2"` |  |
+| logging.targetRevision | string | `"0.8.3"` |  |
 | metrics.enabled | bool | `false` |  |
 | metrics.istio.grafana | object | `{}` |  |
 | metrics.istio.prometheus | object | `{}` |  |
@@ -67,7 +68,7 @@ Kubernetes: `>= 1.20.0`
 | network.cilium.cluster | object | `{}` |  |
 | network.enabled | bool | `true` |  |
 | network.retain | bool | `true` |  |
-| network.targetRevision | string | `"0.3.3"` |  |
+| network.targetRevision | string | `"0.3.4"` |  |
 | storage.aws-ebs-csi-driver.enabled | bool | `false` |  |
 | storage.aws-efs-csi-driver.enabled | bool | `false` |  |
 | storage.enabled | bool | `false` |  |
