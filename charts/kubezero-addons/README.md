@@ -1,6 +1,6 @@
 # kubezero-addons
 
-![Version: 0.6.2](https://img.shields.io/badge/Version-0.6.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.23.10](https://img.shields.io/badge/AppVersion-v1.23.10-informational?style=flat-square)
+![Version: 0.6.3](https://img.shields.io/badge/Version-0.6.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.23.11](https://img.shields.io/badge/AppVersion-v1.23.11-informational?style=flat-square)
 
 KubeZero umbrella chart for various optional cluster addons
 
@@ -70,9 +70,12 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | cluster-autoscaler.autoDiscovery.clusterName | string | `""` |  |
 | cluster-autoscaler.awsRegion | string | `"us-west-2"` |  |
 | cluster-autoscaler.enabled | bool | `false` |  |
+| cluster-autoscaler.extraArgs.scan-interval | string | `"30s"` |  |
+| cluster-autoscaler.extraArgs.skip-nodes-with-local-storage | bool | `false` |  |
 | cluster-autoscaler.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | cluster-autoscaler.podDisruptionBudget | bool | `false` |  |
 | cluster-autoscaler.prometheusRule.enabled | bool | `false` |  |
+| cluster-autoscaler.prometheusRule.interval | string | `"30"` |  |
 | cluster-autoscaler.serviceMonitor.enabled | bool | `false` |  |
 | cluster-autoscaler.serviceMonitor.interval | string | `"30s"` |  |
 | cluster-autoscaler.tolerations[0].effect | string | `"NoSchedule"` |  |

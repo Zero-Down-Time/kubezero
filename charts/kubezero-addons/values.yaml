@@ -123,9 +123,14 @@ cluster-autoscaler:
 
   prometheusRule:
     enabled: false
+    interval: "30"
 
   # Disable pdb for now
   podDisruptionBudget: false
+
+  extraArgs:
+    scan-interval: 30s
+    skip-nodes-with-local-storage: false
 
   #securityContext:
   #  runAsNonRoot: true
@@ -170,7 +175,7 @@ external-dns:
 
   #logLevel: debug
   sources:
-  - service
+    - service
   #- istio-gateway
 
   provider: inmemory

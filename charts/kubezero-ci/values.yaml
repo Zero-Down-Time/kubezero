@@ -69,7 +69,7 @@ jenkins:
   enabled: false
 
   controller:
-    tag: 2.362-alpine-jdk17
+    tag: 2.370-alpine-jdk17
     #tagLabel: alpine
     disableRememberMe: true
     prometheus:
@@ -114,13 +114,13 @@ jenkins:
                       numToKeepStr: "10"
 
     installPlugins:
-      - kubernetes:3704.va_08f0206b_95e
+      - kubernetes:3706.vdfb_d599579f3
       - workflow-aggregator:581.v0c46fa_697ffd
-      - git:4.11.5
+      - git:4.12.1
       - configuration-as-code:1512.vb_79d418d5fc8
       - antisamy-markup-formatter:2.7
       - prometheus:2.0.11
-      - htmlpublisher:1.30
+      - htmlpublisher:1.31
       - build-discarder:139.v05696a_7fe240
       - dark-theme:245.vb_a_2b_b_010ea_96
       - kubernetes-credentials-provider:1.196.va_55f5e31e3c2

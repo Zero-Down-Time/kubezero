@@ -92,8 +92,9 @@ cluster-autoscaler:
   {{- with .Values.metrics }}
   serviceMonitor:
     enabled: {{ .enabled }}
-  prometheusRule:
-    enabled: {{ .enabled }}
+  # Buggy atm due to integer vs. string issue
+  # prometheusRule:
+  #  enabled: {{ .enabled }}
   {{- end }}
 
   {{- if .Values.global.aws }}

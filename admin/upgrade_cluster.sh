@@ -138,7 +138,7 @@ waitSystemPodsRunning
 
 argo_used && disable_argo
 
-all_nodes_upgrade "nsenter -m/hostproc/1/ns/mnt mount --make-shared /sys/fs/cgroup; mount --make-shared /sys; sleep 3;"
+all_nodes_upgrade "nsenter -m/hostproc/1/ns/mnt mount --make-shared /sys/fs/cgroup; nsenter -m/hostproc/1/ns/mnt mount --make-shared /sys; nsenter -r/host /usr/bin/podman image prune -a -f;"
 
 control_plane_upgrade kubeadm_upgrade
 
@@ -155,6 +155,9 @@ kubectl delete daemonset metrics-prometheus-node-exporter -n monitoring || true
 # AWS EBS CSI driver change their fsGroupPolicy
 kubectl delete CSIDriver ebs.csi.aws.com || true
 
+# Delete external-dns deployment as upstream changed strategy to 'recreate'
+kubectl delete deployment addons-external-dns -n kube-system || true
+
 control_plane_upgrade "apply_network, apply_addons, apply_storage"
 
 kubectl rollout restart daemonset/calico-node -n kube-system
@@ -165,7 +168,16 @@ echo "Checking that all pods in kube-system are running ..."
 waitSystemPodsRunning
 
 echo "Applying remaining KubeZero modules..."
+
+# Delete outdated cert-manager CRDs, otherwise serverside apply will fail
+for c in certificaterequests.cert-manager.io certificates.cert-manager.io challenges.acme.cert-manager.io clusterissuers.cert-manager.io issuers.cert-manager.io orders.acme.cert-manager.io; do
+  kubectl delete crd $c
+done
+
 control_plane_upgrade "apply_cert-manager, apply_istio, apply_istio-ingress, apply_istio-private-ingress, apply_logging, apply_metrics, apply_argocd"
+
+# delete legace ArgCD controller which is now a statefulSet
+kubectl delete deployment argocd-application-controller -n argocd || true
 
 # Final step is to commit the new argocd kubezero app
 kubectl get app kubezero -n argocd -o yaml | yq 'del(.status) | del(.metadata) | del(.operation) | .metadata.name="kubezero" | .metadata.namespace="argocd"' | yq 'sort_keys(..) | .spec.source.helm.values |= (from_yaml | to_yaml)' > $ARGO_APP
