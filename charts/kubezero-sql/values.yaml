@@ -1,5 +1,5 @@
 mariadb-galera:
-  enabled: true
+  enabled: false
 
   replicaCount: 2
 

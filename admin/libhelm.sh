@@ -137,6 +137,9 @@ function _helm() {
   local action=$1
   local module=$2
 
+  # check if module is even enabled and return if not
+  [ ! -f $WORKDIR/kubezero/templates/${module}.yaml ] && { echo "Module $module disabled. No-op."; return 0; }
+
   local chart="$(yq eval '.spec.source.chart' $WORKDIR/kubezero/templates/${module}.yaml)"
   local namespace="$(yq eval '.spec.destination.namespace' $WORKDIR/kubezero/templates/${module}.yaml)"
 

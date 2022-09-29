@@ -38,7 +38,8 @@ clean: rm-test-image rm-image
 .PHONY: rm-remote-untagged
 rm-remote-untagged:
 	@echo "Removing all untagged images from $(IMAGE) in $(REGION)"
-	@aws ecr-public batch-delete-image --repository-name $(IMAGE) --region $(REGION) --image-ids $$(for image in $$(aws ecr-public describe-images --repository-name $(IMAGE) --region $(REGION) --output json | jq -r '.imageDetails[] | select(.imageTags | not ).imageDigest'); do echo -n "imageDigest=$$image "; done)
+	@IMAGE_IDS=$$(for image in $$(aws ecr-public describe-images --repository-name $(IMAGE) --region $(REGION) --output json | jq -r '.imageDetails[] | select(.imageTags | not ).imageDigest'); do echo -n "imageDigest=$$image "; done) ; \
+	  [ -n "$$IMAGE_IDS" ] && aws ecr-public batch-delete-image --repository-name $(IMAGE) --region $(REGION) --image-ids $$IMAGE_IDS || echo "Nothing to remove"
 
 .PHONY: rm-image
 rm-image:
