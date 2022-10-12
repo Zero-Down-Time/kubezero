@@ -36,7 +36,7 @@ cert-manager:
 
 storage:
   enabled: false
-  targetRevision: 0.7.1
+  targetRevision: 0.7.2
   aws-ebs-csi-driver:
     enabled: false
   aws-efs-csi-driver:
