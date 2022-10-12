@@ -69,14 +69,18 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-          {{- if .Values.controller.extraEnv }}
+            {{- if .Values.useFIPS }}
+            - name: AWS_USE_FIPS_ENDPOINT
+              value: "true"
+            {{- end }}
+            {{- if .Values.controller.extraEnv }}
             {{- toYaml .Values.controller.extraEnv | nindent 12 }}
-          {{- end }}
+            {{- end }}
           volumeMounts:
             - name: socket-dir
               mountPath: /var/lib/csi/sockets/pluginproxy/
             - name: aws-token
-              mountPath: "/var/run/secrets/sts.amazonaws.com/serviceaccount/"
+              mountPath: /var/run/secrets/sts.amazonaws.com/serviceaccount/
           ports:
             - name: healthz
               containerPort: {{ .Values.controller.healthPort }}

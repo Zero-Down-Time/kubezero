@@ -95,8 +95,15 @@ aws-ebs-csi-driver:
         memory: 40Mi
 
   node:
+    tolerateAllTaints: false
     tolerations:
     - key: kubezero-workergroup
+      effect: NoSchedule
+      operator: Exists
+    - key: nvidia.com/gpu
+      effect: NoSchedule
+      operator: Exists
+    - key: aws.amazon.com/neuron
       effect: NoSchedule
       operator: Exists
 
@@ -169,6 +176,12 @@ aws-efs-csi-driver:
               operator: Exists
     tolerations:
     - key: kubezero-workergroup
+      effect: NoSchedule
+      operator: Exists
+    - key: nvidia.com/gpu
+      effect: NoSchedule
+      operator: Exists
+    - key: aws.amazon.com/neuron
       effect: NoSchedule
       operator: Exists
 
