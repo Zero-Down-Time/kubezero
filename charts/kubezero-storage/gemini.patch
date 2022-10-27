@@ -1,7 +1,7 @@
 diff -rtubN charts/gemini/templates/deployment.yaml charts/gemini.zdt/templates/deployment.yaml
 --- charts/gemini/templates/deployment.yaml	2021-04-19 12:00:43.605005861 +0200
 +++ charts/gemini.zdt/templates/deployment.yaml	2021-04-19 12:00:08.365005781 +0200
-@@ -19,6 +19,11 @@
+@@ -19,6 +19,13 @@
        {{- else }}
        serviceAccountName: {{ .Values.rbac.serviceAccountName }}
        {{- end }}
@@ -10,6 +10,8 @@ diff -rtubN charts/gemini/templates/deployment.yaml charts/gemini.zdt/templates/
 +      tolerations:
 +      - effect: NoSchedule
 +        key: node-role.kubernetes.io/master
++      - effect: NoSchedule
++        key: node-role.kubernetes.io/control-plane
        containers:
        - command:
          - gemini

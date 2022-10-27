@@ -1,6 +1,6 @@
 # kubezero-metrics
 
-![Version: 0.8.5](https://img.shields.io/badge/Version-0.8.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.8.7](https://img.shields.io/badge/Version-0.8.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Prometheus, Grafana and Alertmanager as well as all Kubernetes integrations.
 
@@ -14,12 +14,12 @@ KubeZero Umbrella Chart for Prometheus, Grafana and Alertmanager as well as all 
 
 ## Requirements
 
-Kubernetes: `>= 1.20.0`
+Kubernetes: `>= 1.24.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | kube-prometheus-stack | 40.0.0 |
-|  | prometheus-pushgateway | 1.18.2 |
+|  | kube-prometheus-stack | 41.4.1 |
+|  | prometheus-pushgateway | 1.20.0 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
 | https://prometheus-community.github.io/helm-charts | prometheus-adapter | 3.4.0 |
 
@@ -127,6 +127,8 @@ Kubernetes: `>= 1.20.0`
 | kube-prometheus-stack.kube-state-metrics.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | kube-prometheus-stack.kube-state-metrics.tolerations[0].effect | string | `"NoSchedule"` |  |
 | kube-prometheus-stack.kube-state-metrics.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| kube-prometheus-stack.kube-state-metrics.tolerations[1].effect | string | `"NoSchedule"` |  |
+| kube-prometheus-stack.kube-state-metrics.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | kube-prometheus-stack.kubeApiServer.enabled | bool | `true` |  |
 | kube-prometheus-stack.kubeControllerManager.enabled | bool | `true` |  |
 | kube-prometheus-stack.kubeControllerManager.service.port | int | `10257` |  |
@@ -168,10 +170,11 @@ Kubernetes: `>= 1.20.0`
 | kube-prometheus-stack.prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues | bool | `false` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.accessModes[0] | string | `"ReadWriteOnce"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage | string | `"16Gi"` |  |
-| kube-prometheus-stack.prometheus.prometheusSpec.walCompression | bool | `true` |  |
 | kube-prometheus-stack.prometheusOperator.admissionWebhooks.patch.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | kube-prometheus-stack.prometheusOperator.admissionWebhooks.patch.tolerations[0].effect | string | `"NoSchedule"` |  |
 | kube-prometheus-stack.prometheusOperator.admissionWebhooks.patch.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| kube-prometheus-stack.prometheusOperator.admissionWebhooks.patch.tolerations[1].effect | string | `"NoSchedule"` |  |
+| kube-prometheus-stack.prometheusOperator.admissionWebhooks.patch.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | kube-prometheus-stack.prometheusOperator.enabled | bool | `true` |  |
 | kube-prometheus-stack.prometheusOperator.logFormat | string | `"json"` |  |
 | kube-prometheus-stack.prometheusOperator.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
@@ -180,6 +183,8 @@ Kubernetes: `>= 1.20.0`
 | kube-prometheus-stack.prometheusOperator.resources.requests.memory | string | `"32Mi"` |  |
 | kube-prometheus-stack.prometheusOperator.tolerations[0].effect | string | `"NoSchedule"` |  |
 | kube-prometheus-stack.prometheusOperator.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| kube-prometheus-stack.prometheusOperator.tolerations[1].effect | string | `"NoSchedule"` |  |
+| kube-prometheus-stack.prometheusOperator.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | prometheus-adapter.enabled | bool | `true` |  |
 | prometheus-adapter.logLevel | int | `1` |  |
 | prometheus-adapter.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
@@ -200,6 +205,8 @@ Kubernetes: `>= 1.20.0`
 | prometheus-adapter.rules.resource.window | string | `"5m"` |  |
 | prometheus-adapter.tolerations[0].effect | string | `"NoSchedule"` |  |
 | prometheus-adapter.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| prometheus-adapter.tolerations[1].effect | string | `"NoSchedule"` |  |
+| prometheus-adapter.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | prometheus-pushgateway.enabled | bool | `false` |  |
 | prometheus-pushgateway.serviceMonitor.enabled | bool | `true` |  |
 

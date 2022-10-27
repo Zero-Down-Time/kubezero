@@ -67,6 +67,8 @@ aws-node-termination-handler:
   tolerations:
   - key: node-role.kubernetes.io/master
     effect: NoSchedule
+  - key: node-role.kubernetes.io/control-plane
+    effect: NoSchedule
   nodeSelector:
     node-role.kubernetes.io/control-plane: ""
 
@@ -140,6 +142,8 @@ cluster-autoscaler:
   tolerations:
   - key: node-role.kubernetes.io/master
     effect: NoSchedule
+  - key: node-role.kubernetes.io/control-plane
+    effect: NoSchedule
 
   # On AWS enable Projected Service Accounts to assume IAM role
   #extraEnv:
@@ -169,6 +173,8 @@ external-dns:
 
   tolerations:
   - key: node-role.kubernetes.io/master
+    effect: NoSchedule
+  - key: node-role.kubernetes.io/control-plane
     effect: NoSchedule
   nodeSelector:
     node-role.kubernetes.io/control-plane: ""

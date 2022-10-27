@@ -1,9 +1,11 @@
 #!/bin/bash
 set -ex
 
-VERSION=$(yq eval '.dependencies[] | select(.name=="kube-prometheus-stack") | .version' Chart.yaml)
 PG_VER=$(yq eval '.dependencies[] | select(.name=="prometheus-pushgateway") | .version' Chart.yaml)
 
+helm repo update
+
+VERSION=$(yq eval '.dependencies[] | select(.name=="kube-prometheus-stack") | .version' Chart.yaml)
 rm -rf charts/kube-prometheus-stack
 helm pull prometheus-community/kube-prometheus-stack --untar --untardir charts --version $VERSION
 
