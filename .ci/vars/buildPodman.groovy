@@ -62,7 +62,7 @@ def call(Map config=[:]) {
         // Push to ECR
         stage('Push') {
           steps {
-            sh 'make push'
+            sh 'make ecr-login push'
           }
         }
 
