@@ -1,6 +1,6 @@
 # kubezero-ci
 
-![Version: 0.5.14](https://img.shields.io/badge/Version-0.5.14-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.5.15](https://img.shields.io/badge/Version-0.5.15-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things CI
 
@@ -20,7 +20,7 @@ Kubernetes: `>= 1.20.0`
 |------------|------|---------|
 | https://aquasecurity.github.io/helm-charts/ | trivy | 0.4.17 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
-| https://charts.jenkins.io | jenkins | 4.2.6 |
+| https://charts.jenkins.io | jenkins | 4.2.8 |
 | https://dl.gitea.io/charts/ | gitea | 5.0.9 |
 | https://gocd.github.io/helm-chart | gocd | 1.40.8 |
 
@@ -85,7 +85,7 @@ Kubernetes: `>= 1.20.0`
 | jenkins.agent.resources.requests.cpu | string | `"512m"` |  |
 | jenkins.agent.resources.requests.memory | string | `"1024Mi"` |  |
 | jenkins.agent.showRawYaml | bool | `false` |  |
-| jenkins.agent.tag | string | `"v0.3.2"` |  |
+| jenkins.agent.tag | string | `"v0.4.0"` |  |
 | jenkins.agent.yamlMergeStrategy | string | `"merge"` |  |
 | jenkins.agent.yamlTemplate | string | `"apiVersion: v1\nkind: Pod\nspec:\n  securityContext:\n    fsGroup: 1000\n  serviceAccountName: jenkins-podman-aws\n  containers:\n  - name: jnlp\n    resources:\n      limits:\n        github.com/fuse: 1\n    volumeMounts:\n    - name: aws-token\n      mountPath: \"/var/run/secrets/sts.amazonaws.com/serviceaccount/\"\n      readOnly: true\n    - name: host-registries-conf\n      mountPath: \"/home/jenkins/.config/containers/registries.conf\"\n      readOnly: true\n  volumes:\n  - name: aws-token\n    projected:\n      sources:\n      - serviceAccountToken:\n          path: token\n          expirationSeconds: 86400\n          audience: \"sts.amazonaws.com\"\n  - name: host-registries-conf\n    hostPath:\n      path: /etc/containers/registries.conf\n      type: File"` |  |
 | jenkins.controller.JCasC.configScripts.zdt-settings | string | `"jenkins:\n  noUsageStatistics: true\n  disabledAdministrativeMonitors:\n  - \"jenkins.security.ResourceDomainRecommendation\"\nunclassified:\n  buildDiscarders:\n    configuredBuildDiscarders:\n    - \"jobBuildDiscarder\"\n    - defaultBuildDiscarder:\n        discarder:\n          logRotator:\n            artifactDaysToKeepStr: \"32\"\n            artifactNumToKeepStr: \"10\"\n            daysToKeepStr: \"100\"\n            numToKeepStr: \"10\"\n"` |  |
@@ -95,7 +95,7 @@ Kubernetes: `>= 1.20.0`
 | jenkins.controller.initContainerResources.limits.memory | string | `"1024Mi"` |  |
 | jenkins.controller.initContainerResources.requests.cpu | string | `"50m"` |  |
 | jenkins.controller.initContainerResources.requests.memory | string | `"256Mi"` |  |
-| jenkins.controller.installPlugins[0] | string | `"kubernetes:3706.vdfb_d599579f3"` |  |
+| jenkins.controller.installPlugins[0] | string | `"kubernetes:3724.v0920c1e0ec69"` |  |
 | jenkins.controller.installPlugins[1] | string | `"workflow-aggregator:581.v0c46fa_697ffd"` |  |
 | jenkins.controller.installPlugins[2] | string | `"git:4.12.1"` |  |
 | jenkins.controller.installPlugins[3] | string | `"configuration-as-code:1512.vb_79d418d5fc8"` |  |
@@ -104,7 +104,7 @@ Kubernetes: `>= 1.20.0`
 | jenkins.controller.installPlugins[6] | string | `"htmlpublisher:1.31"` |  |
 | jenkins.controller.installPlugins[7] | string | `"build-discarder:139.v05696a_7fe240"` |  |
 | jenkins.controller.installPlugins[8] | string | `"dark-theme:245.vb_a_2b_b_010ea_96"` |  |
-| jenkins.controller.installPlugins[9] | string | `"kubernetes-credentials-provider:1.196.va_55f5e31e3c2"` |  |
+| jenkins.controller.installPlugins[9] | string | `"kubernetes-credentials-provider:1.199.v4a_1d1f5d074f"` |  |
 | jenkins.controller.javaOpts | string | `"-XX:+UseContainerSupport -XX:+UseStringDeduplication -Dhudson.model.DirectoryBrowserSupport.CSP=\"sandbox allow-popups; default-src 'none'; img-src 'self' cdn.zero-downtime.net; style-src 'unsafe-inline';\""` |  |
 | jenkins.controller.jenkinsOpts | string | `"--sessionTimeout=180 --sessionEviction=3600"` |  |
 | jenkins.controller.prometheus.enabled | bool | `false` |  |

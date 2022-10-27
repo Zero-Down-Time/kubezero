@@ -52,6 +52,8 @@ kube-prometheus-stack:
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
     nodeSelector:
       node-role.kubernetes.io/control-plane: ""
     resources:
@@ -65,6 +67,8 @@ kube-prometheus-stack:
       patch:
         tolerations:
         - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+        - key: node-role.kubernetes.io/control-plane
           effect: NoSchedule
         nodeSelector:
           node-role.kubernetes.io/control-plane: ""
@@ -111,7 +115,6 @@ kube-prometheus-stack:
           memory: 4Gi
           # cpu: "1000m"
 
-      walCompression: true
       storageSpec:
         volumeClaimTemplate:
           spec:
@@ -120,6 +123,27 @@ kube-prometheus-stack:
             resources:
               requests:
                 storage: 16Gi
+      #volumes:
+      #  - name: aws-token
+      #    projected:
+      #      sources:
+      #      - serviceAccountToken:
+      #          path: token
+      #          expirationSeconds: 86400
+      #          audience: "sts.amazonaws.com"
+      #volumeMounts:
+      #  - name: aws-token
+      #    mountPath: "/var/run/secrets/sts.amazonaws.com/serviceaccount/"
+      #    readOnly: true
+      #containers:
+      #  - name: prometheus 
+      #    env:
+      #      - name: AWS_ROLE_ARN
+      #        value: "<prometheus IAM ROLE ARN>"
+      #      - name: AWS_WEB_IDENTITY_TOKEN_FILE
+      #        value: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
+      #      - name: AWS_STS_REGIONAL_ENDPOINTS
+      #        value: regional
 
   # Custom Grafana tweaks
   grafana:
@@ -187,6 +211,8 @@ kube-prometheus-stack:
   kube-state-metrics:
     tolerations:
     - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    - key: node-role.kubernetes.io/control-plane
       effect: NoSchedule
     nodeSelector:
       node-role.kubernetes.io/control-plane: ""
@@ -300,6 +326,8 @@ prometheus-adapter:
     url: http://metrics-kube-prometheus-st-prometheus
   tolerations:
   - key: node-role.kubernetes.io/master
+    effect: NoSchedule
+  - key: node-role.kubernetes.io/control-plane
     effect: NoSchedule
   nodeSelector:
     node-role.kubernetes.io/control-plane: ""

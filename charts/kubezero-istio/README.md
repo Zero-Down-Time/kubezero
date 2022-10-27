@@ -1,6 +1,6 @@
 # kubezero-istio
 
-![Version: 0.8.3](https://img.shields.io/badge/Version-0.8.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.8.5](https://img.shields.io/badge/Version-0.8.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Istio
 
@@ -16,7 +16,7 @@ Installs the Istio control plane
 
 ## Requirements
 
-Kubernetes: `>= 1.20.0`
+Kubernetes: `>= 1.24.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
@@ -44,6 +44,8 @@ Kubernetes: `>= 1.20.0`
 | istiod.pilot.resources.requests.memory | string | `"128Mi"` |  |
 | istiod.pilot.tolerations[0].effect | string | `"NoSchedule"` |  |
 | istiod.pilot.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| istiod.pilot.tolerations[1].effect | string | `"NoSchedule"` |  |
+| istiod.pilot.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | istiod.telemetry.enabled | bool | `false` |  |
 | kiali-server.auth.strategy | string | `"anonymous"` |  |
 | kiali-server.deployment.ingress_enabled | bool | `false` |  |

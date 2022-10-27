@@ -1,6 +1,6 @@
 # kubezero-logging
 
-![Version: 0.8.3](https://img.shields.io/badge/Version-0.8.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6.0](https://img.shields.io/badge/AppVersion-1.6.0-informational?style=flat-square)
+![Version: 0.8.4](https://img.shields.io/badge/Version-0.8.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6.0](https://img.shields.io/badge/AppVersion-1.6.0-informational?style=flat-square)
 
 KubeZero Umbrella Chart for complete EFK stack
 
@@ -14,7 +14,7 @@ KubeZero Umbrella Chart for complete EFK stack
 
 ## Requirements
 
-Kubernetes: `>= 1.20.0`
+Kubernetes: `>= 1.24.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
@@ -62,6 +62,8 @@ Kubernetes: `>= 1.20.0`
 | eck-operator.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | eck-operator.tolerations[0].effect | string | `"NoSchedule"` |  |
 | eck-operator.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| eck-operator.tolerations[1].effect | string | `"NoSchedule"` |  |
+| eck-operator.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | elastic_password | string | `""` |  |
 | es.nodeSets | list | `[]` |  |
 | es.prometheus | bool | `false` |  |

@@ -1,6 +1,6 @@
 # kubezero-network
 
-![Version: 0.3.4](https://img.shields.io/badge/Version-0.3.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things network
 
@@ -14,7 +14,7 @@ KubeZero umbrella chart for all things network
 
 ## Requirements
 
-Kubernetes: `>= 1.20.0`
+Kubernetes: `>= 1.24.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
@@ -47,6 +47,8 @@ Kubernetes: `>= 1.20.0`
 | cilium.operator.replicas | int | `1` |  |
 | cilium.operator.tolerations[0].effect | string | `"NoSchedule"` |  |
 | cilium.operator.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| cilium.operator.tolerations[1].effect | string | `"NoSchedule"` |  |
+| cilium.operator.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | cilium.policyEnforcementMode | string | `"never"` |  |
 | cilium.prometheus.enabled | bool | `false` |  |
 | cilium.prometheus.port | int | `9091` |  |
@@ -55,6 +57,8 @@ Kubernetes: `>= 1.20.0`
 | metallb.controller.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | metallb.controller.tolerations[0].effect | string | `"NoSchedule"` |  |
 | metallb.controller.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| metallb.controller.tolerations[1].effect | string | `"NoSchedule"` |  |
+| metallb.controller.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | metallb.enabled | bool | `false` |  |
 | metallb.ipAddressPools | list | `[]` |  |
 | multus.clusterNetwork | string | `"calico"` |  |

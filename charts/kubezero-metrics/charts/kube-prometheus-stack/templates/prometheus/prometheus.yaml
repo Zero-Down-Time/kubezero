@@ -46,6 +46,10 @@ spec:
   sha: {{ .Values.prometheus.prometheusSpec.image.sha }}
   {{- end }}
 {{- end }}
+{{- if .Values.prometheus.prometheusSpec.additionalArgs }}
+  additionalArgs:
+{{ toYaml .Values.prometheus.prometheusSpec.additionalArgs | indent 4}}
+{{- end -}}
 {{- if .Values.prometheus.prometheusSpec.externalLabels }}
   externalLabels:
 {{ tpl (toYaml .Values.prometheus.prometheusSpec.externalLabels | indent 4) . }}
@@ -217,7 +221,7 @@ spec:
 {{- end }}
 {{- if .Values.prometheus.prometheusSpec.storageSpec }}
   storage:
-{{ toYaml .Values.prometheus.prometheusSpec.storageSpec | indent 4 }}
+{{ tpl (toYaml .Values.prometheus.prometheusSpec.storageSpec | indent 4) . }}
 {{- end }}
 {{- if .Values.prometheus.prometheusSpec.podMetadata }}
   podMetadata:
@@ -239,7 +243,7 @@ spec:
         labelSelector:
           matchExpressions:
             - {key: app.kubernetes.io/name, operator: In, values: [prometheus]}
-            - {key: prometheus, operator: In, values: [{{ template "kube-prometheus-stack.fullname" . }}-prometheus]}
+            - {key: prometheus, operator: In, values: [{{ template "kube-prometheus-stack.prometheus.crname" . }}]}
 {{- else if eq .Values.prometheus.prometheusSpec.podAntiAffinity "soft" }}
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
@@ -249,7 +253,7 @@ spec:
           labelSelector:
             matchExpressions:
               - {key: app.kubernetes.io/name, operator: In, values: [prometheus]}
-              - {key: prometheus, operator: In, values: [{{ template "kube-prometheus-stack.fullname" . }}-prometheus]}
+              - {key: prometheus, operator: In, values: [{{ template "kube-prometheus-stack.prometheus.crname" . }}]}
 {{- end }}
 {{- end }}
 {{- if .Values.prometheus.prometheusSpec.tolerations }}
@@ -379,5 +383,8 @@ spec:
 {{- end }}
 {{- if .Values.prometheus.prometheusSpec.allowOverlappingBlocks }}
   allowOverlappingBlocks: {{ .Values.prometheus.prometheusSpec.allowOverlappingBlocks }}
+{{- end }}
+{{- if .Values.prometheus.prometheusSpec.minReadySeconds }}
+  minReadySeconds: {{ .Values.prometheus.prometheusSpec.minReadySeconds }}
 {{- end }}
 {{- end }}

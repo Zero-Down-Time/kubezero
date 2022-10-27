@@ -18,6 +18,8 @@ function reset_index() {
   aws s3 sync $REPO_URL_S3/ $TMPDIR/
   helm repo index $TMPDIR --url $REPO_URL
   aws s3 cp $TMPDIR/index.yaml $REPO_URL_S3/ --cache-control max-age=1
+
+  exit 0
 }
 
 
@@ -49,9 +51,10 @@ function publish_chart() {
 }
 
 
+#reset_index
+
 publish_chart
 
 CF_DIST=E1YFUJXMCXT2RN
 aws cloudfront create-invalidation --distribution $CF_DIST --paths "/charts/*"
 
-#reset_index

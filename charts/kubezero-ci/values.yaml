@@ -114,7 +114,7 @@ jenkins:
                       numToKeepStr: "10"
 
     installPlugins:
-      - kubernetes:3706.vdfb_d599579f3
+      - kubernetes:3724.v0920c1e0ec69
       - workflow-aggregator:581.v0c46fa_697ffd
       - git:4.12.1
       - configuration-as-code:1512.vb_79d418d5fc8
@@ -123,7 +123,7 @@ jenkins:
       - htmlpublisher:1.31
       - build-discarder:139.v05696a_7fe240
       - dark-theme:245.vb_a_2b_b_010ea_96
-      - kubernetes-credentials-provider:1.196.va_55f5e31e3c2
+      - kubernetes-credentials-provider:1.199.v4a_1d1f5d074f
 
   serviceAccountAgent:
     create: true
@@ -132,7 +132,7 @@ jenkins:
   # Preconfigure agents to use zdt podman requires fuse/overlayfs
   agent:
     image: public.ecr.aws/zero-downtime/jenkins-podman
-    tag: v0.3.2
+    tag: v0.4.0
     resources:
       requests:
         cpu: "512m"

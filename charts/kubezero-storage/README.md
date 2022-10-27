@@ -1,6 +1,6 @@
 # kubezero-storage
 
-![Version: 0.7.1](https://img.shields.io/badge/Version-0.7.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.7.3](https://img.shields.io/badge/Version-0.7.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things storage incl. AWS EBS/EFS, openEBS-lvm, gemini
 
@@ -14,12 +14,12 @@ KubeZero umbrella chart for all things storage incl. AWS EBS/EFS, openEBS-lvm, g
 
 ## Requirements
 
-Kubernetes: `>= 1.20.0`
+Kubernetes: `>= 1.24.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | aws-ebs-csi-driver | 2.11.0 |
-|  | aws-efs-csi-driver | 2.2.7 |
+|  | aws-ebs-csi-driver | 2.12.0 |
+|  | aws-efs-csi-driver | 2.2.9 |
 |  | gemini | 1.0.0 |
 |  | lvm-localpv | 1.0.0 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
@@ -37,13 +37,22 @@ Kubernetes: `>= 1.20.0`
 | aws-ebs-csi-driver.controller.resources.requests.memory | string | `"24Mi"` |  |
 | aws-ebs-csi-driver.controller.tolerations[0].effect | string | `"NoSchedule"` |  |
 | aws-ebs-csi-driver.controller.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| aws-ebs-csi-driver.controller.tolerations[1].effect | string | `"NoSchedule"` |  |
+| aws-ebs-csi-driver.controller.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | aws-ebs-csi-driver.enabled | bool | `false` |  |
 | aws-ebs-csi-driver.node.resources.limits.memory | string | `"32Mi"` |  |
 | aws-ebs-csi-driver.node.resources.requests.cpu | string | `"10m"` |  |
 | aws-ebs-csi-driver.node.resources.requests.memory | string | `"16Mi"` |  |
+| aws-ebs-csi-driver.node.tolerateAllTaints | bool | `false` |  |
 | aws-ebs-csi-driver.node.tolerations[0].effect | string | `"NoSchedule"` |  |
 | aws-ebs-csi-driver.node.tolerations[0].key | string | `"kubezero-workergroup"` |  |
 | aws-ebs-csi-driver.node.tolerations[0].operator | string | `"Exists"` |  |
+| aws-ebs-csi-driver.node.tolerations[1].effect | string | `"NoSchedule"` |  |
+| aws-ebs-csi-driver.node.tolerations[1].key | string | `"nvidia.com/gpu"` |  |
+| aws-ebs-csi-driver.node.tolerations[1].operator | string | `"Exists"` |  |
+| aws-ebs-csi-driver.node.tolerations[2].effect | string | `"NoSchedule"` |  |
+| aws-ebs-csi-driver.node.tolerations[2].key | string | `"aws.amazon.com/neuron"` |  |
+| aws-ebs-csi-driver.node.tolerations[2].operator | string | `"Exists"` |  |
 | aws-ebs-csi-driver.storageClasses[0].allowVolumeExpansion | bool | `true` |  |
 | aws-ebs-csi-driver.storageClasses[0].name | string | `"ebs-sc-gp2-xfs"` |  |
 | aws-ebs-csi-driver.storageClasses[0].parameters."csi.storage.k8s.io/fstype" | string | `"xfs"` |  |
@@ -62,6 +71,8 @@ Kubernetes: `>= 1.20.0`
 | aws-efs-csi-driver.controller.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | aws-efs-csi-driver.controller.tolerations[0].effect | string | `"NoSchedule"` |  |
 | aws-efs-csi-driver.controller.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| aws-efs-csi-driver.controller.tolerations[1].effect | string | `"NoSchedule"` |  |
+| aws-efs-csi-driver.controller.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | aws-efs-csi-driver.enabled | bool | `false` |  |
 | aws-efs-csi-driver.node.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key | string | `"node.kubernetes.io/csi.efs.fs"` |  |
 | aws-efs-csi-driver.node.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator | string | `"Exists"` |  |
@@ -72,6 +83,12 @@ Kubernetes: `>= 1.20.0`
 | aws-efs-csi-driver.node.tolerations[0].effect | string | `"NoSchedule"` |  |
 | aws-efs-csi-driver.node.tolerations[0].key | string | `"kubezero-workergroup"` |  |
 | aws-efs-csi-driver.node.tolerations[0].operator | string | `"Exists"` |  |
+| aws-efs-csi-driver.node.tolerations[1].effect | string | `"NoSchedule"` |  |
+| aws-efs-csi-driver.node.tolerations[1].key | string | `"nvidia.com/gpu"` |  |
+| aws-efs-csi-driver.node.tolerations[1].operator | string | `"Exists"` |  |
+| aws-efs-csi-driver.node.tolerations[2].effect | string | `"NoSchedule"` |  |
+| aws-efs-csi-driver.node.tolerations[2].key | string | `"aws.amazon.com/neuron"` |  |
+| aws-efs-csi-driver.node.tolerations[2].operator | string | `"Exists"` |  |
 | aws-efs-csi-driver.replicaCount | int | `1` |  |
 | gemini.enabled | bool | `false` |  |
 | gemini.resources.limits.cpu | string | `"400m"` |  |
@@ -84,6 +101,8 @@ Kubernetes: `>= 1.20.0`
 | lvm-localpv.lvmController.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | lvm-localpv.lvmController.tolerations[0].effect | string | `"NoSchedule"` |  |
 | lvm-localpv.lvmController.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| lvm-localpv.lvmController.tolerations[1].effect | string | `"NoSchedule"` |  |
+| lvm-localpv.lvmController.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | lvm-localpv.lvmNode.logLevel | int | `2` |  |
 | lvm-localpv.lvmNode.nodeSelector."node.kubernetes.io/lvm" | string | `"openebs"` |  |
 | lvm-localpv.lvmNode.tolerations[0].effect | string | `"NoSchedule"` |  |
@@ -102,6 +121,8 @@ Kubernetes: `>= 1.20.0`
 | snapshotController.resources.requests.memory | string | `"16Mi"` |  |
 | snapshotController.tolerations[0].effect | string | `"NoSchedule"` |  |
 | snapshotController.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| snapshotController.tolerations[1].effect | string | `"NoSchedule"` |  |
+| snapshotController.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 
 # Snapshotter
 - https://kubernetes-csi.github.io/docs/snapshot-controller.html#deployment

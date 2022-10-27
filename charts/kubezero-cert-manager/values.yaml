@@ -49,6 +49,8 @@ cert-manager:
   tolerations:
   - key: node-role.kubernetes.io/master
     effect: NoSchedule
+  - key: node-role.kubernetes.io/control-plane
+    effect: NoSchedule
   nodeSelector:
     node-role.kubernetes.io/control-plane: ""
 
@@ -60,12 +62,16 @@ cert-manager:
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
     nodeSelector:
       node-role.kubernetes.io/control-plane: ""
 
   cainjector:
     tolerations:
     - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    - key: node-role.kubernetes.io/control-plane
       effect: NoSchedule
     nodeSelector:
       node-role.kubernetes.io/control-plane: ""

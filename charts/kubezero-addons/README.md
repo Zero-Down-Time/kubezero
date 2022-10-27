@@ -1,6 +1,6 @@
 # kubezero-addons
 
-![Version: 0.6.3](https://img.shields.io/badge/Version-0.6.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.23.11](https://img.shields.io/badge/AppVersion-v1.23.11-informational?style=flat-square)
+![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.24](https://img.shields.io/badge/AppVersion-v1.24-informational?style=flat-square)
 
 KubeZero umbrella chart for various optional cluster addons
 
@@ -14,7 +14,7 @@ KubeZero umbrella chart for various optional cluster addons
 
 ## Requirements
 
-Kubernetes: `>= 1.20.0`
+Kubernetes: `>= 1.24.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
@@ -63,6 +63,8 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | aws-node-termination-handler.taintNode | bool | `true` |  |
 | aws-node-termination-handler.tolerations[0].effect | string | `"NoSchedule"` |  |
 | aws-node-termination-handler.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| aws-node-termination-handler.tolerations[1].effect | string | `"NoSchedule"` |  |
+| aws-node-termination-handler.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | aws-node-termination-handler.useProviderId | bool | `true` |  |
 | awsNeuron.enabled | bool | `false` |  |
 | awsNeuron.image.name | string | `"public.ecr.aws/neuron/neuron-device-plugin"` |  |
@@ -80,6 +82,8 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | cluster-autoscaler.serviceMonitor.interval | string | `"30s"` |  |
 | cluster-autoscaler.tolerations[0].effect | string | `"NoSchedule"` |  |
 | cluster-autoscaler.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| cluster-autoscaler.tolerations[1].effect | string | `"NoSchedule"` |  |
+| cluster-autoscaler.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | clusterBackup.enabled | bool | `false` |  |
 | clusterBackup.extraEnv | list | `[]` |  |
 | clusterBackup.image.name | string | `"public.ecr.aws/zero-downtime/kubezero-admin"` |  |
@@ -104,6 +108,8 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | external-dns.sources[0] | string | `"service"` |  |
 | external-dns.tolerations[0].effect | string | `"NoSchedule"` |  |
 | external-dns.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| external-dns.tolerations[1].effect | string | `"NoSchedule"` |  |
+| external-dns.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | external-dns.triggerLoopOnEvent | bool | `true` |  |
 | forseti.aws.iamRoleArn | string | `""` | "arn:aws:iam::${AWS::AccountId}:role/${AWS::Region}.${ClusterName}.kubezeroForseti" |
 | forseti.aws.region | string | `""` |  |
