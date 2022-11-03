@@ -1,17 +1,27 @@
+pxc-operator:
+  enabled: false
+
+  # we want a clusterwide operator
+  watchAllNamespaces: true
+
+  # running on the control-plane
+  tolerations:
+  - key: node-role.kubernetes.io/master
+    effect: NoSchedule
+  - key: node-role.kubernetes.io/control-plane
+    effect: NoSchedule
+  nodeSelector:
+    node-role.kubernetes.io/control-plane: ""
+
+
 mariadb-galera:
   enabled: false
 
   replicaCount: 2
 
-  # Passwords should be fixed otherwise helm will create random new ones each time we template|apply
-  rootUser:
-    password: 12345qwert
   db:
     user: mariadb
-    password: 12345qwert
   galera:
-    mariabackup:
-      password: 12345qwert
     # For a single node "cluster" force bootstrap
     #bootstrap:
     #  bootstrapFromNode: 0
@@ -19,6 +29,8 @@ mariadb-galera:
 
   metrics:
     enabled: false
+    # set to false for any subsequent installation of the chart in the same cluster to prevent overwriting each other
+    installDashboard: true
     serviceMonitor:
       enabled: false
 
