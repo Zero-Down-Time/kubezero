@@ -26,6 +26,7 @@ Kubernetes: `>= 1.20.0`
 ## Operator
 
 https://github.com/keycloak/keycloak/tree/main/operator
+https://github.com/aerogear/keycloak-metrics-spi
 https://github.com/keycloak/keycloak-benchmark/tree/main/provision/minikube/keycloak/templates
 
 ## Resources
