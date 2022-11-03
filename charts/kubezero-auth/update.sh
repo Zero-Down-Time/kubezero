@@ -14,3 +14,6 @@ wget -O crds/keycloak-realmimports.yaml https://raw.githubusercontent.com/keyclo
 
 wget -O templates/keycloak/operator.yaml https://raw.githubusercontent.com/keycloak/keycloak-k8s-resources/"${VERSION}"/kubernetes/kubernetes.yml
 patch -i keycloak.patch -p0 --no-backup-if-mismatch
+
+# Fetch dashboards
+../kubezero-metrics/sync_grafana_dashboards.py dashboards-keycloak.yaml templates/keycloak/grafana-dashboards.yaml
