@@ -31,8 +31,6 @@ spec:
     - name: db
       value: dev-file
     {{- end }}
-    - name: metrics-enabled
-      value: {{ .Values.keycloak.metrics.enabled | quote }}
     - name: hostname-strict-https
       value: "false"
     - name: proxy
