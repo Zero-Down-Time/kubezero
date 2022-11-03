@@ -4,6 +4,8 @@ kind: Keycloak
 metadata:
   name: {{ template "kubezero-lib.fullname" . }}
   namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kubezero-lib.labels" . | nindent 4 }}
 spec:
   instances: {{ .Values.keycloak.replicas }}
 
@@ -29,12 +31,16 @@ spec:
     - name: db
       value: dev-file
     {{- end }}
+    - name: metrics-enabled
+      value: {{ .Values.keycloak.metrics.enabled | quote }}
     - name: hostname-strict-https
       value: "false"
     - name: proxy
       value: edge
     - name: http-enabled
       value: "true"
+    - name: log-console-output
+      value: json
 
 
   ingress:

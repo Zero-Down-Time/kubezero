@@ -1,6 +1,6 @@
 # kubezero-auth
 
-![Version: 0.2.4](https://img.shields.io/badge/Version-0.2.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 19.0.1](https://img.shields.io/badge/AppVersion-19.0.1-informational?style=flat-square)
+![Version: 0.3.3](https://img.shields.io/badge/Version-0.3.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 20.0.0](https://img.shields.io/badge/AppVersion-20.0.0-informational?style=flat-square)
 
 KubeZero umbrella chart for all things Authentication and Identity management
 
@@ -26,6 +26,7 @@ Kubernetes: `>= 1.20.0`
 ## Operator
 
 https://github.com/keycloak/keycloak/tree/main/operator
+https://github.com/keycloak/keycloak-benchmark/tree/main/provision/minikube/keycloak/templates
 
 ## Resources
 
@@ -41,6 +42,8 @@ https://github.com/keycloak/keycloak/tree/main/operator
 | keycloak.istio.gateway | string | `"istio-ingress/private-ingressgateway"` |  |
 | keycloak.istio.url | string | `""` |  |
 | keycloak.metrics.enabled | bool | `false` |  |
+| keycloak.podDisruptionBudget.minAvailable | int | `1` |  |
+| keycloak.replicas | int | `1` |  |
 | postgresql.auth.database | string | `"keycloak"` |  |
 | postgresql.auth.existingSecret | string | `"kubezero-auth-postgresql"` |  |
 | postgresql.auth.username | string | `"keycloak"` |  |
