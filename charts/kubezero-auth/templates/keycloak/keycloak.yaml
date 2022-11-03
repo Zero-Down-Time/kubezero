@@ -5,12 +5,14 @@ metadata:
   name: {{ template "kubezero-lib.fullname" . }}
   namespace: {{ .Release.Namespace }}
 spec:
-  instances: 1
-  disableDefaultIngress: true
+  instances: {{ .Values.keycloak.replicas }}
 
-  serverConfiguration:
+  additionalOptions:
+    # Needs int casting thx to https://github.com/kubernetes-sigs/yaml/issues/45
+    {{- if lt (int .Values.keycloak.replicas) 2 }}
     - name: cache
       value: local
+    {{- end }}
     {{- if .Values.postgresql.enabled }}
     - name: db
       value: postgres
@@ -30,15 +32,21 @@ spec:
     - name: hostname-strict-https
       value: "false"
     - name: proxy
-      value: passthrough
+      value: edge
     - name: http-enabled
       value: "true"
 
 
-  #hostname: INSECURE-DISABLE
-  hostname: {{ default "keycloak" .Values.keycloak.istio.url }}
-    
+  ingress:
+    enabled: false
+
+  http:
+    httpEnabled: true
+
   # We use Istio Ingress to terminate TLS
   # mTls down the road
-  tlsSecret: INSECURE-DISABLE
+  hostname:
+    hostname: {{ default "keycloak" .Values.keycloak.istio.url }}
+    strict: false
+    strictBackchannel: false
 {{- end }}

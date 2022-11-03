@@ -1,0 +1,15 @@
+{{- if and .Values.keycloak.podDisruptionBudget (gt (int .Values.keycloak.replicas) 1) }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "kubezero-lib.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kubezero-lib.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: keycloak
+      app.kubernetes.io/managed-by: keycloak-operator
+  {{- toYaml .Values.keycloak.podDisruptionBudget | nindent 2 }}
+{{- end }}
