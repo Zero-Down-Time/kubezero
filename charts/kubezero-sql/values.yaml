@@ -13,6 +13,13 @@ pxc-operator:
   nodeSelector:
     node-role.kubernetes.io/control-plane: ""
 
+  resources:
+    limits:
+      #cpu: 200m
+      memory: 512Mi
+    requests:
+      cpu: 50m
+      memory: 32Mi
 
 mariadb-galera:
   enabled: false

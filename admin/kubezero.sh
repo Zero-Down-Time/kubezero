@@ -56,7 +56,7 @@ render_kubeadm() {
     cat ${WORKDIR}/kubeadm/templates/${f}Configuration.yaml >> ${HOSTFS}/etc/kubernetes/kubeadm.yaml
   done
 
-  # hack to "uncloack" the json patches after they go processed by helm
+  # "uncloak" the json patches after they got processed by helm
   for s in apiserver controller-manager scheduler; do
     yq eval '.json' ${WORKDIR}/kubeadm/templates/patches/kube-${s}1\+json.yaml > /tmp/_tmp.yaml && \
       mv /tmp/_tmp.yaml ${WORKDIR}/kubeadm/templates/patches/kube-${s}1\+json.yaml
