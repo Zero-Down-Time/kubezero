@@ -45,7 +45,7 @@ storage:
 istio:
   enabled: false
   namespace: istio-system
-  targetRevision: 0.8.3
+  targetRevision: 0.8.4
 
 istio-ingress:
   enabled: false
