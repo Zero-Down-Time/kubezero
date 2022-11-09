@@ -40,6 +40,9 @@ Kubernetes: `>= 1.20.0`
 | mariadb-galera.replicaCount | int | `2` |  |
 | pxc-operator.enabled | bool | `false` |  |
 | pxc-operator.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
+| pxc-operator.resources.limits.memory | string | `"512Mi"` |  |
+| pxc-operator.resources.requests.cpu | string | `"50m"` |  |
+| pxc-operator.resources.requests.memory | string | `"32Mi"` |  |
 | pxc-operator.tolerations[0].effect | string | `"NoSchedule"` |  |
 | pxc-operator.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | pxc-operator.tolerations[1].effect | string | `"NoSchedule"` |  |

@@ -6,6 +6,7 @@ metadata:
   namespace: kube-system
 spec:
   schedule: "0 * * * *"
+  concurrencyPolicy: "Replace"
   jobTemplate:
     spec:
       backoffLimit: 1

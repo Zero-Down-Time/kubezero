@@ -68,7 +68,7 @@ Kubernetes: `>= 1.24.0`
 | network.cilium.cluster | object | `{}` |  |
 | network.enabled | bool | `true` |  |
 | network.retain | bool | `true` |  |
-| network.targetRevision | string | `"0.4.0"` |  |
+| network.targetRevision | string | `"0.4.1"` |  |
 | storage.aws-ebs-csi-driver.enabled | bool | `false` |  |
 | storage.aws-efs-csi-driver.enabled | bool | `false` |  |
 | storage.enabled | bool | `false` |  |

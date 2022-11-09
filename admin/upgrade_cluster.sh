@@ -1,11 +1,12 @@
 #!/bin/bash -e
 
-VERSION="v1.23"
 #VERSION="latest"
+VERSION="v1.24"
 ARGO_APP=${1:-/tmp/new-kubezero-argoapp.yaml}
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-. $SCRIPT_DIR/libhelm.sh
+# shellcheck disable=SC1091
+. "$SCRIPT_DIR"/libhelm.sh
 
 [ -n "$DEBUG" ] && set -x
 
@@ -36,6 +37,9 @@ spec:
       hostPID: true
       tolerations:
       - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/control-plane
         operator: Exists
         effect: NoSchedule
       initContainers:
@@ -75,7 +79,7 @@ EOF
 control_plane_upgrade() {
   TASKS="$1"
 
-  echo "Deploy cluster admin task: $TASK"
+  echo "Deploy cluster admin task: $TASKS"
   cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Pod
@@ -138,46 +142,24 @@ waitSystemPodsRunning
 
 argo_used && disable_argo
 
-all_nodes_upgrade "nsenter -m/hostproc/1/ns/mnt mount --make-shared /sys/fs/cgroup; nsenter -m/hostproc/1/ns/mnt mount --make-shared /sys; nsenter -r/host /usr/bin/podman image prune -a -f;"
+# all_nodes_upgrade ""
 
 control_plane_upgrade kubeadm_upgrade
 
-echo "Adjust kubezero values as needed: (eg. set cilium cluster id and ensure no IP space overlap !!):"
+echo "Adjust kubezero values as needed:"
+# shellcheck disable=SC2015
 argo_used && kubectl edit app kubezero -n argocd || kubectl edit cm kubezero-values -n kube-system
-
-# Remove multus DS due to label changes, if this fails:
-# kubezero-network $ helm template . --set multus.enabled=true | kubectl apply -f -
-kubectl delete ds kube-multus-ds -n kube-system || true
-
-# Required due to chart upgrade to 4.X part of prometheus-stack 40.X
-kubectl delete daemonset metrics-prometheus-node-exporter -n monitoring || true
-
-# AWS EBS CSI driver change their fsGroupPolicy
-kubectl delete CSIDriver ebs.csi.aws.com || true
-
-# Delete external-dns deployment as upstream changed strategy to 'recreate'
-kubectl delete deployment addons-external-dns -n kube-system || true
 
 control_plane_upgrade "apply_network, apply_addons, apply_storage"
 
-kubectl rollout restart daemonset/calico-node -n kube-system
 kubectl rollout restart daemonset/cilium -n kube-system
-kubectl rollout restart daemonset/kube-multus-ds -n kube-system
 
 echo "Checking that all pods in kube-system are running ..."
 waitSystemPodsRunning
 
 echo "Applying remaining KubeZero modules..."
 
-# Delete outdated cert-manager CRDs, otherwise serverside apply will fail
-for c in certificaterequests.cert-manager.io certificates.cert-manager.io challenges.acme.cert-manager.io clusterissuers.cert-manager.io issuers.cert-manager.io orders.acme.cert-manager.io; do
-  kubectl delete crd $c
-done
-
 control_plane_upgrade "apply_cert-manager, apply_istio, apply_istio-ingress, apply_istio-private-ingress, apply_logging, apply_metrics, apply_argocd"
-
-# delete legace ArgCD controller which is now a statefulSet
-kubectl delete deployment argocd-application-controller -n argocd || true
 
 # Final step is to commit the new argocd kubezero app
 kubectl get app kubezero -n argocd -o yaml | yq 'del(.status) | del(.metadata) | del(.operation) | .metadata.name="kubezero" | .metadata.namespace="argocd"' | yq 'sort_keys(..) | .spec.source.helm.values |= (from_yaml | to_yaml)' > $ARGO_APP
@@ -186,6 +168,6 @@ echo "Please commit $ARGO_APP as the updated kubezero/application.yaml for your 
 echo "Then head over to ArgoCD for this cluster and sync all KubeZero modules to apply remaining upgrades."
 
 echo "<Return> to continue and re-enable ArgoCD:"
-read
+read -r
 
 argo_used && enable_argo

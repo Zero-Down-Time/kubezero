@@ -18,12 +18,12 @@ metallb:
 
 multus:
   enabled: false
-  tag: "v3.9.1"
+  tag: "v3.9.2"
 
-  clusterNetwork: "calico"
-  defaultNetworks: []
-   # - "cilium"
-  readinessindicatorfile: "/etc/cni/net.d/10-calico.conflist"
+  #clusterNetwork: "calico"
+  #defaultNetworks: []
+  # - "cilium"
+  #readinessindicatorfile: "/etc/cni/net.d/10-calico.conflist"
 
 cilium:
   enabled: false
@@ -38,16 +38,12 @@ cilium:
   cni:
     binPath: "/usr/libexec/cni"
     #-- Ensure this is false if multus is enabled
-    exclusive: false
-    chainingMode: generic-veth
+    # exclusive: false
+    # chainingMode: generic-veth
 
   bpf:
     hostLegacyRouting: true
   #  tproxy: false
-
-  # enableIPv4Masquerade: false
-  # enableIdentityMark: false
-  policyEnforcementMode: "never"
 
   cluster:
     # This should match the second octet of clusterPoolIPv4PodCIDRList
@@ -63,7 +59,7 @@ cilium:
 
   # Should be handled by multus
   nodePort:
-    enabled: false
+    enabled: true
 
   # Keep it simple for now
   l7Proxy: false

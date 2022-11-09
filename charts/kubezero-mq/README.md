@@ -1,6 +1,6 @@
 # kubezero-mq
 
-![Version: 0.2.3](https://img.shields.io/badge/Version-0.2.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for MQ systems like NATS, RabbitMQ
 
@@ -19,8 +19,8 @@ Kubernetes: `>= 1.20.0`
 | Repository | Name | Version |
 |------------|------|---------|
 |  | nats | 0.8.4 |
-| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.3 |
-| https://charts.bitnami.com/bitnami | rabbitmq | 9.0.3 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
+| https://charts.bitnami.com/bitnami | rabbitmq | 11.1.1 |
 
 ## Values
 
@@ -34,8 +34,8 @@ Kubernetes: `>= 1.20.0`
 | nats.nats.advertise | bool | `false` |  |
 | nats.nats.jetstream.enabled | bool | `true` |  |
 | nats.natsbox.enabled | bool | `false` |  |
-| rabbitmq.auth.erlangCookie | string | `"randomlongerlangcookie"` |  |
-| rabbitmq.auth.password | string | `"supersecret"` |  |
+| rabbitmq.auth.existingErlangSecret | string | `"rabbitmq"` |  |
+| rabbitmq.auth.existingPasswordSecret | string | `"rabbitmq"` |  |
 | rabbitmq.auth.tls.enabled | bool | `false` |  |
 | rabbitmq.auth.tls.existingSecret | string | `"rabbitmq-server-certificate"` |  |
 | rabbitmq.auth.tls.existingSecretFullChain | bool | `true` |  |
