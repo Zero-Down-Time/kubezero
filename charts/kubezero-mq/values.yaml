@@ -38,8 +38,8 @@ rabbitmq:
     gateway: istio-ingress/private-ingressgateway
 
   auth:
-    password: "supersecret"
-    erlangCookie: "randomlongerlangcookie"
+    existingPasswordSecret: rabbitmq
+    existingErlangSecret: rabbitmq
     tls:
       enabled: false
       failIfNoPeerCert: false
