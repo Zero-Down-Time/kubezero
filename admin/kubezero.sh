@@ -65,11 +65,6 @@ render_kubeadm() {
 
 
 parse_kubezero() {
-  # remove with 1.24
-  if [ ! -f ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml ]; then
-    [ -f ${HOSTFS}/etc/kubernetes/kubezero.yaml ] && cp ${HOSTFS}/etc/kubernetes/kubezero.yaml ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml
-  fi
-
   export CLUSTERNAME=$(yq eval '.global.clusterName // .clusterName' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml)
   export HIGHAVAILABLE=$(yq eval '.global.highAvailable // .highAvailable // "false"' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml)
   export ETCD_NODENAME=$(yq eval '.etcd.nodeName' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml)
