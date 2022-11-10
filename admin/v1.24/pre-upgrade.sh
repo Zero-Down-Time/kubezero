@@ -1,20 +1,20 @@
 #!/bin/bash
 
-# get current argo cd values
-kubectl get application kubezero -n argocd -o yaml | yq '.spec.source.helm.values' > "${WORKDIR}"/argo-values.yaml
+# get current values, argo app over cm
+get_kubezero_values
 
 # tumble new config through migrate.py
-migrate_argo_values.py < "$WORKDIR"/argo-values.yaml > "$WORKDIR"/kubezero-values.yaml
+migrate_argo_values.py < "$WORKDIR"/kubezero-values.yaml > "$WORKDIR"/new-kubezero-values.yaml
 
 # Update kubezero-values CM
 kubectl get cm -n kube-system kubezero-values -o=yaml | \
-  yq e '.data."values.yaml" |= load_str("/tmp/kubezero/kubezero-values.yaml")' | \
+  yq e '.data."values.yaml" |= load_str("/tmp/kubezero/new-kubezero-values.yaml")' | \
   kubectl replace -f -
 
 # update argo app
 kubectl get application kubezero -n argocd -o yaml | \
   kubezero_chart_version=$(yq .version /charts/kubezero/Chart.yaml) \
-  yq '.spec.source.helm.values |= load_str("/tmp/kubezero/kubezero-values.yaml") | .spec.source.targetRevision = strenv(kubezero_chart_version)' | \
+  yq '.spec.source.helm.values |= load_str("/tmp/kubezero/new-kubezero-values.yaml") | .spec.source.targetRevision = strenv(kubezero_chart_version)' | \
   kubectl apply -f -
 
 # finally remove annotation to allow argo to sync again
