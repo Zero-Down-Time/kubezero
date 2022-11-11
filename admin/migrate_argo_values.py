@@ -8,6 +8,24 @@ import yaml
 def migrate(values):
     """Actual changes here"""
 
+    # ClusterBackup is enabled on AWS anyways, same with cluster-autoscaler
+    if "aws" in values["global"]:
+        deleteKey(values["addons"], "clusterBackup")
+        deleteKey(values["addons"], "cluster-autoscaler")
+
+    # Remove calico and multus
+    deleteKey(values["network"], "calico")
+    deleteKey(values["network"], "multus")
+
+    return values
+
+
+def deleteKey(values, key):
+    """Delete key from dictionary if exists"""
+    try:
+        values.pop(key)
+    except KeyError:
+        pass
 
     return values
 
@@ -16,8 +34,10 @@ class MyDumper(yaml.Dumper):
     """
     Required to add additional indent for arrays to match yq behaviour to reduce noise in diffs
     """
+
     def increase_indent(self, flow=False, indentless=False):
         return super(MyDumper, self).increase_indent(flow, False)
+
 
 def str_presenter(dumper, data):
     if len(data.splitlines()) > 1:  # check for multiline string
@@ -65,5 +85,5 @@ yaml.dump(
     default_flow_style=False,
     indent=2,
     sort_keys=False,
-    Dumper=MyDumper
+    Dumper=MyDumper,
 )

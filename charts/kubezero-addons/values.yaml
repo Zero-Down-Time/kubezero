@@ -33,7 +33,7 @@ aws-node-termination-handler:
   #  tag: v1.14.1
 
   # -- "aws-node-termination-handler/${ClusterName}"
-  managedAsgTag: "aws-node-termination-handler/managed"
+  managedTag: "aws-node-termination-handler/managed"
 
   useProviderId: true
   enableSqsTerminationDraining: true

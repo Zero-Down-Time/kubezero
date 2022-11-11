@@ -1,6 +1,9 @@
 {{- define "network-values" }}
 
-# since 1.23
+multus:
+  enabled: true
+  clusterNetwork: "cilium"
+
 cilium:
   enabled: true
 

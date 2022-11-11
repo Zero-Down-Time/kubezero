@@ -153,6 +153,7 @@ argo_used && kubectl edit app kubezero -n argocd || kubectl edit cm kubezero-val
 control_plane_upgrade "apply_network, apply_addons, apply_storage"
 
 kubectl rollout restart daemonset/cilium -n kube-system
+kubectl rollout restart daemonset/kube-multus-ds -n kube-system
 
 echo "Checking that all pods in kube-system are running ..."
 waitSystemPodsRunning

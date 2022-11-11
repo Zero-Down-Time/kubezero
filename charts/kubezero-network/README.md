@@ -14,11 +14,10 @@ KubeZero umbrella chart for all things network
 
 ## Requirements
 
-Kubernetes: `>= 1.20.0`
+Kubernetes: `>= 1.24.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | calico | 0.2.2 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
 | https://helm.cilium.io/ | cilium | 1.12.3 |
 | https://metallb.github.io/metallb | metallb | 0.13.7 |
@@ -27,20 +26,18 @@ Kubernetes: `>= 1.20.0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| calico.enabled | bool | `false` |  |
 | cilium.bpf.hostLegacyRouting | bool | `true` |  |
 | cilium.cgroup.autoMount.enabled | bool | `false` |  |
 | cilium.cgroup.hostRoot | string | `"/sys/fs/cgroup"` |  |
 | cilium.cluster.id | int | `240` |  |
 | cilium.cluster.name | string | `"default"` |  |
 | cilium.cni.binPath | string | `"/usr/libexec/cni"` |  |
+| cilium.cni.logFile | string | `"/var/log/cilium-cni.log"` |  |
 | cilium.containerRuntime.integration | string | `"crio"` |  |
 | cilium.enabled | bool | `false` |  |
 | cilium.hubble.enabled | bool | `false` |  |
 | cilium.ipam.operator.clusterPoolIPv4PodCIDRList[0] | string | `"10.240.0.0/16"` |  |
-| cilium.l2NeighDiscovery.enabled | bool | `false` |  |
 | cilium.l7Proxy | bool | `false` |  |
-| cilium.nodePort.enabled | bool | `true` |  |
 | cilium.operator.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | cilium.operator.replicas | int | `1` |  |
 | cilium.operator.tolerations[0].effect | string | `"NoSchedule"` |  |
@@ -58,5 +55,7 @@ Kubernetes: `>= 1.20.0`
 | metallb.controller.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | metallb.enabled | bool | `false` |  |
 | metallb.ipAddressPools | list | `[]` |  |
+| multus.clusterNetwork | string | `"cilium"` |  |
+| multus.defaultNetworks | list | `[]` |  |
 | multus.enabled | bool | `false` |  |
 | multus.tag | string | `"v3.9.2"` |  |

@@ -20,10 +20,9 @@ multus:
   enabled: false
   tag: "v3.9.2"
 
-  #clusterNetwork: "calico"
-  #defaultNetworks: []
-  # - "cilium"
-  #readinessindicatorfile: "/etc/cni/net.d/10-calico.conflist"
+  clusterNetwork: "cilium"
+  defaultNetworks: []
+  readinessindicatorfile: "/etc/cni/net.d/05-cilium.conf"
 
 cilium:
   enabled: false
@@ -37,9 +36,9 @@ cilium:
 
   cni:
     binPath: "/usr/libexec/cni"
+    logFile: /var/log/cilium-cni.log
     #-- Ensure this is false if multus is enabled
-    # exclusive: false
-    # chainingMode: generic-veth
+    exclusive: false
 
   bpf:
     hostLegacyRouting: true
@@ -48,7 +47,7 @@ cilium:
   cluster:
     # This should match the second octet of clusterPoolIPv4PodCIDRList
     # to prevent IP space overlap and easy tracking
-    # use 240 as default, less likely to clash with 1, do NOT use 244 used by calico until 1.25
+    # use 240 as default, less likely to clash with 1
     id: 240
     name: default
 
@@ -57,14 +56,10 @@ cilium:
       clusterPoolIPv4PodCIDRList:
         - 10.240.0.0/16
 
-  # Should be handled by multus
-  nodePort:
-    enabled: true
-
   # Keep it simple for now
+  # nodePort:
+  #  enabled: true
   l7Proxy: false
-  l2NeighDiscovery:
-    enabled: false
 
   cgroup:
     autoMount:
@@ -89,7 +84,3 @@ cilium:
 
   hubble:
     enabled: false
-
-# Legacy / Testing
-calico:
-  enabled: false
