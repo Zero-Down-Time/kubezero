@@ -8,7 +8,8 @@ ARG KUBE_VERSION=1.24
 RUN cd /etc/apk/keys && \
     wget "https://cdn.zero-downtime.net/alpine/stefan@zero-downtime.net-61bb6bfb.rsa.pub" && \
     echo "@kubezero https://cdn.zero-downtime.net/alpine/v${ALPINE_VERSION}/kubezero" >> /etc/apk/repositories && \
-    echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
+    echo "@edge-testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
+    echo "@edge-community http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
     apk upgrade -U -a --no-cache && \
     apk --no-cache add \
       jq \
@@ -21,9 +22,9 @@ RUN cd /etc/apk/keys && \
       kubeadm@kubezero~=${KUBE_VERSION} \
       kubectl@kubezero~=${KUBE_VERSION} \
       etcdhelper@kubezero \
-      etcd-ctl@testing \
-      restic@testing \
-      helm@testing
+      etcd-ctl@edge-testing \
+      restic@edge-community \
+      helm@edge-community
 
 RUN helm repo add kubezero https://cdn.zero-downtime.net/charts && \
     mkdir -p /var/lib/kubezero

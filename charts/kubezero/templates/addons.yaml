@@ -42,7 +42,7 @@ aws-node-termination-handler:
   {{- if .Values.global.aws }}
   # AWS
   queueURL: "https://sqs.{{ .Values.global.aws.region }}.amazonaws.com/{{ .Values.global.aws.accountId }}/{{ .Values.global.clusterName }}_Nth"
-  managedAsgTag: "aws-node-termination-handler/{{ .Values.global.clusterName }}"
+  managedTag: "aws-node-termination-handler/{{ .Values.global.clusterName }}"
   extraEnv:
     - name: AWS_ROLE_ARN
       value: "arn:aws:iam::{{ .Values.global.aws.accountId }}:role/{{ .Values.global.aws.region }}.{{ .Values.global.clusterName }}.awsNth"
@@ -80,7 +80,7 @@ external-dns:
   {{- end }}
 
 cluster-autoscaler:
-  enabled: {{ default "false" (index .Values "addons" "cluster-autoscaler" "enabled") }}
+  enabled: {{ ternary "true" "false" (or (hasKey .Values.global "aws") (index .Values "addons" "cluster-autoscaler" "enabled")) }}
 
   {{- with omit (index .Values "addons" "cluster-autoscaler") "enabled" }}
   {{- toYaml . | nindent 2 }}

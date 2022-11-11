@@ -18,7 +18,7 @@ maintainers:
     email: stefan@zero-downtime.net
 dependencies:
   - name: aws-node-termination-handler
-    version: 0.18.5
+    version: 0.19.3
     # repository: https://aws.github.io/eks-charts
     condition: aws-node-termination-handler.enabled
   - name: external-dns
@@ -30,7 +30,7 @@ dependencies:
     repository: https://kubernetes.github.io/autoscaler
     condition: cluster-autoscaler.enabled
   - name: nvidia-device-plugin
-    version: 0.12.2
+    version: 0.12.3
     # https://github.com/NVIDIA/k8s-device-plugin
     repository: https://nvidia.github.io/k8s-device-plugin
     condition: nvidia-device-plugin.enabled

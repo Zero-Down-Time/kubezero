@@ -18,10 +18,10 @@ Kubernetes: `>= 1.24.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | aws-node-termination-handler | 0.18.5 |
+|  | aws-node-termination-handler | 0.19.3 |
 | https://kubernetes-sigs.github.io/external-dns/ | external-dns | 1.11.0 |
 | https://kubernetes.github.io/autoscaler | cluster-autoscaler | 9.21.0 |
-| https://nvidia.github.io/k8s-device-plugin | nvidia-device-plugin | 0.12.2 |
+| https://nvidia.github.io/k8s-device-plugin | nvidia-device-plugin | 0.12.3 |
 
 # MetalLB   
    
@@ -54,7 +54,7 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | aws-node-termination-handler.fullnameOverride | string | `"aws-node-termination-handler"` |  |
 | aws-node-termination-handler.ignoreDaemonSets | bool | `true` |  |
 | aws-node-termination-handler.jsonLogging | bool | `true` |  |
-| aws-node-termination-handler.managedAsgTag | string | `"aws-node-termination-handler/managed"` | "aws-node-termination-handler/${ClusterName}" |
+| aws-node-termination-handler.managedTag | string | `"aws-node-termination-handler/managed"` | "aws-node-termination-handler/${ClusterName}" |
 | aws-node-termination-handler.metadataTries | int | `0` |  |
 | aws-node-termination-handler.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | aws-node-termination-handler.podMonitor.create | bool | `false` |  |
