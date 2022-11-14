@@ -1,14 +1,10 @@
 configmap: grafana-dashboards
 gzip: true
 folder: Logging
-condition: '.Values.es.prometheus'
 dashboards:
 - name: fluent-logging
   url: https://grafana.com/api/dashboards/7752/revisions/4/download
   #url: https://grafana.com/api/dashboards/13042/revisions/2/download
   tags:
-  - Fluent
-- name: elasticsearch-logging
-  url: https://grafana.com/api/dashboards/266/revisions/4/download
-  tags:
-  - ECK
+  - fluentd
+  - fluent-bit
