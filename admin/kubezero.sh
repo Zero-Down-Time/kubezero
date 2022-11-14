@@ -323,6 +323,21 @@ apply_module() {
 }
 
 
+delete_module() {
+  MODULES=$1
+
+  get_kubezero_values
+
+  # Always use embedded kubezero chart
+  helm template $CHARTS/kubezero -f $WORKDIR/kubezero-values.yaml --version ~$KUBE_VERSION --devel --output-dir $WORKDIR
+
+  for t in $MODULES; do
+    _helm delete $t
+  done
+
+  echo "Deleted KubeZero modules: $MODULES. Potential CRDs must be removed manually."
+}
+
 # backup etcd + /etc/kubernetes/pki
 backup() {
   # Display all ENVs, careful this exposes the password !
@@ -377,7 +392,8 @@ for t in $@; do
     bootstrap) control_plane_node bootstrap;;
     join) control_plane_node join;;
     restore) control_plane_node restore;;
-    apply_*) apply_module ${t##apply_};;
+    apply_*) apply_module "${t##apply_}";;
+    delete_*) delete_module "${t##delete_}";;
     backup) backup;;
     debug_shell) debug_shell;;
     *) echo "Unknown command: '$t'";;

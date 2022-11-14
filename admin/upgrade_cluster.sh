@@ -124,6 +124,10 @@ spec:
     node-role.kubernetes.io/control-plane: ""
   tolerations:
   - key: node-role.kubernetes.io/master
+    operator: Exists
+    effect: NoSchedule
+  - key: node-role.kubernetes.io/control-plane
+    operator: Exists
     effect: NoSchedule
   restartPolicy: Never
 EOF
