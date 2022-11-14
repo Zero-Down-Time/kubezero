@@ -40,8 +40,8 @@ cilium:
     #-- Ensure this is false if multus is enabled
     exclusive: false
 
-  bpf:
-    hostLegacyRouting: true
+  #bpf:
+  #  hostLegacyRouting: true
   #  tproxy: false
 
   cluster:
@@ -57,9 +57,9 @@ cilium:
         - 10.240.0.0/16
 
   # Keep it simple for now
-  # nodePort:
-  #  enabled: true
   l7Proxy: false
+
+  #rollOutCiliumPods: true
 
   cgroup:
     autoMount:
@@ -84,3 +84,14 @@ cilium:
 
   hubble:
     enabled: false
+    relay:
+      enabled: false
+    ui:
+      enabled: false
+    tls:
+      auto:
+        method: cert-manager
+        certManagerIssuerRef:
+          group: cert-manager.io
+          kind: ClusterIssuer
+          name: kubezero-local-ca-issuer

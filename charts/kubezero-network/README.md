@@ -26,16 +26,22 @@ Kubernetes: `>= 1.24.0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| cilium.bpf.hostLegacyRouting | bool | `true` |  |
 | cilium.cgroup.autoMount.enabled | bool | `false` |  |
 | cilium.cgroup.hostRoot | string | `"/sys/fs/cgroup"` |  |
 | cilium.cluster.id | int | `240` |  |
 | cilium.cluster.name | string | `"default"` |  |
 | cilium.cni.binPath | string | `"/usr/libexec/cni"` |  |
+| cilium.cni.exclusive | bool | `false` |  |
 | cilium.cni.logFile | string | `"/var/log/cilium-cni.log"` |  |
 | cilium.containerRuntime.integration | string | `"crio"` |  |
 | cilium.enabled | bool | `false` |  |
 | cilium.hubble.enabled | bool | `false` |  |
+| cilium.hubble.relay.enabled | bool | `false` |  |
+| cilium.hubble.tls.auto.certManagerIssuerRef.group | string | `"cert-manager.io"` |  |
+| cilium.hubble.tls.auto.certManagerIssuerRef.kind | string | `"ClusterIssuer"` |  |
+| cilium.hubble.tls.auto.certManagerIssuerRef.name | string | `"kubezero-local-ca-issuer"` |  |
+| cilium.hubble.tls.auto.method | string | `"cert-manager"` |  |
+| cilium.hubble.ui.enabled | bool | `false` |  |
 | cilium.ipam.operator.clusterPoolIPv4PodCIDRList[0] | string | `"10.240.0.0/16"` |  |
 | cilium.l7Proxy | bool | `false` |  |
 | cilium.operator.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
@@ -58,4 +64,5 @@ Kubernetes: `>= 1.24.0`
 | multus.clusterNetwork | string | `"cilium"` |  |
 | multus.defaultNetworks | list | `[]` |  |
 | multus.enabled | bool | `false` |  |
+| multus.readinessindicatorfile | string | `"/etc/cni/net.d/05-cilium.conf"` |  |
 | multus.tag | string | `"v3.9.2"` |  |
