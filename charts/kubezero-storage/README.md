@@ -1,6 +1,6 @@
 # kubezero-storage
 
-![Version: 0.7.3](https://img.shields.io/badge/Version-0.7.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.7.4](https://img.shields.io/badge/Version-0.7.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things storage incl. AWS EBS/EFS, openEBS-lvm, gemini
 
@@ -18,11 +18,11 @@ Kubernetes: `>= 1.24.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | aws-ebs-csi-driver | 2.12.0 |
-|  | aws-efs-csi-driver | 2.2.9 |
+|  | aws-efs-csi-driver | 2.3.2 |
 |  | gemini | 1.0.0 |
 |  | lvm-localpv | 1.0.0 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
+| https://kubernetes-sigs.github.io/aws-ebs-csi-driver | aws-ebs-csi-driver | 2.13.0 |
 
 ## Values
 
@@ -39,6 +39,13 @@ Kubernetes: `>= 1.24.0`
 | aws-ebs-csi-driver.controller.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
 | aws-ebs-csi-driver.controller.tolerations[1].effect | string | `"NoSchedule"` |  |
 | aws-ebs-csi-driver.controller.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
+| aws-ebs-csi-driver.controller.volumeMounts[0].mountPath | string | `"/var/run/secrets/sts.amazonaws.com/serviceaccount/"` |  |
+| aws-ebs-csi-driver.controller.volumeMounts[0].name | string | `"aws-token"` |  |
+| aws-ebs-csi-driver.controller.volumeMounts[0].readOnly | bool | `true` |  |
+| aws-ebs-csi-driver.controller.volumes[0].name | string | `"aws-token"` |  |
+| aws-ebs-csi-driver.controller.volumes[0].projected.sources[0].serviceAccountToken.audience | string | `"sts.amazonaws.com"` |  |
+| aws-ebs-csi-driver.controller.volumes[0].projected.sources[0].serviceAccountToken.expirationSeconds | int | `86400` |  |
+| aws-ebs-csi-driver.controller.volumes[0].projected.sources[0].serviceAccountToken.path | string | `"token"` |  |
 | aws-ebs-csi-driver.enabled | bool | `false` |  |
 | aws-ebs-csi-driver.node.resources.limits.memory | string | `"32Mi"` |  |
 | aws-ebs-csi-driver.node.resources.requests.cpu | string | `"10m"` |  |
@@ -129,3 +136,4 @@ Kubernetes: `>= 1.24.0`
 
 ## Resources
 - https://github.com/openebs/monitoring/blob/develop/docs/openebs-mixin-user-guide.md#install-openebs-mixin-in-existing-prometheus-stack
+- https://quay.io/organization/fairwinds

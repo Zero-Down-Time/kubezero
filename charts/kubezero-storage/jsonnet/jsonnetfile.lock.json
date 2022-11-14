@@ -18,7 +18,7 @@
           "subdir": "contrib/mixin"
         }
       },
-      "version": "7cd9e5a3383d688b072808cea5dedeb209cc6d47",
+      "version": "c2378be1b552663ac6c5278148aefbeb281b7228",
       "sum": "W/Azptf1PoqjyMwJON96UY69MFugDA4IAYiKURscryc="
     },
     {
@@ -38,7 +38,7 @@
           "subdir": "grafana-builder"
         }
       },
-      "version": "187833fc2d104a75dadf28ea5d628818e21619cb",
+      "version": "fd5379a1fba2d572fc314a0395dd61e7df335948",
       "sum": "tDR6yT2GVfw0wTU12iZH+m01HrbIr6g/xN+/8nzNkU0="
     },
     {
