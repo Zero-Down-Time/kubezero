@@ -21,12 +21,12 @@ help: ## Show Help
 	grep -E '^[a-zA-Z_-]+:.*?## .*$$' .ci/podman.mk | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 build: ## Build the app
-	docker build --rm -t $(REGISTRY)/$(IMAGE):$(TAG)-$(ARCH) --build-arg TAG=$(TAG) --build-arg ARCH=$(ARCH) --platform linux/$(ARCH) .
+	buildah build --rm --layers -t $(IMAGE):$(TAG)-$(ARCH) --build-arg TAG=$(TAG) --build-arg ARCH=$(ARCH) --platform linux/$(ARCH) .
 
 test: rm-test-image ## Execute Dockerfile.test
 	test -f Dockerfile.test && \
-		{ docker build --rm -t $(REGISTRY)/$(IMAGE):$(TAG)-test --from=$(REGISTRY)/$(IMAGE):$(TAG) -f Dockerfile.test --platform linux/$(ARCH) . && \
-			docker run --rm --env-host -t $(REGISTRY)/$(IMAGE):$(TAG)-$(ARCH)-test; } || \
+		{ buildah build --rm --layers -t $(REGISTRY)/$(IMAGE):$(TAG)-test --from=$(REGISTRY)/$(IMAGE):$(TAG) -f Dockerfile.test --platform linux/$(ARCH) . && \
+			podman run --rm --env-host -t $(REGISTRY)/$(IMAGE):$(TAG)-$(ARCH)-test; } || \
 		echo "No Dockerfile.test found, skipping test"
 
 scan: ## Scan image using trivy
@@ -37,17 +37,17 @@ scan: ## Scan image using trivy
 # create new manifest for each tag and add all available TAG-ARCH before pushing
 push: ecr-login ## push images to registry
 	for t in $(TAG) latest $(EXTRA_TAGS); do \
-		[ "$$t" != "$(TAG)" ] && podman tag $(REGISTRY)/$(IMAGE):$(TAG)-$(ARCH) $(REGISTRY)/$(IMAGE):$${t}-$(ARCH); \
-		podman manifest exists $(IMAGE):$$t && podman manifest rm $(IMAGE):$$t; \
-		podman manifest create $(IMAGE):$$t; \
+		buildah tag $(IMAGE):$(TAG)-$(ARCH) $(REGISTRY)/$(IMAGE):$${t}-$(ARCH); \
+		buildah manifest rm $(IMAGE):$$t || true; \
+		buildah manifest create $(IMAGE):$$t; \
 		for a in $(ALL_ARCHS); do \
-			podman manifest add $(IMAGE):$$t $(REGISTRY)/$(IMAGE):$(TAG)-$$a; \
+			buildah manifest add $(IMAGE):$$t $(REGISTRY)/$(IMAGE):$(TAG)-$$a; \
 		done; \
-		podman manifest push $(IMAGE):$$t $(REGISTRY)/$(IMAGE):$$t; \
+		buildah manifest push --all $(IMAGE):$$t docker://$(REGISTRY)/$(IMAGE):$$t; \
 	done
 
 ecr-login: ## log into AWS ECR public
-	aws ecr-public get-login-password --region $(REGION) | docker login --username AWS --password-stdin $(REGISTRY)
+	aws ecr-public get-login-password --region $(REGION) | podman login --username AWS --password-stdin $(REGISTRY)
 
 clean: rm-test-image rm-image ## delete local built container and test images
 
@@ -57,12 +57,12 @@ rm-remote-untagged: ## delete all remote untagged images
 		[ -n "$$IMAGE_IDS" ] && aws ecr-public batch-delete-image --repository-name $(IMAGE) --region $(REGION) --image-ids $$IMAGE_IDS || echo "No image to remove"
 
 rm-image:
-	test -z "$$(docker image ls -q $(IMAGE):$(TAG)-$(ARCH))" || docker image rm -f $(IMAGE):$(TAG)-$(ARCH) > /dev/null
+	test -z "$$(docker image ls -q $(IMAGE):$(TAG)-$(ARCH))" || podman image rm -f $(IMAGE):$(TAG)-$(ARCH) > /dev/null
 	test -z "$$(docker image ls -q $(IMAGE):$(TAG)-$(ARCH))" || echo "Error: Removing image failed"
 
 # Ensure we run the tests by removing any previous runs
 rm-test-image:
-	test -z "$$(docker image ls -q $(IMAGE):$(TAG)-$(ARCH)-test)" || docker image rm -f $(IMAGE):$(TAG)-$(ARCH)-test > /dev/null
+	test -z "$$(docker image ls -q $(IMAGE):$(TAG)-$(ARCH)-test)" || podman image rm -f $(IMAGE):$(TAG)-$(ARCH)-test > /dev/null
 	test -z "$$(docker image ls -q $(IMAGE):$(TAG)-$(ARCH)-test)" || echo "Error: Removing test image failed"
 
 ci-pull-upstream: ## pull latest shared .ci subtree
