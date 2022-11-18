@@ -1,6 +1,7 @@
 # Parse version from latest git semver tag
-GTAG=$(shell git describe --tags --match v*.*.* 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
-TAG ?= $(shell echo $(GTAG) | awk -F '-' '{ print $$1 "-" $$2 }' | sed -e 's/-$$//')
+BRANCH := $(shell git rev-parse --abbrev-ref HEAD 2>/dev/null)
+GIT_TAG=$(shell git describe --tags --match v*.*.* 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
+TAG ?= $(shell echo $(GIT_TAG) | awk -F '-' '{ print $$1 "-" $$2 }' | sed -e 's/-$$//')
 ARCH := amd64
 ALL_ARCHS := amd64 arm64
 
@@ -30,8 +31,8 @@ test: rm-test-image ## Execute Dockerfile.test
 		echo "No Dockerfile.test found, skipping test"
 
 scan: ## Scan image using trivy
-	echo "Scanning $(REGISTRY)/$(IMAGE):$(TAG)-$(ARCH) using Trivy $(TRIVY_REMOTE)"
-	trivy image $(TRIVY_OPTS) $(REGISTRY)/$(IMAGE):$(TAG)-$(ARCH)
+	echo "Scanning $(IMAGE):$(TAG)-$(ARCH) using Trivy $(TRIVY_REMOTE)"
+	trivy image $(TRIVY_OPTS) localhost/$(IMAGE):$(TAG)-$(ARCH)
 
 # first tag and push all actual images
 # create new manifest for each tag and add all available TAG-ARCH before pushing
