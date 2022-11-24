@@ -5,11 +5,11 @@ KubeZero is a Kubernetes distribution providing an integrated container platform
 # Design philosophy
 
 - Cloud provider agnostic, bare-metal/self-hosted
-- Focus on security and simplicity before feature bloat
-- No vendor lock in, most components are optional and could be exchanged
+- Focus on security and simplicity over feature creep
+- No vendor lock in, most components are optional and could be easily exchanged
 - Organic Open Source / open and permissive licenses over closed-source solutions
 - No premium services / subscriptions required
-- Staying and contributing back to upstream projects as much as possible
+- Staying up to date and contributing back to upstream projects, like alpine-cloud-images and others
 - Corgi approved :dog:
 
 
@@ -19,7 +19,7 @@ KubeZero is a Kubernetes distribution providing an integrated container platform
 
 # Version / Support Matrix
 KubeZero releases track the same *minor* version of Kubernetes.  
-Any 1.21.X-Y release of Kubezero supports any Kubernetes cluster 1.21.X.
+Any 1.24.X-Y release of Kubezero supports any Kubernetes cluster 1.24.X.
 
 KubeZero is distributed as a collection of versioned Helm charts, allowing custom upgrade schedules and module versions as needed.
 
@@ -30,13 +30,13 @@ gantt
     dateFormat  YYYY-MM-DD
     section 1.23
     beta     :123b, 2022-08-01, 2022-09-01
-    release  :after 123b, 2023-01-31
+    release  :after 123b, 2023-02-01
     section 1.24
     beta     :124b, 2022-11-14, 2022-12-31
-    release  :after 124b, 2023-04-01
+    release  :after 124b, 2023-06-01
     section 1.25
     beta     :125b, 2023-02-01, 2023-02-28
-    release  :after 125b, 2023-07-01
+    release  :after 125b, 2023-08-01
 ```
 
 [Upstream release policy](https://kubernetes.io/releases/)
