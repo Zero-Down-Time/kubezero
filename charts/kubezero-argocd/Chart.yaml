@@ -1,24 +1,29 @@
 apiVersion: v2
-description: KubeZero ArgoCD Helm chart to install ArgoCD itself and the KubeZero ArgoCD Application
+description: KubeZero ArgoCD - config, branding, image-updater (optional)
 name: kubezero-argocd
-version: 0.11.0
+version: 0.11.1
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
   - kubezero
   - argocd
-  - gitops
+  - argocd-image-updater
 maintainers:
   - name: Stefan Reimer
     email: stefan@zero-downtime.net
+# Url: https://github.com/argoproj/argo-helm/tree/main/charts
 dependencies:
   - name: kubezero-lib
     version: ">= 0.1.5"
     repository: https://cdn.zero-downtime.net/charts/
   - name: argo-cd
-    version: 5.13.8
+    version: 5.16.1
     repository: https://argoproj.github.io/argo-helm
   - name: argocd-apps
-    version: 0.0.3
+    version: 0.0.4
     repository: https://argoproj.github.io/argo-helm
-kubeVersion: ">= 1.20.0"
+  - name: argocd-image-updater
+    version: 0.8.1
+    repository: https://argoproj.github.io/argo-helm
+    condition: argocd-image-updater.enabled
+kubeVersion: ">= 1.24.0"
