@@ -2,7 +2,7 @@
 
 ![Version: 0.11.1](https://img.shields.io/badge/Version-0.11.1-informational?style=flat-square)
 
-KubeZero ArgoCD integration, config and branding as well as ArgoCD image-updater
+KubeZero ArgoCD - config, branding, image-updater (optional)
 
 **Homepage:** <https://kubezero.com>
 
@@ -56,7 +56,15 @@ Kubernetes: `>= 1.24.0`
 | argo-cd.server.service.servicePortHttpsName | string | `"grpc"` |  |
 | argocd-apps.applications | list | `[]` |  |
 | argocd-apps.projects | list | `[]` |  |
+| argocd-image-updater.authScripts.enabled | bool | `true` |  |
+| argocd-image-updater.authScripts.scripts."ecr-login.sh" | string | `"#!/bin/sh\naws ecr --region $AWS_REGION get-authorization-token --output text --query 'authorizationData[].authorizationToken' | base64 -d\n"` |  |
+| argocd-image-updater.authScripts.scripts."ecr-public-login.sh" | string | `"#!/bin/sh\naws ecr-public --region us-east-1 get-authorization-token --output text --query 'authorizationData.authorizationToken' | base64 -d\n"` |  |
+| argocd-image-updater.config.argocd.plaintext | bool | `true` |  |
 | argocd-image-updater.enabled | bool | `false` |  |
+| argocd-image-updater.fullnameOverride | string | `"argocd-image-updater"` |  |
+| argocd-image-updater.metrics.enabled | bool | `false` |  |
+| argocd-image-updater.metrics.serviceMonitor.enabled | bool | `true` |  |
+| argocd-image-updater.sshConfig.config | string | `"Host *\n  PubkeyAcceptedAlgorithms +ssh-rsa\n  HostkeyAlgorithms +ssh-rsa\n"` |  |
 | istio.enabled | bool | `false` | Deploy Istio VirtualService to expose ArgoCD |
 | istio.gateway | string | `"istio-ingress/ingressgateway"` | Name of the Istio gateway to add the VirtualService to |
 | istio.ipBlocks | list | `[]` |  |

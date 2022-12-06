@@ -1,6 +1,6 @@
 # kubezero-addons
 
-![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.24](https://img.shields.io/badge/AppVersion-v1.24-informational?style=flat-square)
+![Version: 0.7.1](https://img.shields.io/badge/Version-0.7.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.24](https://img.shields.io/badge/AppVersion-v1.24-informational?style=flat-square)
 
 KubeZero umbrella chart for various optional cluster addons
 
@@ -18,7 +18,7 @@ Kubernetes: `>= 1.24.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | aws-node-termination-handler | 0.19.3 |
+|  | aws-node-termination-handler | 0.20.0 |
 | https://kubernetes-sigs.github.io/external-dns/ | external-dns | 1.11.0 |
 | https://kubernetes.github.io/autoscaler | cluster-autoscaler | 9.21.0 |
 | https://nvidia.github.io/k8s-device-plugin | nvidia-device-plugin | 0.12.3 |
@@ -54,6 +54,7 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | aws-node-termination-handler.fullnameOverride | string | `"aws-node-termination-handler"` |  |
 | aws-node-termination-handler.ignoreDaemonSets | bool | `true` |  |
 | aws-node-termination-handler.jsonLogging | bool | `true` |  |
+| aws-node-termination-handler.logFormatVersion | int | `2` |  |
 | aws-node-termination-handler.managedTag | string | `"aws-node-termination-handler/managed"` | "aws-node-termination-handler/${ClusterName}" |
 | aws-node-termination-handler.metadataTries | int | `0` |  |
 | aws-node-termination-handler.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
@@ -90,18 +91,6 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | clusterBackup.password | string | `""` | /etc/cloudbender/clusterBackup.passphrase |
 | clusterBackup.repository | string | `""` | s3:https://s3.amazonaws.com/${CFN[ConfigBucket]}/k8s/${CLUSTERNAME}/clusterBackup |
 | external-dns.enabled | bool | `false` |  |
-| external-dns.env[0] | object | `{"name":"AWS_ROLE_ARN","value":""}` | "arn:aws:iam::${AWS::AccountId}:role/${AWS::Region}.${ClusterName}.externalDNS" |
-| external-dns.env[1].name | string | `"AWS_WEB_IDENTITY_TOKEN_FILE"` |  |
-| external-dns.env[1].value | string | `"/var/run/secrets/sts.amazonaws.com/serviceaccount/token"` |  |
-| external-dns.env[2].name | string | `"AWS_STS_REGIONAL_ENDPOINTS"` |  |
-| external-dns.env[2].value | string | `"regional"` |  |
-| external-dns.extraVolumeMounts[0].mountPath | string | `"/var/run/secrets/sts.amazonaws.com/serviceaccount/"` |  |
-| external-dns.extraVolumeMounts[0].name | string | `"aws-token"` |  |
-| external-dns.extraVolumeMounts[0].readOnly | bool | `true` |  |
-| external-dns.extraVolumes[0].name | string | `"aws-token"` |  |
-| external-dns.extraVolumes[0].projected.sources[0].serviceAccountToken.audience | string | `"sts.amazonaws.com"` |  |
-| external-dns.extraVolumes[0].projected.sources[0].serviceAccountToken.expirationSeconds | int | `86400` |  |
-| external-dns.extraVolumes[0].projected.sources[0].serviceAccountToken.path | string | `"token"` |  |
 | external-dns.interval | string | `"3m"` |  |
 | external-dns.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | external-dns.provider | string | `"inmemory"` |  |

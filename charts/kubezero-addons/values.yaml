@@ -29,9 +29,6 @@ aws-node-termination-handler:
 
   fullnameOverride: "aws-node-termination-handler"
 
-  #image:
-  #  tag: v1.14.1
-
   # -- "aws-node-termination-handler/${ClusterName}"
   managedTag: "aws-node-termination-handler/managed"
 
@@ -63,6 +60,7 @@ aws-node-termination-handler:
     create: false
 
   jsonLogging: true
+  logFormatVersion: 2
 
   tolerations:
   - key: node-role.kubernetes.io/master
@@ -185,24 +183,3 @@ external-dns:
   #- istio-gateway
 
   provider: inmemory
-
-  extraVolumes:
-  - name: aws-token
-    projected:
-      sources:
-      - serviceAccountToken:
-          path: token
-          expirationSeconds: 86400
-          audience: "sts.amazonaws.com"
-  extraVolumeMounts:
-  - name: aws-token
-    mountPath: "/var/run/secrets/sts.amazonaws.com/serviceaccount/"
-    readOnly: true
-  env:
-  # -- "arn:aws:iam::${AWS::AccountId}:role/${AWS::Region}.${ClusterName}.externalDNS"
-  - name: AWS_ROLE_ARN
-    value: ""
-  - name: AWS_WEB_IDENTITY_TOKEN_FILE
-    value: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
-  - name: AWS_STS_REGIONAL_ENDPOINTS
-    value: "regional"

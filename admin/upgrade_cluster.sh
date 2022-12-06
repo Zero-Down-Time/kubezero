@@ -164,6 +164,11 @@ waitSystemPodsRunning
 
 echo "Applying remaining KubeZero modules..."
 
+# delete argocd deployments as various immutable things changed, also redis restart fails otherwise
+kubectl delete deployment argocd-redis -n argocd || true
+kubectl delete deployment argocd-repo-server -n argocd || true
+kubectl delete statefulset argocd-application-controller -n argocd || true
+
 control_plane_upgrade "apply_cert-manager, apply_istio, apply_istio-ingress, apply_istio-private-ingress, apply_logging, apply_metrics, apply_argocd"
 
 # Final step is to commit the new argocd kubezero app
