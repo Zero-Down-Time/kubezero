@@ -126,3 +126,33 @@ argo-cd:
 
   notifications:
     enabled: false
+
+argocd-image-updater:
+  enabled: false
+
+  # Unify all ArgoCD pieces under the same argocd namespace
+  fullnameOverride: argocd-image-updater
+
+  config:
+    argocd:
+      plaintext: true
+
+  metrics:
+    enabled: false
+    serviceMonitor:
+      enabled: true
+
+  authScripts:
+    enabled: true
+    scripts:
+      ecr-login.sh: |
+        #!/bin/sh
+        aws ecr --region $AWS_REGION get-authorization-token --output text --query 'authorizationData[].authorizationToken' | base64 -d
+      ecr-public-login.sh: |
+        #!/bin/sh
+        aws ecr-public --region us-east-1 get-authorization-token --output text --query 'authorizationData.authorizationToken' | base64 -d
+  sshConfig:
+    config: |
+      Host *
+        PubkeyAcceptedAlgorithms +ssh-rsa
+        HostkeyAlgorithms +ssh-rsa
