@@ -35,7 +35,7 @@ gantt
     beta     :124b, 2022-11-14, 2022-12-31
     release  :after 124b, 2023-06-01
     section 1.25
-    beta     :125b, 2023-02-01, 2023-02-28
+    beta     :125b, 2023-03-01, 2023-03-31
     release  :after 125b, 2023-08-01
 ```
 
@@ -44,7 +44,7 @@ gantt
 # Components
 
 ## OS
-- all nodes are based on Alpine V3.15
+- all nodes are based on Alpine V3.16
 - 2 GB encrypted root filesystem
 - no 3rd party dependencies at boot ( other than container registries )
 - minimal attack surface

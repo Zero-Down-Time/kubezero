@@ -10,7 +10,7 @@ global:
 
 addons:
   enabled: true
-  targetRevision: 0.7.0
+  targetRevision: 0.7.1
   external-dns:
     enabled: false
   forseti:
@@ -79,6 +79,8 @@ logging:
 argocd:
   enabled: false
   namespace: argocd
-  targetRevision: 0.10.2
+  targetRevision: 0.11.1
+  argocd-image-updater:
+    enabled: false
   istio:
     enabled: false

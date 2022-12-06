@@ -1,6 +1,6 @@
 # kubezero-ci
 
-![Version: 0.5.17](https://img.shields.io/badge/Version-0.5.17-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.5.20](https://img.shields.io/badge/Version-0.5.20-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things CI
 
@@ -20,8 +20,8 @@ Kubernetes: `>= 1.20.0`
 |------------|------|---------|
 | https://aquasecurity.github.io/helm-charts/ | trivy | 0.4.17 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
-| https://charts.jenkins.io | jenkins | 4.2.10 |
-| https://dl.gitea.io/charts/ | gitea | 5.0.9 |
+| https://charts.jenkins.io | jenkins | 4.2.13 |
+| https://dl.gitea.io/charts/ | gitea | 6.0.3 |
 | https://gocd.github.io/helm-chart | gocd | 1.40.8 |
 
 # Jenkins
@@ -54,7 +54,7 @@ Kubernetes: `>= 1.20.0`
 | gitea.gitea.metrics.enabled | bool | `false` |  |
 | gitea.gitea.metrics.serviceMonitor.enabled | bool | `false` |  |
 | gitea.image.rootless | bool | `true` |  |
-| gitea.image.tag | string | `"1.17.1"` |  |
+| gitea.image.tag | string | `"1.17.3"` |  |
 | gitea.istio.enabled | bool | `false` |  |
 | gitea.istio.gateway | string | `"istio-ingress/private-ingressgateway"` |  |
 | gitea.istio.url | string | `"git.example.com"` |  |
@@ -85,7 +85,7 @@ Kubernetes: `>= 1.20.0`
 | jenkins.agent.resources.requests.cpu | string | `"512m"` |  |
 | jenkins.agent.resources.requests.memory | string | `"1024Mi"` |  |
 | jenkins.agent.showRawYaml | bool | `false` |  |
-| jenkins.agent.tag | string | `"v0.4.0"` |  |
+| jenkins.agent.tag | string | `"v0.4.1"` |  |
 | jenkins.agent.yamlMergeStrategy | string | `"merge"` |  |
 | jenkins.agent.yamlTemplate | string | `"apiVersion: v1\nkind: Pod\nspec:\n  securityContext:\n    fsGroup: 1000\n  serviceAccountName: jenkins-podman-aws\n  containers:\n  - name: jnlp\n    resources:\n      limits:\n        github.com/fuse: 1\n    volumeMounts:\n    - name: aws-token\n      mountPath: \"/var/run/secrets/sts.amazonaws.com/serviceaccount/\"\n      readOnly: true\n    - name: host-registries-conf\n      mountPath: \"/home/jenkins/.config/containers/registries.conf\"\n      readOnly: true\n  volumes:\n  - name: aws-token\n    projected:\n      sources:\n      - serviceAccountToken:\n          path: token\n          expirationSeconds: 86400\n          audience: \"sts.amazonaws.com\"\n  - name: host-registries-conf\n    hostPath:\n      path: /etc/containers/registries.conf\n      type: File"` |  |
 | jenkins.controller.JCasC.configScripts.zdt-settings | string | `"jenkins:\n  noUsageStatistics: true\n  disabledAdministrativeMonitors:\n  - \"jenkins.security.ResourceDomainRecommendation\"\nunclassified:\n  buildDiscarders:\n    configuredBuildDiscarders:\n    - \"jobBuildDiscarder\"\n    - defaultBuildDiscarder:\n        discarder:\n          logRotator:\n            artifactDaysToKeepStr: \"32\"\n            artifactNumToKeepStr: \"10\"\n            daysToKeepStr: \"100\"\n            numToKeepStr: \"10\"\n"` |  |
@@ -97,9 +97,9 @@ Kubernetes: `>= 1.20.0`
 | jenkins.controller.initContainerResources.requests.memory | string | `"256Mi"` |  |
 | jenkins.controller.installPlugins[0] | string | `"kubernetes:3734.v562b_b_a_627ea_c"` |  |
 | jenkins.controller.installPlugins[1] | string | `"workflow-aggregator:581.v0c46fa_697ffd"` |  |
-| jenkins.controller.installPlugins[2] | string | `"git:4.13.0"` |  |
+| jenkins.controller.installPlugins[2] | string | `"git:4.14.1"` |  |
 | jenkins.controller.installPlugins[3] | string | `"configuration-as-code:1569.vb_72405b_80249"` |  |
-| jenkins.controller.installPlugins[4] | string | `"antisamy-markup-formatter:2.7"` |  |
+| jenkins.controller.installPlugins[4] | string | `"antisamy-markup-formatter:155.v795fb_8702324"` |  |
 | jenkins.controller.installPlugins[5] | string | `"prometheus:2.0.11"` |  |
 | jenkins.controller.installPlugins[6] | string | `"htmlpublisher:1.31"` |  |
 | jenkins.controller.installPlugins[7] | string | `"build-discarder:139.v05696a_7fe240"` |  |
@@ -129,7 +129,7 @@ Kubernetes: `>= 1.20.0`
 | jenkins.serviceAccountAgent.create | bool | `true` |  |
 | jenkins.serviceAccountAgent.name | string | `"jenkins-podman-aws"` |  |
 | trivy.enabled | bool | `false` |  |
+| trivy.image.tag | string | `"0.34.0"` |  |
 | trivy.persistence.enabled | bool | `true` |  |
 | trivy.persistence.size | string | `"1Gi"` |  |
 | trivy.rbac.create | bool | `false` |  |
-| trivy.rbac.pspEnabled | bool | `false` |  |

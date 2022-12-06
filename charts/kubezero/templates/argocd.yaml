@@ -1,6 +1,11 @@
 {{- define "argocd-values" }}
 
 argo-cd:
+  {{- with index .Values "argocd" "configs" }}
+  configs:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
   controller:
     metrics:
       enabled: {{ .Values.metrics.enabled }}
@@ -10,10 +15,9 @@ argo-cd:
   server:
     metrics:
       enabled: {{ .Values.metrics.enabled }}
-    {{- with index .Values "argocd" "server" }}
-    {{- toYaml . | nindent 4 }}
-    {{- end }}
-    additionalProjects:
+
+argocd-apps:
+  projects:
     - name: kubezero
       namespace: argocd
       description: KubeZero - ZeroDownTime Kubernetes Platform
@@ -28,7 +32,7 @@ argo-cd:
       clusterResourceWhitelist:
       - group: '*'
         kind: '*'
-    additionalApplications:
+  applications:
     - name: kubezero-git-sync
       namespace: argocd
       project: kubezero
@@ -47,12 +51,43 @@ argo-cd:
       {{- with .Values.kubezero.syncPolicy }}
       syncPolicy:
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
 
-  {{- with index .Values "argocd" "configs" }}
-  configs:
-    {{- toYaml . | nindent 4 }}
+argocd-image-updater:
+  enabled: {{ default "false" (index .Values "argocd" "argocd-image-updater" "enabled") }}
+
+  {{- with omit (index .Values "argocd" "argocd-image-updater") "enabled" }}
+  {{- toYaml . | nindent 2 }}
   {{- end }}
+
+  {{- if .Values.global.aws }}
+  extraEnv:
+    - name: AWS_ROLE_ARN
+      value: "arn:aws:iam::{{ .Values.global.aws.accountId }}:role/{{ .Values.global.aws.region }}.{{ .Values.global.clusterName }}.argocd-image-updater"
+    - name: AWS_WEB_IDENTITY_TOKEN_FILE
+      value: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
+    - name: AWS_STS_REGIONAL_ENDPOINTS
+      value: "regional"
+    - name: METADATA_TRIES
+      value: "0"
+    - name: AWS_REGION
+      value: {{ .Values.global.aws.region }}
+  volumes:
+  - name: aws-token
+    projected:
+      sources:
+      - serviceAccountToken:
+          path: token
+          expirationSeconds: 86400
+          audience: "sts.amazonaws.com"
+  volumeMounts:
+  - name: aws-token
+    mountPath: "/var/run/secrets/sts.amazonaws.com/serviceaccount/"
+    readOnly: true
+  {{- end }}
+
+  metrics:
+    enabled: {{ .Values.metrics.enabled }}
 
 {{- if and ( index .Values "argocd" "istio" "enabled" ) .Values.istio.enabled }}
 istio:

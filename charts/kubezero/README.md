@@ -30,11 +30,12 @@ Kubernetes: `>= 1.24.0`
 | addons.enabled | bool | `true` |  |
 | addons.external-dns.enabled | bool | `false` |  |
 | addons.forseti.enabled | bool | `false` |  |
-| addons.targetRevision | string | `"0.7.0"` |  |
+| addons.targetRevision | string | `"0.7.1"` |  |
+| argocd.argocd-image-updater.enabled | bool | `false` |  |
 | argocd.enabled | bool | `false` |  |
 | argocd.istio.enabled | bool | `false` |  |
 | argocd.namespace | string | `"argocd"` |  |
-| argocd.targetRevision | string | `"0.10.2"` |  |
+| argocd.targetRevision | string | `"0.11.1"` |  |
 | cert-manager.enabled | bool | `false` |  |
 | cert-manager.namespace | string | `"cert-manager"` |  |
 | cert-manager.targetRevision | string | `"0.9.3"` |  |

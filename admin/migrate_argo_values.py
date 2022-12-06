@@ -17,6 +17,18 @@ def migrate(values):
     deleteKey(values["network"], "calico")
     deleteKey(values["network"], "multus")
 
+    # ArgoCD helm changes
+    if "argocd" in values:
+        if "server" in values["argocd"]:
+            if not "configs" in values["argocd"]:
+                values["argocd"]["configs"] = {}
+            if not "cm" in values["argocd"]["configs"]:
+                values["argocd"]["configs"]["cm"] = {}
+            values["argocd"]["configs"]["cm"]["url"] = values["argocd"]["server"]["config"][
+                "url"
+            ]
+            deleteKey(values["argocd"], "server")
+
     return values
 
 
