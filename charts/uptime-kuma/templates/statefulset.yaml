@@ -21,7 +21,7 @@ spec:
         {{- if .Values.version }}
         image: "{{ .Values.image }}:{{ .Values.version }}"
         {{- else }}
-        image: "{{ .Values.image }}:{{ .Chart.AppVersion }}-alpine"
+        image: "{{ .Values.image }}:{{ .Chart.AppVersion }}"
         {{- end }}
         env:
         - name: UPTIME_KUMA_PORT
