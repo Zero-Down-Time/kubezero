@@ -97,7 +97,7 @@ Kubernetes: `>= 1.20.0`
 | jenkins.controller.initContainerResources.requests.memory | string | `"256Mi"` |  |
 | jenkins.controller.installPlugins[0] | string | `"kubernetes:3734.v562b_b_a_627ea_c"` |  |
 | jenkins.controller.installPlugins[1] | string | `"workflow-aggregator:581.v0c46fa_697ffd"` |  |
-| jenkins.controller.installPlugins[2] | string | `"git:4.14.1"` |  |
+| jenkins.controller.installPlugins[2] | string | `"git:4.14.2"` |  |
 | jenkins.controller.installPlugins[3] | string | `"configuration-as-code:1569.vb_72405b_80249"` |  |
 | jenkins.controller.installPlugins[4] | string | `"antisamy-markup-formatter:155.v795fb_8702324"` |  |
 | jenkins.controller.installPlugins[5] | string | `"prometheus:2.0.11"` |  |

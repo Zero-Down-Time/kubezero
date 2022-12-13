@@ -1,6 +1,6 @@
 # kubezero
 
-![Version: 1.24.7](https://img.shields.io/badge/Version-1.24.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 1.24.9](https://img.shields.io/badge/Version-1.24.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero - Root App of Apps chart
 
@@ -45,15 +45,15 @@ Kubernetes: `>= 1.24.0`
 | istio-ingress.enabled | bool | `false` |  |
 | istio-ingress.gateway.service | object | `{}` |  |
 | istio-ingress.namespace | string | `"istio-ingress"` |  |
-| istio-ingress.targetRevision | string | `"0.8.2"` |  |
+| istio-ingress.targetRevision | string | `"0.9.0"` |  |
 | istio-private-ingress.chart | string | `"kubezero-istio-gateway"` |  |
 | istio-private-ingress.enabled | bool | `false` |  |
 | istio-private-ingress.gateway.service | object | `{}` |  |
 | istio-private-ingress.namespace | string | `"istio-ingress"` |  |
-| istio-private-ingress.targetRevision | string | `"0.8.2"` |  |
+| istio-private-ingress.targetRevision | string | `"0.9.0"` |  |
 | istio.enabled | bool | `false` |  |
 | istio.namespace | string | `"istio-system"` |  |
-| istio.targetRevision | string | `"0.8.5"` |  |
+| istio.targetRevision | string | `"0.9.0"` |  |
 | kubezero.defaultTargetRevision | string | `"*"` |  |
 | kubezero.gitSync | object | `{}` |  |
 | kubezero.repoURL | string | `"https://cdn.zero-downtime.net/charts"` |  |
@@ -65,7 +65,7 @@ Kubernetes: `>= 1.24.0`
 | metrics.istio.grafana | object | `{}` |  |
 | metrics.istio.prometheus | object | `{}` |  |
 | metrics.namespace | string | `"monitoring"` |  |
-| metrics.targetRevision | string | `"0.8.7"` |  |
+| metrics.targetRevision | string | `"0.8.8"` |  |
 | network.cilium.cluster | object | `{}` |  |
 | network.enabled | bool | `true` |  |
 | network.retain | bool | `true` |  |

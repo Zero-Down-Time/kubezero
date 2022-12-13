@@ -1,6 +1,5 @@
 global:
-  # hub: docker.io/istio
-  tag: 1.14.4-distroless
+  variant: distroless
 
   logAsJson: true
 
