@@ -10,7 +10,7 @@ global:
 
 addons:
   enabled: true
-  targetRevision: 0.7.1
+  targetRevision: 0.7.2
   external-dns:
     enabled: false
   forseti:
@@ -20,6 +20,8 @@ addons:
   aws-node-termination-handler:
     enabled: false
   cluster-autoscaler:
+    enabled: false
+  sealed-secrets:
     enabled: false
 
 network:
@@ -40,6 +42,12 @@ storage:
   aws-ebs-csi-driver:
     enabled: false
   aws-efs-csi-driver:
+    enabled: false
+  velero:
+    enabled: false
+  gemini:
+    enabled: false
+  snapshotController:
     enabled: false
 
 istio:

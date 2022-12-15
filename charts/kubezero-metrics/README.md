@@ -19,7 +19,7 @@ Kubernetes: `>= 1.24.0`
 | Repository | Name | Version |
 |------------|------|---------|
 |  | kube-prometheus-stack | 42.2.1 |
-| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
 | https://prometheus-community.github.io/helm-charts | prometheus-adapter | 3.4.2 |
 | https://prometheus-community.github.io/helm-charts | prometheus-pushgateway | 2.0.2 |
 

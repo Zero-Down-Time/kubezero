@@ -30,7 +30,8 @@ Kubernetes: `>= 1.24.0`
 | addons.enabled | bool | `true` |  |
 | addons.external-dns.enabled | bool | `false` |  |
 | addons.forseti.enabled | bool | `false` |  |
-| addons.targetRevision | string | `"0.7.1"` |  |
+| addons.sealed-secrets.enabled | bool | `false` |  |
+| addons.targetRevision | string | `"0.7.2"` |  |
 | argocd.argocd-image-updater.enabled | bool | `false` |  |
 | argocd.enabled | bool | `false` |  |
 | argocd.istio.enabled | bool | `false` |  |
@@ -73,6 +74,8 @@ Kubernetes: `>= 1.24.0`
 | storage.aws-ebs-csi-driver.enabled | bool | `false` |  |
 | storage.aws-efs-csi-driver.enabled | bool | `false` |  |
 | storage.enabled | bool | `false` |  |
+| storage.gemini.enabled | bool | `false` |  |
+| storage.snapshotController.enabled | bool | `false` |  |
 | storage.targetRevision | string | `"0.7.4"` |  |
 
 ----------------------------------------------

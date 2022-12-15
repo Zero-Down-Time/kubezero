@@ -19,7 +19,7 @@ Kubernetes: `>= 1.20.0`
 | Repository | Name | Version |
 |------------|------|---------|
 | https://aquasecurity.github.io/helm-charts/ | trivy | 0.4.17 |
-| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
 | https://charts.jenkins.io | jenkins | 4.2.13 |
 | https://dl.gitea.io/charts/ | gitea | 6.0.3 |
 | https://gocd.github.io/helm-chart | gocd | 1.40.8 |

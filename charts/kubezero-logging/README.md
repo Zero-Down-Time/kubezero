@@ -21,7 +21,7 @@ Kubernetes: `>= 1.24.0`
 |  | eck-operator | 2.4.0 |
 |  | fluent-bit | 0.20.6 |
 |  | fluentd | 0.3.9 |
-| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
 
 ## Changes from upstream
 ### ECK
