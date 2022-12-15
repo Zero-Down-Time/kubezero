@@ -1,5 +1,5 @@
 snapshotController:
-  enabled: true
+  enabled: false
   replicas: 1
   logLevel: 2
 
