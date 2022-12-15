@@ -1,6 +1,6 @@
 # kubezero-addons
 
-![Version: 0.7.1](https://img.shields.io/badge/Version-0.7.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.24](https://img.shields.io/badge/AppVersion-v1.24-informational?style=flat-square)
+![Version: 0.7.2](https://img.shields.io/badge/Version-0.7.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.24](https://img.shields.io/badge/AppVersion-v1.24-informational?style=flat-square)
 
 KubeZero umbrella chart for various optional cluster addons
 
@@ -18,7 +18,8 @@ Kubernetes: `>= 1.24.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | aws-node-termination-handler | 0.20.0 |
+|  | aws-node-termination-handler | 0.20.1 |
+| https://bitnami-labs.github.io/sealed-secrets | sealed-secrets | 2.7.1 |
 | https://kubernetes-sigs.github.io/external-dns/ | external-dns | 1.11.0 |
 | https://kubernetes.github.io/autoscaler | cluster-autoscaler | 9.21.0 |
 | https://nvidia.github.io/k8s-device-plugin | nvidia-device-plugin | 0.12.3 |
@@ -123,3 +124,15 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | nvidia-device-plugin.tolerations[1].effect | string | `"NoSchedule"` |  |
 | nvidia-device-plugin.tolerations[1].key | string | `"kubezero-workergroup"` |  |
 | nvidia-device-plugin.tolerations[1].operator | string | `"Exists"` |  |
+| sealed-secrets.enabled | bool | `false` |  |
+| sealed-secrets.fullnameOverride | string | `"sealed-secrets-controller"` |  |
+| sealed-secrets.keyrenewperiod | int | `0` |  |
+| sealed-secrets.metrics.serviceMonitor.enabled | bool | `false` |  |
+| sealed-secrets.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
+| sealed-secrets.resources.limits.memory | string | `"128Mi"` |  |
+| sealed-secrets.resources.requests.cpu | string | `"10m"` |  |
+| sealed-secrets.resources.requests.memory | string | `"24Mi"` |  |
+| sealed-secrets.tolerations[0].effect | string | `"NoSchedule"` |  |
+| sealed-secrets.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| sealed-secrets.tolerations[1].effect | string | `"NoSchedule"` |  |
+| sealed-secrets.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |

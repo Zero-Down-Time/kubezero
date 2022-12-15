@@ -146,6 +146,17 @@ nvidia-device-plugin:
   {{- toYaml . | nindent 2 }}
 {{- end }}
 
+{{- with index .Values "addons" "sealed-secrets" }}
+sealed-secrets:
+  {{- toYaml . | nindent 2 }}
+
+  {{- with $.Values.metrics }}
+  metrics:
+    serviceMonitor:
+      enabled: {{ .enabled }}
+  {{- end }}
+{{- end }}
+
 {{- end }}
 
 {{- define "addons-argo" }}

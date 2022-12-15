@@ -1,4 +1,4 @@
-configmap: grafana-dashboards-keycloak
+configmap: grafana-dashboards
 condition: '.Values.keycloak.metrics.enabled'
 gzip: true
 # folder: 

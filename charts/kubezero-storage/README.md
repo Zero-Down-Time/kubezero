@@ -21,7 +21,7 @@ Kubernetes: `>= 1.24.0`
 |  | aws-efs-csi-driver | 2.3.2 |
 |  | gemini | 1.0.0 |
 |  | lvm-localpv | 1.0.0 |
-| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
 | https://kubernetes-sigs.github.io/aws-ebs-csi-driver | aws-ebs-csi-driver | 2.13.0 |
 
 ## Values
@@ -118,7 +118,7 @@ Kubernetes: `>= 1.24.0`
 | lvm-localpv.prometheus.enabled | bool | `false` |  |
 | lvm-localpv.storageClass.default | bool | `false` |  |
 | lvm-localpv.storageClass.vgpattern | string | `""` |  |
-| snapshotController.enabled | bool | `true` |  |
+| snapshotController.enabled | bool | `false` |  |
 | snapshotController.logLevel | int | `2` |  |
 | snapshotController.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | snapshotController.replicas | int | `1` |  |

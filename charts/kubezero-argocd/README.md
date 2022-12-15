@@ -21,7 +21,7 @@ Kubernetes: `>= 1.24.0`
 | https://argoproj.github.io/argo-helm | argo-cd | 5.16.1 |
 | https://argoproj.github.io/argo-helm | argocd-apps | 0.0.4 |
 | https://argoproj.github.io/argo-helm | argocd-image-updater | 0.8.1 |
-| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
 
 ## Values
 
