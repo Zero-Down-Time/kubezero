@@ -32,6 +32,13 @@ gitea:
     enabled: true
     size: 4Gi
 
+  resources:
+    requests:
+      cpu: "150m"
+      memory: "320Mi"
+    limits:
+      memory: "2048Mi"
+
   gitea:
     admin:
       existingSecret: gitea-admin-secret
@@ -84,14 +91,14 @@ jenkins:
         cpu: "250m"
         memory: "1280Mi"
       limits:
-        cpu: "2000m"
+        #cpu: "2000m"
         memory: "4096Mi"
     initContainerResources:
       requests:
         cpu: "50m"
         memory: "256Mi"
       limits:
-        cpu: "1000m"
+        #cpu: "1000m"
         memory: "1024Mi"
 
     JCasC:
@@ -114,9 +121,12 @@ jenkins:
                       numToKeepStr: "10"
 
     installPlugins:
-      - kubernetes:3734.v562b_b_a_627ea_c
+      - kubernetes:3743.v1fa_4c724c3b_7
       - workflow-aggregator:581.v0c46fa_697ffd
-      - git:4.14.2
+      - git:4.14.3
+      - basic-branch-build-strategies:71.vc1421f89888e
+      - pipeline-graph-view:144.vf3924feb_7e35
+      - pipeline-stage-view:2.28
       - configuration-as-code:1569.vb_72405b_80249
       - antisamy-markup-formatter:155.v795fb_8702324
       - prometheus:2.0.11
@@ -133,20 +143,13 @@ jenkins:
   agent:
     image: public.ecr.aws/zero-downtime/jenkins-podman
     tag: v0.4.1
-    resources:
-      requests:
-        cpu: "512m"
-        memory: "1024Mi"
-      limits:
-        cpu: "4"
-        memory: "6144Mi"
     #alwaysPullImage: true
     podRetention: "Default"
     showRawYaml: false
     podName: "podman-aws"
     customJenkinsLabels:
     - podman-aws-trivy
-    idleMinutes: 10
+    idleMinutes: 15
     containerCap: 2
     annotations:
       container.apparmor.security.beta.kubernetes.io/jnlp: unconfined
@@ -168,7 +171,12 @@ jenkins:
         containers:
         - name: jnlp
           resources:
+            requests:
+              cpu: "512m"
+              memory: "1024Mi"
             limits:
+              cpu: "4"
+              memory: "6144Mi"
               github.com/fuse: 1
           volumeMounts:
           - name: aws-token
@@ -216,7 +224,7 @@ jenkins:
 trivy:
   enabled: false
   image:
-    tag: 0.34.0
+    tag: 0.35.0
   persistence:
     enabled: true
     size: 1Gi
