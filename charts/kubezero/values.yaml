@@ -10,24 +10,26 @@ global:
 
 addons:
   enabled: true
-  targetRevision: 0.7.2
+  targetRevision: 0.7.3
   external-dns:
     enabled: false
   forseti:
     enabled: false
   clusterBackup:
     enabled: false
-  aws-node-termination-handler:
-    enabled: false
   cluster-autoscaler:
     enabled: false
   sealed-secrets:
+    enabled: false
+  aws-node-termination-handler:
+    enabled: false
+  aws-eks-asg-rolling-update-handler:
     enabled: false
 
 network:
   enabled: true
   retain: true
-  targetRevision: 0.4.1
+  targetRevision: 0.4.2
   cilium:
     cluster: {}
 
@@ -74,7 +76,7 @@ istio-private-ingress:
 metrics:
   enabled: false
   namespace: monitoring
-  targetRevision: 0.8.8
+  targetRevision: 0.8.9
   istio:
     grafana: {}
     prometheus: {}
@@ -87,7 +89,7 @@ logging:
 argocd:
   enabled: false
   namespace: argocd
-  targetRevision: 0.11.1
+  targetRevision: 0.11.2
   argocd-image-updater:
     enabled: false
   istio:

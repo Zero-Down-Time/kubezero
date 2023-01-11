@@ -48,17 +48,10 @@ headlessService: false
 #
 autoscaling:
   enabled: false
-#   minReplicas: 1
-#   maxReplicas: 10
-#   metrics:
-#   - type: Resource
-#     resource:
-#       name: cpu
-#       targetAverageUtilization: 60
-#   - type: Resource
-#     resource:
-#       name: memory
-#       targetAverageUtilization: 60
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPU: "60"
+  targetMemory: ""
 
 ## See `kubectl explain poddisruptionbudget.spec` for more
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
@@ -101,7 +94,7 @@ image:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ## Can be templated.
   ##
-  # pullSecrets:
+  pullSecrets: []
   #   - myRegistrKeySecretName
 
 testFramework:
@@ -761,7 +754,7 @@ smtp:
 sidecar:
   image:
     repository: quay.io/kiwigrid/k8s-sidecar
-    tag: 1.19.2
+    tag: 1.21.0
     sha: ""
   imagePullPolicy: IfNotPresent
   resources: {}
@@ -845,8 +838,11 @@ sidecar:
     # If specified, the sidecar will look for annotation with this name to create folder and put graph here.
     # You can use this parameter together with `provider.foldersFromFilesStructure`to annotate configmaps and create folder structure.
     folderAnnotation: null
+    # Endpoint to send request to reload alerts
+    reloadURL: "http://localhost:3000/api/admin/provisioning/dashboards/reload"
     # Absolute path to shell script to execute after a configmap got reloaded
     script: null
+    skipReload: false
     # watchServerTimeout: request to the server, asking it to cleanly close the connection after that.
     # defaults to 60sec; much higher values like 3600 seconds (1h) are feasible for non-Azure K8S
     # watchServerTimeout: 3600

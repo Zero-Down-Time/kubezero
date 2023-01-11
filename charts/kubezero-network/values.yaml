@@ -34,6 +34,14 @@ cilium:
   securityContext:
     privileged: true
 
+  resources:
+    requests:
+      cpu: 10m
+      memory: 256Mi
+    limits:
+      memory: 1024Mi
+      # cpu: 4000m
+
   cni:
     binPath: "/usr/libexec/cni"
     logFile: /var/log/cilium-cni.log

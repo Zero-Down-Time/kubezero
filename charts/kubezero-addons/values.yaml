@@ -52,6 +52,47 @@ sealed-secrets:
   - key: node-role.kubernetes.io/control-plane
     effect: NoSchedule
 
+aws-eks-asg-rolling-update-handler:
+  enabled: false
+  image:
+    tag: v1.7.0
+
+  environmentVars:
+    - name: CLUSTER_NAME
+      value: ""
+    - name: AWS_REGION
+      value: us-west-2
+    - name: EXECUTION_INTERVAL
+      value: "60"
+    - name: METRICS
+      value: "true"
+    - name: EAGER_CORDONING
+      value: "true"
+    # Only disable if all services have PDBs across AZs
+    - name: SLOW_MODE
+      value: "true"
+    - name: AWS_ROLE_ARN
+      value: ""
+    - name: AWS_WEB_IDENTITY_TOKEN_FILE
+      value: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
+    - name: AWS_STS_REGIONAL_ENDPOINTS
+      value: "regional"
+
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      memory: 128Mi
+
+  nodeSelector:
+    node-role.kubernetes.io/control-plane: ""
+  tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
+
 aws-node-termination-handler:
   enabled: false
 

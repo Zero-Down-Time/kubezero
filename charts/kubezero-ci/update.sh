@@ -3,4 +3,5 @@
 helm dep update
 
 # Create ZDT dashboard configmap
-../kubezero-metrics/sync_grafana_dashboards.py dashboards.yaml templates/grafana-dashboards.yaml
+../kubezero-metrics/sync_grafana_dashboards.py dashboard-jenkins.yaml templates/jenkins/grafana-dashboard.yaml
+../kubezero-metrics/sync_grafana_dashboards.py dashboard-gitea.yaml templates/gitea/grafana-dashboard.yaml

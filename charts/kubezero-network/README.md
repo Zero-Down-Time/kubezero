@@ -1,6 +1,6 @@
 # kubezero-network
 
-![Version: 0.4.1](https://img.shields.io/badge/Version-0.4.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.4.2](https://img.shields.io/badge/Version-0.4.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things network
 
@@ -19,7 +19,7 @@ Kubernetes: `>= 1.24.0`
 | Repository | Name | Version |
 |------------|------|---------|
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
-| https://helm.cilium.io/ | cilium | 1.12.3 |
+| https://helm.cilium.io/ | cilium | 1.12.5 |
 | https://metallb.github.io/metallb | metallb | 0.13.7 |
 
 ## Values
@@ -52,6 +52,9 @@ Kubernetes: `>= 1.24.0`
 | cilium.operator.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | cilium.prometheus.enabled | bool | `false` |  |
 | cilium.prometheus.port | int | `9091` |  |
+| cilium.resources.limits.memory | string | `"1024Mi"` |  |
+| cilium.resources.requests.cpu | string | `"10m"` |  |
+| cilium.resources.requests.memory | string | `"256Mi"` |  |
 | cilium.securityContext.privileged | bool | `true` |  |
 | cilium.tunnel | string | `"geneve"` |  |
 | metallb.controller.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |

@@ -146,7 +146,7 @@ waitSystemPodsRunning
 
 argo_used && disable_argo
 
-# all_nodes_upgrade ""
+#all_nodes_upgrade ""
 
 control_plane_upgrade kubeadm_upgrade
 
@@ -154,10 +154,18 @@ echo "Adjust kubezero values as needed:"
 # shellcheck disable=SC2015
 argo_used && kubectl edit app kubezero -n argocd || kubectl edit cm kubezero-values -n kube-system
 
+# Remove calico
+#kubectl delete deployment calico-kube-controllers -n kube-system || true
+#kubectl delete daemonset calico-node -n kube-system || true
+#kubectl delete network-attachment-definitions calico -n kube-system || true
+
+# Remove previous cilium config as the helm options are additive only -> fail
+kubectl delete configmap cilium-config -n kube-system || true
+
 control_plane_upgrade "apply_network, apply_addons, apply_storage"
 
-kubectl rollout restart daemonset/cilium -n kube-system
 kubectl rollout restart daemonset/kube-multus-ds -n kube-system
+kubectl rollout restart daemonset/cilium -n kube-system
 
 echo "Checking that all pods in kube-system are running ..."
 waitSystemPodsRunning
