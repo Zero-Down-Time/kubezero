@@ -2,7 +2,7 @@ apiVersion: v2
 name: kubezero-network
 description: KubeZero umbrella chart for all things network
 type: application
-version: 0.4.1
+version: 0.4.2
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
@@ -19,7 +19,7 @@ dependencies:
     version: ">= 0.1.5"
     repository: https://cdn.zero-downtime.net/charts/
   - name: cilium
-    version: 1.12.3
+    version: 1.12.5
     repository: https://helm.cilium.io/
     condition: cilium.enabled
   - name: metallb

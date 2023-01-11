@@ -1,4 +1,4 @@
- # cd rules; for f in *-prometheusRule; do echo "- name: ${f%%-prometheusRule}" >> ../k8s-rules.yaml; echo "  url: file://rules/$f" >> ../k8s-rules.yaml; done; cd -
+# cd rules; for f in *-prometheusRule; do echo "- name: ${f%%-prometheusRule}" >> ../k8s-rules.yaml; echo "  url: file://rules/$f" >> ../k8s-rules.yaml; done; cd -
 rules:
 - name: alertmanager
   url: file://rules/alertmanager-prometheusRule

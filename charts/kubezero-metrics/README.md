@@ -1,6 +1,6 @@
 # kubezero-metrics
 
-![Version: 0.8.8](https://img.shields.io/badge/Version-0.8.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.8.9](https://img.shields.io/badge/Version-0.8.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Prometheus, Grafana and Alertmanager as well as all Kubernetes integrations.
 
@@ -18,9 +18,9 @@ Kubernetes: `>= 1.24.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | kube-prometheus-stack | 42.2.1 |
+|  | kube-prometheus-stack | 43.2.0 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://prometheus-community.github.io/helm-charts | prometheus-adapter | 3.4.2 |
+| https://prometheus-community.github.io/helm-charts | prometheus-adapter | 3.5.0 |
 | https://prometheus-community.github.io/helm-charts | prometheus-pushgateway | 2.0.2 |
 
 ## Values
@@ -87,15 +87,15 @@ Kubernetes: `>= 1.24.0`
 | kube-prometheus-stack.alertmanager.config.inhibit_rules[2].equal[0] | string | `"namespace"` |  |
 | kube-prometheus-stack.alertmanager.config.inhibit_rules[2].source_matchers[0] | string | `"alertname = InfoInhibitor"` |  |
 | kube-prometheus-stack.alertmanager.config.inhibit_rules[2].target_matchers[0] | string | `"severity = info"` |  |
+| kube-prometheus-stack.alertmanager.config.inhibit_rules[3].source_matchers[0] | string | `"alertname = ClusterAutoscalerNodeGroupsEnabled"` |  |
+| kube-prometheus-stack.alertmanager.config.inhibit_rules[3].target_matchers[0] | string | `"alertname =~ \"KubeCPUOvercommit|KubeMemoryOvercommit\""` |  |
 | kube-prometheus-stack.alertmanager.config.route.group_by[0] | string | `"severity"` |  |
 | kube-prometheus-stack.alertmanager.config.route.group_by[1] | string | `"clusterName"` |  |
 | kube-prometheus-stack.alertmanager.config.route.group_interval | string | `"5m"` |  |
-| kube-prometheus-stack.alertmanager.config.route.group_wait | string | `"30s"` |  |
-| kube-prometheus-stack.alertmanager.config.route.repeat_interval | string | `"6h"` |  |
-| kube-prometheus-stack.alertmanager.config.route.routes[0].matchers[0] | string | `"alertname = Watchdog"` |  |
+| kube-prometheus-stack.alertmanager.config.route.group_wait | string | `"10s"` |  |
+| kube-prometheus-stack.alertmanager.config.route.repeat_interval | string | `"4h"` |  |
+| kube-prometheus-stack.alertmanager.config.route.routes[0].matchers[0] | string | `"severity = none"` |  |
 | kube-prometheus-stack.alertmanager.config.route.routes[0].receiver | string | `"null"` |  |
-| kube-prometheus-stack.alertmanager.config.route.routes[1].matchers[0] | string | `"alertname = InfoInhibitor"` |  |
-| kube-prometheus-stack.alertmanager.config.route.routes[1].receiver | string | `"null"` |  |
 | kube-prometheus-stack.alertmanager.enabled | bool | `false` |  |
 | kube-prometheus-stack.coreDns.enabled | bool | `true` |  |
 | kube-prometheus-stack.defaultRules.create | bool | `false` |  |

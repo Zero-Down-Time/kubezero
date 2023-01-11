@@ -1,6 +1,6 @@
 # kubezero-addons
 
-![Version: 0.7.2](https://img.shields.io/badge/Version-0.7.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.24](https://img.shields.io/badge/AppVersion-v1.24-informational?style=flat-square)
+![Version: 0.7.3](https://img.shields.io/badge/Version-0.7.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.24](https://img.shields.io/badge/AppVersion-v1.24-informational?style=flat-square)
 
 KubeZero umbrella chart for various optional cluster addons
 
@@ -18,11 +18,12 @@ Kubernetes: `>= 1.24.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
+|  | aws-eks-asg-rolling-update-handler | 1.2.7 |
 |  | aws-node-termination-handler | 0.20.1 |
 | https://bitnami-labs.github.io/sealed-secrets | sealed-secrets | 2.7.1 |
 | https://kubernetes-sigs.github.io/external-dns/ | external-dns | 1.11.0 |
 | https://kubernetes.github.io/autoscaler | cluster-autoscaler | 9.21.0 |
-| https://nvidia.github.io/k8s-device-plugin | nvidia-device-plugin | 0.12.3 |
+| https://nvidia.github.io/k8s-device-plugin | nvidia-device-plugin | 0.13.0 |
 
 # MetalLB   
    
@@ -40,6 +41,34 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| aws-eks-asg-rolling-update-handler.enabled | bool | `false` |  |
+| aws-eks-asg-rolling-update-handler.environmentVars[0].name | string | `"CLUSTER_NAME"` |  |
+| aws-eks-asg-rolling-update-handler.environmentVars[0].value | string | `""` |  |
+| aws-eks-asg-rolling-update-handler.environmentVars[1].name | string | `"AWS_REGION"` |  |
+| aws-eks-asg-rolling-update-handler.environmentVars[1].value | string | `"us-west-2"` |  |
+| aws-eks-asg-rolling-update-handler.environmentVars[2].name | string | `"EXECUTION_INTERVAL"` |  |
+| aws-eks-asg-rolling-update-handler.environmentVars[2].value | string | `"60"` |  |
+| aws-eks-asg-rolling-update-handler.environmentVars[3].name | string | `"METRICS"` |  |
+| aws-eks-asg-rolling-update-handler.environmentVars[3].value | string | `"true"` |  |
+| aws-eks-asg-rolling-update-handler.environmentVars[4].name | string | `"EAGER_CORDONING"` |  |
+| aws-eks-asg-rolling-update-handler.environmentVars[4].value | string | `"true"` |  |
+| aws-eks-asg-rolling-update-handler.environmentVars[5].name | string | `"SLOW_MODE"` |  |
+| aws-eks-asg-rolling-update-handler.environmentVars[5].value | string | `"true"` |  |
+| aws-eks-asg-rolling-update-handler.environmentVars[6].name | string | `"AWS_ROLE_ARN"` |  |
+| aws-eks-asg-rolling-update-handler.environmentVars[6].value | string | `""` |  |
+| aws-eks-asg-rolling-update-handler.environmentVars[7].name | string | `"AWS_WEB_IDENTITY_TOKEN_FILE"` |  |
+| aws-eks-asg-rolling-update-handler.environmentVars[7].value | string | `"/var/run/secrets/sts.amazonaws.com/serviceaccount/token"` |  |
+| aws-eks-asg-rolling-update-handler.environmentVars[8].name | string | `"AWS_STS_REGIONAL_ENDPOINTS"` |  |
+| aws-eks-asg-rolling-update-handler.environmentVars[8].value | string | `"regional"` |  |
+| aws-eks-asg-rolling-update-handler.image.tag | string | `"v1.7.0"` |  |
+| aws-eks-asg-rolling-update-handler.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
+| aws-eks-asg-rolling-update-handler.resources.limits.memory | string | `"128Mi"` |  |
+| aws-eks-asg-rolling-update-handler.resources.requests.cpu | string | `"10m"` |  |
+| aws-eks-asg-rolling-update-handler.resources.requests.memory | string | `"32Mi"` |  |
+| aws-eks-asg-rolling-update-handler.tolerations[0].effect | string | `"NoSchedule"` |  |
+| aws-eks-asg-rolling-update-handler.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| aws-eks-asg-rolling-update-handler.tolerations[1].effect | string | `"NoSchedule"` |  |
+| aws-eks-asg-rolling-update-handler.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | aws-node-termination-handler.deleteLocalData | bool | `true` |  |
 | aws-node-termination-handler.emitKubernetesEvents | bool | `true` |  |
 | aws-node-termination-handler.enableProbesServer | bool | `true` |  |

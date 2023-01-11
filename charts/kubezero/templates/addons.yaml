@@ -28,32 +28,6 @@ forseti:
     iamRoleArn: "arn:aws:iam::{{ .Values.global.aws.accountId }}:role/{{ .Values.global.aws.region }}.{{ .Values.global.clusterName }}.kubezeroForseti"
   {{- end }}
 
-aws-node-termination-handler:
-  enabled: {{ ternary "true" "false" (or (hasKey .Values.global "aws") (index .Values "addons" "aws-node-termination-handler" "enabled")) }}
-
-  {{- with omit (index .Values "addons" "aws-node-termination-handler") "enabled" }}
-  {{- toYaml . | nindent 2 }}
-  {{- end }}
-
-  {{- with .Values.metrics }}
-  enablePrometheusServer: {{ .enabled }}
-  {{- end }}
-
-  {{- if .Values.global.aws }}
-  # AWS
-  queueURL: "https://sqs.{{ .Values.global.aws.region }}.amazonaws.com/{{ .Values.global.aws.accountId }}/{{ .Values.global.clusterName }}_Nth"
-  managedTag: "aws-node-termination-handler/{{ .Values.global.clusterName }}"
-  extraEnv:
-    - name: AWS_ROLE_ARN
-      value: "arn:aws:iam::{{ .Values.global.aws.accountId }}:role/{{ .Values.global.aws.region }}.{{ .Values.global.clusterName }}.awsNth"
-    - name: AWS_WEB_IDENTITY_TOKEN_FILE
-      value: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
-    - name: AWS_STS_REGIONAL_ENDPOINTS
-      value: "regional"
-    - name: METADATA_TRIES
-      value: "0"
-  {{- end }}
-
 external-dns:
   enabled: {{ ternary "true" "false" (or (hasKey .Values.global "aws") (index .Values "addons" "external-dns" "enabled")) }}
 
@@ -155,6 +129,58 @@ sealed-secrets:
     serviceMonitor:
       enabled: {{ .enabled }}
   {{- end }}
+{{- end }}
+
+{{- if .Values.global.aws }}
+# AWS only
+aws-node-termination-handler:
+  enabled: {{ default "true" (index .Values "addons" "aws-node-termination-handler" "enabled") }}
+
+  {{- with omit (index .Values "addons" "aws-node-termination-handler") "enabled" }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+
+  {{- with .Values.metrics }}
+  enablePrometheusServer: {{ .enabled }}
+  {{- end }}
+
+  queueURL: "https://sqs.{{ .Values.global.aws.region }}.amazonaws.com/{{ .Values.global.aws.accountId }}/{{ .Values.global.clusterName }}_Nth"
+  managedTag: "aws-node-termination-handler/{{ .Values.global.clusterName }}"
+  extraEnv:
+    - name: AWS_ROLE_ARN
+      value: "arn:aws:iam::{{ .Values.global.aws.accountId }}:role/{{ .Values.global.aws.region }}.{{ .Values.global.clusterName }}.awsNth"
+    - name: AWS_WEB_IDENTITY_TOKEN_FILE
+      value: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
+    - name: AWS_STS_REGIONAL_ENDPOINTS
+      value: "regional"
+    - name: METADATA_TRIES
+      value: "0"
+
+aws-eks-asg-rolling-update-handler:
+  enabled: {{ default "true" (index .Values "addons" "aws-eks-asg-rolling-update-handler" "enabled") }}
+
+  {{- with omit (index .Values "addons" "aws-eks-asg-rolling-update-handler") "enabled" }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+
+  environmentVars:
+    - name: CLUSTER_NAME
+      value: {{ .Values.global.clusterName }}
+    - name: AWS_REGION
+      value: {{ .Values.global.aws.region }}
+    - name: EXECUTION_INTERVAL
+      value: "60"
+    - name: METRICS
+      value: "{{ .Values.metrics.enabled }}"
+    - name: EAGER_CORDONING
+      value: "true"
+    - name: SLOW_MODE
+      value: "true"
+    - name: AWS_ROLE_ARN
+      value: "arn:aws:iam::{{ .Values.global.aws.accountId }}:role/{{ .Values.global.aws.region }}.{{ .Values.global.clusterName }}.awsRuh"
+    - name: AWS_WEB_IDENTITY_TOKEN_FILE
+      value: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
+    - name: AWS_STS_REGIONAL_ENDPOINTS
 {{- end }}
 
 {{- end }}
