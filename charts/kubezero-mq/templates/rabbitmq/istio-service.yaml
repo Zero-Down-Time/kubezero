@@ -34,4 +34,13 @@ spec:
         port:
           number: 1883
   {{- end }}
+  {{- if .Values.rabbitmq.istio.mqtt }}
+  - match:
+    - port: 1883
+    route:
+    - destination:
+        host: rabbitmq
+        port:
+          number: 1883
+  {{- end }}
 {{- end }}
