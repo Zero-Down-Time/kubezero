@@ -59,6 +59,9 @@ rabbitmq:
     mqtt: false
     mqtts: false
 
+  #extraConfiguration: |-
+  #  mqtt.durable_queue_type = quorum
+
   auth:
     existingPasswordSecret: rabbitmq
     existingErlangSecret: rabbitmq

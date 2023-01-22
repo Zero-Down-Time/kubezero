@@ -178,6 +178,7 @@ nvidia-device-plugin:
                   - g5.16xlarge
                   - g5.24xlarge
                   - g5.48xlarge
+                  - g4dn.xlarge
 
 cluster-autoscaler:
   enabled: false

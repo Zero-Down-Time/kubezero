@@ -121,19 +121,19 @@ jenkins:
                       numToKeepStr: "10"
 
     installPlugins:
-      - kubernetes:3743.v1fa_4c724c3b_7
+      - kubernetes:3802.vb_b_600831fcb_3
       - workflow-aggregator:581.v0c46fa_697ffd
-      - git:4.14.3
+      - git:5.0.0
       - basic-branch-build-strategies:71.vc1421f89888e
       - pipeline-graph-view:144.vf3924feb_7e35
       - pipeline-stage-view:2.28
       - configuration-as-code:1569.vb_72405b_80249
       - antisamy-markup-formatter:155.v795fb_8702324
-      - prometheus:2.0.11
+      - prometheus:2.1.0
       - htmlpublisher:1.31
       - build-discarder:139.v05696a_7fe240
       - dark-theme:262.v0202a_4c8fb_6a
-      - kubernetes-credentials-provider:1.206.v7ce2cf7b_0c8b
+      - kubernetes-credentials-provider:1.208.v128ee9800c04
 
   serviceAccountAgent:
     create: true
@@ -153,6 +153,13 @@ jenkins:
     containerCap: 2
     annotations:
       container.apparmor.security.beta.kubernetes.io/jnlp: unconfined
+    resources:
+      requests:
+        cpu: ""
+        memory: ""
+      limits:
+        cpu: ""
+        memory: ""
     # envVars:
     # - name: AWS_WEB_IDENTITY_TOKEN_FILE
     #   value: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
