@@ -112,10 +112,12 @@ spec:
       tolerations:
       - effect: NoSchedule
         key: node-role.kubernetes.io/master
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/control-plane
 
       containers:
       - name: aws-iam-authenticator
-        image: public.ecr.aws/zero-downtime/aws-iam-authenticator:v0.5.9
+        image: public.ecr.aws/zero-downtime/aws-iam-authenticator:v0.5.11
         args:
         - server
         - --backend-mode=CRD,MountedFile
@@ -131,7 +133,7 @@ spec:
 
         resources:
           requests:
-            memory: 20Mi
+            memory: 32Mi
             cpu: 10m
           limits:
             memory: 64Mi

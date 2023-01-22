@@ -2,7 +2,7 @@ apiVersion: v2
 name: kubezero-ci
 description: KubeZero umbrella chart for all things CI
 type: application
-version: 0.5.14
+version: 0.5.25
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
@@ -15,18 +15,18 @@ maintainers:
     email: stefan@zero-downtime.net
 dependencies:
   - name: kubezero-lib
-    version: ">= 0.1.5"
+    version: ">= 0.1.6"
     repository: https://cdn.zero-downtime.net/charts/
   - name: gocd
     version: 1.40.8
     repository: https://gocd.github.io/helm-chart
     condition: gocd.enabled
   - name: gitea
-    version: 5.0.9
+    version: 6.0.5
     repository: https://dl.gitea.io/charts/
     condition: gitea.enabled
   - name: jenkins
-    version: 4.2.6
+    version: 4.2.20
     repository: https://charts.jenkins.io
     condition: jenkins.enabled
   - name: trivy

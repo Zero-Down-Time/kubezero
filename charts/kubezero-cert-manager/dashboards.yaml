@@ -1,4 +1,4 @@
-configmap: cert-manager-grafana-dashboard
+configmap: grafana-dashboard
 gzip: true
 folder: KubeZero
 condition: 'index .Values "cert-manager" "prometheus" "servicemonitor" "enabled"'

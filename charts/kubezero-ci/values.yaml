@@ -17,7 +17,7 @@ gitea:
   enabled: false
 
   image:
-    tag: 1.17.1
+    #tag: 1.17.4
     rootless: true
 
   securityContext:
@@ -32,6 +32,13 @@ gitea:
     enabled: true
     size: 4Gi
 
+  resources:
+    requests:
+      cpu: "150m"
+      memory: "320Mi"
+    limits:
+      memory: "2048Mi"
+
   gitea:
     admin:
       existingSecret: gitea-admin-secret
@@ -42,7 +49,7 @@ gitea:
     metrics:
       enabled: false
       serviceMonitor:
-        enabled: false
+        enabled: true
 
     config:
       database:
@@ -69,7 +76,7 @@ jenkins:
   enabled: false
 
   controller:
-    tag: 2.370-alpine-jdk17
+    tag: alpine-jdk17
     #tagLabel: alpine
     disableRememberMe: true
     prometheus:
@@ -84,14 +91,14 @@ jenkins:
         cpu: "250m"
         memory: "1280Mi"
       limits:
-        cpu: "2000m"
+        #cpu: "2000m"
         memory: "4096Mi"
     initContainerResources:
       requests:
         cpu: "50m"
         memory: "256Mi"
       limits:
-        cpu: "1000m"
+        #cpu: "1000m"
         memory: "1024Mi"
 
     JCasC:
@@ -114,16 +121,19 @@ jenkins:
                       numToKeepStr: "10"
 
     installPlugins:
-      - kubernetes:3706.vdfb_d599579f3
+      - kubernetes:3802.vb_b_600831fcb_3
       - workflow-aggregator:581.v0c46fa_697ffd
-      - git:4.12.1
-      - configuration-as-code:1512.vb_79d418d5fc8
-      - antisamy-markup-formatter:2.7
-      - prometheus:2.0.11
+      - git:5.0.0
+      - basic-branch-build-strategies:71.vc1421f89888e
+      - pipeline-graph-view:144.vf3924feb_7e35
+      - pipeline-stage-view:2.28
+      - configuration-as-code:1569.vb_72405b_80249
+      - antisamy-markup-formatter:155.v795fb_8702324
+      - prometheus:2.1.0
       - htmlpublisher:1.31
       - build-discarder:139.v05696a_7fe240
-      - dark-theme:245.vb_a_2b_b_010ea_96
-      - kubernetes-credentials-provider:1.196.va_55f5e31e3c2
+      - dark-theme:262.v0202a_4c8fb_6a
+      - kubernetes-credentials-provider:1.208.v128ee9800c04
 
   serviceAccountAgent:
     create: true
@@ -132,24 +142,24 @@ jenkins:
   # Preconfigure agents to use zdt podman requires fuse/overlayfs
   agent:
     image: public.ecr.aws/zero-downtime/jenkins-podman
-    tag: v0.3.2
-    resources:
-      requests:
-        cpu: "512m"
-        memory: "1024Mi"
-      limits:
-        cpu: "4"
-        memory: "6144Mi"
+    tag: v0.4.1
     #alwaysPullImage: true
     podRetention: "Default"
     showRawYaml: false
     podName: "podman-aws"
     customJenkinsLabels:
     - podman-aws-trivy
-    idleMinutes: 10
+    idleMinutes: 15
     containerCap: 2
     annotations:
       container.apparmor.security.beta.kubernetes.io/jnlp: unconfined
+    resources:
+      requests:
+        cpu: ""
+        memory: ""
+      limits:
+        cpu: ""
+        memory: ""
     # envVars:
     # - name: AWS_WEB_IDENTITY_TOKEN_FILE
     #   value: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
@@ -168,7 +178,12 @@ jenkins:
         containers:
         - name: jnlp
           resources:
+            requests:
+              cpu: "512m"
+              memory: "1024Mi"
             limits:
+              cpu: "4"
+              memory: "6144Mi"
               github.com/fuse: 1
           volumeMounts:
           - name: aws-token
@@ -215,9 +230,10 @@ jenkins:
 
 trivy:
   enabled: false
+  image:
+    tag: 0.35.0
   persistence:
     enabled: true
     size: 1Gi
   rbac:
     create: false
-    pspEnabled: false

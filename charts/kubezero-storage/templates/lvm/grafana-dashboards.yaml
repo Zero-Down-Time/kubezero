@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ printf "%s-%s" (include "kubezero-lib.fullname" $) "openebs-lvmlocalpv-grafana-dashboard" | trunc 63 | trimSuffix "-" }}
+  name: {{ printf "%s-%s" (include "kubezero-lib.fullname" $) "grafana-dashboard-lvmlocalpv" | trunc 63 | trimSuffix "-" }}
   namespace: {{ .Release.Namespace }}
   labels:
     grafana_dashboard: "1"

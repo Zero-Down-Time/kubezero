@@ -8,32 +8,34 @@ import yaml
 def migrate(values):
     """Actual changes here"""
 
-    # migrate ClusterName to clusterName
-    if "ClusterName" in values:
-        values["clusterName"] = values["ClusterName"]
-        values.pop("ClusterName")
+    # ClusterBackup is enabled on AWS anyways, same with cluster-autoscaler
+    if "aws" in values["global"]:
+        deleteKey(values["addons"], "clusterBackup")
+        deleteKey(values["addons"], "cluster-autoscaler")
 
-    # Remove HighAvailableControlplane
+    # Remove calico and multus
+    deleteKey(values["network"], "calico")
+    deleteKey(values["network"], "multus")
+
+    # ArgoCD helm changes
+    if "argocd" in values:
+        if "server" in values["argocd"]:
+            if not "configs" in values["argocd"]:
+                values["argocd"]["configs"] = {}
+            if not "cm" in values["argocd"]["configs"]:
+                values["argocd"]["configs"]["cm"] = {}
+            values["argocd"]["configs"]["cm"]["url"] = values["argocd"]["server"]["config"][
+                "url"
+            ]
+            deleteKey(values["argocd"], "server")
+
+    return values
+
+
+def deleteKey(values, key):
+    """Delete key from dictionary if exists"""
     try:
-        values["global"]["highAvailable"] = values["HighAvailableControlplane"]
-        values.pop("HighAvailableControlplane")
-    except KeyError:
-        pass
-
-    # Create new clusterwide cloudprovider data if possible
-    # IamArn: arn:aws:iam::<ACCOUNT_ID>:role/<REGION>.<CLUSTERNAME>.cert-manager
-    try:
-        if values["cert-manager"]["IamArn"]:
-            account_id = values["cert-manager"]["IamArn"].split(":")[4]
-            region = values["cert-manager"]["IamArn"].split(":")[5].split('.')[0].split('/')[1]
-            if "global" not in values:
-                values["global"] = {}
-            if "aws" not in values["global"]:
-                values["global"]["aws"] = {}
-
-            values["global"]["aws"]["region"] = region
-            values["global"]["aws"]["accountId"] = account_id
-
+        values.pop(key)
     except KeyError:
         pass
 
@@ -44,8 +46,10 @@ class MyDumper(yaml.Dumper):
     """
     Required to add additional indent for arrays to match yq behaviour to reduce noise in diffs
     """
+
     def increase_indent(self, flow=False, indentless=False):
         return super(MyDumper, self).increase_indent(flow, False)
+
 
 def str_presenter(dumper, data):
     if len(data.splitlines()) > 1:  # check for multiline string
@@ -93,5 +97,5 @@ yaml.dump(
     default_flow_style=False,
     indent=2,
     sort_keys=False,
-    Dumper=MyDumper
+    Dumper=MyDumper,
 )

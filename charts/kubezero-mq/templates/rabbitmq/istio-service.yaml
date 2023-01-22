@@ -11,25 +11,36 @@ spec:
   - {{ .Values.rabbitmq.istio.gateway }}
   hosts:
 {{ toYaml .Values.rabbitmq.hosts | indent 2 }}
-  tcp:
-  - match:
-    - port: 5672
-    route:
+  http:
+  - route:
     - destination:
-        host: rabbitmq-headless
+        host: rabbitmq
         port:
-          number: 5672
+          number: 15672
+  tcp:
   - match:
     - port: 5671
     route:
     - destination:
-        host: rabbitmq-headless
+        host: rabbitmq
         port:
-          number: 5671
-  http:
-  - route:
+          number: 5672
+  {{- if .Values.rabbitmq.istio.mqtts }}
+  - match:
+    - port: 8883
+    route:
     - destination:
-        host: rabbitmq-headless
+        host: rabbitmq
         port:
-          number: 15672
+          number: 1883
+  {{- end }}
+  {{- if .Values.rabbitmq.istio.mqtt }}
+  - match:
+    - port: 1883
+    route:
+    - destination:
+        host: rabbitmq
+        port:
+          number: 1883
+  {{- end }}
 {{- end }}

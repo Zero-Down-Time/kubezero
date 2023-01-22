@@ -2,7 +2,7 @@ apiVersion: v2
 name: kubezero-istio-gateway
 description: KubeZero Umbrella Chart for Istio gateways
 type: application
-version: 0.8.2
+version: 0.9.0
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
@@ -17,6 +17,6 @@ dependencies:
     version: ">= 0.1.5"
     repository: https://cdn.zero-downtime.net/charts/
   - name: gateway
-    version: 1.14.3
+    version: 1.16.1
     repository: https://istio-release.storage.googleapis.com/charts
-kubeVersion: ">= 1.20.0"
+kubeVersion: ">= 1.24.0"

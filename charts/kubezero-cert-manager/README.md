@@ -1,6 +1,6 @@
 # kubezero-cert-manager
 
-![Version: 0.9.2](https://img.shields.io/badge/Version-0.9.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.9.3](https://img.shields.io/badge/Version-0.9.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for cert-manager
 
@@ -14,11 +14,11 @@ KubeZero Umbrella Chart for cert-manager
 
 ## Requirements
 
-Kubernetes: `>= 1.20.0`
+Kubernetes: `>= 1.24.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
 | https://charts.jetstack.io | cert-manager | 1.9.1 |
 
 ## AWS - OIDC IAM roles
@@ -35,6 +35,8 @@ If your resolvers need additional sercrets like CloudFlare API tokens etc. make 
 | cert-manager.cainjector.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | cert-manager.cainjector.tolerations[0].effect | string | `"NoSchedule"` |  |
 | cert-manager.cainjector.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| cert-manager.cainjector.tolerations[1].effect | string | `"NoSchedule"` |  |
+| cert-manager.cainjector.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | cert-manager.enabled | bool | `true` |  |
 | cert-manager.extraArgs[0] | string | `"--dns01-recursive-nameservers-only"` |  |
 | cert-manager.global.leaderElection.namespace | string | `"cert-manager"` |  |
@@ -45,9 +47,13 @@ If your resolvers need additional sercrets like CloudFlare API tokens etc. make 
 | cert-manager.startupapicheck.enabled | bool | `false` |  |
 | cert-manager.tolerations[0].effect | string | `"NoSchedule"` |  |
 | cert-manager.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| cert-manager.tolerations[1].effect | string | `"NoSchedule"` |  |
+| cert-manager.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | cert-manager.webhook.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | cert-manager.webhook.tolerations[0].effect | string | `"NoSchedule"` |  |
 | cert-manager.webhook.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| cert-manager.webhook.tolerations[1].effect | string | `"NoSchedule"` |  |
+| cert-manager.webhook.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | clusterIssuer | object | `{}` |  |
 | localCA.enabled | bool | `false` |  |
 | localCA.selfsigning | bool | `true` |  |

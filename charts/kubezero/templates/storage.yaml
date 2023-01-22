@@ -12,6 +12,14 @@ gemini:
   {{- toYaml . | nindent 2 }}
 {{- end }}
 
+{{- with .Values.storage.velero }}
+velero:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+
+snapshotController:
+  enabled: {{ default false (or (index .Values "storage" "velero" "enabled") (index .Values "storage" "gemini" "enabled")) }}
+
 aws-ebs-csi-driver:
   enabled: {{ default false (index .Values "storage" "aws-ebs-csi-driver" "enabled")}}
   controller:

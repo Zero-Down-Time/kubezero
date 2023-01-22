@@ -1,0 +1,36 @@
+diff -tuNr charts/aws-eks-asg-rolling-update-handler.orig/templates/deployment.yaml charts/aws-eks-asg-rolling-update-handler/templates/deployment.yaml
+--- charts/aws-eks-asg-rolling-update-handler.orig/templates/deployment.yaml	2022-12-16 13:10:26.049272371 +0000
++++ charts/aws-eks-asg-rolling-update-handler/templates/deployment.yaml	2022-12-16 15:56:00.880666339 +0000
+@@ -25,7 +25,31 @@
+           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+           imagePullPolicy: {{ .Values.image.pullPolicy }}
+           env:
+-{{- toYaml .Values.environmentVars | nindent 12 }}
++            {{- toYaml .Values.environmentVars | nindent 12 }}
++          {{- with .Values.resources }}
++          resources:
++            {{- toYaml . | nindent 12 }}
++          {{- end }}
++          volumeMounts:
++            - name: aws-token
++              mountPath: "/var/run/secrets/sts.amazonaws.com/serviceaccount/"
++              readOnly: true
++      volumes:
++        - name: aws-token
++          projected:
++            sources:
++            - serviceAccountToken:
++                path: token
++                expirationSeconds: 86400
++                audience: "sts.amazonaws.com"
++      {{- with .Values.nodeSelector }}
++      nodeSelector:
++        {{- toYaml . | nindent 8 }}
++      {{- end }}
++      {{- with .Values.tolerations }}
++      tolerations:
++        {{- toYaml . | nindent 8 }}
++      {{- end }}
+       {{- with .Values.imagePullSecrets }}
+       imagePullSecrets:
+ {{- toYaml . | nindent 8 }}

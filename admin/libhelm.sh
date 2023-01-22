@@ -108,6 +108,7 @@ function _crds() {
 
   # Only apply if there are actually any crds
   if [ -s $WORKDIR/crds.yaml ]; then
+    [ -n "$DEBUG" ] && cat $WORKDIR/crds.yaml
     kubectl apply -f $WORKDIR/crds.yaml --server-side --force-conflicts
   fi
 }
@@ -115,7 +116,7 @@ function _crds() {
 
 # helm template | kubectl apply -f -
 # confine to one namespace if possible
-function apply() {
+function render() {
   helm template $(chart_location $chart) -n $namespace --name-template $module $targetRevision --skip-crds -f $WORKDIR/values.yaml $API_VERSIONS --kube-version $KUBE_VERSION $@ \
     | python3 -c '
 #!/usr/bin/python3
@@ -128,8 +129,6 @@ for manifest in yaml.safe_load_all(sys.stdin):
             manifest["metadata"]["namespace"] = sys.argv[1]
         print("---")
         print(yaml.dump(manifest))' $namespace > $WORKDIR/helm.yaml
-
-  kubectl $action -f $WORKDIR/helm.yaml --server-side --force-conflicts && rc=$? || rc=$?
 }
 
 
@@ -164,13 +163,15 @@ function _helm() {
     # Optional pre hook
     declare -F ${module}-pre && ${module}-pre
 
-    apply
+    render
+    kubectl $action -f $WORKDIR/helm.yaml --server-side --force-conflicts && rc=$? || rc=$?
 
     # Optional post hook
     declare -F ${module}-post && ${module}-post
 
   elif [ $action == "delete" ]; then
-    apply
+    render
+    kubectl $action -f $WORKDIR/helm.yaml && rc=$? || rc=$?
 
     # Delete dedicated namespace if not kube-system
     [ -n "$DELETE_NS" ] && delete_ns $namespace
