@@ -56,7 +56,7 @@ render_kubeadm() {
     cat ${WORKDIR}/kubeadm/templates/${f}Configuration.yaml >> ${HOSTFS}/etc/kubernetes/kubeadm.yaml
   done
 
-  # hack to "uncloack" the json patches after they go processed by helm
+  # "uncloak" the json patches after they got processed by helm
   for s in apiserver controller-manager scheduler; do
     yq eval '.json' ${WORKDIR}/kubeadm/templates/patches/kube-${s}1\+json.yaml > /tmp/_tmp.yaml && \
       mv /tmp/_tmp.yaml ${WORKDIR}/kubeadm/templates/patches/kube-${s}1\+json.yaml
@@ -65,11 +65,6 @@ render_kubeadm() {
 
 
 parse_kubezero() {
-  # remove with 1.24
-  if [ ! -f ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml ]; then
-    [ -f ${HOSTFS}/etc/kubernetes/kubezero.yaml ] && cp ${HOSTFS}/etc/kubernetes/kubezero.yaml ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml
-  fi
-
   export CLUSTERNAME=$(yq eval '.global.clusterName // .clusterName' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml)
   export HIGHAVAILABLE=$(yq eval '.global.highAvailable // .highAvailable // "false"' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml)
   export ETCD_NODENAME=$(yq eval '.etcd.nodeName' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml)
@@ -328,6 +323,21 @@ apply_module() {
 }
 
 
+delete_module() {
+  MODULES=$1
+
+  get_kubezero_values
+
+  # Always use embedded kubezero chart
+  helm template $CHARTS/kubezero -f $WORKDIR/kubezero-values.yaml --version ~$KUBE_VERSION --devel --output-dir $WORKDIR
+
+  for t in $MODULES; do
+    _helm delete $t
+  done
+
+  echo "Deleted KubeZero modules: $MODULES. Potential CRDs must be removed manually."
+}
+
 # backup etcd + /etc/kubernetes/pki
 backup() {
   # Display all ENVs, careful this exposes the password !
@@ -382,7 +392,8 @@ for t in $@; do
     bootstrap) control_plane_node bootstrap;;
     join) control_plane_node join;;
     restore) control_plane_node restore;;
-    apply_*) apply_module ${t##apply_};;
+    apply_*) apply_module "${t##apply_}";;
+    delete_*) delete_module "${t##delete_}";;
     backup) backup;;
     debug_shell) debug_shell;;
     *) echo "Unknown command: '$t'";;

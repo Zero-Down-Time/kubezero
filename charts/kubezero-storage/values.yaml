@@ -1,10 +1,12 @@
 snapshotController:
-  enabled: true
+  enabled: false
   replicas: 1
   logLevel: 2
 
   tolerations:
   - key: node-role.kubernetes.io/master
+    effect: NoSchedule
+  - key: node-role.kubernetes.io/control-plane
     effect: NoSchedule
   nodeSelector:
     node-role.kubernetes.io/control-plane: ""
@@ -34,6 +36,8 @@ lvm-localpv:
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
     nodeSelector:
       node-role.kubernetes.io/control-plane: ""
 
@@ -50,6 +54,9 @@ lvm-localpv:
 gemini:
   enabled: false
   # verbosity: 1
+
+  #image:
+  #  tag: build_500
 
   resources:
     requests:
@@ -74,6 +81,8 @@ aws-ebs-csi-driver:
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
 
     # k8sTagClusterId: <CLUSTER_NAME>
     # region: <AWS_DEFAULT_REGION>
@@ -86,6 +95,20 @@ aws-ebs-csi-driver:
       #  value: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
       #- name: AWS_STS_REGIONAL_ENDPOINTS
       #  value: regional
+
+    volumeMounts:
+      - name: aws-token
+        mountPath: "/var/run/secrets/sts.amazonaws.com/serviceaccount/"
+        readOnly: true
+    volumes:
+      - name: aws-token
+        projected:
+          sources:
+          - serviceAccountToken:
+              path: token
+              expirationSeconds: 86400
+              audience: "sts.amazonaws.com"
+
     resources:
       requests:
         cpu: 10m
@@ -145,6 +168,8 @@ aws-efs-csi-driver:
 
     tolerations:
     - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    - key: node-role.kubernetes.io/control-plane
       effect: NoSchedule
     nodeSelector:
       node-role.kubernetes.io/control-plane: ""

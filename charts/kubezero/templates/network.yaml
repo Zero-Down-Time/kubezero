@@ -1,16 +1,9 @@
 {{- define "network-values" }}
 
-# until 1.24
-calico:
-  enabled: true
-
-# since 1.22
 multus:
   enabled: true
-  defaultNetworks:
-    - "cilium"
+  clusterNetwork: "cilium"
 
-# since 1.23
 cilium:
   enabled: true
 

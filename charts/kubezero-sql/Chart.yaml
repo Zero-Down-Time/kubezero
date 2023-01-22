@@ -1,14 +1,15 @@
 apiVersion: v2
 name: kubezero-sql
-description: KubeZero umbrella chart for SQL databases like MariaDB, PostgreSQL
+description: KubeZero umbrella chart for SQL databases, Percona XtraDB Cluster
 type: application
-version: 0.2.1
+version: 0.3.1
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
   - kubezero
-  - mariadb
-  - postgresql
+  - mysql
+  - percona
+  #  - postgresql
 maintainers:
   - name: Stefan Reimer
     email: stefan@zero-downtime.net
@@ -16,8 +17,12 @@ dependencies:
   - name: kubezero-lib
     version: ">= 0.1.5"
     repository: https://cdn.zero-downtime.net/charts/
+  - name: pxc-operator
+    version: 1.12.0
+    repository: https://percona.github.io/percona-helm-charts/
+    condition: pxc-operator.enabled
   - name: mariadb-galera
-    version: 7.4.3
+    version: 7.4.7
     repository: https://charts.bitnami.com/bitnami
     condition: mariadb-galera.enabled
 kubeVersion: ">= 1.20.0"

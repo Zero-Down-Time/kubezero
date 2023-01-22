@@ -1,6 +1,5 @@
 global:
-  # hub: docker.io/istio
-  tag: 1.14.4-distroless
+  variant: distroless
 
   logAsJson: true
 
@@ -19,6 +18,8 @@ istiod:
     tolerations:
     - effect: NoSchedule
       key: node-role.kubernetes.io/master
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/control-plane
 
     resources:
       requests:

@@ -1,6 +1,6 @@
 diff -tubr charts/gateway.orig/templates/deployment.yaml charts/gateway/templates/deployment.yaml
---- charts/gateway.orig/templates/deployment.yaml	2022-04-21 17:33:30.042035869 +0200
-+++ charts/gateway/templates/deployment.yaml	2022-04-21 18:17:15.130605952 +0200
+--- charts/gateway.orig/templates/deployment.yaml	2022-12-09 14:58:33.000000000 +0000
++++ charts/gateway/templates/deployment.yaml	2022-12-13 11:43:02.196667885 +0000
 @@ -11,6 +11,9 @@
    {{- if not .Values.autoscaling.enabled }}
    replicas: {{ .Values.replicaCount }}
@@ -30,8 +30,8 @@ diff -tubr charts/gateway.orig/templates/deployment.yaml charts/gateway/template
        {{- with .Values.nodeSelector }}
        nodeSelector:
          {{- toYaml . | nindent 8 }}
-@@ -98,3 +106,7 @@
-       tolerations:
+@@ -102,3 +110,7 @@
+       topologySpreadConstraints:
          {{- toYaml . | nindent 8 }}
        {{- end }}
 +      {{- with .Values.volumes }}
@@ -39,8 +39,8 @@ diff -tubr charts/gateway.orig/templates/deployment.yaml charts/gateway/template
 +        {{- toYaml . | nindent 8 }}
 +      {{- end }}
 diff -tubr charts/gateway.orig/templates/service.yaml charts/gateway/templates/service.yaml
---- charts/gateway.orig/templates/service.yaml	2022-04-21 17:33:30.042035869 +0200
-+++ charts/gateway/templates/service.yaml	2022-04-21 17:33:41.801806959 +0200
+--- charts/gateway.orig/templates/service.yaml	2022-12-09 14:58:33.000000000 +0000
++++ charts/gateway/templates/service.yaml	2022-12-12 22:52:27.629670669 +0000
 @@ -38,7 +38,14 @@
      port: 15017
      targetPort: 15017
@@ -55,12 +55,12 @@ diff -tubr charts/gateway.orig/templates/service.yaml charts/gateway/templates/s
 +    {{- end }}
 +  {{- end }}
  {{- end }}
-   selector:
-     {{- include "gateway.selectorLabels" . | nindent 4 }}
+ {{- if .Values.service.externalIPs }}
+   externalIPs: {{- range .Values.service.externalIPs }}
 diff -tubr charts/gateway.orig/values.schema.json charts/gateway/values.schema.json
---- charts/gateway.orig/values.schema.json	2022-04-21 17:33:30.042035869 +0200
-+++ charts/gateway/values.schema.json	2022-04-21 17:52:51.007536238 +0200
-@@ -47,6 +47,12 @@
+--- charts/gateway.orig/values.schema.json	2022-12-09 14:58:33.000000000 +0000
++++ charts/gateway/values.schema.json	2022-12-12 22:52:27.629670669 +0000
+@@ -51,6 +51,12 @@
      "labels": {
        "type": "object"
      },

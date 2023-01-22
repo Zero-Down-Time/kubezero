@@ -1,4 +1,4 @@
-configmap: openebs-lvmlocalpv-grafana-dashboard
+configmap: grafana-dashboard-lvmlocalpv
 gzip: true
 folder: KubeZero
 condition: 'index .Values "lvm-localpv" "prometheus" "enabled"'

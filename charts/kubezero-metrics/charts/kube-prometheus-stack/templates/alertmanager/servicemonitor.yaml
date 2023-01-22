@@ -18,6 +18,7 @@ spec:
       - {{ printf "%s" (include "kube-prometheus-stack.namespace" .) | quote }}
   endpoints:
   - port: {{ .Values.alertmanager.alertmanagerSpec.portName }}
+    enableHttp2: {{ .Values.alertmanager.serviceMonitor.enableHttp2 }}
     {{- if .Values.alertmanager.serviceMonitor.interval }}
     interval: {{ .Values.alertmanager.serviceMonitor.interval }}
     {{- end }}

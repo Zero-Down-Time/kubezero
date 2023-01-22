@@ -23,6 +23,26 @@ nats:
     # url: "mq.example.com"
     gateway: istio-ingress/private-ingressgateway
 
+# rabbitmq cluster operator
+rabbitmq-cluster-operator:
+  enabled: false
+  rabbitmqImage:
+    tag: 3.11.4-debian-11-r0
+
+  useCertManager: true
+
+  clusterOperator:
+    metrics:
+      enabled: false
+      serviceMonitor:
+        enabled: true
+
+  msgTopologyOperator:
+    metrics:
+      enabled: false
+      serviceMonitor:
+        enabled: true
+
 # rabbitmq
 rabbitmq:
   enabled: false
@@ -36,10 +56,15 @@ rabbitmq:
   istio:
     enabled: false
     gateway: istio-ingress/private-ingressgateway
+    mqtt: false
+    mqtts: false
+
+  #extraConfiguration: |-
+  #  mqtt.durable_queue_type = quorum
 
   auth:
-    password: "supersecret"
-    erlangCookie: "randomlongerlangcookie"
+    existingPasswordSecret: rabbitmq
+    existingErlangSecret: rabbitmq
     tls:
       enabled: false
       failIfNoPeerCert: false
@@ -47,7 +72,8 @@ rabbitmq:
       existingSecretFullChain: true
   
   clustering:
-    forceBoot: true
+    enabled: false
+    forceBoot: false
   
   resources:
     requests:
@@ -56,6 +82,9 @@ rabbitmq:
   
   replicaCount: 1
   
+  persistence:
+    size: 2Gi
+
   podAntiAffinityPreset: ""
   topologySpreadConstraints: |-
     - maxSkew: 1
@@ -70,9 +99,9 @@ rabbitmq:
         matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
  
   pdb:
-    create: true
+    create: false
   
   metrics:
     enabled: false
     serviceMonitor:
-      enabled: false
+      enabled: true

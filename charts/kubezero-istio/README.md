@@ -1,6 +1,6 @@
 # kubezero-istio
 
-![Version: 0.8.3](https://img.shields.io/badge/Version-0.8.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.9.0](https://img.shields.io/badge/Version-0.9.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Istio
 
@@ -16,14 +16,14 @@ Installs the Istio control plane
 
 ## Requirements
 
-Kubernetes: `>= 1.20.0`
+Kubernetes: `>= 1.24.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
-| https://istio-release.storage.googleapis.com/charts | base | 1.14.3 |
-| https://istio-release.storage.googleapis.com/charts | istiod | 1.14.3 |
-| https://kiali.org/helm-charts | kiali-server | 1.54 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
+| https://istio-release.storage.googleapis.com/charts | base | 1.16.1 |
+| https://istio-release.storage.googleapis.com/charts | istiod | 1.16.1 |
+| https://kiali.org/helm-charts | kiali-server | 1.60.0 |
 
 ## Values
 
@@ -32,7 +32,7 @@ Kubernetes: `>= 1.20.0`
 | global.defaultPodDisruptionBudget.enabled | bool | `false` |  |
 | global.logAsJson | bool | `true` |  |
 | global.priorityClassName | string | `"system-cluster-critical"` |  |
-| global.tag | string | `"1.14.4-distroless"` |  |
+| global.variant | string | `"distroless"` |  |
 | istiod.meshConfig.accessLogEncoding | string | `"JSON"` |  |
 | istiod.meshConfig.accessLogFile | string | `"/dev/stdout"` |  |
 | istiod.meshConfig.tcpKeepalive.interval | string | `"60s"` |  |
@@ -44,6 +44,8 @@ Kubernetes: `>= 1.20.0`
 | istiod.pilot.resources.requests.memory | string | `"128Mi"` |  |
 | istiod.pilot.tolerations[0].effect | string | `"NoSchedule"` |  |
 | istiod.pilot.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| istiod.pilot.tolerations[1].effect | string | `"NoSchedule"` |  |
+| istiod.pilot.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | istiod.telemetry.enabled | bool | `false` |  |
 | kiali-server.auth.strategy | string | `"anonymous"` |  |
 | kiali-server.deployment.ingress_enabled | bool | `false` |  |

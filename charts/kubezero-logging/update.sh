@@ -29,4 +29,5 @@ curl -L -s -o - https://github.com/fluent/helm-charts/releases/download/fluentd-
 patch -i fluentd.patch -p0 --no-backup-if-mismatch
 
 # Fetch dashboards from Grafana.com and update ZDT CM
-../kubezero-metrics/sync_grafana_dashboards.py dashboards.yaml templates/grafana-dashboards.yaml
+../kubezero-metrics/sync_grafana_dashboards.py dashboards.yaml templates/fluent-bit/grafana-dashboards.yaml
+../kubezero-metrics/sync_grafana_dashboards.py dashboards-es.yaml templates/eck/grafana-dashboards.yaml

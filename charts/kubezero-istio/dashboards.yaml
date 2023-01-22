@@ -1,22 +1,22 @@
-# Revision 128 = 1.14.3
+# Revision 148 = 1.16
 configmap: grafana-dashboards
 gzip: true
 folder: Istio
 condition: '.Values.istiod.telemetry.enabled'
 dashboards:
 - name: istio-control-plane
-  url: https://grafana.com/api/dashboards/7645/revisions/128/download
+  url: https://grafana.com/api/dashboards/7645/revisions/148/download
   tags:
   - Istio
 - name: istio-mesh
-  url: https://grafana.com/api/dashboards/7639/revisions/128/download
+  url: https://grafana.com/api/dashboards/7639/revisions/148/download
   tags:
   - Istio
 - name: istio-service
-  url: https://grafana.com/api/dashboards/7636/revisions/128/download
+  url: https://grafana.com/api/dashboards/7636/revisions/148/download
   tags:
   - Istio
 - name: istio-workload
-  url: https://grafana.com/api/dashboards/7630/revisions/128/download
+  url: https://grafana.com/api/dashboards/7630/revisions/148/download
   tags:
   - Istio

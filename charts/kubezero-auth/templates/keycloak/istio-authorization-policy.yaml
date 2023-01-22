@@ -1,8 +1,8 @@
-{{- if and .Values.keycloak.enabled .Values.keycloak.istio.enabled .Values.keycloak.istio.ipBlocks }}
+{{- if and .Values.keycloak.enabled .Values.keycloak.istio.enabled }}
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
-  name: {{ .Release.Name }}-deny-not-in-ipblocks
+  name: {{ .Release.Name }}-deny-metrics-ipblocks
   namespace: istio-system
   labels:
     {{- include "kubezero-lib.labels" $ | nindent 4 }}
@@ -12,6 +12,15 @@ spec:
       app: istio-ingressgateway
   action: DENY
   rules:
+  - to:
+    - operation:
+        hosts: ["{{ .Values.keycloak.istio.url }}"]
+        paths: ["/auth/realms/master/metrics"]
+    when:
+    - key: connection.sni
+      values:
+      - '*'
+  {{- if .Values.keycloak.istio.ipBlocks }}
   - from:
     - source:
         notIpBlocks:
@@ -23,4 +32,5 @@ spec:
     - key: connection.sni
       values:
       - '*'
+  {{- end }}
 {{- end }}

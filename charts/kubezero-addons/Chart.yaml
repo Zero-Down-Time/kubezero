@@ -2,8 +2,8 @@ apiVersion: v2
 name: kubezero-addons
 description: KubeZero umbrella chart for various optional cluster addons
 type: application
-version: 0.6.3
-appVersion: v1.23.11
+version: 0.7.3
+appVersion: v1.24
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
@@ -11,16 +11,14 @@ keywords:
   - fuse-device-plugin
   - neuron-device-plugin
   - nvidia-device-plugin
-  - aws-node-termination-handler
+  - cluster-autoscaler
+  - sealed-secrets
   - external-dns
+  - aws-node-termination-handler
 maintainers:
   - name: Stefan Reimer
     email: stefan@zero-downtime.net
 dependencies:
-  - name: aws-node-termination-handler
-    version: 0.18.5
-    # repository: https://aws.github.io/eks-charts
-    condition: aws-node-termination-handler.enabled
   - name: external-dns
     version: 1.11.0
     repository: https://kubernetes-sigs.github.io/external-dns/
@@ -30,8 +28,20 @@ dependencies:
     repository: https://kubernetes.github.io/autoscaler
     condition: cluster-autoscaler.enabled
   - name: nvidia-device-plugin
-    version: 0.12.2
+    version: 0.13.0
     # https://github.com/NVIDIA/k8s-device-plugin
     repository: https://nvidia.github.io/k8s-device-plugin
     condition: nvidia-device-plugin.enabled
-kubeVersion: ">= 1.20.0"
+  - name: sealed-secrets
+    version: 2.7.1
+    repository: https://bitnami-labs.github.io/sealed-secrets
+    condition: sealed-secrets.enabled
+  - name: aws-node-termination-handler
+    version: 0.20.1
+    # repository: https://aws.github.io/eks-charts
+    condition: aws-node-termination-handler.enabled
+  - name: aws-eks-asg-rolling-update-handler
+    version: 1.2.7
+    # repository: https://twin.github.io/helm-charts
+    condition: aws-eks-asg-rolling-update-handler.enabled
+kubeVersion: ">= 1.24.0"

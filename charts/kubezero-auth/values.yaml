@@ -1,6 +1,10 @@
 keycloak:
   enabled: false
 
+  replicas: 1
+  podDisruptionBudget:
+    minAvailable: 1
+
   istio:
     enabled: false
     gateway: istio-ingress/private-ingressgateway

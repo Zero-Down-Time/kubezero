@@ -13,7 +13,7 @@ Common naming functions
 {{- if .subchart }}
 {{- $name = default .subchart .Values.nameOverride -}}
 {{- end -}}
-{{- if contains $name .Release.Name -}}
+{{- if or (contains $name .Release.Name) (contains $name (printf "%s-%s" "kubezero" .Release.Name)) -}}
 {{- .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}

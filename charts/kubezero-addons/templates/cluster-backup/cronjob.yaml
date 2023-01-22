@@ -6,6 +6,7 @@ metadata:
   namespace: kube-system
 spec:
   schedule: "0 * * * *"
+  concurrencyPolicy: "Replace"
   jobTemplate:
     spec:
       backoffLimit: 1
@@ -55,6 +56,8 @@ spec:
             node-role.kubernetes.io/control-plane: ""
           tolerations:
           - key: node-role.kubernetes.io/master
+            effect: NoSchedule
+          - key: node-role.kubernetes.io/control-plane
             effect: NoSchedule
           restartPolicy: Never
 {{- end }}

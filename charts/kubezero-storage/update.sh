@@ -1,6 +1,8 @@
 #!/bin/bash
 set -ex
 
+helm dependencies update
+
 ### Gemini
 rm -rf charts/gemini
 helm pull fairwinds-stable/gemini --untar --untardir charts
@@ -16,10 +18,10 @@ mv charts/lvm-localpv/crds/volumesnapshot* crds
 patch -i lvm.patch -p0 --no-backup-if-mismatch
 
 ### EBS
-VERSION=$(yq eval '.dependencies[] | select(.name=="aws-ebs-csi-driver") | .version' Chart.yaml)
-rm -rf charts/aws-ebs-csi-driver
-curl -L -s -o - https://github.com/kubernetes-sigs/aws-ebs-csi-driver/releases/download/helm-chart-aws-ebs-csi-driver-${VERSION}/aws-ebs-csi-driver-${VERSION}.tgz | tar xfz - -C charts
-patch -i ebs.patch -p0 --no-backup-if-mismatch
+#VERSION=$(yq eval '.dependencies[] | select(.name=="aws-ebs-csi-driver") | .version' Chart.yaml)
+#rm -rf charts/aws-ebs-csi-driver
+#curl -L -s -o - https://github.com/kubernetes-sigs/aws-ebs-csi-driver/releases/download/helm-chart-aws-ebs-csi-driver-${VERSION}/aws-ebs-csi-driver-${VERSION}.tgz | tar xfz - -C charts
+#patch -i ebs.patch -p0 --no-backup-if-mismatch
 
 ### EFS
 VERSION=$(yq eval '.dependencies[] | select(.name=="aws-efs-csi-driver") | .version' Chart.yaml)

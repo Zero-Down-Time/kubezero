@@ -18,7 +18,7 @@ Kubernetes: `>= 1.20.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.4 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
 | https://charts.bitnami.com/bitnami | redis | 16.10.1 |
 | https://charts.bitnami.com/bitnami | redis-cluster | 7.6.1 |
 

@@ -1,6 +1,6 @@
 # kubeadm
 
-![Version: 1.23.10](https://img.shields.io/badge/Version-1.23.10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 1.24.9](https://img.shields.io/badge/Version-1.24.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Kubeadm cluster config
 
@@ -14,7 +14,7 @@ KubeZero Kubeadm cluster config
 
 ## Requirements
 
-Kubernetes: `>= 1.20.0`
+Kubernetes: `>= 1.24.0`
 
 ## Values
 
@@ -44,7 +44,7 @@ Kubernetes: `>= 1.20.0`
 ## Resources
 
 - https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/troubleshooting-kubeadm/
-- https://godoc.org/k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta2
+- https://godoc.org/k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta3
 - https://pkg.go.dev/k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta3
 - https://github.com/kubernetes/kubernetes/blob/master/staging/src/k8s.io/kubelet/config/v1beta1/types.go
 - https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/control-plane-flags/
