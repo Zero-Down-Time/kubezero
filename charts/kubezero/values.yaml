@@ -10,48 +10,58 @@ global:
 
 addons:
   enabled: true
-  targetRevision: 0.6.3
+  targetRevision: 0.7.3
   external-dns:
     enabled: false
   forseti:
     enabled: false
   clusterBackup:
     enabled: false
+  cluster-autoscaler:
+    enabled: false
+  sealed-secrets:
+    enabled: false
   aws-node-termination-handler:
     enabled: false
-  cluster-autoscaler:
+  aws-eks-asg-rolling-update-handler:
     enabled: false
 
 network:
   enabled: true
   retain: true
-  targetRevision: 0.3.4
+  targetRevision: 0.4.2
   cilium:
     cluster: {}
 
 cert-manager:
   enabled: false
   namespace: cert-manager
-  targetRevision: 0.9.2
+  targetRevision: 0.9.3
 
 storage:
   enabled: false
-  targetRevision: 0.7.2
+  targetRevision: 0.7.4
   aws-ebs-csi-driver:
     enabled: false
   aws-efs-csi-driver:
+    enabled: false
+  velero:
+    enabled: false
+  gemini:
+    enabled: false
+  snapshotController:
     enabled: false
 
 istio:
   enabled: false
   namespace: istio-system
-  targetRevision: 0.8.4
+  targetRevision: 0.9.0
 
 istio-ingress:
   enabled: false
   chart: kubezero-istio-gateway
   namespace: istio-ingress
-  targetRevision: 0.8.2
+  targetRevision: 0.9.0
   gateway:
     service: {}
 
@@ -59,14 +69,14 @@ istio-private-ingress:
   enabled: false
   chart: kubezero-istio-gateway
   namespace: istio-ingress
-  targetRevision: 0.8.2
+  targetRevision: 0.9.0
   gateway:
     service: {}
 
 metrics:
   enabled: false
   namespace: monitoring
-  targetRevision: 0.8.5
+  targetRevision: 0.8.9
   istio:
     grafana: {}
     prometheus: {}
@@ -74,11 +84,13 @@ metrics:
 logging:
   enabled: false
   namespace: logging
-  targetRevision: 0.8.3
+  targetRevision: 0.8.4
 
 argocd:
   enabled: false
   namespace: argocd
-  targetRevision: 0.10.2
+  targetRevision: 0.11.2
+  argocd-image-updater:
+    enabled: false
   istio:
     enabled: false
