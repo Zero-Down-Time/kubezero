@@ -51,6 +51,33 @@ lvm-localpv:
   prometheus:
     enabled: false
 
+k8up:
+  enabled: false
+
+  replicaCount: 1
+  k8up:
+    enableLeaderElection: false
+
+  metrics:
+    serviceMonitor:
+      enabled: true
+
+  resources:
+    requests:
+      memory: 32Mi
+      cpu: 20m
+    limits:
+      memory: 256Mi
+      #cpu: 400m
+
+  tolerations:
+  - key: node-role.kubernetes.io/master
+    effect: NoSchedule
+  - key: node-role.kubernetes.io/control-plane
+    effect: NoSchedule
+  nodeSelector:
+    node-role.kubernetes.io/control-plane: ""
+
 gemini:
   enabled: false
   # verbosity: 1
@@ -65,7 +92,6 @@ gemini:
     limits:
       memory: 128Mi
       cpu: 400m
-
 
 aws-ebs-csi-driver:
   enabled: false

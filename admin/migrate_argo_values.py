@@ -8,26 +8,17 @@ import yaml
 def migrate(values):
     """Actual changes here"""
 
-    # ClusterBackup is enabled on AWS anyways, same with cluster-autoscaler
-    if "aws" in values["global"]:
-        deleteKey(values["addons"], "clusterBackup")
-        deleteKey(values["addons"], "cluster-autoscaler")
+    # Move additional prometheus labels to better config tree
+    try:
+        labels = {}
+        for c in values["metrics"]['kube-prometheus-stack']["prometheus"]["prometheusSpec"]["additionalAlertRelabelConfigs"]:
+            labels[c["target_label"]] = c["replacement"]
 
-    # Remove calico and multus
-    deleteKey(values["network"], "calico")
-    deleteKey(values["network"], "multus")
-
-    # ArgoCD helm changes
-    if "argocd" in values:
-        if "server" in values["argocd"]:
-            if not "configs" in values["argocd"]:
-                values["argocd"]["configs"] = {}
-            if not "cm" in values["argocd"]["configs"]:
-                values["argocd"]["configs"]["cm"] = {}
-            values["argocd"]["configs"]["cm"]["url"] = values["argocd"]["server"]["config"][
-                "url"
-            ]
-            deleteKey(values["argocd"], "server")
+        values["metrics"]['kube-prometheus-stack']["prometheus"]["prometheusSpec"]["externalLabels"] = labels
+        deleteKey(values["metrics"]['kube-prometheus-stack']["prometheus"]["prometheusSpec"], "additionalAlertRelabelConfigs")
+        
+    except KeyError:
+        pass
 
     return values
 

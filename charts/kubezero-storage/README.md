@@ -1,6 +1,6 @@
 # kubezero-storage
 
-![Version: 0.7.5](https://img.shields.io/badge/Version-0.7.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.8.1](https://img.shields.io/badge/Version-0.8.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things storage incl. AWS EBS/EFS, openEBS-lvm, gemini
 
@@ -20,8 +20,9 @@ Kubernetes: `>= 1.24.0`
 |------------|------|---------|
 |  | aws-efs-csi-driver | 2.3.2 |
 |  | gemini | 1.0.0 |
-|  | lvm-localpv | 1.0.0 |
+|  | lvm-localpv | 1.0.1 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
+| https://k8up-io.github.io/k8up | k8up | 4.2.0 |
 | https://kubernetes-sigs.github.io/aws-ebs-csi-driver | aws-ebs-csi-driver | 2.14.1 |
 
 ## Values
@@ -102,6 +103,18 @@ Kubernetes: `>= 1.24.0`
 | gemini.resources.limits.memory | string | `"128Mi"` |  |
 | gemini.resources.requests.cpu | string | `"20m"` |  |
 | gemini.resources.requests.memory | string | `"32Mi"` |  |
+| k8up.enabled | bool | `false` |  |
+| k8up.k8up.enableLeaderElection | bool | `false` |  |
+| k8up.metrics.serviceMonitor.enabled | bool | `true` |  |
+| k8up.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
+| k8up.replicaCount | int | `1` |  |
+| k8up.resources.limits.memory | string | `"256Mi"` |  |
+| k8up.resources.requests.cpu | string | `"20m"` |  |
+| k8up.resources.requests.memory | string | `"32Mi"` |  |
+| k8up.tolerations[0].effect | string | `"NoSchedule"` |  |
+| k8up.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
+| k8up.tolerations[1].effect | string | `"NoSchedule"` |  |
+| k8up.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | lvm-localpv.analytics.enabled | bool | `false` |  |
 | lvm-localpv.enabled | bool | `false` |  |
 | lvm-localpv.lvmController.logLevel | int | `2` |  |

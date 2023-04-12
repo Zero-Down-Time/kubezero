@@ -2,7 +2,7 @@ apiVersion: v2
 name: kubezero
 description: KubeZero - Root App of Apps chart
 type: application
-version: 1.24.9
+version: 1.25.8
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
@@ -13,6 +13,6 @@ maintainers:
     email: stefan@zero-downtime.net
 dependencies:
   - name: kubezero-lib
-    version: ">= 0.1.5"
+    version: ">= 0.1.6"
     repository: https://cdn.zero-downtime.net/charts
-kubeVersion: ">= 1.24.0"
+kubeVersion: ">= 1.25.0"

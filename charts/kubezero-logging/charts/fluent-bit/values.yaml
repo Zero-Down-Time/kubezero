@@ -13,7 +13,7 @@ image:
   pullPolicy: Always
 
 testFramework:
-  enabled: false
+  enabled: true
   image:
     repository: busybox
     pullPolicy: Always
@@ -32,6 +32,11 @@ rbac:
   create: true
   nodeAccess: false
 
+# Configure podsecuritypolicy
+# Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
+# from Kubernetes 1.25, PSP is deprecated
+# See: https://kubernetes.io/blog/2022/08/23/kubernetes-v1-25-release/#pod-security-changes
+# We automatically disable PSP if Kubernetes version is 1.25 or higher
 podSecurityPolicy:
   create: false
   annotations: {}
@@ -78,6 +83,8 @@ securityContext: {}
 service:
   type: ClusterIP
   port: 2020
+  loadBalancerClass:
+  loadBalancerSourceRanges: []
   labels: {}
   # nodePort: 30020
   # clusterIP: 172.16.10.1
@@ -111,6 +118,35 @@ serviceMonitor:
 #      targetLabel: nodename
 #      replacement: $1
 #      action: replace
+#  scheme: ""
+#  tlsConfig: {}
+
+  ## Beare in mind if youn want to collec metrics from a different port
+  ## you will need to configure the new ports on the extraPorts property.
+  additionalEndpoints: []
+  # - port: metrics
+  #   path: /metrics
+  #   interval: 10s
+  #   scrapeTimeout: 10s
+  #   scheme: ""
+  #   tlsConfig: {}
+  #   # metric relabel configs to apply to samples before ingestion.
+  #   #
+  #   metricRelabelings:
+  #     - sourceLabels: [__meta_kubernetes_service_label_cluster]
+  #       targetLabel: cluster
+  #       regex: (.*)
+  #       replacement: ${1}
+  #       action: replace
+  #   # relabel configs to apply to samples after ingestion.
+  #   #
+  #   relabelings:
+  #     - sourceLabels: [__meta_kubernetes_pod_node_name]
+  #       separator: ;
+  #       regex: ^(.*)$
+  #       targetLabel: nodename
+  #       replacement: $1
+  #       action: replace
 
 prometheusRule:
   enabled: false
@@ -177,6 +213,28 @@ ingress:
 
 ## only available if kind is Deployment
 autoscaling:
+  vpa:
+    enabled: false
+
+    annotations: {}
+
+    # List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    controlledResources: []
+
+    # Define the max allowed resources for the pod
+    maxAllowed: {}
+    # cpu: 200m
+    # memory: 100Mi
+    # Define the min allowed resources for the pod
+    minAllowed: {}
+    # cpu: 200m
+    # memory: 100Mi
+
+    updatePolicy:
+      # Specifies whether recommended updates are applied when a Pod is started and whether recommended updates
+      # are applied during the life of a Pod. Possible values are "Off", "Initial", "Recreate", and "Auto".
+      updateMode: Auto
+
   enabled: false
   minReplicas: 1
   maxReplicas: 3
@@ -221,6 +279,14 @@ annotations: {}
 podAnnotations: {}
 
 podLabels: {}
+
+## How long (in seconds) a pods needs to be stable before progressing the deployment
+##
+minReadySeconds:
+
+## How long (in seconds) a pod may take to exit (useful with lifecycle hooks to ensure lb deregistration is done)
+##
+terminationGracePeriodSeconds:
 
 priorityClassName: ""
 
@@ -274,7 +340,7 @@ networkPolicy:
 
 luaScripts: {}
 
-## https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/configuration-file
+## https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/classic-mode/configuration-file
 config:
   service: |
     [SERVICE]
@@ -332,15 +398,8 @@ config:
         Retry_Limit False
 
   ## https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/classic-mode/upstream-servers
+  ## This configuration is deprecated, please use `extraFiles` instead.
   upstream: {}
-#      upstream.conf: |
-#        [UPSTREAM]
-#            upstream1
-#
-#        [NODE]
-#            name       node-1
-#            host       127.0.0.1
-#            port       43000
 
   ## https://docs.fluentbit.io/manual/pipeline/parsers
   customParsers: |
@@ -354,6 +413,14 @@ config:
   # This allows adding more files with arbitary filenames to /fluent-bit/etc by providing key/value pairs.
   # The key becomes the filename, the value becomes the file content.
   extraFiles: {}
+#     upstream.conf: |
+#       [UPSTREAM]
+#           upstream1
+#
+#       [NODE]
+#           name       node-1
+#           host       127.0.0.1
+#           port       43000
 #     example.conf: |
 #       [OUTPUT]
 #           Name example

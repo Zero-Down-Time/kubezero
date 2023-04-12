@@ -1,6 +1,6 @@
 # kubezero-ci
 
-![Version: 0.5.24](https://img.shields.io/badge/Version-0.5.24-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things CI
 
@@ -14,14 +14,14 @@ KubeZero umbrella chart for all things CI
 
 ## Requirements
 
-Kubernetes: `>= 1.20.0`
+Kubernetes: `>= 1.24.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://aquasecurity.github.io/helm-charts/ | trivy | 0.4.17 |
+| https://aquasecurity.github.io/helm-charts/ | trivy | 0.6.0 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://charts.jenkins.io | jenkins | 4.2.17 |
-| https://dl.gitea.io/charts/ | gitea | 6.0.5 |
+| https://charts.jenkins.io | jenkins | 4.3.2 |
+| https://dl.gitea.io/charts/ | gitea | 7.0.4 |
 | https://gocd.github.io/helm-chart | gocd | 1.40.8 |
 
 # Jenkins
@@ -82,6 +82,10 @@ Kubernetes: `>= 1.20.0`
 | jenkins.agent.image | string | `"public.ecr.aws/zero-downtime/jenkins-podman"` |  |
 | jenkins.agent.podName | string | `"podman-aws"` |  |
 | jenkins.agent.podRetention | string | `"Default"` |  |
+| jenkins.agent.resources.limits.cpu | string | `""` |  |
+| jenkins.agent.resources.limits.memory | string | `""` |  |
+| jenkins.agent.resources.requests.cpu | string | `""` |  |
+| jenkins.agent.resources.requests.memory | string | `""` |  |
 | jenkins.agent.showRawYaml | bool | `false` |  |
 | jenkins.agent.tag | string | `"v0.4.1"` |  |
 | jenkins.agent.yamlMergeStrategy | string | `"merge"` |  |
@@ -92,18 +96,18 @@ Kubernetes: `>= 1.20.0`
 | jenkins.controller.initContainerResources.limits.memory | string | `"1024Mi"` |  |
 | jenkins.controller.initContainerResources.requests.cpu | string | `"50m"` |  |
 | jenkins.controller.initContainerResources.requests.memory | string | `"256Mi"` |  |
-| jenkins.controller.installPlugins[0] | string | `"kubernetes:3743.v1fa_4c724c3b_7"` |  |
+| jenkins.controller.installPlugins[0] | string | `"kubernetes:3883.v4d70a_a_a_df034"` |  |
 | jenkins.controller.installPlugins[10] | string | `"build-discarder:139.v05696a_7fe240"` |  |
-| jenkins.controller.installPlugins[11] | string | `"dark-theme:262.v0202a_4c8fb_6a"` |  |
-| jenkins.controller.installPlugins[12] | string | `"kubernetes-credentials-provider:1.206.v7ce2cf7b_0c8b"` |  |
+| jenkins.controller.installPlugins[11] | string | `"dark-theme:302.vf069cb_e01486"` |  |
+| jenkins.controller.installPlugins[12] | string | `"kubernetes-credentials-provider:1.209.v862c6e5fb_1ef"` |  |
 | jenkins.controller.installPlugins[1] | string | `"workflow-aggregator:581.v0c46fa_697ffd"` |  |
-| jenkins.controller.installPlugins[2] | string | `"git:4.14.3"` |  |
+| jenkins.controller.installPlugins[2] | string | `"git:5.0.0"` |  |
 | jenkins.controller.installPlugins[3] | string | `"basic-branch-build-strategies:71.vc1421f89888e"` |  |
-| jenkins.controller.installPlugins[4] | string | `"pipeline-graph-view:144.vf3924feb_7e35"` |  |
-| jenkins.controller.installPlugins[5] | string | `"pipeline-stage-view:2.28"` |  |
+| jenkins.controller.installPlugins[4] | string | `"pipeline-graph-view:154.v52138b_cb_557e"` |  |
+| jenkins.controller.installPlugins[5] | string | `"pipeline-stage-view:2.31"` |  |
 | jenkins.controller.installPlugins[6] | string | `"configuration-as-code:1569.vb_72405b_80249"` |  |
 | jenkins.controller.installPlugins[7] | string | `"antisamy-markup-formatter:155.v795fb_8702324"` |  |
-| jenkins.controller.installPlugins[8] | string | `"prometheus:2.0.11"` |  |
+| jenkins.controller.installPlugins[8] | string | `"prometheus:2.1.1"` |  |
 | jenkins.controller.installPlugins[9] | string | `"htmlpublisher:1.31"` |  |
 | jenkins.controller.javaOpts | string | `"-XX:+UseContainerSupport -XX:+UseStringDeduplication -Dhudson.model.DirectoryBrowserSupport.CSP=\"sandbox allow-popups; default-src 'none'; img-src 'self' cdn.zero-downtime.net; style-src 'unsafe-inline';\""` |  |
 | jenkins.controller.jenkinsOpts | string | `"--sessionTimeout=180 --sessionEviction=3600"` |  |
