@@ -246,7 +246,10 @@ fluent-bit:
 
   image:
     #repository: public.ecr.aws/zero-downtime/fluent-bit
-    tag: 1.9.8
+    tag: 2.0.10
+
+  testFramework:
+    enabled: false
 
   serviceMonitor:
     enabled: false
@@ -276,8 +279,8 @@ fluent-bit:
       tls: false
 
     input:
-      memBufLimit: 4MB
-      refreshInterval: 10
+      memBufLimit: 16MB
+      refreshInterval: 5
 
     logLevel: info
     flushInterval: 5
@@ -300,16 +303,19 @@ fluent-bit:
       [INPUT]
           Name tail
           Path /var/log/containers/*.log
+          # Exclude ourselves to current error spam, https://github.com/fluent/fluent-bit/issues/5769
+          Exclude_Path *logging-fluent-bit*
           multiline.parser cri
           Tag cri.*
           Skip_Long_Lines On
+          Skip_Empty_Lines On
           DB /var/log/flb_kube.db
           DB.Sync Normal
           DB.locking true
           # Buffer_Max_Size 1M
           {{- with .Values.config.input }}
-          Mem_Buf_Limit {{ default "4MB" .memBufLimit }}
-          Refresh_Interval {{ default 10 .refreshInterval }}
+          Mem_Buf_Limit {{ default "16MB" .memBufLimit }}
+          Refresh_Interval {{ default 5 .refreshInterval }}
           {{- end }}
 
     filters: |

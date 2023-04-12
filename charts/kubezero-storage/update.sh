@@ -1,13 +1,17 @@
 #!/bin/bash
 set -ex
 
-helm dependencies update
+#helm dependencies update
 
 ### Gemini
 rm -rf charts/gemini
 helm pull fairwinds-stable/gemini --untar --untardir charts
 # Patch to run gemini on controller nodes
 patch -p0 -i gemini.patch --no-backup-if-mismatch
+
+# k8up
+VERSION=$(yq eval '.dependencies[] | select(.name=="k8up") | .version' Chart.yaml)
+curl -L -s -o crds/k8up.yaml https://github.com/k8up-io/k8up/releases/download/k8up-${VERSION}/k8up-crd.yaml
 
 ### openEBS
 VERSION=$(yq eval '.dependencies[] | select(.name=="lvm-localpv") | .version' Chart.yaml)

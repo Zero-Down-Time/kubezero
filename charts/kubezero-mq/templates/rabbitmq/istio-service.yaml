@@ -25,6 +25,15 @@ spec:
         host: rabbitmq
         port:
           number: 5672
+  {{- if .Values.rabbitmq.istio.amqp }}
+  - match:
+    - port: 5672
+    route:
+    - destination:
+        host: rabbitmq
+        port:
+          number: 5672
+  {{- end }}
   {{- if .Values.rabbitmq.istio.mqtts }}
   - match:
     - port: 8883

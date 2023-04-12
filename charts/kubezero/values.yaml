@@ -10,7 +10,7 @@ global:
 
 addons:
   enabled: true
-  targetRevision: 0.7.3
+  targetRevision: 0.7.4
   external-dns:
     enabled: false
   forseti:
@@ -29,7 +29,7 @@ addons:
 network:
   enabled: true
   retain: true
-  targetRevision: 0.4.2
+  targetRevision: 0.4.3
   cilium:
     cluster: {}
 
@@ -40,12 +40,12 @@ cert-manager:
 
 storage:
   enabled: false
-  targetRevision: 0.7.4
+  targetRevision: 0.8.1
   aws-ebs-csi-driver:
     enabled: false
   aws-efs-csi-driver:
     enabled: false
-  velero:
+  k8up:
     enabled: false
   gemini:
     enabled: false
@@ -55,13 +55,13 @@ storage:
 istio:
   enabled: false
   namespace: istio-system
-  targetRevision: 0.9.0
+  targetRevision: 0.9.1
 
 istio-ingress:
   enabled: false
   chart: kubezero-istio-gateway
   namespace: istio-ingress
-  targetRevision: 0.9.0
+  targetRevision: 0.9.1
   gateway:
     service: {}
 
@@ -69,7 +69,7 @@ istio-private-ingress:
   enabled: false
   chart: kubezero-istio-gateway
   namespace: istio-ingress
-  targetRevision: 0.9.0
+  targetRevision: 0.9.1
   gateway:
     service: {}
 
@@ -84,7 +84,7 @@ metrics:
 logging:
   enabled: false
   namespace: logging
-  targetRevision: 0.8.4
+  targetRevision: 0.8.5
 
 argocd:
   enabled: false
