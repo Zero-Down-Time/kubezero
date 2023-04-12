@@ -132,7 +132,7 @@ Kubernetes: `>= 1.24.0`
 | jenkins.serviceAccountAgent.create | bool | `true` |  |
 | jenkins.serviceAccountAgent.name | string | `"jenkins-podman-aws"` |  |
 | trivy.enabled | bool | `false` |  |
-| trivy.image.tag | string | `"0.35.0"` |  |
+| trivy.image.tag | string | `"0.37.3"` |  |
 | trivy.persistence.enabled | bool | `true` |  |
 | trivy.persistence.size | string | `"1Gi"` |  |
 | trivy.rbac.create | bool | `false` |  |

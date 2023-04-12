@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: twinproduction/aws-eks-asg-rolling-update-handler
-  tag: v1.4.3
+  tag: v1.7.0
   pullPolicy: IfNotPresent
 
 #imagePullSecrets:
@@ -21,6 +21,17 @@ environmentVars:
 #  value: us-west-2
 #- name: ENVIRONMENT
 #  value: ""
+
+resources: {}
+  # limits:
+  #   cpu: 0.3
+  #   memory: 100Mi
+  # requests:
+  #   cpu: 0.1
+  #   memory: 50Mi
+podAnnotations: {}
+  # prometheus.io/port: "8080"
+  # prometheus.io/scrape: "true"
 
 serviceAccount:
   create: true

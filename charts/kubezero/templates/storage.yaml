@@ -60,7 +60,8 @@ aws-efs-csi-driver:
 
     # The EFS controller steel needs hostnetwork and cannot update on single node control planes otherwise
     {{- if not .Values.global.highAvailable }}
-    updateStrategy: Recreate
+    updateStrategy:
+      type: Recreate
     {{- else }}
     affinity:
       podAntiAffinity:

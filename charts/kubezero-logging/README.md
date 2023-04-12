@@ -1,6 +1,6 @@
 # kubezero-logging
 
-![Version: 0.8.4](https://img.shields.io/badge/Version-0.8.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6.0](https://img.shields.io/badge/AppVersion-1.6.0-informational?style=flat-square)
+![Version: 0.8.5](https://img.shields.io/badge/Version-0.8.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6.0](https://img.shields.io/badge/AppVersion-1.6.0-informational?style=flat-square)
 
 KubeZero Umbrella Chart for complete EFK stack
 
@@ -19,7 +19,7 @@ Kubernetes: `>= 1.24.0`
 | Repository | Name | Version |
 |------------|------|---------|
 |  | eck-operator | 2.4.0 |
-|  | fluent-bit | 0.20.6 |
+|  | fluent-bit | 0.24.0 |
 |  | fluentd | 0.3.9 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
 
@@ -72,9 +72,9 @@ Kubernetes: `>= 1.24.0`
 | fluent-bit.config.customParsers | string | `"[PARSER]\n    Name cri-log\n    Format regex\n    Regex ^(?<time>.+) (?<stream>stdout|stderr) (?<logtag>F|P) (?<log>.*)$\n    Time_Key    time\n    Time_Format %Y-%m-%dT%H:%M:%S.%L%z\n"` |  |
 | fluent-bit.config.filters | string | `"[FILTER]\n    Name parser\n    Match cri.*\n    Parser cri-log\n    Key_Name log\n\n[FILTER]\n    Name kubernetes\n    Match cri.*\n    Merge_Log On\n    Merge_Log_Key kube\n    Kube_Tag_Prefix cri.var.log.containers.\n    Keep_Log Off\n    K8S-Logging.Parser Off\n    K8S-Logging.Exclude Off\n    Kube_Meta_Cache_TTL 3600s\n    Buffer_Size 0\n    #Use_Kubelet true\n\n{{- if index .Values \"config\" \"extraRecords\" }}\n\n[FILTER]\n    Name record_modifier\n    Match cri.*\n    {{- range $k,$v := index .Values \"config\" \"extraRecords\" }}\n    Record {{ $k }} {{ $v }}\n    {{- end }}\n{{- end }}\n\n[FILTER]\n    Name rewrite_tag\n    Match cri.*\n    Emitter_Name kube_tag_rewriter\n    Rule $kubernetes['pod_id'] .* kube.$kubernetes['namespace_name'].$kubernetes['container_name'] false\n\n[FILTER]\n    Name    lua\n    Match   kube.*\n    script  /fluent-bit/scripts/kubezero.lua\n    call    nest_k8s_ns\n"` |  |
 | fluent-bit.config.flushInterval | int | `5` |  |
-| fluent-bit.config.input.memBufLimit | string | `"4MB"` |  |
-| fluent-bit.config.input.refreshInterval | int | `10` |  |
-| fluent-bit.config.inputs | string | `"[INPUT]\n    Name tail\n    Path /var/log/containers/*.log\n    multiline.parser cri\n    Tag cri.*\n    Skip_Long_Lines On\n    DB /var/log/flb_kube.db\n    DB.Sync Normal\n    DB.locking true\n    # Buffer_Max_Size 1M\n    {{- with .Values.config.input }}\n    Mem_Buf_Limit {{ default \"4MB\" .memBufLimit }}\n    Refresh_Interval {{ default 10 .refreshInterval }}\n    {{- end }}\n"` |  |
+| fluent-bit.config.input.memBufLimit | string | `"16MB"` |  |
+| fluent-bit.config.input.refreshInterval | int | `5` |  |
+| fluent-bit.config.inputs | string | `"[INPUT]\n    Name tail\n    Path /var/log/containers/*.log\n    # Exclude ourselves to current error spam, https://github.com/fluent/fluent-bit/issues/5769\n    Exclude_Path *logging-fluent-bit*\n    multiline.parser cri\n    Tag cri.*\n    Skip_Long_Lines On\n    Skip_Empty_Lines On\n    DB /var/log/flb_kube.db\n    DB.Sync Normal\n    DB.locking true\n    # Buffer_Max_Size 1M\n    {{- with .Values.config.input }}\n    Mem_Buf_Limit {{ default \"16MB\" .memBufLimit }}\n    Refresh_Interval {{ default 5 .refreshInterval }}\n    {{- end }}\n"` |  |
 | fluent-bit.config.logLevel | string | `"info"` |  |
 | fluent-bit.config.output.host | string | `"logging-fluentd"` |  |
 | fluent-bit.config.output.sharedKey | string | `"cloudbender"` |  |
@@ -90,13 +90,14 @@ Kubernetes: `>= 1.24.0`
 | fluent-bit.daemonSetVolumes[1].hostPath.path | string | `"/var/lib/containers/logs"` |  |
 | fluent-bit.daemonSetVolumes[1].name | string | `"newlog"` |  |
 | fluent-bit.enabled | bool | `false` |  |
-| fluent-bit.image.tag | string | `"1.9.8"` |  |
+| fluent-bit.image.tag | string | `"2.0.10"` |  |
 | fluent-bit.luaScripts."kubezero.lua" | string | `"function nest_k8s_ns(tag, timestamp, record)\n    if not record['kubernetes']['namespace_name'] then\n        return 0, 0, 0\n    end\n    new_record = {}\n    for key, val in pairs(record) do\n        if key == 'kube' then\n            new_record[key] = {}\n            new_record[key][record['kubernetes']['namespace_name']] = record[key]\n        else\n            new_record[key] = record[key]\n        end\n    end\n    return 1, timestamp, new_record\nend\n"` |  |
 | fluent-bit.resources.limits.memory | string | `"64Mi"` |  |
 | fluent-bit.resources.requests.cpu | string | `"20m"` |  |
 | fluent-bit.resources.requests.memory | string | `"32Mi"` |  |
 | fluent-bit.serviceMonitor.enabled | bool | `false` |  |
 | fluent-bit.serviceMonitor.selector.release | string | `"metrics"` |  |
+| fluent-bit.testFramework.enabled | bool | `false` |  |
 | fluent-bit.tolerations[0].effect | string | `"NoSchedule"` |  |
 | fluent-bit.tolerations[0].operator | string | `"Exists"` |  |
 | fluentd.dashboards.enabled | bool | `false` |  |

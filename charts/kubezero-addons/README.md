@@ -1,6 +1,6 @@
 # kubezero-addons
 
-![Version: 0.7.4](https://img.shields.io/badge/Version-0.7.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.24](https://img.shields.io/badge/AppVersion-v1.24-informational?style=flat-square)
+![Version: 0.7.5](https://img.shields.io/badge/Version-0.7.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.25](https://img.shields.io/badge/AppVersion-v1.25-informational?style=flat-square)
 
 KubeZero umbrella chart for various optional cluster addons
 
@@ -14,16 +14,16 @@ KubeZero umbrella chart for various optional cluster addons
 
 ## Requirements
 
-Kubernetes: `>= 1.24.0`
+Kubernetes: `>= 1.25.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | aws-eks-asg-rolling-update-handler | 1.2.7 |
-|  | aws-node-termination-handler | 0.20.1 |
-| https://bitnami-labs.github.io/sealed-secrets | sealed-secrets | 2.7.3 |
-| https://kubernetes-sigs.github.io/external-dns/ | external-dns | 1.11.0 |
-| https://kubernetes.github.io/autoscaler | cluster-autoscaler | 9.24.0 |
-| https://nvidia.github.io/k8s-device-plugin | nvidia-device-plugin | 0.13.0 |
+|  | aws-eks-asg-rolling-update-handler | 1.3.0 |
+|  | aws-node-termination-handler | 0.21.0 |
+| https://bitnami-labs.github.io/sealed-secrets | sealed-secrets | 2.8.1 |
+| https://kubernetes-sigs.github.io/external-dns/ | external-dns | 1.12.2 |
+| https://kubernetes.github.io/autoscaler | cluster-autoscaler | 9.28.0 |
+| https://nvidia.github.io/k8s-device-plugin | nvidia-device-plugin | 0.14.0 |
 
 # MetalLB   
    
@@ -105,7 +105,7 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | cluster-autoscaler.enabled | bool | `false` |  |
 | cluster-autoscaler.extraArgs.scan-interval | string | `"30s"` |  |
 | cluster-autoscaler.extraArgs.skip-nodes-with-local-storage | bool | `false` |  |
-| cluster-autoscaler.image.tag | string | `"v1.24.0"` |  |
+| cluster-autoscaler.image.tag | string | `"v1.25.1"` |  |
 | cluster-autoscaler.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | cluster-autoscaler.podDisruptionBudget | bool | `false` |  |
 | cluster-autoscaler.prometheusRule.enabled | bool | `false` |  |

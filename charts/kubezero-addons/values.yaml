@@ -189,7 +189,7 @@ cluster-autoscaler:
   enabled: false
 
   image:
-    tag: v1.24.0
+    tag: v1.25.1
 
   autoDiscovery:
     clusterName: ""
