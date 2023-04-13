@@ -23,6 +23,8 @@ cert-manager:
     leaderElection:
       namespace: "cert-manager"
 
+  #enableCertificateOwnerRef: true
+
   # On AWS enable Projected Service Accounts to assume IAM role
   #extraEnv:
   #- name: AWS_ROLE_ARN

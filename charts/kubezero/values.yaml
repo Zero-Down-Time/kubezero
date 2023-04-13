@@ -36,7 +36,7 @@ network:
 cert-manager:
   enabled: false
   namespace: cert-manager
-  targetRevision: 0.9.3
+  targetRevision: 0.9.4
 
 storage:
   enabled: false
@@ -89,7 +89,7 @@ logging:
 argocd:
   enabled: false
   namespace: argocd
-  targetRevision: 0.11.2
+  targetRevision: 0.12.0
   argocd-image-updater:
     enabled: false
   istio:
