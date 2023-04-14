@@ -117,6 +117,12 @@ spec:
 {{- if .Values.prometheus.prometheusSpec.retentionSize }}
   retentionSize: {{ .Values.prometheus.prometheusSpec.retentionSize | quote }}
 {{- end }}
+{{- if .Values.prometheus.prometheusSpec.tsdb }}
+  tsdb:
+    {{- if .Values.prometheus.prometheusSpec.tsdb.outOfOrderTimeWindow }}
+    outOfOrderTimeWindow: {{ .Values.prometheus.prometheusSpec.tsdb.outOfOrderTimeWindow }}
+    {{- end }}
+{{- end }}
 {{- if eq .Values.prometheus.prometheusSpec.walCompression false }}
   walCompression: false
 {{ else }}
@@ -391,4 +397,8 @@ spec:
   minReadySeconds: {{ .Values.prometheus.prometheusSpec.minReadySeconds }}
 {{- end }}
   hostNetwork: {{ .Values.prometheus.prometheusSpec.hostNetwork }}
+{{- if .Values.prometheus.prometheusSpec.hostAliases }}
+  hostAliases:
+{{ toYaml .Values.prometheus.prometheusSpec.hostAliases | indent 4 }}
+{{- end }}
 {{- end }}
