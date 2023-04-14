@@ -67,7 +67,7 @@ Kubernetes: `>= 1.25.0`
 | metrics.istio.grafana | object | `{}` |  |
 | metrics.istio.prometheus | object | `{}` |  |
 | metrics.namespace | string | `"monitoring"` |  |
-| metrics.targetRevision | string | `"0.8.9"` |  |
+| metrics.targetRevision | string | `"0.9.0"` |  |
 | network.cilium.cluster | object | `{}` |  |
 | network.enabled | bool | `true` |  |
 | network.retain | bool | `true` |  |
