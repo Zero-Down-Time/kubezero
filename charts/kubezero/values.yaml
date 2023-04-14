@@ -69,7 +69,7 @@ istio-private-ingress:
   enabled: false
   chart: kubezero-istio-gateway
   namespace: istio-ingress
-  targetRevision: 0.9.1
+  targetRevision: 0.10.0
   gateway:
     service: {}
 
@@ -84,7 +84,7 @@ metrics:
 logging:
   enabled: false
   namespace: logging
-  targetRevision: 0.8.5
+  targetRevision: 0.8.6
 
 argocd:
   enabled: false
