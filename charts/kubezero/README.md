@@ -52,7 +52,7 @@ Kubernetes: `>= 1.25.0`
 | istio-private-ingress.enabled | bool | `false` |  |
 | istio-private-ingress.gateway.service | object | `{}` |  |
 | istio-private-ingress.namespace | string | `"istio-ingress"` |  |
-| istio-private-ingress.targetRevision | string | `"0.9.1"` |  |
+| istio-private-ingress.targetRevision | string | `"0.10.0"` |  |
 | istio.enabled | bool | `false` |  |
 | istio.namespace | string | `"istio-system"` |  |
 | istio.targetRevision | string | `"0.10.0"` |  |
@@ -62,7 +62,7 @@ Kubernetes: `>= 1.25.0`
 | kubezero.server | string | `"https://kubernetes.default.svc"` |  |
 | logging.enabled | bool | `false` |  |
 | logging.namespace | string | `"logging"` |  |
-| logging.targetRevision | string | `"0.8.5"` |  |
+| logging.targetRevision | string | `"0.8.6"` |  |
 | metrics.enabled | bool | `false` |  |
 | metrics.istio.grafana | object | `{}` |  |
 | metrics.istio.prometheus | object | `{}` |  |

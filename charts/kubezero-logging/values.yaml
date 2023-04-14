@@ -48,7 +48,7 @@ fluentd:
   enabled: false
   image:
     repository: public.ecr.aws/zero-downtime/fluentd-concenter
-    tag: v1.14.2
+    tag: v1.16.0
   istio:
     enabled: false
 
