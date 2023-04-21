@@ -1,8 +1,6 @@
 #!/bin/bash
 set -ex
 
-#helm dependencies update
-
 ### Gemini
 rm -rf charts/gemini
 helm pull fairwinds-stable/gemini --untar --untardir charts
@@ -36,5 +34,7 @@ patch -i efs.patch -p0 --no-backup-if-mismatch
 # Metrics
 cd jsonnet
 make render
+
+helm dependencies update
 
 helm-docs
