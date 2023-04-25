@@ -25,7 +25,7 @@ patch -i lvm.patch -p0 --no-backup-if-mismatch
 VERSION=$(yq eval '.dependencies[] | select(.name=="aws-ebs-csi-driver") | .version' Chart.yaml)
 rm -rf charts/aws-ebs-csi-driver
 curl -L -s -o - https://github.com/kubernetes-sigs/aws-ebs-csi-driver/releases/download/helm-chart-aws-ebs-csi-driver-${VERSION}/aws-ebs-csi-driver-${VERSION}.tgz | tar xfz - -C charts
-rm -rf charts/aws-ebs-csi-driver/templates/test
+rm -rf charts/aws-ebs-csi-driver/templates/tests
 
 ### EFS
 VERSION=$(yq eval '.dependencies[] | select(.name=="aws-efs-csi-driver") | .version' Chart.yaml)
