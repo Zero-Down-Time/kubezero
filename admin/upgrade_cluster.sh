@@ -151,6 +151,7 @@ argo_used && disable_argo
 # Cleanup
 # Remove calico CRDs
 kubectl delete -f https://git.zero-downtime.net/ZeroDownTime/kubezero/raw/tag/v1.23.11/charts/kubezero-network/charts/calico/crds/crds.yaml 2>/dev/null || true
+kubectl delete servicemonitor calico-node -n kube-system || true
 
 # delete old kubelet configs
 for cm in $(kubectl get cm -n kube-system --no-headers |  awk '{if ($1 ~ "kubelet-config-1*") print $1}'); do kubectl delete cm $cm -n kube-system; done
