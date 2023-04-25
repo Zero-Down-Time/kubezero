@@ -10,9 +10,6 @@ ifeq (,$(filter main master, $(GIT_BRANCH)))
 	endif
 endif
 
-# optionally set by the caller
-EXTRA_TAGS :=
-
 ARCH := amd64
 ALL_ARCHS := amd64 arm64
 _ARCH = $(or $(filter $(ARCH),$(ALL_ARCHS)),$(error $$ARCH [$(ARCH)] must be exactly one of "$(ALL_ARCHS)"))
