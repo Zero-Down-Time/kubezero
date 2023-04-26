@@ -209,6 +209,8 @@ cluster-autoscaler:
   extraArgs:
     scan-interval: 30s
     skip-nodes-with-local-storage: false
+    balance-similar-node-groups: true
+    ignore-taint: "node.cilium.io/agent-not-ready"
 
   #securityContext:
   #  runAsNonRoot: true

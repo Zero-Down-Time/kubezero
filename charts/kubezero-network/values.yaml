@@ -30,7 +30,7 @@ cilium:
   containerRuntime:
     integration: crio
 
-  # Until we figured out AppArmore on Alpine and Gentoo
+  # remove with 1.26
   securityContext:
     privileged: true
 
