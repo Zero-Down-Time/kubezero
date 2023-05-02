@@ -19,6 +19,14 @@ cilium:
 
   prometheus:
     enabled: {{ .Values.metrics.enabled }}
+    serviceMonitor:
+      enabled: {{ .Values.metrics.enabled }}
+
+  operator:
+    prometheus:
+      enabled: {{ .Values.metrics.enabled }}
+      serviceMonitor:
+        enabled: {{ .Values.metrics.enabled }}
 
 {{- with index .Values "network" "metallb" }}
 metallb:
