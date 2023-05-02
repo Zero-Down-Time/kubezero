@@ -1,6 +1,6 @@
 # kubezero-ci
 
-![Version: 0.6.1](https://img.shields.io/badge/Version-0.6.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.6.2](https://img.shields.io/badge/Version-0.6.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things CI
 
@@ -21,7 +21,7 @@ Kubernetes: `>= 1.24.0`
 | https://aquasecurity.github.io/helm-charts/ | trivy | 0.7.0 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
 | https://charts.jenkins.io | jenkins | 4.3.20 |
-| https://dl.gitea.io/charts/ | gitea | 8.0.3 |
+| https://dl.gitea.io/charts/ | gitea | 8.2.0 |
 | https://gocd.github.io/helm-chart | gocd | 1.40.8 |
 
 # Jenkins

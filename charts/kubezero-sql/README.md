@@ -1,6 +1,6 @@
 # kubezero-sql
 
-![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for SQL databases, Percona XtraDB Cluster
 
@@ -14,13 +14,13 @@ KubeZero umbrella chart for SQL databases, Percona XtraDB Cluster
 
 ## Requirements
 
-Kubernetes: `>= 1.20.0`
+Kubernetes: `>= 1.24.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
 | https://charts.bitnami.com/bitnami | mariadb-galera | 7.4.7 |
-| https://percona.github.io/percona-helm-charts/ | pxc-operator | 1.12.0 |
+| https://percona.github.io/percona-helm-charts/ | pxc-operator | 1.12.1 |
 
 ## Values
 

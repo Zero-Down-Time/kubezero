@@ -103,6 +103,8 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | cluster-autoscaler.autoDiscovery.clusterName | string | `""` |  |
 | cluster-autoscaler.awsRegion | string | `"us-west-2"` |  |
 | cluster-autoscaler.enabled | bool | `false` |  |
+| cluster-autoscaler.extraArgs.balance-similar-node-groups | bool | `true` |  |
+| cluster-autoscaler.extraArgs.ignore-taint | string | `"node.cilium.io/agent-not-ready"` |  |
 | cluster-autoscaler.extraArgs.scan-interval | string | `"30s"` |  |
 | cluster-autoscaler.extraArgs.skip-nodes-with-local-storage | bool | `false` |  |
 | cluster-autoscaler.image.tag | string | `"v1.25.1"` |  |

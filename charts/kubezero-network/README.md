@@ -45,6 +45,8 @@ Kubernetes: `>= 1.25.0`
 | cilium.ipam.operator.clusterPoolIPv4PodCIDRList[0] | string | `"10.240.0.0/16"` |  |
 | cilium.l7Proxy | bool | `false` |  |
 | cilium.operator.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
+| cilium.operator.prometheus.enabled | bool | `false` |  |
+| cilium.operator.prometheus.serviceMonitor.enabled | bool | `false` |  |
 | cilium.operator.replicas | int | `1` |  |
 | cilium.operator.tolerations[0].effect | string | `"NoSchedule"` |  |
 | cilium.operator.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
@@ -52,6 +54,7 @@ Kubernetes: `>= 1.25.0`
 | cilium.operator.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | cilium.prometheus.enabled | bool | `false` |  |
 | cilium.prometheus.port | int | `9091` |  |
+| cilium.prometheus.serviceMonitor.enabled | bool | `false` |  |
 | cilium.resources.limits.memory | string | `"1024Mi"` |  |
 | cilium.resources.requests.cpu | string | `"10m"` |  |
 | cilium.resources.requests.memory | string | `"256Mi"` |  |
