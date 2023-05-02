@@ -78,6 +78,8 @@ cilium:
 
   prometheus:
     enabled: false
+    serviceMonitor:
+      enabled: false
     port: 9091
 
   operator:
@@ -89,6 +91,10 @@ cilium:
       effect: NoSchedule
     nodeSelector:
       node-role.kubernetes.io/control-plane: ""
+    prometheus:
+      enabled: false
+      serviceMonitor:
+        enabled: false
 
   hubble:
     enabled: false
