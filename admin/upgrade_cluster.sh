@@ -151,7 +151,7 @@ argo_used && disable_argo
 # Cleanup
 # Remove calico CRDs
 kubectl delete -f https://git.zero-downtime.net/ZeroDownTime/kubezero/raw/tag/v1.23.11/charts/kubezero-network/charts/calico/crds/crds.yaml 2>/dev/null || true
-kubectl delete servicemonitor calico-node -n kube-system || true
+kubectl delete servicemonitor calico-node -n kube-system 2>/dev/null || true
 
 # delete old kubelet configs
 for cm in $(kubectl get cm -n kube-system --no-headers |  awk '{if ($1 ~ "kubelet-config-1*") print $1}'); do kubectl delete cm $cm -n kube-system; done
@@ -170,7 +170,7 @@ waitSystemPodsRunning
 
 echo "Applying remaining KubeZero modules..."
 
-control_plane_upgrade "apply_cert-manager, apply_istio, apply_istio-ingress, apply_istio-private-ingress, apply_logging, apply_metrics, apply_argocd"
+control_plane_upgrade "apply_cert-manager, apply_istio, apply_istio-ingress, apply_istio-private-ingress, apply_logging, apply_metrics, apply_argocd" backup
 
 # Final step is to commit the new argocd kubezero app
 kubectl get app kubezero -n argocd -o yaml | yq 'del(.status) | del(.metadata) | del(.operation) | .metadata.name="kubezero" | .metadata.namespace="argocd"' | yq 'sort_keys(..) | .spec.source.helm.values |= (from_yaml | to_yaml)' > $ARGO_APP
