@@ -14,16 +14,16 @@ KubeZero umbrella chart for all things storage incl. AWS EBS/EFS, openEBS-lvm, g
 
 ## Requirements
 
-Kubernetes: `>= 1.24.0`
+Kubernetes: `>= 1.25.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
+|  | aws-ebs-csi-driver | 2.18.0 |
 |  | aws-efs-csi-driver | 2.4.1 |
 |  | gemini | 2.0.0 |
 |  | lvm-localpv | 1.0.1 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
 | https://k8up-io.github.io/k8up | k8up | 4.2.0 |
-| https://kubernetes-sigs.github.io/aws-ebs-csi-driver | aws-ebs-csi-driver | 2.18.0 |
 
 ## Values
 

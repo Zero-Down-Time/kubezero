@@ -4,3 +4,6 @@ folder: KubeZero
 dashboards:
 - name: home
   url: file://zdt/home.json
+- name: crio
+  url: file://zdt/crio.json
+  tags: ['kubernetes']

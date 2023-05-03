@@ -358,7 +358,6 @@ backup() {
   cp -r ${HOSTFS}/etc/kubernetes/admin.conf ${WORKDIR}
 
   # Backup via restic
-  restic snapshots || restic init
   restic backup ${WORKDIR} -H $CLUSTERNAME --tag $CLUSTER_VERSION
 
   echo "Backup complete."
