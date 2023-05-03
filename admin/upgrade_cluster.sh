@@ -170,7 +170,11 @@ waitSystemPodsRunning
 
 echo "Applying remaining KubeZero modules..."
 
-control_plane_upgrade "apply_cert-manager, apply_istio, apply_istio-ingress, apply_istio-private-ingress, apply_logging, apply_metrics, apply_argocd" backup
+control_plane_upgrade "apply_cert-manager, apply_istio, apply_istio-ingress, apply_istio-private-ingress, apply_logging, apply_metrics, apply_argocd"
+
+# Trigger backup of upgraded cluster state
+kubectl create job --from=cronjob/kubezero-backup kubezero-backup-$VERSION -n kube-system
+kubectl wait --for=condition=complete job/kubezero-backup-$VERSION && kubectl delete job kubezero-backup-$VERSION -n kube-system
 
 # Final step is to commit the new argocd kubezero app
 kubectl get app kubezero -n argocd -o yaml | yq 'del(.status) | del(.metadata) | del(.operation) | .metadata.name="kubezero" | .metadata.namespace="argocd"' | yq 'sort_keys(..) | .spec.source.helm.values |= (from_yaml | to_yaml)' > $ARGO_APP

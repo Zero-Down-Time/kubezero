@@ -214,30 +214,16 @@ control_plane_node() {
       sleep 3
     done
 
-    # if we are NOT member already, flush etcd to be able to join
+    # see if we are a former member
     MY_ID=$(etcdctl member list --endpoints=$etcd_endpoints | grep $ETCD_NODENAME | awk '{print $1}' | sed -e 's/,$//')
+    [ -n "$MY_ID" ] && retry 12 5 5 etcdctl member remove $MY_ID --endpoints=$etcd_endpoints
 
-    # Failsafe / etcd on ephmeral: we were a member but our dataset is missing
-    # -> remove former self so we can re-join
-    if [ -n "$MY_ID" -a ! -d ${HOSTFS}/var/lib/etcd/member ]; then
-      # Remove former self first
-      [ -n "$MY_ID" ] && retry 12 5 5 etcdctl member remove $MY_ID --endpoints=$etcd_endpoints
-      MY_ID=""
-    fi
+    # flush etcd data directory as joining with previous store seems flaky, especially during etcd version upgrades
+    rm -rf ${HOSTFS}/var/lib/etcd/member
 
-
-    if [ -z "$MY_ID" ]; then
-      # flush etcd data directory from restore
-      rm -rf ${HOSTFS}/var/lib/etcd/member
-
-      # Announce new etcd member and capture ETCD_INITIAL_CLUSTER, retry needed in case another node joining causes temp quorum loss
-      ETCD_ENVS=$(retry 12 5 5 etcdctl member add $ETCD_NODENAME --peer-urls="https://${ETCD_NODENAME}:2380" --endpoints=$etcd_endpoints)
-      export $(echo "$ETCD_ENVS" | grep ETCD_INITIAL_CLUSTER= | sed -e 's/"//g')
-    else
-      # build initial_cluster string from running cluster
-      _cluster=$(etcdctl member list --endpoints=$etcd_endpoints -w json | jq -r '.members[] | "\(.name)=\(.peerURLs[]),"')
-      export ETCD_INITIAL_CLUSTER=$(echo ${_cluster%%,} | sed -e 's/ //g')
-    fi
+    # Announce new etcd member and capture ETCD_INITIAL_CLUSTER, retry needed in case another node joining causes temp quorum loss
+    ETCD_ENVS=$(retry 12 5 5 etcdctl member add $ETCD_NODENAME --peer-urls="https://${ETCD_NODENAME}:2380" --endpoints=$etcd_endpoints)
+    export $(echo "$ETCD_ENVS" | grep ETCD_INITIAL_CLUSTER= | sed -e 's/"//g')
 
     # Patch kubeadm-values.yaml and re-render to get etcd manifest patched
     yq eval -i '.etcd.state = "existing"
