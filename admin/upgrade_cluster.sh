@@ -10,7 +10,6 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 [ -n "$DEBUG" ] && set -x
 
-
 all_nodes_upgrade() {
   CMD="$1"
 
@@ -174,7 +173,10 @@ control_plane_upgrade "apply_cert-manager, apply_istio, apply_istio-ingress, app
 
 # Trigger backup of upgraded cluster state
 kubectl create job --from=cronjob/kubezero-backup kubezero-backup-$VERSION -n kube-system
-kubectl wait --for=condition=complete job/kubezero-backup-$VERSION && kubectl delete job kubezero-backup-$VERSION -n kube-system
+while true; do
+  kubectl wait --for=condition=complete job/kubezero-backup-$VERSION -n kube-system 2>/dev/null && kubectl delete job kubezero-backup-$VERSION -n kube-system && break
+  sleep 1
+done
 
 # Final step is to commit the new argocd kubezero app
 kubectl get app kubezero -n argocd -o yaml | yq 'del(.status) | del(.metadata) | del(.operation) | .metadata.name="kubezero" | .metadata.namespace="argocd"' | yq 'sort_keys(..) | .spec.source.helm.values |= (from_yaml | to_yaml)' > $ARGO_APP
