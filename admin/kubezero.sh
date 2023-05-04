@@ -161,7 +161,7 @@ control_plane_node() {
 
   else
     # restore latest backup
-    retry 10 60 30 restic restore latest --no-lock -t / #Review: Use latest no matter what for now: --tag $KUBE_VERSION_MINOR
+    retry 10 60 30 restic restore latest --no-lock -t / # --tag $KUBE_VERSION_MINOR
 
     # Make last etcd snapshot available
     cp ${WORKDIR}/etcd_snapshot ${HOSTFS}/etc/kubernetes
@@ -214,11 +214,11 @@ control_plane_node() {
       sleep 3
     done
 
-    # see if we are a former member
+    # see if we are a former member and remove our former self if so
     MY_ID=$(etcdctl member list --endpoints=$etcd_endpoints | grep $ETCD_NODENAME | awk '{print $1}' | sed -e 's/,$//')
     [ -n "$MY_ID" ] && retry 12 5 5 etcdctl member remove $MY_ID --endpoints=$etcd_endpoints
 
-    # flush etcd data directory as joining with previous store seems flaky, especially during etcd version upgrades
+    # flush etcd data directory as joining with previous storage seems flaky, especially during etcd version upgrades
     rm -rf ${HOSTFS}/var/lib/etcd/member
 
     # Announce new etcd member and capture ETCD_INITIAL_CLUSTER, retry needed in case another node joining causes temp quorum loss

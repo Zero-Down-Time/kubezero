@@ -1,5 +1,5 @@
 {{- range $ssg := .Values.snapshotgroups }}
-apiVersion: gemini.fairwinds.com/v1beta1
+apiVersion: gemini.fairwinds.com/v1
 kind: SnapshotGroup
 metadata:
   name: {{ $ssg.name }}
