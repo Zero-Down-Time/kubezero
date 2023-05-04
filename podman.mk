@@ -2,11 +2,15 @@
 GIT_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD 2>/dev/null)
 GIT_TAG := $(shell git describe --tags --match v*.*.* 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
 
-# append branch name to tag if NOT main nor master
 TAG := $(GIT_TAG)
+# append branch name to tag if NOT main nor master
 ifeq (,$(filter main master, $(GIT_BRANCH)))
-	ifneq ($(GIT_TAG), $(GIT_BRANCH))
-		TAG = $(GIT_TAG)-$(GIT_BRANCH)
+	# If branch is substring of tag, omit branch name
+	ifeq ($(findstring $(GIT_BRANCH), $(GIT_TAG)),)
+		# only append branch name if not equal tag
+		ifneq ($(GIT_TAG), $(GIT_BRANCH))
+			TAG = $(GIT_TAG)-$(GIT_BRANCH)
+		endif
 	endif
 endif
 
