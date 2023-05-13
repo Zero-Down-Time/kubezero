@@ -1,6 +1,6 @@
 # kubezero-metrics
 
-![Version: 0.9.0](https://img.shields.io/badge/Version-0.9.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.9.1](https://img.shields.io/badge/Version-0.9.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Prometheus, Grafana and Alertmanager as well as all Kubernetes integrations.
 
@@ -18,7 +18,7 @@ Kubernetes: `>= 1.25.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | kube-prometheus-stack | 45.9.1 |
+|  | kube-prometheus-stack | 45.27.2 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
 | https://prometheus-community.github.io/helm-charts | prometheus-adapter | 4.1.1 |
 | https://prometheus-community.github.io/helm-charts | prometheus-pushgateway | 2.1.3 |
@@ -155,7 +155,7 @@ Kubernetes: `>= 1.25.0`
 | kube-prometheus-stack.prometheus-node-exporter.prometheus.monitor.relabelings[0].replacement | string | `"$1"` |  |
 | kube-prometheus-stack.prometheus-node-exporter.prometheus.monitor.relabelings[0].separator | string | `";"` |  |
 | kube-prometheus-stack.prometheus-node-exporter.prometheus.monitor.relabelings[0].sourceLabels[0] | string | `"__meta_kubernetes_pod_node_name"` |  |
-| kube-prometheus-stack.prometheus-node-exporter.prometheus.monitor.relabelings[0].targetLabel | string | `"node"` |  |
+| kube-prometheus-stack.prometheus-node-exporter.prometheus.monitor.relabelings[0].targetLabel | string | `"instance"` |  |
 | kube-prometheus-stack.prometheus-node-exporter.resources.requests.cpu | string | `"20m"` |  |
 | kube-prometheus-stack.prometheus-node-exporter.resources.requests.memory | string | `"16Mi"` |  |
 | kube-prometheus-stack.prometheus.enabled | bool | `true` |  |
