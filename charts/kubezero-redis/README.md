@@ -1,6 +1,6 @@
 # kubezero-redis
 
-![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.4.1](https://img.shields.io/badge/Version-0.4.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Redis HA
 
@@ -14,7 +14,7 @@ KubeZero Umbrella Chart for Redis HA
 
 ## Requirements
 
-Kubernetes: `>= 1.20.0`
+Kubernetes: `>= 1.25.0`
 
 | Repository | Name | Version |
 |------------|------|---------|

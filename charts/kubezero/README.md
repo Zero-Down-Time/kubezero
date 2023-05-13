@@ -1,6 +1,6 @@
 # kubezero
 
-![Version: 1.25.8](https://img.shields.io/badge/Version-1.25.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 1.25.8-1](https://img.shields.io/badge/Version-1.25.8--1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero - Root App of Apps chart
 
@@ -67,7 +67,7 @@ Kubernetes: `>= 1.25.0`
 | metrics.istio.grafana | object | `{}` |  |
 | metrics.istio.prometheus | object | `{}` |  |
 | metrics.namespace | string | `"monitoring"` |  |
-| metrics.targetRevision | string | `"0.9.0"` |  |
+| metrics.targetRevision | string | `"0.9.1"` |  |
 | network.cilium.cluster | object | `{}` |  |
 | network.enabled | bool | `true` |  |
 | network.retain | bool | `true` |  |

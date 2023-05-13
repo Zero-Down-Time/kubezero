@@ -1,3 +1,60 @@
+{{- define "_kube-prometheus-stack" }}
+
+{{- if .global.aws }}
+alertmanager:
+  config:
+    receivers:
+      - name: 'null'
+      - name: alerthub-notifications
+        webhook_configs:
+          - send_resolved: true
+            url: http://localhost:9087/alert/AlertHub
+    route:
+      receiver: alerthub-notifications
+prometheus:
+  prometheusSpec:
+    externalLabels:
+      awsAccount: '{{ .global.aws.accountId }}'
+      awsRegion: {{ .global.aws.region }}
+      clusterName: {{ .global.clusterName }}
+    volumes:
+      - name: aws-token
+        projected:
+          sources:
+          - serviceAccountToken:
+              path: token
+              expirationSeconds: 86400
+              audience: "sts.amazonaws.com"
+    volumeMounts:
+      - name: aws-token
+        mountPath: "/var/run/secrets/sts.amazonaws.com/serviceaccount/"
+        readOnly: true
+    additionalScrapeConfigs:
+      - job_name: 'nodes'
+        ec2_sd_configs:
+          - port: 9100
+            region: {{ .global.aws.region }}
+            filters:
+              - name: 'tag-key'
+                values: ['zdt:prometheus.node-exporter']
+        relabel_configs:
+          - source_labels:
+            - '__meta_ec2_instance_id'
+            target_label: 'instance_id'
+          - source_labels:
+            - '__meta_ec2_availability_zone'
+            target_label: 'availability_zone'
+          - source_labels:
+            - '__meta_ec2_private_dns_name'
+            target_label: 'instance'
+          - source_labels:
+            - '__meta_ec2_tag_Name'
+            target_label: 'instance'
+{{- end }}
+
+{{- end }}
+
+
 {{- define "metrics-values" }}
 
 {{- with .Values.metrics.istio }}
@@ -6,7 +63,7 @@ istio:
 {{- end }}
 {{- with index .Values "metrics" "kube-prometheus-stack" }}
 kube-prometheus-stack:
-  {{- toYaml . | nindent 2 }}
+  {{- toYaml ( merge ( include "_kube-prometheus-stack" $.Values | fromYaml ) . ) | nindent 2 }}
 {{- end }}
 {{- with index .Values "metrics" "prometheus-adapter" }}
 prometheus-adapter:
