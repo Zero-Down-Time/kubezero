@@ -121,15 +121,15 @@ jenkins:
                       numToKeepStr: "10"
 
     installPlugins:
-      - kubernetes:3910.ve59cec5e33ea_
+      - kubernetes:3923.v294a_d4250b_91
       - workflow-aggregator:581.v0c46fa_697ffd
-      - git:5.0.0
+      - git:5.0.2
       - basic-branch-build-strategies:71.vc1421f89888e
       - pipeline-graph-view:183.v9e27732d970f
       - pipeline-stage-view:2.32
       - configuration-as-code:1625.v27444588cc3d
       - antisamy-markup-formatter:159.v25b_c67cd35fb_
-      - prometheus:2.2.1
+      - prometheus:2.2.2
       - htmlpublisher:1.31
       - build-discarder:139.v05696a_7fe240
       - dark-theme:315.va_22e7d692ea_a
