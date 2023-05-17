@@ -1,7 +1,7 @@
 apiVersion: v2
 description: KubeZero ArgoCD - config, branding, image-updater (optional)
 name: kubezero-argocd
-version: 0.12.1
+version: 0.12.0
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:

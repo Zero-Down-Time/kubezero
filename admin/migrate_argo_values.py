@@ -8,18 +8,11 @@ import yaml
 def migrate(values):
     """Actual changes here"""
 
-    # Move additional prometheus labels to better config tree
-    try:
-        labels = {}
-        for c in values["metrics"]['kube-prometheus-stack']["prometheus"]["prometheusSpec"]["additionalAlertRelabelConfigs"]:
-            labels[c["target_label"]] = c["replacement"]
-
-        values["metrics"]['kube-prometheus-stack']["prometheus"]["prometheusSpec"]["externalLabels"] = labels
-        deleteKey(values["metrics"]['kube-prometheus-stack']["prometheus"]["prometheusSpec"], "additionalAlertRelabelConfigs")
+    # Remove various keys as they have been merged into the metrics template
+    deleteKey(values["metrics"]['kube-prometheus-stack']["alertmanager"]["alertmanagerSpec"], "podMetadata")
+    deleteKey(values["metrics"]['kube-prometheus-stack']["alertmanager"], "config")
+    deleteKey(values["metrics"]['kube-prometheus-stack']["prometheus"]["prometheusSpec"], "externalLabels")
         
-    except KeyError:
-        pass
-
     return values
 
 
