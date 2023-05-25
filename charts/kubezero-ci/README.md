@@ -98,18 +98,18 @@ Kubernetes: `>= 1.24.0`
 | jenkins.controller.initContainerResources.limits.memory | string | `"1024Mi"` |  |
 | jenkins.controller.initContainerResources.requests.cpu | string | `"50m"` |  |
 | jenkins.controller.initContainerResources.requests.memory | string | `"256Mi"` |  |
-| jenkins.controller.installPlugins[0] | string | `"kubernetes:3910.ve59cec5e33ea_"` |  |
+| jenkins.controller.installPlugins[0] | string | `"kubernetes:3923.v294a_d4250b_91"` |  |
 | jenkins.controller.installPlugins[10] | string | `"build-discarder:139.v05696a_7fe240"` |  |
 | jenkins.controller.installPlugins[11] | string | `"dark-theme:315.va_22e7d692ea_a"` |  |
 | jenkins.controller.installPlugins[12] | string | `"kubernetes-credentials-provider:1.211.vc236a_f5a_2f3c"` |  |
 | jenkins.controller.installPlugins[1] | string | `"workflow-aggregator:581.v0c46fa_697ffd"` |  |
-| jenkins.controller.installPlugins[2] | string | `"git:5.0.0"` |  |
+| jenkins.controller.installPlugins[2] | string | `"git:5.0.2"` |  |
 | jenkins.controller.installPlugins[3] | string | `"basic-branch-build-strategies:71.vc1421f89888e"` |  |
 | jenkins.controller.installPlugins[4] | string | `"pipeline-graph-view:183.v9e27732d970f"` |  |
 | jenkins.controller.installPlugins[5] | string | `"pipeline-stage-view:2.32"` |  |
 | jenkins.controller.installPlugins[6] | string | `"configuration-as-code:1625.v27444588cc3d"` |  |
 | jenkins.controller.installPlugins[7] | string | `"antisamy-markup-formatter:159.v25b_c67cd35fb_"` |  |
-| jenkins.controller.installPlugins[8] | string | `"prometheus:2.2.1"` |  |
+| jenkins.controller.installPlugins[8] | string | `"prometheus:2.2.2"` |  |
 | jenkins.controller.installPlugins[9] | string | `"htmlpublisher:1.31"` |  |
 | jenkins.controller.javaOpts | string | `"-XX:+UseContainerSupport -XX:+UseStringDeduplication -Dhudson.model.DirectoryBrowserSupport.CSP=\"sandbox allow-popups; default-src 'none'; img-src 'self' cdn.zero-downtime.net; style-src 'unsafe-inline';\""` |  |
 | jenkins.controller.jenkinsOpts | string | `"--sessionTimeout=180 --sessionEviction=3600"` |  |
