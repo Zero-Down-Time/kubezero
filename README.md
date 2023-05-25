@@ -19,7 +19,7 @@ KubeZero is a Kubernetes distribution providing an integrated container platform
 
 # Version / Support Matrix
 KubeZero releases track the same *minor* version of Kubernetes.  
-Any 1.24.X-Y release of Kubezero supports any Kubernetes cluster 1.24.X.
+Any 1.26.X-Y release of Kubezero supports any Kubernetes cluster 1.26.X.
 
 KubeZero is distributed as a collection of versioned Helm charts, allowing custom upgrade schedules and module versions as needed.
 
@@ -28,15 +28,15 @@ KubeZero is distributed as a collection of versioned Helm charts, allowing custo
 gantt
     title KubeZero Support Timeline
     dateFormat  YYYY-MM-DD
-    section 1.23
-    beta     :123b, 2022-08-01, 2022-09-01
-    release  :after 123b, 2023-02-01
     section 1.24
     beta     :124b, 2022-11-14, 2022-12-31
     release  :after 124b, 2023-06-01
     section 1.25
     beta     :125b, 2023-03-01, 2023-03-31
     release  :after 125b, 2023-08-01
+    section 1.26
+    beta     :126b, 2023-06-01, 2023-06-30
+    release  :after 126b, 2023-10-01
 ```
 
 [Upstream release policy](https://kubernetes.io/releases/)
@@ -44,7 +44,7 @@ gantt
 # Components
 
 ## OS
-- all nodes are based on Alpine V3.16
+- all nodes are based on Alpine V3.17
 - 2 GB encrypted root filesystem
 - no 3rd party dependencies at boot ( other than container registries )
 - minimal attack surface
@@ -73,10 +73,8 @@ gantt
 - support for [Inf1 instances](https://aws.amazon.com/ec2/instance-types/inf1/) part of [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/).
 
 ## Network
+- Cilium using Geneve encapsulation, incl. increased MTU allowing flexible / more containers per worker node compared to eg. AWS VPC CNI
 - Multus support for multiple network interfaces per pod, eg. additional AWS CNI
-- Calico using VxLAN incl. increased MTU  
-allows flexible / more containers per worker node compared to eg. AWS VPC CNI
-- isolates container traffic from VPC by using VxLAN overlay
 - no restrictions on IP space / sizing from the underlying VPC architecture
 
 ## Storage
@@ -95,7 +93,7 @@ allows flexible / more containers per worker node compared to eg. AWS VPC CNI
 - optional full service mesh
 
 ## Metrics
-- Prometheus support for all components
+- Prometheus support for all components, incl. out of cluster EC2 instances (node_exporter)
 - automated service discovery allowing instant access to common workload metrics
 - pre-configured Grafana dashboards and alerts
 - Alertmanager events via SNSAlertHub to Slack, Google, Matrix, etc.
