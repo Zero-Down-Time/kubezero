@@ -1,6 +1,6 @@
 # kubezero-metrics
 
-![Version: 0.9.1](https://img.shields.io/badge/Version-0.9.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.9.2](https://img.shields.io/badge/Version-0.9.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Prometheus, Grafana and Alertmanager as well as all Kubernetes integrations.
 
@@ -218,3 +218,5 @@ Kubernetes: `>= 1.25.0`
 - https://grafana.com/api/dashboards/3662/revisions/2/download
 ## AlertManager SNS Forwarder
 - https://github.com/DataReply/alertmanager-sns-forwarder
+## docker-registry
+- https://github.com/lstn/misc-grafana-dashboards/blob/master/dashboards/docker-registry.json

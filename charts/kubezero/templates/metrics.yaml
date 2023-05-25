@@ -44,6 +44,26 @@ prometheus:
         mountPath: "/var/run/secrets/sts.amazonaws.com/serviceaccount/"
         readOnly: true
     additionalScrapeConfigs:
+      - job_name: 'crio'
+        ec2_sd_configs:
+          - port: 9090
+            region: {{ .global.aws.region }}
+            filters:
+              - name: 'tag-key'
+                values: ['zdt:prometheus.crio']
+        relabel_configs:
+          - source_labels:
+            - '__meta_ec2_instance_id'
+            target_label: 'instance_id'
+          - source_labels:
+            - '__meta_ec2_availability_zone'
+            target_label: 'availability_zone'
+          - source_labels:
+            - '__meta_ec2_private_dns_name'
+            target_label: 'instance'
+          - source_labels:
+            - '__meta_ec2_tag_Name'
+            target_label: 'instance'
       - job_name: 'nodes'
         ec2_sd_configs:
           - port: 9100
@@ -64,6 +84,29 @@ prometheus:
           - source_labels:
             - '__meta_ec2_tag_Name'
             target_label: 'instance'
+      - job_name: 'docker-registry'
+        ec2_sd_configs:
+          - port: 9101
+            region: {{ .global.aws.region }}
+            filters:
+              - name: 'tag-key'
+                values: ['zdt:prometheus.docker-registry']
+        relabel_configs:
+          - source_labels:
+            - '__meta_ec2_instance_id'
+            target_label: 'instance_id'
+          - source_labels:
+            - '__meta_ec2_availability_zone'
+            target_label: 'availability_zone'
+          - source_labels:
+            - '__meta_ec2_private_dns_name'
+            target_label: 'instance'
+          - source_labels:
+            - '__meta_ec2_tag_Name'
+            target_label: 'instance'
+      {{- with .metrics.kubezero.prometheus.prometheusSpec.additionalScrapeConfigs }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
 {{- end }}
 
 {{- end }}
