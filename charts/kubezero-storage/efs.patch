@@ -1,17 +1,6 @@
 diff -tuNr charts/aws-efs-csi-driver.orig/templates/controller-deployment.yaml charts/aws-efs-csi-driver/templates/controller-deployment.yaml
 --- charts/aws-efs-csi-driver.orig/templates/controller-deployment.yaml	2022-10-11 20:57:20.000000000 +0200
 +++ charts/aws-efs-csi-driver/templates/controller-deployment.yaml	2022-10-12 22:40:48.100658738 +0200
-@@ -13,6 +13,10 @@
-       app: efs-csi-controller
-       app.kubernetes.io/name: {{ include "aws-efs-csi-driver.name" . }}
-       app.kubernetes.io/instance: {{ .Release.Name }}
-+  {{- with .Values.controller.updateStrategy }}
-+  strategy:
-+    type: {{ . }}
-+  {{- end }}
-   template:
-     metadata:
-       labels:
 @@ -69,9 +73,14 @@
              - name: AWS_USE_FIPS_ENDPOINT
                value: "true"

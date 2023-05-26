@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Simulate well-known CRDs being available
-API_VERSIONS="-a monitoring.coreos.com/v1 -a snapshot.storage.k8s.io/v1"
+API_VERSIONS="-a monitoring.coreos.com/v1 -a snapshot.storage.k8s.io/v1 -a policy/v1/PodDisruptionBudget"
 
 # Waits for max 300s and retries
 function wait_for() {
@@ -165,6 +165,9 @@ function _helm() {
 
     render
     kubectl $action -f $WORKDIR/helm.yaml --server-side --force-conflicts && rc=$? || rc=$?
+
+    # Try again without server-side, review with 1.26, required for cert-manager during 1.25
+    [ $rc -ne 0 ] && kubectl $action -f $WORKDIR/helm.yaml && rc=$? || rc=$?
 
     # Optional post hook
     declare -F ${module}-post && ${module}-post

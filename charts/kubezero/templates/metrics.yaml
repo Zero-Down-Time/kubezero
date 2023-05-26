@@ -1,3 +1,117 @@
+{{- define "_kube-prometheus-stack" }}
+
+{{- if .global.aws }}
+alertmanager:
+  alertmanagerSpec:
+    podMetadata:
+      annotations:
+        kubezero.com/sns_forwarder_ARN_PREFIX: "arn:aws:sns:{{ .global.aws.region }}:{{ .global.aws.accountId }}:"
+        kubezero.com/sns_forwarder_AWS_ROLE_ARN: "arn:aws:iam::{{ .global.aws.accountId }}:role/{{ .global.aws.region }}.{{ .global.clusterName }}.alertmanager"
+  config:
+    receivers:
+      - name: 'null'
+      - name: alerthub-notifications
+        webhook_configs:
+          - send_resolved: true
+            url: http://localhost:9087/alert/AlertHub
+    route:
+      receiver: alerthub-notifications
+prometheus:
+  prometheusSpec:
+    externalLabels:
+      awsAccount: '{{ .global.aws.accountId }}'
+      awsRegion: {{ .global.aws.region }}
+      clusterName: {{ .global.clusterName }}
+    containers:
+      - name: prometheus
+        env:
+          - name: AWS_ROLE_ARN
+            value: "arn:aws:iam::{{ .global.aws.accountId }}:role/{{ .global.aws.region }}.{{ .global.clusterName }}.prometheus"
+          - name: AWS_WEB_IDENTITY_TOKEN_FILE
+            value: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
+          - name: AWS_STS_REGIONAL_ENDPOINTS
+            value: regional
+    volumes:
+      - name: aws-token
+        projected:
+          sources:
+          - serviceAccountToken:
+              path: token
+              expirationSeconds: 86400
+              audience: "sts.amazonaws.com"
+    volumeMounts:
+      - name: aws-token
+        mountPath: "/var/run/secrets/sts.amazonaws.com/serviceaccount/"
+        readOnly: true
+    additionalScrapeConfigs:
+      - job_name: 'crio'
+        ec2_sd_configs:
+          - port: 9090
+            region: {{ .global.aws.region }}
+            filters:
+              - name: 'tag-key'
+                values: ['zdt:prometheus.crio']
+        relabel_configs:
+          - source_labels:
+            - '__meta_ec2_instance_id'
+            target_label: 'instance_id'
+          - source_labels:
+            - '__meta_ec2_availability_zone'
+            target_label: 'availability_zone'
+          - source_labels:
+            - '__meta_ec2_private_dns_name'
+            target_label: 'instance'
+          - source_labels:
+            - '__meta_ec2_tag_Name'
+            target_label: 'instance'
+      - job_name: 'nodes'
+        ec2_sd_configs:
+          - port: 9100
+            region: {{ .global.aws.region }}
+            filters:
+              - name: 'tag-key'
+                values: ['zdt:prometheus.node-exporter']
+        relabel_configs:
+          - source_labels:
+            - '__meta_ec2_instance_id'
+            target_label: 'instance_id'
+          - source_labels:
+            - '__meta_ec2_availability_zone'
+            target_label: 'availability_zone'
+          - source_labels:
+            - '__meta_ec2_private_dns_name'
+            target_label: 'instance'
+          - source_labels:
+            - '__meta_ec2_tag_Name'
+            target_label: 'instance'
+      - job_name: 'docker-registry'
+        ec2_sd_configs:
+          - port: 9101
+            region: {{ .global.aws.region }}
+            filters:
+              - name: 'tag-key'
+                values: ['zdt:prometheus.docker-registry']
+        relabel_configs:
+          - source_labels:
+            - '__meta_ec2_instance_id'
+            target_label: 'instance_id'
+          - source_labels:
+            - '__meta_ec2_availability_zone'
+            target_label: 'availability_zone'
+          - source_labels:
+            - '__meta_ec2_private_dns_name'
+            target_label: 'instance'
+          - source_labels:
+            - '__meta_ec2_tag_Name'
+            target_label: 'instance'
+      {{- with .metrics.kubezero.prometheus.prometheusSpec.additionalScrapeConfigs }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+{{- end }}
+
+{{- end }}
+
+
 {{- define "metrics-values" }}
 
 {{- with .Values.metrics.istio }}
@@ -6,7 +120,7 @@ istio:
 {{- end }}
 {{- with index .Values "metrics" "kube-prometheus-stack" }}
 kube-prometheus-stack:
-  {{- toYaml . | nindent 2 }}
+  {{- toYaml ( merge ( include "_kube-prometheus-stack" $.Values | fromYaml ) . ) | nindent 2 }}
 {{- end }}
 {{- with index .Values "metrics" "prometheus-adapter" }}
 prometheus-adapter:

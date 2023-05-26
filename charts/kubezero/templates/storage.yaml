@@ -12,13 +12,13 @@ gemini:
   {{- toYaml . | nindent 2 }}
 {{- end }}
 
-{{- with .Values.storage.velero }}
-velero:
+{{- with .Values.storage.k8up }}
+k8up:
   {{- toYaml . | nindent 2 }}
 {{- end }}
 
 snapshotController:
-  enabled: {{ default false (or (index .Values "storage" "velero" "enabled") (index .Values "storage" "gemini" "enabled")) }}
+  enabled: {{ default false (index .Values "storage" "gemini" "enabled") }}
 
 aws-ebs-csi-driver:
   enabled: {{ default false (index .Values "storage" "aws-ebs-csi-driver" "enabled")}}
@@ -60,7 +60,8 @@ aws-efs-csi-driver:
 
     # The EFS controller steel needs hostnetwork and cannot update on single node control planes otherwise
     {{- if not .Values.global.highAvailable }}
-    updateStrategy: Recreate
+    updateStrategy:
+      type: Recreate
     {{- else }}
     affinity:
       podAntiAffinity:

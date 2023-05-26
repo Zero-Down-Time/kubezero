@@ -1,6 +1,6 @@
 # kubezero-network
 
-![Version: 0.4.2](https://img.shields.io/badge/Version-0.4.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.4.3](https://img.shields.io/badge/Version-0.4.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things network
 
@@ -14,13 +14,13 @@ KubeZero umbrella chart for all things network
 
 ## Requirements
 
-Kubernetes: `>= 1.24.0`
+Kubernetes: `>= 1.25.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.5 |
-| https://helm.cilium.io/ | cilium | 1.12.5 |
-| https://metallb.github.io/metallb | metallb | 0.13.7 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
+| https://helm.cilium.io/ | cilium | 1.13.1 |
+| https://metallb.github.io/metallb | metallb | 0.13.9 |
 
 ## Values
 
@@ -45,6 +45,8 @@ Kubernetes: `>= 1.24.0`
 | cilium.ipam.operator.clusterPoolIPv4PodCIDRList[0] | string | `"10.240.0.0/16"` |  |
 | cilium.l7Proxy | bool | `false` |  |
 | cilium.operator.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
+| cilium.operator.prometheus.enabled | bool | `false` |  |
+| cilium.operator.prometheus.serviceMonitor.enabled | bool | `false` |  |
 | cilium.operator.replicas | int | `1` |  |
 | cilium.operator.tolerations[0].effect | string | `"NoSchedule"` |  |
 | cilium.operator.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
@@ -52,6 +54,7 @@ Kubernetes: `>= 1.24.0`
 | cilium.operator.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | cilium.prometheus.enabled | bool | `false` |  |
 | cilium.prometheus.port | int | `9091` |  |
+| cilium.prometheus.serviceMonitor.enabled | bool | `false` |  |
 | cilium.resources.limits.memory | string | `"1024Mi"` |  |
 | cilium.resources.requests.cpu | string | `"10m"` |  |
 | cilium.resources.requests.memory | string | `"256Mi"` |  |
@@ -68,4 +71,4 @@ Kubernetes: `>= 1.24.0`
 | multus.defaultNetworks | list | `[]` |  |
 | multus.enabled | bool | `false` |  |
 | multus.readinessindicatorfile | string | `"/etc/cni/net.d/05-cilium.conf"` |  |
-| multus.tag | string | `"v3.9.2"` |  |
+| multus.tag | string | `"v3.9.3"` |  |

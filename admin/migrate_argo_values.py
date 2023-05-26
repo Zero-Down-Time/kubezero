@@ -8,27 +8,11 @@ import yaml
 def migrate(values):
     """Actual changes here"""
 
-    # ClusterBackup is enabled on AWS anyways, same with cluster-autoscaler
-    if "aws" in values["global"]:
-        deleteKey(values["addons"], "clusterBackup")
-        deleteKey(values["addons"], "cluster-autoscaler")
-
-    # Remove calico and multus
-    deleteKey(values["network"], "calico")
-    deleteKey(values["network"], "multus")
-
-    # ArgoCD helm changes
-    if "argocd" in values:
-        if "server" in values["argocd"]:
-            if not "configs" in values["argocd"]:
-                values["argocd"]["configs"] = {}
-            if not "cm" in values["argocd"]["configs"]:
-                values["argocd"]["configs"]["cm"] = {}
-            values["argocd"]["configs"]["cm"]["url"] = values["argocd"]["server"]["config"][
-                "url"
-            ]
-            deleteKey(values["argocd"], "server")
-
+    # Remove various keys as they have been merged into the metrics template
+    deleteKey(values["metrics"]['kube-prometheus-stack']["alertmanager"]["alertmanagerSpec"], "podMetadata")
+    deleteKey(values["metrics"]['kube-prometheus-stack']["alertmanager"], "config")
+    deleteKey(values["metrics"]['kube-prometheus-stack']["prometheus"]["prometheusSpec"], "externalLabels")
+        
     return values
 
 

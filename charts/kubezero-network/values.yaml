@@ -18,7 +18,7 @@ metallb:
 
 multus:
   enabled: false
-  tag: "v3.9.2"
+  tag: "v3.9.3"
 
   clusterNetwork: "cilium"
   defaultNetworks: []
@@ -30,7 +30,7 @@ cilium:
   containerRuntime:
     integration: crio
 
-  # Until we figured out AppArmore on Alpine and Gentoo
+  # remove with 1.26
   securityContext:
     privileged: true
 
@@ -78,6 +78,8 @@ cilium:
 
   prometheus:
     enabled: false
+    serviceMonitor:
+      enabled: false
     port: 9091
 
   operator:
@@ -89,6 +91,10 @@ cilium:
       effect: NoSchedule
     nodeSelector:
       node-role.kubernetes.io/control-plane: ""
+    prometheus:
+      enabled: false
+      serviceMonitor:
+        enabled: false
 
   hubble:
     enabled: false

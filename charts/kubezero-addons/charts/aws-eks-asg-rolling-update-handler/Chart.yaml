@@ -5,4 +5,4 @@ home: https://github.com/TwiN/aws-eks-asg-rolling-update-handler
 maintainers:
 - name: TwiN
 name: aws-eks-asg-rolling-update-handler
-version: 1.2.7
+version: 1.3.0

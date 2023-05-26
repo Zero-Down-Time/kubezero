@@ -3,7 +3,8 @@ IMAGE := kubezero-admin
 REGION := us-east-1
 
 # Also tag as Kubernetes major version
-EXTRA_TAGS = $(shell echo $(TAG) | awk -F '.' '{ print $$1 "." $$2 }')
+MY_TAG = $(shell git describe --tags --match v*.*.* 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
+EXTRA_TAGS = $(shell echo $(MY_TAG) | awk -F '.' '{ print $$1 "." $$2 }')
 
 include .ci/podman.mk
 

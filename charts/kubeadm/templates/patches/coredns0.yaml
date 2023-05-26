@@ -12,13 +12,3 @@ spec:
             memory: 128Mi
       nodeSelector:
         node-role.kubernetes.io/control-plane: ""
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: k8s-app
-                operator: In
-                values:
-                - kube-dns
-            topologyKey: "kubernetes.io/hostname"
