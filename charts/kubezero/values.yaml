@@ -80,6 +80,11 @@ metrics:
   istio:
     grafana: {}
     prometheus: {}
+  # our custom scrapeConfig which gets merged
+  kubezero:
+    prometheus:
+      prometheusSpec:
+        additionalScrapeConfigs: []
 
 logging:
   enabled: false
