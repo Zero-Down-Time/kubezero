@@ -23,8 +23,10 @@
 
 # Gitea
 
-## OpenSSH 8.8 RSA disabled
-- https://github.com/go-gitea/gitea/issues/17798
+# Verdaccio
+
+## Authentication sealed-secret
+```htpasswd -n -b -B -C 4 <username> <password> | kubeseal --raw --namespace verdaccio --name verdaccio-htpasswd```
 
 ## Resources
 

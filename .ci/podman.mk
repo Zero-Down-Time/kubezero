@@ -1,11 +1,22 @@
 # Parse version from latest git semver tag
-BRANCH := $(shell git rev-parse --abbrev-ref HEAD 2>/dev/null)
-GIT_TAG=$(shell git describe --tags --match v*.*.* 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
-TAG ?= $(shell echo $(GIT_TAG) | awk -F '-' '{ print $$1 "-" $$2 }' | sed -e 's/-$$//')
+GIT_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD 2>/dev/null)
+GIT_TAG := $(shell git describe --tags --match v*.*.* 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
+
+TAG := $(GIT_TAG)
+# append branch name to tag if NOT main nor master
+ifeq (,$(filter main master, $(GIT_BRANCH)))
+	# If branch is substring of tag, omit branch name
+	ifeq ($(findstring $(GIT_BRANCH), $(GIT_TAG)),)
+		# only append branch name if not equal tag
+		ifneq ($(GIT_TAG), $(GIT_BRANCH))
+			TAG = $(GIT_TAG)-$(GIT_BRANCH)
+		endif
+	endif
+endif
+
 ARCH := amd64
 ALL_ARCHS := amd64 arm64
-
-# EXTRA_TAGS supposed to be set at the caller, eg. $(shell echo $(TAG) | awk -F '.' '{ print $$1 "." $$2 }')
+_ARCH = $(or $(filter $(ARCH),$(ALL_ARCHS)),$(error $$ARCH [$(ARCH)] must be exactly one of "$(ALL_ARCHS)"))
 
 ifneq ($(TRIVY_REMOTE),)
 	TRIVY_OPTS := --server $(TRIVY_REMOTE)
@@ -22,28 +33,30 @@ help: ## Show Help
 	grep -E '^[a-zA-Z_-]+:.*?## .*$$' .ci/podman.mk | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 build: ## Build the app
-	buildah build --rm --layers -t $(IMAGE):$(TAG)-$(ARCH) --build-arg TAG=$(TAG) --build-arg ARCH=$(ARCH) --platform linux/$(ARCH) .
+	buildah build --rm --layers -t $(IMAGE):$(TAG)-$(_ARCH) --build-arg TAG=$(TAG) --build-arg ARCH=$(_ARCH) --platform linux/$(_ARCH) .
 
 test: rm-test-image ## Execute Dockerfile.test
 	test -f Dockerfile.test && \
-		{ buildah build --rm --layers -t $(REGISTRY)/$(IMAGE):$(TAG)-test --from=$(REGISTRY)/$(IMAGE):$(TAG) -f Dockerfile.test --platform linux/$(ARCH) . && \
-			podman run --rm --env-host -t $(REGISTRY)/$(IMAGE):$(TAG)-$(ARCH)-test; } || \
+		{ buildah build --rm --layers -t $(REGISTRY)/$(IMAGE):$(TAG)-test --from=$(REGISTRY)/$(IMAGE):$(TAG) -f Dockerfile.test --platform linux/$(_ARCH) . && \
+			podman run --rm --env-host -t $(REGISTRY)/$(IMAGE):$(TAG)-$(_ARCH)-test; } || \
 		echo "No Dockerfile.test found, skipping test"
 
 scan: ## Scan image using trivy
-	echo "Scanning $(IMAGE):$(TAG)-$(ARCH) using Trivy $(TRIVY_REMOTE)"
-	trivy image $(TRIVY_OPTS) localhost/$(IMAGE):$(TAG)-$(ARCH)
+	echo "Scanning $(IMAGE):$(TAG)-$(_ARCH) using Trivy $(TRIVY_REMOTE)"
+	trivy image $(TRIVY_OPTS) localhost/$(IMAGE):$(TAG)-$(_ARCH)
 
 # first tag and push all actual images
 # create new manifest for each tag and add all available TAG-ARCH before pushing
 push: ecr-login ## push images to registry
 	for t in $(TAG) latest $(EXTRA_TAGS); do \
-		buildah tag $(IMAGE):$(TAG)-$(ARCH) $(REGISTRY)/$(IMAGE):$${t}-$(ARCH); \
+		echo "Tagging image with $(REGISTRY)/$(IMAGE):$${t}-$(ARCH)"
+		buildah tag $(IMAGE):$(TAG)-$(_ARCH) $(REGISTRY)/$(IMAGE):$${t}-$(_ARCH); \
 		buildah manifest rm $(IMAGE):$$t || true; \
 		buildah manifest create $(IMAGE):$$t; \
 		for a in $(ALL_ARCHS); do \
 			buildah manifest add $(IMAGE):$$t $(REGISTRY)/$(IMAGE):$(TAG)-$$a; \
 		done; \
+		echo "Pushing manifest $(IMAGE):$$t"
 		buildah manifest push --all $(IMAGE):$$t docker://$(REGISTRY)/$(IMAGE):$$t; \
 	done
 
@@ -58,13 +71,13 @@ rm-remote-untagged: ## delete all remote untagged images
 		[ -n "$$IMAGE_IDS" ] && aws ecr-public batch-delete-image --repository-name $(IMAGE) --region $(REGION) --image-ids $$IMAGE_IDS || echo "No image to remove"
 
 rm-image:
-	test -z "$$(docker image ls -q $(IMAGE):$(TAG)-$(ARCH))" || podman image rm -f $(IMAGE):$(TAG)-$(ARCH) > /dev/null
-	test -z "$$(docker image ls -q $(IMAGE):$(TAG)-$(ARCH))" || echo "Error: Removing image failed"
+	test -z "$$(podman image ls -q $(IMAGE):$(TAG)-$(_ARCH))" || podman image rm -f $(IMAGE):$(TAG)-$(_ARCH) > /dev/null
+	test -z "$$(podman image ls -q $(IMAGE):$(TAG)-$(_ARCH))" || echo "Error: Removing image failed"
 
 # Ensure we run the tests by removing any previous runs
 rm-test-image:
-	test -z "$$(docker image ls -q $(IMAGE):$(TAG)-$(ARCH)-test)" || podman image rm -f $(IMAGE):$(TAG)-$(ARCH)-test > /dev/null
-	test -z "$$(docker image ls -q $(IMAGE):$(TAG)-$(ARCH)-test)" || echo "Error: Removing test image failed"
+	test -z "$$(podman image ls -q $(IMAGE):$(TAG)-$(_ARCH)-test)" || podman image rm -f $(IMAGE):$(TAG)-$(_ARCH)-test > /dev/null
+	test -z "$$(podman image ls -q $(IMAGE):$(TAG)-$(_ARCH)-test)" || echo "Error: Removing test image failed"
 
 ci-pull-upstream: ## pull latest shared .ci subtree
 	git stash && git subtree pull --prefix .ci ssh://git@git.zero-downtime.net/ZeroDownTime/ci-tools-lib.git master --squash && git stash pop

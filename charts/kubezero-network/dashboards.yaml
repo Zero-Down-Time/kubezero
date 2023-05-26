@@ -1,0 +1,15 @@
+configmap: cilium-grafana-dashboards
+gzip: true
+condition: 'index .Values.cilium.prometheus.enabled'
+folder: KubeZero
+dashboards:
+- name: cilium-agents
+  url: https://grafana.com/api/dashboards/16611/revisions/1/download
+  tags:
+  - cilium
+  - network
+- name: cilium-operator
+  url: https://grafana.com/api/dashboards/16612/revisions/1/download
+  tags:
+  - cilium
+  - network

@@ -85,7 +85,7 @@ kube-prometheus-stack:
         - sourceLabels: [__meta_kubernetes_pod_node_name]
           separator: ;
           regex: ^(.*)$
-          targetLabel: node
+          targetLabel: instance
           replacement: $1
           action: replace
     resources:

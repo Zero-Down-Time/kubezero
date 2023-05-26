@@ -158,6 +158,7 @@ alertmanager:
     create: true
     name: ""
     annotations: {}
+    automountServiceAccountToken: true
 
   ## Configure pod disruption budgets for Alertmanager
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget
@@ -211,6 +212,13 @@ alertmanager:
     - name: 'null'
     templates:
     - '/etc/alertmanager/config/*.tmpl'
+
+  ## Alertmanager configuration directives (as string type, preferred over the config hash map)
+  ## stringConfig will be used only, if tplConfig is true
+  ## ref: https://prometheus.io/docs/alerting/configuration/#configuration-file
+  ##      https://prometheus.io/webtools/alerting/routing-tree-editor/
+  ##
+  stringConfig: ""
 
   ## Pass the Alertmanager configuration directives through Helm's templating
   ## engine. If the Alertmanager configuration contains Alertmanager templates,
@@ -413,6 +421,30 @@ alertmanager:
     interval: ""
     selfMonitor: true
 
+    ## Additional labels
+    ##
+    additionalLabels: {}
+
+    ## SampleLimit defines per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: 0
+
+    ## TargetLimit defines a limit on the number of scraped targets that will be accepted.
+    ##
+    targetLimit: 0
+
+    ## Per-scrape limit on number of labels that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelLimit: 0
+
+    ## Per-scrape limit on length of labels name that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelNameLengthLimit: 0
+
+    ## Per-scrape limit on length of labels value that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelValueLengthLimit: 0
+
     ## proxyUrl: URL of a proxy that should be used for scraping.
     ##
     proxyUrl: ""
@@ -532,6 +564,13 @@ alertmanager:
     ## Example with select a global alertmanagerconfig
     # alertmanagerConfiguration:
     #   name: global-alertmanager-Configuration
+
+    ## Defines the strategy used by AlertmanagerConfig objects to match alerts. eg:
+    ##
+    alertmanagerConfigMatcherStrategy: {}
+    ## Example with use OnNamespace strategy
+    # alertmanagerConfigMatcherStrategy:
+    #   type: OnNamespace
 
     ## Define Log Format
     # Use logfmt (default) or json logging
@@ -784,6 +823,8 @@ grafana:
       enabled: true
       label: grafana_dashboard
       labelValue: "1"
+      # Allow discovery in all namespaces for dashboards
+      searchNamespace: ALL
 
       ## Annotations for Grafana dashboard configmaps
       ##
@@ -806,12 +847,18 @@ grafana:
       ##
       # url: http://prometheus-stack-prometheus:9090/
 
+      ## Prometheus request timeout in seconds
+      # timeout: 30
+
       # If not defined, will use prometheus.prometheusSpec.scrapeInterval or its default
       # defaultDatasourceScrapeInterval: 15s
 
       ## Annotations for Grafana datasource configmaps
       ##
       annotations: {}
+
+      ## Set method for HTTP to send query to datasource
+      httpMethod: POST
 
       ## Create datasource for each Pod of Prometheus StatefulSet;
       ## this uses headless service `prometheus-operated` which is
@@ -891,6 +938,11 @@ grafana:
     #   replacement: $1
     #   action: replace
 
+## Flag to disable all the kubernetes component scrapers
+##
+kubernetesServiceMonitors:
+  enabled: true
+
 ## Component scraping the kube api server
 ##
 kubeApiServer:
@@ -902,6 +954,27 @@ kubeApiServer:
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
     ##
     interval: ""
+
+    ## SampleLimit defines per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: 0
+
+    ## TargetLimit defines a limit on the number of scraped targets that will be accepted.
+    ##
+    targetLimit: 0
+
+    ## Per-scrape limit on number of labels that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelLimit: 0
+
+    ## Per-scrape limit on length of labels name that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelNameLengthLimit: 0
+
+    ## Per-scrape limit on length of labels value that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelValueLengthLimit: 0
+
     ## proxyUrl: URL of a proxy that should be used for scraping.
     ##
     proxyUrl: ""
@@ -954,6 +1027,26 @@ kubelet:
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
     ##
     interval: ""
+
+    ## SampleLimit defines per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: 0
+
+    ## TargetLimit defines a limit on the number of scraped targets that will be accepted.
+    ##
+    targetLimit: 0
+
+    ## Per-scrape limit on number of labels that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelLimit: 0
+
+    ## Per-scrape limit on length of labels name that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelNameLengthLimit: 0
+
+    ## Per-scrape limit on length of labels value that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelValueLengthLimit: 0
 
     ## proxyUrl: URL of a proxy that should be used for scraping.
     ##
@@ -1141,6 +1234,26 @@ kubeControllerManager:
     ##
     interval: ""
 
+    ## SampleLimit defines per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: 0
+
+    ## TargetLimit defines a limit on the number of scraped targets that will be accepted.
+    ##
+    targetLimit: 0
+
+    ## Per-scrape limit on number of labels that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelLimit: 0
+
+    ## Per-scrape limit on length of labels name that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelNameLengthLimit: 0
+
+    ## Per-scrape limit on length of labels value that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelValueLengthLimit: 0
+
     ## proxyUrl: URL of a proxy that should be used for scraping.
     ##
     proxyUrl: ""
@@ -1195,6 +1308,26 @@ coreDns:
     ##
     interval: ""
 
+    ## SampleLimit defines per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: 0
+
+    ## TargetLimit defines a limit on the number of scraped targets that will be accepted.
+    ##
+    targetLimit: 0
+
+    ## Per-scrape limit on number of labels that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelLimit: 0
+
+    ## Per-scrape limit on length of labels name that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelNameLengthLimit: 0
+
+    ## Per-scrape limit on length of labels value that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelValueLengthLimit: 0
+
     ## proxyUrl: URL of a proxy that should be used for scraping.
     ##
     proxyUrl: ""
@@ -1240,6 +1373,26 @@ kubeDns:
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
     ##
     interval: ""
+
+    ## SampleLimit defines per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: 0
+
+    ## TargetLimit defines a limit on the number of scraped targets that will be accepted.
+    ##
+    targetLimit: 0
+
+    ## Per-scrape limit on number of labels that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelLimit: 0
+
+    ## Per-scrape limit on length of labels name that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelNameLengthLimit: 0
+
+    ## Per-scrape limit on length of labels value that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelValueLengthLimit: 0
 
     ## proxyUrl: URL of a proxy that should be used for scraping.
     ##
@@ -1325,6 +1478,27 @@ kubeEtcd:
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
     ##
     interval: ""
+
+    ## SampleLimit defines per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: 0
+
+    ## TargetLimit defines a limit on the number of scraped targets that will be accepted.
+    ##
+    targetLimit: 0
+
+    ## Per-scrape limit on number of labels that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelLimit: 0
+
+    ## Per-scrape limit on length of labels name that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelNameLengthLimit: 0
+
+    ## Per-scrape limit on length of labels value that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelValueLengthLimit: 0
+
     ## proxyUrl: URL of a proxy that should be used for scraping.
     ##
     proxyUrl: ""
@@ -1388,6 +1562,27 @@ kubeScheduler:
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
     ##
     interval: ""
+
+    ## SampleLimit defines per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: 0
+
+    ## TargetLimit defines a limit on the number of scraped targets that will be accepted.
+    ##
+    targetLimit: 0
+
+    ## Per-scrape limit on number of labels that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelLimit: 0
+
+    ## Per-scrape limit on length of labels name that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelNameLengthLimit: 0
+
+    ## Per-scrape limit on length of labels value that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelValueLengthLimit: 0
+
     ## proxyUrl: URL of a proxy that should be used for scraping.
     ##
     proxyUrl: ""
@@ -1452,6 +1647,26 @@ kubeProxy:
     ##
     interval: ""
 
+    ## SampleLimit defines per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: 0
+
+    ## TargetLimit defines a limit on the number of scraped targets that will be accepted.
+    ##
+    targetLimit: 0
+
+    ## Per-scrape limit on number of labels that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelLimit: 0
+
+    ## Per-scrape limit on length of labels name that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelNameLengthLimit: 0
+
+    ## Per-scrape limit on length of labels value that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelValueLengthLimit: 0
+
     ## proxyUrl: URL of a proxy that should be used for scraping.
     ##
     proxyUrl: ""
@@ -1501,6 +1716,26 @@ kube-state-metrics:
       ## Scrape interval. If not set, the Prometheus default scrape interval is used.
       ##
       interval: ""
+
+      ## SampleLimit defines per-scrape limit on number of scraped samples that will be accepted.
+      ##
+      sampleLimit: 0
+
+      ## TargetLimit defines a limit on the number of scraped targets that will be accepted.
+      ##
+      targetLimit: 0
+
+      ## Per-scrape limit on number of labels that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+      ##
+      labelLimit: 0
+
+      ## Per-scrape limit on length of labels name that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+      ##
+      labelNameLengthLimit: 0
+
+      ## Per-scrape limit on length of labels value that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+      ##
+      labelValueLengthLimit: 0
 
       ## Scrape Timeout. If not set, the Prometheus default scrape timeout is used.
       ##
@@ -1565,6 +1800,26 @@ prometheus-node-exporter:
       ##
       interval: ""
 
+      ## SampleLimit defines per-scrape limit on number of scraped samples that will be accepted.
+      ##
+      sampleLimit: 0
+
+      ## TargetLimit defines a limit on the number of scraped targets that will be accepted.
+      ##
+      targetLimit: 0
+
+      ## Per-scrape limit on number of labels that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+      ##
+      labelLimit: 0
+
+      ## Per-scrape limit on length of labels name that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+      ##
+      labelNameLengthLimit: 0
+
+      ## Per-scrape limit on length of labels value that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+      ##
+      labelValueLengthLimit: 0
+
       ## How long until a scrape request times out. If not set, the Prometheus default scape timeout is used.
       ##
       scrapeTimeout: ""
@@ -1615,7 +1870,7 @@ prometheusOperator:
   ## Admission webhook support for PrometheusRules resources added in Prometheus Operator 0.30 can be enabled to prevent incorrectly formatted
   ## rules from making their way into prometheus and potentially preventing the container from starting
   admissionWebhooks:
-    failurePolicy: Fail
+    failurePolicy:
     ## The default timeoutSeconds is 10 and the maximum value is 30.
     timeoutSeconds: 10
     enabled: true
@@ -1632,9 +1887,9 @@ prometheusOperator:
     patch:
       enabled: true
       image:
-        registry: k8s.gcr.io
+        registry: registry.k8s.io
         repository: ingress-nginx/kube-webhook-certgen
-        tag: v1.3.0
+        tag: v20221220-controller-v1.5.1-58-g787ea74b6
         sha: ""
         pullPolicy: IfNotPresent
       resources: {}
@@ -1707,6 +1962,15 @@ prometheusOperator:
     ## Enable creation of NetworkPolicy resources.
     ##
     enabled: false
+
+    ## Flavor of the network policy to use.
+    #  Can be:
+    #  * kubernetes for networking.k8s.io/v1/NetworkPolicy
+    #  * cilium     for cilium.io/v2/CiliumNetworkPolicy
+    flavor: kubernetes
+
+    # cilium:
+    #   egress:
 
   ## Service account for Alertmanager to use.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -1798,6 +2062,27 @@ prometheusOperator:
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
     ##
     interval: ""
+
+    ## SampleLimit defines per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: 0
+
+    ## TargetLimit defines a limit on the number of scraped targets that will be accepted.
+    ##
+    targetLimit: 0
+
+    ## Per-scrape limit on number of labels that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelLimit: 0
+
+    ## Per-scrape limit on length of labels name that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelNameLengthLimit: 0
+
+    ## Per-scrape limit on length of labels value that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelValueLengthLimit: 0
+
     ## Scrape timeout. If not set, the Prometheus default scrape timeout is used.
     scrapeTimeout: ""
     selfMonitor: true
@@ -1909,7 +2194,8 @@ prometheusOperator:
   image:
     registry: quay.io
     repository: prometheus-operator/prometheus-operator
-    tag: v0.61.1
+    # if not set appVersion field from Chart.yaml is used
+    tag: ""
     sha: ""
     pullPolicy: IfNotPresent
 
@@ -1935,8 +2221,12 @@ prometheusOperator:
     image:
       registry: quay.io
       repository: prometheus-operator/prometheus-config-reloader
-      tag: v0.61.1
+      # if not set appVersion field from Chart.yaml is used
+      tag: ""
       sha: ""
+
+    # add prometheus config reloader liveness and readiness probe. Default: false
+    enableProbe: false
 
     # resource config for prometheusConfigReloader
     resources:
@@ -1952,8 +2242,19 @@ prometheusOperator:
   thanosImage:
     registry: quay.io
     repository: thanos/thanos
-    tag: v0.29.0
+    tag: v0.30.2
     sha: ""
+
+  ## Set a Label Selector to filter watched prometheus and prometheusAgent
+  ##
+  prometheusInstanceSelector: ""
+
+  ## Set a Label Selector to filter watched alertmanager
+  ##
+  alertmanagerInstanceSelector: ""
+
+  ## Set a Label Selector to filter watched thanosRuler
+  thanosRulerInstanceSelector: ""
 
   ## Set a Field Selector to filter watched secrets
   ##
@@ -1962,12 +2263,34 @@ prometheusOperator:
 ## Deploy a Prometheus instance
 ##
 prometheus:
-
   enabled: true
 
   ## Annotations for Prometheus
   ##
   annotations: {}
+
+  ## Configure network policy for the prometheus
+  networkPolicy:
+    enabled: false
+
+    ## Flavor of the network policy to use.
+    #  Can be:
+    #  * kubernetes for networking.k8s.io/v1/NetworkPolicy
+    #  * cilium     for cilium.io/v2/CiliumNetworkPolicy
+    flavor: kubernetes
+
+    # cilium:
+    #   endpointSelector:
+    #   egress:
+    #   ingress:
+
+    # egress:
+    # - {}
+    # ingress:
+    # - {}
+    # podSelector:
+    #   matchLabels:
+    #     app: prometheus
 
   ## Service account for Prometheuses to use.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -2019,6 +2342,10 @@ prometheus:
   thanosServiceMonitor:
     enabled: false
     interval: ""
+
+    ## Additional labels
+    ##
+    additionalLabels: {}
 
     ## scheme: HTTP scheme to use for scraping. Can be used with `tlsConfig` for example if using istio mTLS.
     scheme: ""
@@ -2302,6 +2629,30 @@ prometheus:
     interval: ""
     selfMonitor: true
 
+    ## Additional labels
+    ##
+    additionalLabels: {}
+
+    ## SampleLimit defines per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: 0
+
+    ## TargetLimit defines a limit on the number of scraped targets that will be accepted.
+    ##
+    targetLimit: 0
+
+    ## Per-scrape limit on number of labels that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelLimit: 0
+
+    ## Per-scrape limit on length of labels name that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelNameLengthLimit: 0
+
+    ## Per-scrape limit on length of labels value that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelValueLengthLimit: 0
+
     ## scheme: HTTP scheme to use for scraping. Can be used with `tlsConfig` for example if using istio mTLS.
     scheme: ""
 
@@ -2368,6 +2719,10 @@ prometheus:
     ##
     enableAdminAPI: false
 
+    ## Sets version of Prometheus overriding the Prometheus version as derived
+    ## from the image tag. Useful in cases where the tag does not follow semver v2.
+    version: ""
+
     ## WebTLSConfig defines the TLS parameters for HTTPS
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#webtlsconfig
     web: {}
@@ -2390,7 +2745,7 @@ prometheus:
     image:
       registry: quay.io
       repository: prometheus/prometheus
-      tag: v2.40.5
+      tag: v2.42.0
       sha: ""
 
     ## Tolerations for use with node taints
@@ -2478,11 +2833,12 @@ prometheus:
     ##
     query: {}
 
-    ## Namespaces to be selected for PrometheusRules discovery.
-    ## If nil, select own namespace. Namespaces to be selected for ServiceMonitor discovery.
-    ## See https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#namespaceselector for usage
-    ##
+    ## If nil, select own namespace. Namespaces to be selected for PrometheusRules discovery.
     ruleNamespaceSelector: {}
+    ## Example which selects PrometheusRules in namespaces with label "prometheus" set to "somelabel"
+    # ruleNamespaceSelector:
+    #   matchLabels:
+    #     prometheus: somelabel
 
     ## If true, a nil or {} value for prometheus.prometheusSpec.ruleSelector will cause the
     ## prometheus resource to be created with selectors based on values in the helm deployment,
@@ -2547,10 +2903,12 @@ prometheus:
     #   matchLabels:
     #     prometheus: somelabel
 
-    ## Namespaces to be selected for PodMonitor discovery.
-    ## See https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#namespaceselector for usage
-    ##
+    ## If nil, select own namespace. Namespaces to be selected for PodMonitor discovery.
     podMonitorNamespaceSelector: {}
+    ## Example which selects PodMonitor in namespaces with label "prometheus" set to "somelabel"
+    # podMonitorNamespaceSelector:
+    #   matchLabels:
+    #     prometheus: somelabel
 
     ## If true, a nil or {} value for prometheus.prometheusSpec.probeSelector will cause the
     ## prometheus resource to be created with selectors based on values in the helm deployment,
@@ -2567,10 +2925,12 @@ prometheus:
     #   matchLabels:
     #     prometheus: somelabel
 
-    ## Namespaces to be selected for Probe discovery.
-    ## See https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#namespaceselector for usage
-    ##
+    ## If nil, select own namespace. Namespaces to be selected for Probe discovery.
     probeNamespaceSelector: {}
+    ## Example which selects Probe in namespaces with label "prometheus" set to "somelabel"
+    # probeNamespaceSelector:
+    #   matchLabels:
+    #     prometheus: somelabel
 
     ## How long to retain metrics
     ##
@@ -2579,6 +2939,11 @@ prometheus:
     ## Maximum size of metrics
     ##
     retentionSize: ""
+
+    ## Allow out-of-order/out-of-bounds samples ingested into Prometheus for a specified duration
+    ## See https://prometheus.io/docs/prometheus/latest/configuration/configuration/#tsdb
+    tsdb:
+      outOfOrderTimeWindow: 0s
 
     ## Enable compression of the write-ahead log using Snappy.
     ##
@@ -2940,6 +3305,14 @@ prometheus:
     # When hostNetwork is enabled, this will set dnsPolicy to ClusterFirstWithHostNet automatically.
     hostNetwork: false
 
+    # HostAlias holds the mapping between IP and hostnames that will be injected
+    # as an entry in the pod’s hosts file.
+    hostAliases: []
+    #  - ip: 10.10.0.100
+    #    hostnames:
+    #      - a1.app.local
+    #      - b1.app.local
+
   additionalRulesForClusterRole: []
   #  - apiGroups: [ "" ]
   #    resources:
@@ -3186,6 +3559,30 @@ thanosRuler:
     interval: ""
     selfMonitor: true
 
+    ## Additional labels
+    ##
+    additionalLabels: {}
+
+    ## SampleLimit defines per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: 0
+
+    ## TargetLimit defines a limit on the number of scraped targets that will be accepted.
+    ##
+    targetLimit: 0
+
+    ## Per-scrape limit on number of labels that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelLimit: 0
+
+    ## Per-scrape limit on length of labels name that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelNameLengthLimit: 0
+
+    ## Per-scrape limit on length of labels value that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+    ##
+    labelValueLengthLimit: 0
+
     ## proxyUrl: URL of a proxy that should be used for scraping.
     ##
     proxyUrl: ""
@@ -3232,7 +3629,7 @@ thanosRuler:
     image:
       registry: quay.io
       repository: thanos/thanos
-      tag: v0.29.0
+      tag: v0.30.2
       sha: ""
 
     ## Namespaces to be selected for PrometheusRules discovery.

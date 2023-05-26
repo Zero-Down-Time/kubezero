@@ -19,7 +19,7 @@ yq eval -Mi 'del(.dependencies)' charts/eck-operator/Chart.yaml
 rm -rf charts/fluent-bit
 curl -L -s -o - https://github.com/fluent/helm-charts/releases/download/fluent-bit-${FLUENT_BIT_VERSION}/fluent-bit-${FLUENT_BIT_VERSION}.tgz | tar xfz - -C charts
 
-patch -i fluent-bit.patch -p0 --no-backup-if-mismatch
+# patch -i fluent-bit.patch -p0 --no-backup-if-mismatch
 
 
 # FluentD

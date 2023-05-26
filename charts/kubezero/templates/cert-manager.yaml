@@ -4,6 +4,11 @@ localCA:
   enabled: true
 
 cert-manager:
+  {{- if not .Values.global.highAvailable }}
+  strategy:
+    type: Recreate
+  {{- end }}
+
   prometheus:
     servicemonitor:
       enabled: {{ $.Values.metrics.enabled }}

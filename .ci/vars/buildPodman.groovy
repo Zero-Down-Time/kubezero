@@ -7,12 +7,14 @@ def call(Map config=[:]) {
           label 'podman-aws-trivy'
         }
       }
-
       stages {
         stage('Prepare') {
-          // get tags
           steps {
-            sh 'git fetch -q --tags ${GIT_URL} +refs/heads/${BRANCH_NAME}:refs/remotes/origin/${BRANCH_NAME}'
+            // pull tags
+            withCredentials([gitUsernamePassword(credentialsId: 'gitea-jenkins-user')]) {
+              sh 'git fetch -q --tags ${GIT_URL}'
+            }
+            sh 'make prepare || true'
           }
         }
 
@@ -36,8 +38,7 @@ def call(Map config=[:]) {
             TRIVY_OUTPUT = "reports/trivy.html"
           }
           steps {
-            sh 'mkdir -p reports'
-            sh 'make scan'
+            sh 'mkdir -p reports && make scan'
             publishHTML target: [
               allowMissing: true,
               alwaysLinkToLastBuild: true,
@@ -59,10 +60,11 @@ def call(Map config=[:]) {
           }
         }
 
-        // Push to ECR
+        // Push to container registry, skip if PR
         stage('Push') {
+          when { not { changeRequest() } }
           steps {
-            sh 'make ecr-login push'
+            sh 'make push'
           }
         }
 

@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 #VERSION="latest"
-VERSION="v1.24"
+VERSION="v1.25"
 ARGO_APP=${1:-/tmp/new-kubezero-argoapp.yaml}
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
@@ -9,7 +9,6 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 . "$SCRIPT_DIR"/libhelm.sh
 
 [ -n "$DEBUG" ] && set -x
-
 
 all_nodes_upgrade() {
   CMD="$1"
@@ -148,39 +147,36 @@ argo_used && disable_argo
 
 #all_nodes_upgrade ""
 
+# Cleanup
+# Remove calico CRDs
+kubectl delete -f https://git.zero-downtime.net/ZeroDownTime/kubezero/raw/tag/v1.23.11/charts/kubezero-network/charts/calico/crds/crds.yaml 2>/dev/null || true
+kubectl delete servicemonitor calico-node -n kube-system 2>/dev/null || true
+
+# delete old kubelet configs
+for cm in $(kubectl get cm -n kube-system --no-headers |  awk '{if ($1 ~ "kubelet-config-1*") print $1}'); do kubectl delete cm $cm -n kube-system; done
+for rb in $(kubectl get rolebindings -n kube-system --no-headers |  awk '{if ($1 ~ "kubelet-config-1*") print $1}'); do kubectl delete rolebindings $rb -n kube-system; done
+
 control_plane_upgrade kubeadm_upgrade
 
 echo "Adjust kubezero values as needed:"
 # shellcheck disable=SC2015
 argo_used && kubectl edit app kubezero -n argocd || kubectl edit cm kubezero-values -n kube-system
 
-# Remove calico
-#kubectl delete deployment calico-kube-controllers -n kube-system || true
-#kubectl delete daemonset calico-node -n kube-system || true
-#kubectl delete network-attachment-definitions calico -n kube-system || true
-
-# Remove previous cilium config as the helm options are additive only -> fail
-kubectl delete configmap cilium-config -n kube-system || true
-
 control_plane_upgrade "apply_network, apply_addons, apply_storage"
-
-kubectl rollout restart daemonset/kube-multus-ds -n kube-system
-kubectl rollout restart daemonset/cilium -n kube-system
 
 echo "Checking that all pods in kube-system are running ..."
 waitSystemPodsRunning
 
 echo "Applying remaining KubeZero modules..."
 
-# delete argocd deployments as various immutable things changed, also redis restart fails otherwise
-kubectl delete deployment argocd-redis -n argocd || true
-kubectl delete deployment argocd-repo-server -n argocd || true
-kubectl delete statefulset argocd-application-controller -n argocd || true
-
-# Delete prometheus-push gateway due to label changes
-kubectl delete deploy -l app=prometheus-pushgateway -n monitoring || true
-
 control_plane_upgrade "apply_cert-manager, apply_istio, apply_istio-ingress, apply_istio-private-ingress, apply_logging, apply_metrics, apply_argocd"
+
+# Trigger backup of upgraded cluster state
+kubectl create job --from=cronjob/kubezero-backup kubezero-backup-$VERSION -n kube-system
+while true; do
+  kubectl wait --for=condition=complete job/kubezero-backup-$VERSION -n kube-system 2>/dev/null && kubectl delete job kubezero-backup-$VERSION -n kube-system && break
+  sleep 1
+done
 
 # Final step is to commit the new argocd kubezero app
 kubectl get app kubezero -n argocd -o yaml | yq 'del(.status) | del(.metadata) | del(.operation) | .metadata.name="kubezero" | .metadata.namespace="argocd"' | yq 'sort_keys(..) | .spec.source.helm.values |= (from_yaml | to_yaml)' > $ARGO_APP

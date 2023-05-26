@@ -1,6 +1,6 @@
 # kubezero-mq
 
-![Version: 0.3.3](https://img.shields.io/badge/Version-0.3.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.3.5](https://img.shields.io/badge/Version-0.3.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for MQ systems like NATS, RabbitMQ
 
@@ -20,7 +20,7 @@ Kubernetes: `>= 1.20.0`
 |------------|------|---------|
 |  | nats | 0.8.4 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://charts.bitnami.com/bitnami | rabbitmq | 11.1.5 |
+| https://charts.bitnami.com/bitnami | rabbitmq | 11.3.2 |
 | https://charts.bitnami.com/bitnami | rabbitmq-cluster-operator | 3.1.4 |
 
 ## Values
@@ -52,8 +52,10 @@ Kubernetes: `>= 1.20.0`
 | rabbitmq.clustering.forceBoot | bool | `false` |  |
 | rabbitmq.enabled | bool | `false` |  |
 | rabbitmq.hosts | list | `[]` | hostnames of rabbitmq services, used for Istio and TLS |
+| rabbitmq.istio.amqp | bool | `false` |  |
 | rabbitmq.istio.enabled | bool | `false` |  |
 | rabbitmq.istio.gateway | string | `"istio-ingress/private-ingressgateway"` |  |
+| rabbitmq.istio.mqtt | bool | `false` |  |
 | rabbitmq.istio.mqtts | bool | `false` |  |
 | rabbitmq.metrics.enabled | bool | `false` |  |
 | rabbitmq.metrics.serviceMonitor.enabled | bool | `true` |  |

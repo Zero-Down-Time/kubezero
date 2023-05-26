@@ -56,6 +56,7 @@ rabbitmq:
   istio:
     enabled: false
     gateway: istio-ingress/private-ingressgateway
+    amqp: false
     mqtt: false
     mqtts: false
 

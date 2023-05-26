@@ -1,6 +1,6 @@
 # kubezero-istio
 
-![Version: 0.9.0](https://img.shields.io/badge/Version-0.9.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.10.0](https://img.shields.io/badge/Version-0.10.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Istio
 
@@ -16,14 +16,14 @@ Installs the Istio control plane
 
 ## Requirements
 
-Kubernetes: `>= 1.24.0`
+Kubernetes: `>= 1.25.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://istio-release.storage.googleapis.com/charts | base | 1.16.1 |
-| https://istio-release.storage.googleapis.com/charts | istiod | 1.16.1 |
-| https://kiali.org/helm-charts | kiali-server | 1.60.0 |
+| https://istio-release.storage.googleapis.com/charts | base | 1.17.2 |
+| https://istio-release.storage.googleapis.com/charts | istiod | 1.17.2 |
+| https://kiali.org/helm-charts | kiali-server | 1.66.0 |
 
 ## Values
 

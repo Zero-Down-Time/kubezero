@@ -31,7 +31,7 @@ sealed-secrets:
   fullnameOverride: sealed-secrets-controller
 
   # Disable auto keyrotation for now
-  keyrenewperiod: 0
+  keyrenewperiod: "0"
 
   resources:
     requests:
@@ -179,9 +179,17 @@ nvidia-device-plugin:
                   - g5.24xlarge
                   - g5.48xlarge
                   - g4dn.xlarge
+                  - g4dn.2xlarge
+                  - g4dn.4xlarge
+                  - g4dn.8xlarge
+                  - g4dn.12xlarge
+                  - g4dn.16xlarge
 
 cluster-autoscaler:
   enabled: false
+
+  image:
+    tag: v1.25.1
 
   autoDiscovery:
     clusterName: ""
@@ -201,6 +209,8 @@ cluster-autoscaler:
   extraArgs:
     scan-interval: 30s
     skip-nodes-with-local-storage: false
+    balance-similar-node-groups: true
+    ignore-taint: "node.cilium.io/agent-not-ready"
 
   #securityContext:
   #  runAsNonRoot: true
