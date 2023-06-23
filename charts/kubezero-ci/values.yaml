@@ -84,7 +84,7 @@ jenkins:
     testEnabled: false
     enableRawHtmlMarkupFormatter: true
     javaOpts: "-XX:+UseContainerSupport -XX:+UseStringDeduplication -Dhudson.model.DirectoryBrowserSupport.CSP=\"sandbox allow-popups; default-src 'none'; img-src 'self' cdn.zero-downtime.net; style-src 'unsafe-inline';\""
-    jenkinsOpts: "--sessionTimeout=180 --sessionEviction=3600"
+    jenkinsOpts: "--sessionTimeout=300 --sessionEviction=10800"
 
     resources:
       requests:
@@ -121,15 +121,15 @@ jenkins:
                       numToKeepStr: "10"
 
     installPlugins:
-      - kubernetes:3923.v294a_d4250b_91
+      - kubernetes:3937.vd7b_82db_e347b_
       - workflow-aggregator:581.v0c46fa_697ffd
-      - git:5.0.2
+      - git:5.1.0
       - basic-branch-build-strategies:71.vc1421f89888e
       - pipeline-graph-view:183.v9e27732d970f
       - pipeline-stage-view:2.32
-      - configuration-as-code:1625.v27444588cc3d
+      - configuration-as-code:1647.ve39ca_b_829b_42
       - antisamy-markup-formatter:159.v25b_c67cd35fb_
-      - prometheus:2.2.2
+      - prometheus:2.2.3
       - htmlpublisher:1.31
       - build-discarder:139.v05696a_7fe240
       - dark-theme:315.va_22e7d692ea_a
@@ -142,7 +142,7 @@ jenkins:
   # Preconfigure agents to use zdt podman requires fuse/overlayfs
   agent:
     image: public.ecr.aws/zero-downtime/jenkins-podman
-    tag: v0.4.1
+    tag: v0.4.2
     #alwaysPullImage: true
     podRetention: "Default"
     showRawYaml: false
@@ -231,7 +231,7 @@ jenkins:
 trivy:
   enabled: false
   image:
-    tag: 0.39.1
+    tag: 0.42.0
   persistence:
     enabled: true
     size: 1Gi

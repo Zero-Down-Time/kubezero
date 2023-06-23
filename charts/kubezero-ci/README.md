@@ -1,6 +1,6 @@
 # kubezero-ci
 
-![Version: 0.6.2](https://img.shields.io/badge/Version-0.6.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.6.3](https://img.shields.io/badge/Version-0.6.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things CI
 
@@ -20,7 +20,7 @@ Kubernetes: `>= 1.24.0`
 |------------|------|---------|
 | https://aquasecurity.github.io/helm-charts/ | trivy | 0.7.0 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://charts.jenkins.io | jenkins | 4.3.20 |
+| https://charts.jenkins.io | jenkins | 4.3.24 |
 | https://dl.gitea.io/charts/ | gitea | 8.2.0 |
 | https://gocd.github.io/helm-chart | gocd | 1.40.8 |
 
@@ -89,7 +89,7 @@ Kubernetes: `>= 1.24.0`
 | jenkins.agent.resources.requests.cpu | string | `""` |  |
 | jenkins.agent.resources.requests.memory | string | `""` |  |
 | jenkins.agent.showRawYaml | bool | `false` |  |
-| jenkins.agent.tag | string | `"v0.4.1"` |  |
+| jenkins.agent.tag | string | `"v0.4.2"` |  |
 | jenkins.agent.yamlMergeStrategy | string | `"merge"` |  |
 | jenkins.agent.yamlTemplate | string | `"apiVersion: v1\nkind: Pod\nspec:\n  securityContext:\n    fsGroup: 1000\n  serviceAccountName: jenkins-podman-aws\n  containers:\n  - name: jnlp\n    resources:\n      requests:\n        cpu: \"512m\"\n        memory: \"1024Mi\"\n      limits:\n        cpu: \"4\"\n        memory: \"6144Mi\"\n        github.com/fuse: 1\n    volumeMounts:\n    - name: aws-token\n      mountPath: \"/var/run/secrets/sts.amazonaws.com/serviceaccount/\"\n      readOnly: true\n    - name: host-registries-conf\n      mountPath: \"/home/jenkins/.config/containers/registries.conf\"\n      readOnly: true\n  volumes:\n  - name: aws-token\n    projected:\n      sources:\n      - serviceAccountToken:\n          path: token\n          expirationSeconds: 86400\n          audience: \"sts.amazonaws.com\"\n  - name: host-registries-conf\n    hostPath:\n      path: /etc/containers/registries.conf\n      type: File"` |  |
 | jenkins.controller.JCasC.configScripts.zdt-settings | string | `"jenkins:\n  noUsageStatistics: true\n  disabledAdministrativeMonitors:\n  - \"jenkins.security.ResourceDomainRecommendation\"\nunclassified:\n  buildDiscarders:\n    configuredBuildDiscarders:\n    - \"jobBuildDiscarder\"\n    - defaultBuildDiscarder:\n        discarder:\n          logRotator:\n            artifactDaysToKeepStr: \"32\"\n            artifactNumToKeepStr: \"10\"\n            daysToKeepStr: \"100\"\n            numToKeepStr: \"10\"\n"` |  |
@@ -98,7 +98,7 @@ Kubernetes: `>= 1.24.0`
 | jenkins.controller.initContainerResources.limits.memory | string | `"1024Mi"` |  |
 | jenkins.controller.initContainerResources.requests.cpu | string | `"50m"` |  |
 | jenkins.controller.initContainerResources.requests.memory | string | `"256Mi"` |  |
-| jenkins.controller.installPlugins[0] | string | `"kubernetes:3923.v294a_d4250b_91"` |  |
+| jenkins.controller.installPlugins[0] | string | `"kubernetes:3937.vd7b_82db_e347b_"` |  |
 | jenkins.controller.installPlugins[10] | string | `"build-discarder:139.v05696a_7fe240"` |  |
 | jenkins.controller.installPlugins[11] | string | `"dark-theme:315.va_22e7d692ea_a"` |  |
 | jenkins.controller.installPlugins[12] | string | `"kubernetes-credentials-provider:1.211.vc236a_f5a_2f3c"` |  |
@@ -107,9 +107,9 @@ Kubernetes: `>= 1.24.0`
 | jenkins.controller.installPlugins[3] | string | `"basic-branch-build-strategies:71.vc1421f89888e"` |  |
 | jenkins.controller.installPlugins[4] | string | `"pipeline-graph-view:183.v9e27732d970f"` |  |
 | jenkins.controller.installPlugins[5] | string | `"pipeline-stage-view:2.32"` |  |
-| jenkins.controller.installPlugins[6] | string | `"configuration-as-code:1625.v27444588cc3d"` |  |
+| jenkins.controller.installPlugins[6] | string | `"configuration-as-code:1647.ve39ca_b_829b_42"` |  |
 | jenkins.controller.installPlugins[7] | string | `"antisamy-markup-formatter:159.v25b_c67cd35fb_"` |  |
-| jenkins.controller.installPlugins[8] | string | `"prometheus:2.2.2"` |  |
+| jenkins.controller.installPlugins[8] | string | `"prometheus:2.2.3"` |  |
 | jenkins.controller.installPlugins[9] | string | `"htmlpublisher:1.31"` |  |
 | jenkins.controller.javaOpts | string | `"-XX:+UseContainerSupport -XX:+UseStringDeduplication -Dhudson.model.DirectoryBrowserSupport.CSP=\"sandbox allow-popups; default-src 'none'; img-src 'self' cdn.zero-downtime.net; style-src 'unsafe-inline';\""` |  |
 | jenkins.controller.jenkinsOpts | string | `"--sessionTimeout=180 --sessionEviction=3600"` |  |
@@ -134,7 +134,7 @@ Kubernetes: `>= 1.24.0`
 | jenkins.serviceAccountAgent.create | bool | `true` |  |
 | jenkins.serviceAccountAgent.name | string | `"jenkins-podman-aws"` |  |
 | trivy.enabled | bool | `false` |  |
-| trivy.image.tag | string | `"0.39.1"` |  |
+| trivy.image.tag | string | `"0.42.0"` |  |
 | trivy.persistence.enabled | bool | `true` |  |
 | trivy.persistence.size | string | `"1Gi"` |  |
 | trivy.rbac.create | bool | `false` |  |
