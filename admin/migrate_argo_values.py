@@ -8,11 +8,6 @@ import yaml
 def migrate(values):
     """Actual changes here"""
 
-    # Remove various keys as they have been merged into the metrics template
-    deleteKey(values["metrics"]['kube-prometheus-stack']["alertmanager"]["alertmanagerSpec"], "podMetadata")
-    deleteKey(values["metrics"]['kube-prometheus-stack']["alertmanager"], "config")
-    deleteKey(values["metrics"]['kube-prometheus-stack']["prometheus"]["prometheusSpec"], "externalLabels")
-        
     return values
 
 
