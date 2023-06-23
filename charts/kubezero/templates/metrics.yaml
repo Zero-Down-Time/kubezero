@@ -51,6 +51,9 @@ prometheus:
             filters:
               - name: 'tag-key'
                 values: ['zdt:prometheus.crio']
+              {{- with .metrics.kubezero.prometheus.prometheusSpec.additionalScrapeConfigsEC2Filters }}
+              {{- toYaml . | nindent 14 }}
+              {{- end }}
         relabel_configs:
           - source_labels:
             - '__meta_ec2_instance_id'
@@ -71,6 +74,9 @@ prometheus:
             filters:
               - name: 'tag-key'
                 values: ['zdt:prometheus.node-exporter']
+              {{- with .metrics.kubezero.prometheus.prometheusSpec.additionalScrapeConfigsEC2Filters }}
+              {{- toYaml . | nindent 14 }}
+              {{- end }}
         relabel_configs:
           - source_labels:
             - '__meta_ec2_instance_id'
@@ -91,6 +97,9 @@ prometheus:
             filters:
               - name: 'tag-key'
                 values: ['zdt:prometheus.docker-registry']
+              {{- with .metrics.kubezero.prometheus.prometheusSpec.additionalScrapeConfigsEC2Filters }}
+              {{- toYaml . | nindent 14 }}
+              {{- end }}
         relabel_configs:
           - source_labels:
             - '__meta_ec2_instance_id'
