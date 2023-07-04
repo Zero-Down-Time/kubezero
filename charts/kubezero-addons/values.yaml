@@ -47,8 +47,6 @@ sealed-secrets:
   nodeSelector:
     node-role.kubernetes.io/control-plane: ""
   tolerations:
-  - key: node-role.kubernetes.io/master
-    effect: NoSchedule
   - key: node-role.kubernetes.io/control-plane
     effect: NoSchedule
 
@@ -88,8 +86,6 @@ aws-eks-asg-rolling-update-handler:
   nodeSelector:
     node-role.kubernetes.io/control-plane: ""
   tolerations:
-    - key: node-role.kubernetes.io/master
-      effect: NoSchedule
     - key: node-role.kubernetes.io/control-plane
       effect: NoSchedule
 
@@ -132,8 +128,6 @@ aws-node-termination-handler:
   logFormatVersion: 2
 
   tolerations:
-  - key: node-role.kubernetes.io/master
-    effect: NoSchedule
   - key: node-role.kubernetes.io/control-plane
     effect: NoSchedule
   nodeSelector:
@@ -218,8 +212,6 @@ cluster-autoscaler:
   nodeSelector:
     node-role.kubernetes.io/control-plane: ""
   tolerations:
-  - key: node-role.kubernetes.io/master
-    effect: NoSchedule
   - key: node-role.kubernetes.io/control-plane
     effect: NoSchedule
 
@@ -250,8 +242,6 @@ external-dns:
   triggerLoopOnEvent: true
 
   tolerations:
-  - key: node-role.kubernetes.io/master
-    effect: NoSchedule
   - key: node-role.kubernetes.io/control-plane
     effect: NoSchedule
   nodeSelector:

@@ -66,9 +66,7 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | aws-eks-asg-rolling-update-handler.resources.requests.cpu | string | `"10m"` |  |
 | aws-eks-asg-rolling-update-handler.resources.requests.memory | string | `"32Mi"` |  |
 | aws-eks-asg-rolling-update-handler.tolerations[0].effect | string | `"NoSchedule"` |  |
-| aws-eks-asg-rolling-update-handler.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
-| aws-eks-asg-rolling-update-handler.tolerations[1].effect | string | `"NoSchedule"` |  |
-| aws-eks-asg-rolling-update-handler.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
+| aws-eks-asg-rolling-update-handler.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | aws-node-termination-handler.deleteLocalData | bool | `true` |  |
 | aws-node-termination-handler.emitKubernetesEvents | bool | `true` |  |
 | aws-node-termination-handler.enableProbesServer | bool | `true` |  |
@@ -93,9 +91,7 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | aws-node-termination-handler.rbac.pspEnabled | bool | `false` |  |
 | aws-node-termination-handler.taintNode | bool | `true` |  |
 | aws-node-termination-handler.tolerations[0].effect | string | `"NoSchedule"` |  |
-| aws-node-termination-handler.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
-| aws-node-termination-handler.tolerations[1].effect | string | `"NoSchedule"` |  |
-| aws-node-termination-handler.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
+| aws-node-termination-handler.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | aws-node-termination-handler.useProviderId | bool | `true` |  |
 | awsNeuron.enabled | bool | `false` |  |
 | awsNeuron.image.name | string | `"public.ecr.aws/neuron/neuron-device-plugin"` |  |
@@ -115,9 +111,7 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | cluster-autoscaler.serviceMonitor.enabled | bool | `false` |  |
 | cluster-autoscaler.serviceMonitor.interval | string | `"30s"` |  |
 | cluster-autoscaler.tolerations[0].effect | string | `"NoSchedule"` |  |
-| cluster-autoscaler.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
-| cluster-autoscaler.tolerations[1].effect | string | `"NoSchedule"` |  |
-| cluster-autoscaler.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
+| cluster-autoscaler.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | clusterBackup.enabled | bool | `false` |  |
 | clusterBackup.extraEnv | list | `[]` |  |
 | clusterBackup.image.name | string | `"public.ecr.aws/zero-downtime/kubezero-admin"` |  |
@@ -129,9 +123,7 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | external-dns.provider | string | `"inmemory"` |  |
 | external-dns.sources[0] | string | `"service"` |  |
 | external-dns.tolerations[0].effect | string | `"NoSchedule"` |  |
-| external-dns.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
-| external-dns.tolerations[1].effect | string | `"NoSchedule"` |  |
-| external-dns.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
+| external-dns.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | external-dns.triggerLoopOnEvent | bool | `true` |  |
 | forseti.aws.iamRoleArn | string | `""` | "arn:aws:iam::${AWS::AccountId}:role/${AWS::Region}.${ClusterName}.kubezeroForseti" |
 | forseti.aws.region | string | `""` |  |
@@ -171,6 +163,4 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | sealed-secrets.resources.requests.cpu | string | `"10m"` |  |
 | sealed-secrets.resources.requests.memory | string | `"24Mi"` |  |
 | sealed-secrets.tolerations[0].effect | string | `"NoSchedule"` |  |
-| sealed-secrets.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
-| sealed-secrets.tolerations[1].effect | string | `"NoSchedule"` |  |
-| sealed-secrets.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
+| sealed-secrets.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
