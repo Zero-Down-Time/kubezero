@@ -27,12 +27,9 @@ multus:
 cilium:
   enabled: false
 
-  containerRuntime:
-    integration: crio
-
-  # remove with 1.26
-  securityContext:
-    privileged: true
+  # breaks preloaded images otherwise
+  image:
+    useDigest: false
 
   resources:
     requests:

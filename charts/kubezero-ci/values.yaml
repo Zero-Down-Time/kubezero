@@ -133,7 +133,7 @@ jenkins:
       - htmlpublisher:1.31
       - build-discarder:139.v05696a_7fe240
       - dark-theme:315.va_22e7d692ea_a
-      - kubernetes-credentials-provider:1.211.vc236a_f5a_2f3c
+        # - kubernetes-credentials-provider:1.211.vc236a_f5a_2f3c
 
   serviceAccountAgent:
     create: true
