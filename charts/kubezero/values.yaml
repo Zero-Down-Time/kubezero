@@ -29,7 +29,7 @@ addons:
 network:
   enabled: true
   retain: true
-  targetRevision: 0.4.3
+  targetRevision: 0.4.4
   cilium:
     cluster: {}
 
