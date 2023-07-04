@@ -126,9 +126,7 @@ Kubernetes: `>= 1.25.0`
 | kube-prometheus-stack.grafana.testFramework.enabled | bool | `false` |  |
 | kube-prometheus-stack.kube-state-metrics.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | kube-prometheus-stack.kube-state-metrics.tolerations[0].effect | string | `"NoSchedule"` |  |
-| kube-prometheus-stack.kube-state-metrics.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
-| kube-prometheus-stack.kube-state-metrics.tolerations[1].effect | string | `"NoSchedule"` |  |
-| kube-prometheus-stack.kube-state-metrics.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
+| kube-prometheus-stack.kube-state-metrics.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | kube-prometheus-stack.kubeApiServer.enabled | bool | `true` |  |
 | kube-prometheus-stack.kubeControllerManager.enabled | bool | `true` |  |
 | kube-prometheus-stack.kubeControllerManager.service.port | int | `10257` |  |
@@ -172,9 +170,7 @@ Kubernetes: `>= 1.25.0`
 | kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage | string | `"16Gi"` |  |
 | kube-prometheus-stack.prometheusOperator.admissionWebhooks.patch.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | kube-prometheus-stack.prometheusOperator.admissionWebhooks.patch.tolerations[0].effect | string | `"NoSchedule"` |  |
-| kube-prometheus-stack.prometheusOperator.admissionWebhooks.patch.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
-| kube-prometheus-stack.prometheusOperator.admissionWebhooks.patch.tolerations[1].effect | string | `"NoSchedule"` |  |
-| kube-prometheus-stack.prometheusOperator.admissionWebhooks.patch.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
+| kube-prometheus-stack.prometheusOperator.admissionWebhooks.patch.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | kube-prometheus-stack.prometheusOperator.enabled | bool | `true` |  |
 | kube-prometheus-stack.prometheusOperator.logFormat | string | `"json"` |  |
 | kube-prometheus-stack.prometheusOperator.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
@@ -182,9 +178,7 @@ Kubernetes: `>= 1.25.0`
 | kube-prometheus-stack.prometheusOperator.resources.requests.cpu | string | `"20m"` |  |
 | kube-prometheus-stack.prometheusOperator.resources.requests.memory | string | `"32Mi"` |  |
 | kube-prometheus-stack.prometheusOperator.tolerations[0].effect | string | `"NoSchedule"` |  |
-| kube-prometheus-stack.prometheusOperator.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
-| kube-prometheus-stack.prometheusOperator.tolerations[1].effect | string | `"NoSchedule"` |  |
-| kube-prometheus-stack.prometheusOperator.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
+| kube-prometheus-stack.prometheusOperator.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | prometheus-adapter.enabled | bool | `true` |  |
 | prometheus-adapter.logLevel | int | `1` |  |
 | prometheus-adapter.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
@@ -204,9 +198,7 @@ Kubernetes: `>= 1.25.0`
 | prometheus-adapter.rules.resource.memory.resources.overrides.pod.resource | string | `"pod"` |  |
 | prometheus-adapter.rules.resource.window | string | `"5m"` |  |
 | prometheus-adapter.tolerations[0].effect | string | `"NoSchedule"` |  |
-| prometheus-adapter.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
-| prometheus-adapter.tolerations[1].effect | string | `"NoSchedule"` |  |
-| prometheus-adapter.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
+| prometheus-adapter.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | prometheus-pushgateway.enabled | bool | `false` |  |
 | prometheus-pushgateway.serviceMonitor.enabled | bool | `true` |  |
 

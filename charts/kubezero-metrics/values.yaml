@@ -50,8 +50,6 @@ kube-prometheus-stack:
 
     # Run on controller nodes
     tolerations:
-    - key: node-role.kubernetes.io/master
-      effect: NoSchedule
     - key: node-role.kubernetes.io/control-plane
       effect: NoSchedule
     nodeSelector:
@@ -66,8 +64,6 @@ kube-prometheus-stack:
     admissionWebhooks:
       patch:
         tolerations:
-        - key: node-role.kubernetes.io/master
-          effect: NoSchedule
         - key: node-role.kubernetes.io/control-plane
           effect: NoSchedule
         nodeSelector:
@@ -210,8 +206,6 @@ kube-prometheus-stack:
   # Assign state metrics to control plane
   kube-state-metrics:
     tolerations:
-    - key: node-role.kubernetes.io/master
-      effect: NoSchedule
     - key: node-role.kubernetes.io/control-plane
       effect: NoSchedule
     nodeSelector:
@@ -327,8 +321,6 @@ prometheus-adapter:
   prometheus:
     url: http://metrics-kube-prometheus-st-prometheus
   tolerations:
-  - key: node-role.kubernetes.io/master
-    effect: NoSchedule
   - key: node-role.kubernetes.io/control-plane
     effect: NoSchedule
   nodeSelector:
