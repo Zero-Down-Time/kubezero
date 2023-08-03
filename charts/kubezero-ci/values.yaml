@@ -1,24 +1,23 @@
-gocd:
-  enabled: false
-
-  server:
-    service:
-      type: "ClusterIP"
-    ingress:
-      enabled: false
-
-  istio:
-    enabled: false
-    gateway: istio-ingress/private-ingressgateway
-    url: "" # gocd.example.com
-
-
 gitea:
   enabled: false
 
-  image:
+  #image:
     #tag: 1.17.4
-    rootless: true
+    #rootless: true
+
+  repliaCount: 1
+
+  # We use RWO persistence
+  strategy:
+    type: "Recreate"
+
+  # Since V9 they default to RWX and deployment, we default to old existing RWO from statefulset
+  persistence:
+    enabled: true
+    mount: true
+    create: false
+    #claimName: <set per install>
+    size: 4Gi
 
   securityContext:
     allowPrivilegeEscalation: false
@@ -27,10 +26,6 @@ gitea:
         - ALL
       add:
         - SYS_CHROOT
-
-  persistence:
-    enabled: true
-    size: 4Gi
 
   resources:
     requests:
@@ -56,14 +51,16 @@ gitea:
         DB_TYPE: sqlite3
       cache:
         ADAPTER: memory
+      session:
+        PROVIDER: memory
+      queue:
+        TYPE: level
 
-  memcached:
+  redis-cluster:
+    enabled: false
+  postgresql-ha:
     enabled: false
   postgresql:
-    enabled: false
-  mysql:
-    enabled: false
-  mariadb:
     enabled: false
 
   istio:
@@ -121,19 +118,19 @@ jenkins:
                       numToKeepStr: "10"
 
     installPlugins:
-      - kubernetes:3937.vd7b_82db_e347b_
+      - kubernetes:3971.v94b_4c914ca_75
+      - kubernetes-credentials-provider:1.225.v14f9e6b_28f53
       - workflow-aggregator:581.v0c46fa_697ffd
-      - git:5.1.0
-      - basic-branch-build-strategies:71.vc1421f89888e
+      - git:5.2.0
+      - basic-branch-build-strategies:81.v05e333931c7d
       - pipeline-graph-view:183.v9e27732d970f
-      - pipeline-stage-view:2.32
+      - pipeline-stage-view:2.33
       - configuration-as-code:1647.ve39ca_b_829b_42
       - antisamy-markup-formatter:159.v25b_c67cd35fb_
       - prometheus:2.2.3
       - htmlpublisher:1.31
       - build-discarder:139.v05696a_7fe240
-      - dark-theme:315.va_22e7d692ea_a
-        # - kubernetes-credentials-provider:1.211.vc236a_f5a_2f3c
+      - dark-theme:336.v02165cd8c2ee
 
   serviceAccountAgent:
     create: true
@@ -237,3 +234,6 @@ trivy:
     size: 1Gi
   rbac:
     create: false
+
+renovate:
+  enabled: false
