@@ -1,6 +1,8 @@
 #!/bin/bash
 set -ex
 
+helm dep update
+
 ## NATS
 
 NATS_VERSION=0.8.4
