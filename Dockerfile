@@ -1,9 +1,9 @@
-ARG ALPINE_VERSION=3.17
+ARG ALPINE_VERSION=3.18
 
 FROM docker.io/alpine:${ALPINE_VERSION}
 
 ARG ALPINE_VERSION
-ARG KUBE_VERSION=1.25
+ARG KUBE_VERSION=1.26
 
 RUN cd /etc/apk/keys && \
     wget "https://cdn.zero-downtime.net/alpine/stefan@zero-downtime.net-61bb6bfb.rsa.pub" && \

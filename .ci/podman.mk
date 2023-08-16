@@ -37,7 +37,7 @@ build: ## Build the app
 
 test: rm-test-image ## Execute Dockerfile.test
 	test -f Dockerfile.test && \
-		{ buildah build --rm --layers -t $(REGISTRY)/$(IMAGE):$(TAG)-test --from=$(REGISTRY)/$(IMAGE):$(TAG) -f Dockerfile.test --platform linux/$(_ARCH) . && \
+		{ buildah build --rm --layers -t $(REGISTRY)/$(IMAGE):$(TAG)-$(_ARCH)-test --from=$(REGISTRY)/$(IMAGE):$(TAG) -f Dockerfile.test --platform linux/$(_ARCH) . && \
 			podman run --rm --env-host -t $(REGISTRY)/$(IMAGE):$(TAG)-$(_ARCH)-test; } || \
 		echo "No Dockerfile.test found, skipping test"
 

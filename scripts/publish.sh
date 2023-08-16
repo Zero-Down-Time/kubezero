@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-REPO_URL_S3="s3://zero-downtime-web/cdn/charts"
+REPO_URL_S3="s3://zero-downtime-web-cdn/charts"
 REPO_URL="https://cdn.zero-downtime.net/charts"
 
 CHARTS=${1:-'.*'}
@@ -55,6 +55,6 @@ function publish_chart() {
 
 publish_chart
 
-CF_DIST=E1YFUJXMCXT2RN
+CF_DIST=E11OFTOA3L8IVY
 aws cloudfront create-invalidation --distribution $CF_DIST --paths "/charts/*"
 

@@ -27,6 +27,7 @@ Something along the lines of https://github.com/onfido/k8s-cleanup which doesnt 
 ## Resources
 - https://docs.google.com/spreadsheets/d/1WPHt0gsb7adVzY3eviMK2W8LejV0I5m_Zpc8tMzl_2w/edit#gid=0
 - https://github.com/ishantanu/awesome-kubectl-plugins
+- https://github.com/kubernetes/kubernetes/blob/master/cluster/gce/gci/configure-helper.sh
 
 ## Update Api-server config
 Add the following extraArgs to the ClusterConfiguration configMap in the kube-system namespace:

@@ -25,6 +25,9 @@ api:
     workerNodeRole: "arn:aws:iam::000000000000:role/KubernetesNode"
     kubeAdminRole: "arn:aws:iam::000000000000:role/KubernetesNode"
 
+  falco:
+    enabled: false
+
 etcd:
   nodeName: etcd
   state: new

@@ -3,8 +3,6 @@ metallb:
 
   controller:
     tolerations:
-    - key: node-role.kubernetes.io/master
-      effect: NoSchedule
     - key: node-role.kubernetes.io/control-plane
       effect: NoSchedule
     nodeSelector:
@@ -27,12 +25,9 @@ multus:
 cilium:
   enabled: false
 
-  containerRuntime:
-    integration: crio
-
-  # remove with 1.26
-  securityContext:
-    privileged: true
+  # breaks preloaded images otherwise
+  image:
+    useDigest: false
 
   resources:
     requests:
@@ -85,8 +80,6 @@ cilium:
   operator:
     replicas: 1
     tolerations:
-    - key: node-role.kubernetes.io/master
-      effect: NoSchedule
     - key: node-role.kubernetes.io/control-plane
       effect: NoSchedule
     nodeSelector:
