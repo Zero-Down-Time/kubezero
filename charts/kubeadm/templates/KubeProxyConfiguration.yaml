@@ -1,7 +1,0 @@
-apiVersion: kubeproxy.config.k8s.io/v1alpha1
-kind: KubeProxyConfiguration
-# kube-proxy doesnt really support setting dynamic bind-address via config, replaced by cilium long-term anyways
-metricsBindAddress: "0.0.0.0:10249"
-# calico < 3.22.1 breaks starting with 1.23, see https://github.com/projectcalico/calico/issues/5011
-# we go Cilium anyways
-mode: "iptables"

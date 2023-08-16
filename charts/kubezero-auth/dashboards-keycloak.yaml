@@ -1,8 +1,0 @@
-configmap: grafana-dashboards
-condition: '.Values.keycloak.metrics.enabled'
-gzip: true
-# folder: 
-dashboards:
-- name: keycloak
-  url: https://grafana.com/api/dashboards/10441/revisions/2/download
-  tags: ['Keycloak', 'Auth']

@@ -1,9 +1,0 @@
-configmap: grafana-dashboards-es
-gzip: true
-folder: Logging
-condition: '.Values.es.prometheus'
-dashboards:
-- name: elasticsearch-logging
-  url: https://grafana.com/api/dashboards/266/revisions/4/download
-  tags:
-  - ElasticSearch
