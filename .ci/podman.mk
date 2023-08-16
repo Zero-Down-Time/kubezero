@@ -1,5 +1,5 @@
 # Parse version from latest git semver tag
-GIT_TAG := $(shell git describe --tags --match v*.*.* 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
+GIT_TAG ?= $(shell git describe --tags --match v*.*.* 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
 GIT_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD 2>/dev/null | sed -e 's/[^a-zA-Z0-9]/-/g')
 
 TAG := $(GIT_TAG)
