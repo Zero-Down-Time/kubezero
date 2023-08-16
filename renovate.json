@@ -16,6 +16,6 @@
       "bumpVersion": "patch"
     }
   ],
-  "ignorePaths": ["charts/*/charts/**"]
+  "ignorePaths": ["charts/*/charts/**"],
   "enabledManagers": ["dockerfile", "helmv3"]
 }
