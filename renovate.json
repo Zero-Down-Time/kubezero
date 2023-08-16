@@ -12,8 +12,10 @@
       "matchManagers": ["helmv3"],
       "additionalBranchPrefix": "{{parentDir}}-",
       "matchFileNames": ["charts/*/Chart.yaml"],
-      "groupName": "{{parentDir}}-dependencies"
+      "groupName": "{{parentDir}}-dependencies",
+      "bumpVersion": "patch"
     }
   ],
   "ignorePaths": ["charts/*/charts/**"]
+  "enabledManagers": ["dockerfile", "helmv3"]
 }
