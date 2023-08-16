@@ -2,9 +2,11 @@ REGISTRY := public.ecr.aws/zero-downtime
 IMAGE := kubezero-admin
 REGION := us-east-1
 
+# Use KubeZero chart version rather than git tag for admin image
+GIT_TAG = v$(shell yq .version < charts/kubezero/Chart.yaml)
+
 # Also tag as Kubernetes major version
-MY_TAG = $(shell git describe --tags --match v*.*.* 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
-EXTRA_TAGS = $(shell echo $(MY_TAG) | awk -F '.' '{ print $$1 "." $$2 }')
+EXTRA_TAGS = $(shell echo $(GIT_TAG) | awk -F '.' '{ print $$1 "." $$2 }')
 
 include .ci/podman.mk
 
