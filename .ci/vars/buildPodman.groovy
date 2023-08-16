@@ -10,18 +10,20 @@ def call(Map config=[:]) {
       stages {
         stage('Prepare') {
           steps {
+            // we set pull tags as project adv. options
             // pull tags
-            withCredentials([gitUsernamePassword(credentialsId: 'gitea-jenkins-user')]) {
-              sh 'git fetch -q --tags ${GIT_URL}'
-            }
-            sh 'make prepare || true'
+            //withCredentials([gitUsernamePassword(credentialsId: 'gitea-jenkins-user')]) {
+            //  sh 'git fetch -q --tags ${GIT_URL}'
+            //}
+            // Optional project specific preparations
+            sh 'make prepare'
           }
         }
 
         // Build using rootless podman
         stage('Build') {
           steps {
-            sh 'make build'
+            sh 'make build GIT_BRANCH=$GIT_BRANCH'
           }
         }
 
@@ -60,14 +62,22 @@ def call(Map config=[:]) {
           }
         }
 
-        // Push to container registry, skip if PR
+        // Push to container registry if not PR
+        // incl. basic registry retention removing any untagged images
         stage('Push') {
           when { not { changeRequest() } }
           steps {
             sh 'make push'
+            sh 'make rm-remote-untagged'
           }
         }
 
+        // generic clean
+        stage('cleanup') {
+          steps {
+            sh 'make clean'
+          }
+        }
       }
     }
   }
