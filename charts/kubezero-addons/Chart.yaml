@@ -2,8 +2,8 @@ apiVersion: v2
 name: kubezero-addons
 description: KubeZero umbrella chart for various optional cluster addons
 type: application
-version: 0.7.5
-appVersion: v1.25
+version: 0.8.0
+appVersion: v1.26
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
@@ -15,6 +15,7 @@ keywords:
   - sealed-secrets
   - external-dns
   - aws-node-termination-handler
+  - falco
 maintainers:
   - name: Stefan Reimer
     email: stefan@zero-downtime.net
@@ -44,4 +45,9 @@ dependencies:
     version: 1.3.0
     # repository: https://twin.github.io/helm-charts
     condition: aws-eks-asg-rolling-update-handler.enabled
-kubeVersion: ">= 1.25.0"
+  - name: falco
+    version: 3.3.0
+    repository: https://falcosecurity.github.io/charts
+    condition: falco-control-plane.enabled
+    alias: falco-control-plane
+kubeVersion: ">= 1.26.0"

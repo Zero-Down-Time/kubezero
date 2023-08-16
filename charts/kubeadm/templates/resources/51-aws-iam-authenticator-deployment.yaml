@@ -115,7 +115,7 @@ spec:
 
       containers:
       - name: aws-iam-authenticator
-        image: public.ecr.aws/zero-downtime/aws-iam-authenticator:v0.5.11
+        image: public.ecr.aws/zero-downtime/aws-iam-authenticator:v0.6.10
         args:
         - server
         - --backend-mode=CRD,MountedFile

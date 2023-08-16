@@ -118,17 +118,17 @@ jenkins:
                       numToKeepStr: "10"
 
     installPlugins:
-      - kubernetes:3971.v94b_4c914ca_75
+      - kubernetes:3985.vd26d77b_2a_48a_
       - kubernetes-credentials-provider:1.225.v14f9e6b_28f53
       - workflow-aggregator:581.v0c46fa_697ffd
       - git:5.2.0
       - basic-branch-build-strategies:81.v05e333931c7d
       - pipeline-graph-view:183.v9e27732d970f
       - pipeline-stage-view:2.33
-      - configuration-as-code:1647.ve39ca_b_829b_42
-      - antisamy-markup-formatter:159.v25b_c67cd35fb_
+      - configuration-as-code:1670.v564dc8b_982d0
+      - antisamy-markup-formatter:162.v0e6ec0fcfcf6
       - prometheus:2.2.3
-      - htmlpublisher:1.31
+      - htmlpublisher:1.32
       - build-discarder:139.v05696a_7fe240
       - dark-theme:336.v02165cd8c2ee
 
@@ -139,7 +139,7 @@ jenkins:
   # Preconfigure agents to use zdt podman requires fuse/overlayfs
   agent:
     image: public.ecr.aws/zero-downtime/jenkins-podman
-    tag: v0.4.2
+    tag: v0.4.3
     #alwaysPullImage: true
     podRetention: "Default"
     showRawYaml: false
@@ -237,3 +237,13 @@ trivy:
 
 renovate:
   enabled: false
+
+  env:
+    LOG_FORMAT: json
+  cronjob:
+    concurrencyPolicy: Forbid
+    jobBackoffLimit: 3
+    schedule:	"0 3 * * *"
+    successfulJobsHistoryLimit: 1
+  securityContext:
+    fsGroup: 1000

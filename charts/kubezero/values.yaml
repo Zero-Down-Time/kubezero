@@ -10,7 +10,7 @@ global:
 
 addons:
   enabled: true
-  targetRevision: 0.7.5
+  targetRevision: 0.8.0
   external-dns:
     enabled: false
   forseti:
@@ -25,11 +25,13 @@ addons:
     enabled: false
   aws-eks-asg-rolling-update-handler:
     enabled: false
+  falco-control-plane:
+    enabled: false
 
 network:
   enabled: true
   retain: true
-  targetRevision: 0.4.4
+  targetRevision: 0.4.5
   cilium:
     cluster: {}
 
@@ -94,7 +96,7 @@ logging:
 argocd:
   enabled: false
   namespace: argocd
-  targetRevision: 0.12.1
+  targetRevision: 0.13.0
   argocd-image-updater:
     enabled: false
   istio:

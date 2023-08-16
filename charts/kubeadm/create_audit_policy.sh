@@ -1,3 +1,29 @@
+#!/bin/sh
+
+function createMasterAuditPolicy() {
+  path="templates/apiserver/audit-policy.yaml"
+
+  known_apis='
+      - group: "" # core
+      - group: "admissionregistration.k8s.io"
+      - group: "apiextensions.k8s.io"
+      - group: "apiregistration.k8s.io"
+      - group: "apps"
+      - group: "authentication.k8s.io"
+      - group: "authorization.k8s.io"
+      - group: "autoscaling"
+      - group: "batch"
+      - group: "certificates.k8s.io"
+      - group: "extensions"
+      - group: "metrics.k8s.io"
+      - group: "networking.k8s.io"
+      - group: "node.k8s.io"
+      - group: "policy"
+      - group: "rbac.authorization.k8s.io"
+      - group: "scheduling.k8s.io"
+      - group: "storage.k8s.io"'
+
+  cat <<EOF >"${path}"
 apiVersion: audit.k8s.io/v1
 kind: Policy
 rules:
@@ -69,6 +95,7 @@ rules:
       - /healthz*
       - /version
       - /swagger*
+      - /readyz
 
   # Don't log events requests because of performance impact.
   - level: None
@@ -114,51 +141,19 @@ rules:
   # Get responses can be large; skip them.
   - level: Request
     verbs: ["get", "list", "watch"]
-    resources: 
-      - group: "" # core
-      - group: "admissionregistration.k8s.io"
-      - group: "apiextensions.k8s.io"
-      - group: "apiregistration.k8s.io"
-      - group: "apps"
-      - group: "authentication.k8s.io"
-      - group: "authorization.k8s.io"
-      - group: "autoscaling"
-      - group: "batch"
-      - group: "certificates.k8s.io"
-      - group: "extensions"
-      - group: "metrics.k8s.io"
-      - group: "networking.k8s.io"
-      - group: "node.k8s.io"
-      - group: "policy"
-      - group: "rbac.authorization.k8s.io"
-      - group: "scheduling.k8s.io"
-      - group: "storage.k8s.io"
+    resources: ${known_apis}
     omitStages:
       - "RequestReceived"
   # Default level for known APIs
   - level: RequestResponse
-    resources: 
-      - group: "" # core
-      - group: "admissionregistration.k8s.io"
-      - group: "apiextensions.k8s.io"
-      - group: "apiregistration.k8s.io"
-      - group: "apps"
-      - group: "authentication.k8s.io"
-      - group: "authorization.k8s.io"
-      - group: "autoscaling"
-      - group: "batch"
-      - group: "certificates.k8s.io"
-      - group: "extensions"
-      - group: "metrics.k8s.io"
-      - group: "networking.k8s.io"
-      - group: "node.k8s.io"
-      - group: "policy"
-      - group: "rbac.authorization.k8s.io"
-      - group: "scheduling.k8s.io"
-      - group: "storage.k8s.io"
+    resources: ${known_apis}
     omitStages:
       - "RequestReceived"
   # Default level for all other requests.
   - level: Metadata
     omitStages:
       - "RequestReceived"
+EOF
+}
+
+createMasterAuditPolicy
