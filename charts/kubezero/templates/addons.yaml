@@ -131,6 +131,11 @@ sealed-secrets:
   {{- end }}
 {{- end }}
 
+{{- with index .Values "addons" "falco-control-plane" }}
+falco-control-plane:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+
 {{- if .Values.global.aws }}
 # AWS only
 aws-node-termination-handler:
@@ -145,7 +150,7 @@ aws-node-termination-handler:
   {{- end }}
 
   queueURL: "https://sqs.{{ .Values.global.aws.region }}.amazonaws.com/{{ .Values.global.aws.accountId }}/{{ .Values.global.clusterName }}_Nth"
-  managedTag: "aws-node-termination-handler/{{ .Values.global.clusterName }}"
+  managedTag: "zdt:kubezero:nth:{{ .Values.global.clusterName }}"
   extraEnv:
     - name: AWS_ROLE_ARN
       value: "arn:aws:iam::{{ .Values.global.aws.accountId }}:role/{{ .Values.global.aws.region }}.{{ .Values.global.clusterName }}.awsNth"

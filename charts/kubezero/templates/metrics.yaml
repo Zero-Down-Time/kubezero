@@ -50,7 +50,7 @@ prometheus:
             region: {{ .global.aws.region }}
             filters:
               - name: 'tag-key'
-                values: ['zdt:prometheus.crio']
+                values: ['zdt:prometheus:crio']
               {{- with .metrics.kubezero.prometheus.prometheusSpec.additionalScrapeConfigsEC2Filters }}
               {{- toYaml . | nindent 14 }}
               {{- end }}

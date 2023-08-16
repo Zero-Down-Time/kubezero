@@ -26,6 +26,7 @@ argo-cd:
   configs:
     styles: |
       .sidebar__logo img { content: url(https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png); }
+      .sidebar__logo__text-logo { height: 0em; }
       .sidebar { background: linear-gradient(to bottom, #6A4D79, #493558, #2D1B30, #0D0711); }
 
     cm:
