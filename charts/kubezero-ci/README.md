@@ -21,7 +21,7 @@ Kubernetes: `>= 1.24.0`
 | https://aquasecurity.github.io/helm-charts/ | trivy | 0.7.0 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
 | https://charts.jenkins.io | jenkins | 4.3.24 |
-| https://dl.gitea.io/charts/ | gitea | 8.2.0 |
+| https://dl.gitea.io/charts/ | gitea | 8.3.0 |
 | https://gocd.github.io/helm-chart | gocd | 1.40.8 |
 
 # Jenkins
@@ -101,9 +101,8 @@ Kubernetes: `>= 1.24.0`
 | jenkins.controller.installPlugins[0] | string | `"kubernetes:3937.vd7b_82db_e347b_"` |  |
 | jenkins.controller.installPlugins[10] | string | `"build-discarder:139.v05696a_7fe240"` |  |
 | jenkins.controller.installPlugins[11] | string | `"dark-theme:315.va_22e7d692ea_a"` |  |
-| jenkins.controller.installPlugins[12] | string | `"kubernetes-credentials-provider:1.211.vc236a_f5a_2f3c"` |  |
 | jenkins.controller.installPlugins[1] | string | `"workflow-aggregator:581.v0c46fa_697ffd"` |  |
-| jenkins.controller.installPlugins[2] | string | `"git:5.0.2"` |  |
+| jenkins.controller.installPlugins[2] | string | `"git:5.1.0"` |  |
 | jenkins.controller.installPlugins[3] | string | `"basic-branch-build-strategies:71.vc1421f89888e"` |  |
 | jenkins.controller.installPlugins[4] | string | `"pipeline-graph-view:183.v9e27732d970f"` |  |
 | jenkins.controller.installPlugins[5] | string | `"pipeline-stage-view:2.32"` |  |
@@ -112,7 +111,7 @@ Kubernetes: `>= 1.24.0`
 | jenkins.controller.installPlugins[8] | string | `"prometheus:2.2.3"` |  |
 | jenkins.controller.installPlugins[9] | string | `"htmlpublisher:1.31"` |  |
 | jenkins.controller.javaOpts | string | `"-XX:+UseContainerSupport -XX:+UseStringDeduplication -Dhudson.model.DirectoryBrowserSupport.CSP=\"sandbox allow-popups; default-src 'none'; img-src 'self' cdn.zero-downtime.net; style-src 'unsafe-inline';\""` |  |
-| jenkins.controller.jenkinsOpts | string | `"--sessionTimeout=180 --sessionEviction=3600"` |  |
+| jenkins.controller.jenkinsOpts | string | `"--sessionTimeout=300 --sessionEviction=10800"` |  |
 | jenkins.controller.prometheus.enabled | bool | `false` |  |
 | jenkins.controller.resources.limits.memory | string | `"4096Mi"` |  |
 | jenkins.controller.resources.requests.cpu | string | `"250m"` |  |

@@ -1,6 +1,6 @@
 # kubezero
 
-![Version: 1.25.8-2](https://img.shields.io/badge/Version-1.25.8--2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 1.26.6](https://img.shields.io/badge/Version-1.26.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero - Root App of Apps chart
 
@@ -14,7 +14,7 @@ KubeZero - Root App of Apps chart
 
 ## Requirements
 
-Kubernetes: `>= 1.25.0`
+Kubernetes: `>= 1.26.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
@@ -66,12 +66,13 @@ Kubernetes: `>= 1.25.0`
 | metrics.enabled | bool | `false` |  |
 | metrics.istio.grafana | object | `{}` |  |
 | metrics.istio.prometheus | object | `{}` |  |
+| metrics.kubezero.prometheus.prometheusSpec.additionalScrapeConfigs | list | `[]` |  |
 | metrics.namespace | string | `"monitoring"` |  |
 | metrics.targetRevision | string | `"0.9.2"` |  |
 | network.cilium.cluster | object | `{}` |  |
 | network.enabled | bool | `true` |  |
 | network.retain | bool | `true` |  |
-| network.targetRevision | string | `"0.4.3"` |  |
+| network.targetRevision | string | `"0.4.4"` |  |
 | storage.aws-ebs-csi-driver.enabled | bool | `false` |  |
 | storage.aws-efs-csi-driver.enabled | bool | `false` |  |
 | storage.enabled | bool | `false` |  |

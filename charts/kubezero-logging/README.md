@@ -61,9 +61,7 @@ Kubernetes: `>= 1.24.0`
 | eck-operator.installCRDs | bool | `false` |  |
 | eck-operator.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | eck-operator.tolerations[0].effect | string | `"NoSchedule"` |  |
-| eck-operator.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
-| eck-operator.tolerations[1].effect | string | `"NoSchedule"` |  |
-| eck-operator.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
+| eck-operator.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | elastic_password | string | `""` |  |
 | es.nodeSets | list | `[]` |  |
 | es.prometheus | bool | `false` |  |

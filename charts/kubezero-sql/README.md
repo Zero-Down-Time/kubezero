@@ -44,9 +44,7 @@ Kubernetes: `>= 1.24.0`
 | pxc-operator.resources.requests.cpu | string | `"50m"` |  |
 | pxc-operator.resources.requests.memory | string | `"32Mi"` |  |
 | pxc-operator.tolerations[0].effect | string | `"NoSchedule"` |  |
-| pxc-operator.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
-| pxc-operator.tolerations[1].effect | string | `"NoSchedule"` |  |
-| pxc-operator.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
+| pxc-operator.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | pxc-operator.watchAllNamespaces | bool | `true` |  |
 
 # Changes

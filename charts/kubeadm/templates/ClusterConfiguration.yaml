@@ -9,7 +9,7 @@ networking:
   podSubnet: 10.244.0.0/16
 etcd:
   local:
-    imageTag: 3.5.4-0
+    # imageTag: 3.5.5-0
     extraArgs:
       ### DNS discovery
       #discovery-srv: {{ .Values.domain }}
@@ -59,8 +59,11 @@ apiServer:
     audit-policy-file: /etc/kubernetes/apiserver/audit-policy.yaml
     audit-log-maxage: "7"
     audit-log-maxsize: "100"
-    audit-log-maxbackup: "3"
+    audit-log-maxbackup: "1"
     audit-log-compress: "true"
+    {{- if .Values.api.falco.enabled }}
+    audit-webhook-config-file: /etc/kubernetes/apiserver/audit-webhook.yaml
+    {{- end }}
     tls-cipher-suites: "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384"
     admission-control-config-file: /etc/kubernetes/apiserver/admission-configuration.yaml
     api-audiences: {{ .Values.api.apiAudiences }}

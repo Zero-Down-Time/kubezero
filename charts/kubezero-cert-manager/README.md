@@ -34,9 +34,7 @@ If your resolvers need additional sercrets like CloudFlare API tokens etc. make 
 |-----|------|---------|-------------|
 | cert-manager.cainjector.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | cert-manager.cainjector.tolerations[0].effect | string | `"NoSchedule"` |  |
-| cert-manager.cainjector.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
-| cert-manager.cainjector.tolerations[1].effect | string | `"NoSchedule"` |  |
-| cert-manager.cainjector.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
+| cert-manager.cainjector.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | cert-manager.enabled | bool | `true` |  |
 | cert-manager.extraArgs[0] | string | `"--dns01-recursive-nameservers-only"` |  |
 | cert-manager.global.leaderElection.namespace | string | `"cert-manager"` |  |
@@ -46,14 +44,10 @@ If your resolvers need additional sercrets like CloudFlare API tokens etc. make 
 | cert-manager.prometheus.servicemonitor.enabled | bool | `false` |  |
 | cert-manager.startupapicheck.enabled | bool | `false` |  |
 | cert-manager.tolerations[0].effect | string | `"NoSchedule"` |  |
-| cert-manager.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
-| cert-manager.tolerations[1].effect | string | `"NoSchedule"` |  |
-| cert-manager.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
+| cert-manager.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | cert-manager.webhook.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | cert-manager.webhook.tolerations[0].effect | string | `"NoSchedule"` |  |
-| cert-manager.webhook.tolerations[0].key | string | `"node-role.kubernetes.io/master"` |  |
-| cert-manager.webhook.tolerations[1].effect | string | `"NoSchedule"` |  |
-| cert-manager.webhook.tolerations[1].key | string | `"node-role.kubernetes.io/control-plane"` |  |
+| cert-manager.webhook.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | clusterIssuer | object | `{}` |  |
 | localCA.enabled | bool | `false` |  |
 | localCA.selfsigning | bool | `true` |  |

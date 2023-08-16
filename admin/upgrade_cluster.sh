@@ -1,7 +1,9 @@
-#!/bin/bash -e
+#!/bin/bash
+set -eE
+set -o pipefail
 
 #VERSION="latest"
-VERSION="v1.25"
+VERSION="v1.26"
 ARGO_APP=${1:-/tmp/new-kubezero-argoapp.yaml}
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
@@ -35,9 +37,6 @@ spec:
       hostIPC: true
       hostPID: true
       tolerations:
-      - key: node-role.kubernetes.io/master
-        operator: Exists
-        effect: NoSchedule
       - key: node-role.kubernetes.io/control-plane
         operator: Exists
         effect: NoSchedule
@@ -122,9 +121,6 @@ spec:
   nodeSelector:
     node-role.kubernetes.io/control-plane: ""
   tolerations:
-  - key: node-role.kubernetes.io/master
-    operator: Exists
-    effect: NoSchedule
   - key: node-role.kubernetes.io/control-plane
     operator: Exists
     effect: NoSchedule
@@ -147,14 +143,6 @@ argo_used && disable_argo
 
 #all_nodes_upgrade ""
 
-# Cleanup
-# Remove calico CRDs
-kubectl delete -f https://git.zero-downtime.net/ZeroDownTime/kubezero/raw/tag/v1.23.11/charts/kubezero-network/charts/calico/crds/crds.yaml 2>/dev/null || true
-kubectl delete servicemonitor calico-node -n kube-system 2>/dev/null || true
-
-# delete old kubelet configs
-for cm in $(kubectl get cm -n kube-system --no-headers |  awk '{if ($1 ~ "kubelet-config-1*") print $1}'); do kubectl delete cm $cm -n kube-system; done
-for rb in $(kubectl get rolebindings -n kube-system --no-headers |  awk '{if ($1 ~ "kubelet-config-1*") print $1}'); do kubectl delete rolebindings $rb -n kube-system; done
 
 control_plane_upgrade kubeadm_upgrade
 
