@@ -1,8 +1,0 @@
-fluent-bit:
-  enabled: true
-
-  metrics:
-    enabled: true
-
-  url: fluentd.example.com
-

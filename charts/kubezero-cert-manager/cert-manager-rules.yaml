@@ -1,3 +1,0 @@
-rules:
-- name: prometheus-rules
-  url: file://rules/cert-manager-mixin-prometheusRule
