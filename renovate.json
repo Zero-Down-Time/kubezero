@@ -13,5 +13,6 @@
       "matchFileNames": ["charts/*/Chart.yaml"],
       "groupName": "{{parentDir}}-dependencies"
     }
-  ]
+  ],
+  "ignorePaths": ["charts/*/charts/**"]
 }
