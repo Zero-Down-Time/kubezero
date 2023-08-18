@@ -96,7 +96,7 @@ logging:
 argocd:
   enabled: false
   namespace: argocd
-  targetRevision: 0.13.0
+  targetRevision: 0.13.1
   argocd-image-updater:
     enabled: false
   istio:
