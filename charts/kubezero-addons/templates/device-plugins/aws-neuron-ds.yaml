@@ -12,11 +12,15 @@ spec:
     type: RollingUpdate
   template:
     metadata:
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ""
       labels:
         name: neuron-device-plugin-ds
     spec:
       serviceAccount: neuron-device-plugin
       tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
       - key: aws.amazon.com/neuron
         operator: Exists
         effect: NoSchedule
@@ -40,6 +44,14 @@ spec:
                       - inf1.2xlarge
                       - inf1.6xlarge
                       - inf1.24xlarge
+                      - inf2.xlarge
+                      - inf2.4xlarge
+                      - inf2.8xlarge
+                      - inf2.24xlarge
+                      - inf2.48xlarge
+                      - trn1.2xlarge
+                      - trn1.32xlarge
+                      - trn1n.32xlarge
       containers:
       - image: "{{ .Values.awsNeuron.image.name }}:{{ .Values.awsNeuron.image.tag }}"
         imagePullPolicy: IfNotPresent
