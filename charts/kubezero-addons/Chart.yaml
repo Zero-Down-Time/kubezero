@@ -38,8 +38,8 @@ dependencies:
     repository: https://bitnami-labs.github.io/sealed-secrets
     condition: sealed-secrets.enabled
   - name: aws-node-termination-handler
-    version: 0.21.0
-    repository: https://aws.github.io/eks-charts
+    version: 0.22.0
+    repository: "oci://public.ecr.aws/aws-ec2/helm"
     condition: aws-node-termination-handler.enabled
   - name: aws-eks-asg-rolling-update-handler
     version: 1.3.0

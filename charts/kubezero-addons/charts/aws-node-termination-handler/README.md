@@ -8,22 +8,24 @@ AWS Node Termination Handler Helm chart for Kubernetes. For more information on 
 
 ## Installing the Chart
 
-Before you can install the chart you will need to add the `aws` repo to [Helm](https://helm.sh/).
-
+Before you can install the chart you will need to authenticate your Helm client.
 ```shell
-helm repo add eks https://aws.github.io/eks-charts/
+aws ecr-public get-login-password \
+     --region us-east-1 | helm registry login \
+     --username AWS \
+     --password-stdin public.ecr.aws
 ```
 
-After you've installed the repo you can install the chart, the following command will install the chart with the release name `aws-node-termination-handler` and the default configuration to the `kube-system` namespace.
+Once the helm registry login succeeds, use the following command to install the chart with the release name `aws-node-termination-handler` and the default configuration to the `kube-system` namespace. In the below command, add the CHART_VERSION that you want to install.
 
 ```shell
-helm upgrade --install --namespace kube-system aws-node-termination-handler eks/aws-node-termination-handler
+helm upgrade --install --namespace kube-system aws-node-termination-handler oci://public.ecr.aws/aws-ec2/helm/aws-node-termination-handler --version $CHART_VERSION
 ```
 
 To install the chart on an EKS cluster where the AWS Node Termination Handler is already installed, you can run the following command.
 
 ```shell
-helm upgrade --install --namespace kube-system aws-node-termination-handler eks/aws-node-termination-handler --recreate-pods --force
+helm upgrade --install --namespace kube-system aws-node-termination-handler oci://public.ecr.aws/aws-ec2/helm/aws-node-termination-handler --version $CHART_VERSION --recreate-pods --force
 ```
 
 If you receive an error similar to the one below simply rerun the above command.
@@ -33,7 +35,7 @@ If you receive an error similar to the one below simply rerun the above command.
 To uninstall the `aws-node-termination-handler` chart installation from the `kube-system` namespace run the following command.
 
 ```shell
-helm delete --namespace kube-system aws-node-termination-handler
+helm uninstall --namespace kube-system aws-node-termination-handler
 ```
 
 ## Configuration
@@ -156,6 +158,7 @@ The configuration in this table applies to AWS Node Termination Handler in IMDS 
 | `enableScheduledEventDraining`   | If `true`, drain nodes before the maintenance window starts for an EC2 instance scheduled event. Only used in IMDS mode.                                                                                                                                      | `true`                 |
 | `enableRebalanceMonitoring`      | If `true`, cordon nodes when the rebalance recommendation notice is received. If you'd like to drain the node in addition to cordoning, then also set `enableRebalanceDraining`. Only used in IMDS mode.                                                      | `false`                |
 | `enableRebalanceDraining`        | If `true`, drain nodes when the rebalance recommendation notice is received. Only used in IMDS mode.                                                                                                                                                          | `false`                |
+| `deleteSqsMsgIfNodeNotFound`     | If `true`, delete the SQS Message from the SQS Queue if the targeted node is not found. Only used in Queue Processor mode.                                       | `false`                |
 
 ### Testing Configuration
 

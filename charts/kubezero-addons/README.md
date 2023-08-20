@@ -1,6 +1,6 @@
 # kubezero-addons
 
-![Version: 0.7.5](https://img.shields.io/badge/Version-0.7.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.25](https://img.shields.io/badge/AppVersion-v1.25-informational?style=flat-square)
+![Version: 0.8.0](https://img.shields.io/badge/Version-0.8.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.26](https://img.shields.io/badge/AppVersion-v1.26-informational?style=flat-square)
 
 KubeZero umbrella chart for various optional cluster addons
 
@@ -14,16 +14,17 @@ KubeZero umbrella chart for various optional cluster addons
 
 ## Requirements
 
-Kubernetes: `>= 1.25.0`
+Kubernetes: `>= 1.26.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | aws-eks-asg-rolling-update-handler | 1.3.0 |
-|  | aws-node-termination-handler | 0.21.0 |
 | https://bitnami-labs.github.io/sealed-secrets | sealed-secrets | 2.8.1 |
+| https://falcosecurity.github.io/charts | falco-control-plane(falco) | 3.3.0 |
 | https://kubernetes-sigs.github.io/external-dns/ | external-dns | 1.12.2 |
 | https://kubernetes.github.io/autoscaler | cluster-autoscaler | 9.28.0 |
 | https://nvidia.github.io/k8s-device-plugin | nvidia-device-plugin | 0.14.0 |
+| https://twin.github.io/helm-charts | aws-eks-asg-rolling-update-handler | 1.3.0 |
+| oci://public.ecr.aws/aws-ec2/helm | aws-node-termination-handler | 0.22.0 |
 
 # MetalLB   
    
@@ -67,6 +68,7 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | aws-eks-asg-rolling-update-handler.resources.requests.memory | string | `"32Mi"` |  |
 | aws-eks-asg-rolling-update-handler.tolerations[0].effect | string | `"NoSchedule"` |  |
 | aws-eks-asg-rolling-update-handler.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
+| aws-node-termination-handler.checkASGTagBeforeDraining | bool | `false` |  |
 | aws-node-termination-handler.deleteLocalData | bool | `true` |  |
 | aws-node-termination-handler.emitKubernetesEvents | bool | `true` |  |
 | aws-node-termination-handler.enableProbesServer | bool | `true` |  |
@@ -83,7 +85,7 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | aws-node-termination-handler.ignoreDaemonSets | bool | `true` |  |
 | aws-node-termination-handler.jsonLogging | bool | `true` |  |
 | aws-node-termination-handler.logFormatVersion | int | `2` |  |
-| aws-node-termination-handler.managedTag | string | `"aws-node-termination-handler/managed"` | "aws-node-termination-handler/${ClusterName}" |
+| aws-node-termination-handler.managedTag | string | `"zdt:kubezero:nth:${ClusterName}"` | "zdt:kubezero:nth:${ClusterName}" |
 | aws-node-termination-handler.metadataTries | int | `0` |  |
 | aws-node-termination-handler.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | aws-node-termination-handler.podMonitor.create | bool | `false` |  |
@@ -125,6 +127,32 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | external-dns.tolerations[0].effect | string | `"NoSchedule"` |  |
 | external-dns.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | external-dns.triggerLoopOnEvent | bool | `true` |  |
+| falco-control-plane.collectors | object | `{"enabled":false}` | Disable the collectors, no syscall events to enrich with metadata. |
+| falco-control-plane.controller | object | `{"deployment":{"replicas":1},"kind":"deployment"}` | Deploy Falco as a deployment. One instance of Falco is enough. Anyway the number of replicas is configurabale. |
+| falco-control-plane.controller.deployment.replicas | int | `1` | Number of replicas when installing Falco using a deployment. Change it if you really know what you are doing. For more info check the section on Plugins in the README.md file. |
+| falco-control-plane.driver | object | `{"enabled":false}` | Disable the drivers since we want to deploy only the k8saudit plugin. |
+| falco-control-plane.enabled | bool | `false` |  |
+| falco-control-plane.falco.load_plugins[0] | string | `"k8saudit"` |  |
+| falco-control-plane.falco.load_plugins[1] | string | `"json"` |  |
+| falco-control-plane.falco.plugins[0].init_config.maxEventBytes | int | `1048576` |  |
+| falco-control-plane.falco.plugins[0].library_path | string | `"libk8saudit.so"` |  |
+| falco-control-plane.falco.plugins[0].name | string | `"k8saudit"` |  |
+| falco-control-plane.falco.plugins[0].open_params | string | `"http://:9765/k8s-audit"` |  |
+| falco-control-plane.falco.plugins[1].init_config | string | `""` |  |
+| falco-control-plane.falco.plugins[1].library_path | string | `"libjson.so"` |  |
+| falco-control-plane.falco.plugins[1].name | string | `"json"` |  |
+| falco-control-plane.falco.rules_file[0] | string | `"/etc/falco/k8s_audit_rules.yaml"` |  |
+| falco-control-plane.falco.rules_file[1] | string | `"/etc/falco/rules.d"` |  |
+| falco-control-plane.falcoctl.artifact.follow.enabled | bool | `true` | Enable the sidecar container. We do not support it yet for plugins. It is used only for rules feed such as k8saudit-rules rules. |
+| falco-control-plane.falcoctl.artifact.install.enabled | bool | `true` | Enable the init container. We do not recommend installing (or following) plugins for security reasons since they are executable objects. |
+| falco-control-plane.falcoctl.config.artifact.follow.refs | list | `["k8saudit-rules:0.6"]` | List of artifacts to be followed by the falcoctl sidecar container. Only rulesfiles, we do no recommend plugins for security reasonts since they are executable objects. |
+| falco-control-plane.falcoctl.config.artifact.install.refs | list | `["k8saudit-rules:0.6"]` | List of artifacts to be installed by the falcoctl init container. Only rulesfiles, we do no recommend plugins for security reasonts since they are executable objects. |
+| falco-control-plane.falcoctl.config.artifact.install.resolveDeps | bool | `false` | Do not resolve the depenencies for artifacts. By default is true, but for our use case we disable it. |
+| falco-control-plane.fullnameOverride | string | `"falco-control-plane"` |  |
+| falco-control-plane.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
+| falco-control-plane.services[0].name | string | `"k8saudit-webhook"` |  |
+| falco-control-plane.services[0].ports[0].port | int | `9765` |  |
+| falco-control-plane.services[0].ports[0].protocol | string | `"TCP"` |  |
 | forseti.aws.iamRoleArn | string | `""` | "arn:aws:iam::${AWS::AccountId}:role/${AWS::Region}.${ClusterName}.kubezeroForseti" |
 | forseti.aws.region | string | `""` |  |
 | forseti.enabled | bool | `false` |  |
