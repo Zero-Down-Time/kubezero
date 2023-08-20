@@ -53,6 +53,7 @@ sealed-secrets:
 aws-eks-asg-rolling-update-handler:
   enabled: false
   image:
+    repository: twinproduction/aws-eks-asg-rolling-update-handler
     tag: v1.8.1
 
   environmentVars:
@@ -184,6 +185,7 @@ cluster-autoscaler:
   enabled: false
 
   image:
+    repository: registry.k8s.io/autoscaling/cluster-autoscaler
     tag: v1.26.4
 
   autoDiscovery:
