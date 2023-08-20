@@ -53,7 +53,7 @@ sealed-secrets:
 aws-eks-asg-rolling-update-handler:
   enabled: false
   image:
-    tag: v1.7.0
+    tag: v1.8.1
 
   environmentVars:
     - name: CLUSTER_NAME
@@ -145,7 +145,7 @@ awsNeuron:
 
   image:
     name: public.ecr.aws/neuron/neuron-device-plugin
-    tag: 1.9.3.0
+    tag: 2.12.5.0
 
 nvidia-device-plugin:
   enabled: false
@@ -184,7 +184,7 @@ cluster-autoscaler:
   enabled: false
 
   image:
-    tag: v1.25.1
+    tag: v1.26.4
 
   autoDiscovery:
     clusterName: ""
