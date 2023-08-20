@@ -9,7 +9,7 @@
   "prConcurrentLimit": 0,
   "packageRules": [
     {
-      "matchManagers": ["helmv3"],
+      "matchManagers": ["helmv3", "helm-values"],
       "additionalBranchPrefix": "{{parentDir}}-",
       "matchFileNames": ["charts/*/Chart.yaml"],
       "groupName": "{{parentDir}}-dependencies",
@@ -17,5 +17,5 @@
     }
   ],
   "ignorePaths": ["charts/*/charts/**"],
-  "enabledManagers": ["dockerfile", "helmv3"]
+  "enabledManagers": ["dockerfile", "helmv3", "helm-values"]
 }
