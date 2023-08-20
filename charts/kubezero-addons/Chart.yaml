@@ -39,11 +39,11 @@ dependencies:
     condition: sealed-secrets.enabled
   - name: aws-node-termination-handler
     version: 0.21.0
-    # repository: https://aws.github.io/eks-charts
+    repository: https://aws.github.io/eks-charts
     condition: aws-node-termination-handler.enabled
   - name: aws-eks-asg-rolling-update-handler
     version: 1.3.0
-    # repository: https://twin.github.io/helm-charts
+    repository: https://twin.github.io/helm-charts
     condition: aws-eks-asg-rolling-update-handler.enabled
   - name: falco
     version: 3.3.0
