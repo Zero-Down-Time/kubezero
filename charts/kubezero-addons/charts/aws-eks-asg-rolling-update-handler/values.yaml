@@ -32,7 +32,7 @@ resources: {}
 podAnnotations: {}
   # prometheus.io/port: "8080"
   # prometheus.io/scrape: "true"
-
+podLabels: {}
 serviceAccount:
   create: true
   #name: aws-eks-asg-rolling-update-handler
