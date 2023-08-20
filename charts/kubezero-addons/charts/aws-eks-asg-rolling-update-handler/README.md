@@ -11,3 +11,4 @@ The following table lists the configurable parameters of the aws-eks-asg-rolling
 | image.pullPolicy | Image pull policy | yes | `IfNotPresent` |
 | resources | CPU/memory resource requests/limits | no | `{}` |
 | podAnnotations | Annotations to add to the aws-eks-asg-rolling-update-handler pod configuration | no | `{}` |
+| podLabels | Labels to add to the aws-eks-asg-rolling-update-handler pod configuration | no | `{}` |

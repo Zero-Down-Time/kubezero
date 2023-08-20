@@ -15,9 +15,12 @@ spec:
     metadata:
       labels:
 {{ include "aws-eks-asg-rolling-update-handler.labels" . | indent 8 }}
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.podLabels }}
+      {{- toYaml . | nindent 8 }}
+      {{- end }}    
       annotations:
-        {{- toYaml . | nindent 8 }}
+      {{- with .Values.podAnnotations }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
       automountServiceAccountToken: true
