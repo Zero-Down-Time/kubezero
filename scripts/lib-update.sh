@@ -22,3 +22,7 @@ patch_chart() {
   # diff -tuNr charts/aws-node-termination-handler.orig charts/aws-node-termination-handler > nth.patch
   patch -p0 -i $CHART.patch --no-backup-if-mismatch
 }
+
+update_docs() {
+  helm-docs
+}
