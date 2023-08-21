@@ -1,3 +1,6 @@
+crd:
+  volumeSnapshot: true
+
 snapshotController:
   enabled: false
   replicas: 1
