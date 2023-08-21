@@ -14,8 +14,6 @@ rm -rf charts/aws-ebs-csi-driver/templates/tests
 patch_chart aws-efs-csi-driver
 
 patch_chart lvm-localpv
-# move crds
-mv charts/lvm-localpv/crds/volumesnapshot* crds
 
 # k8up - CRDs
 VERSION=$(yq eval '.dependencies[] | select(.name=="k8up") | .version' Chart.yaml)

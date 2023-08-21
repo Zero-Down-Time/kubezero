@@ -29,7 +29,7 @@ spec:
 {{- if .Values.lvmNode.priorityClass.create }}
       priorityClassName: {{ template "lvmlocalpv.lvmNode.priorityClassName" . }}
 {{- end }}
-      serviceAccount: {{ .Values.serviceAccount.lvmNode.name }}
+      serviceAccountName: {{ .Values.serviceAccount.lvmNode.name }}
       hostNetwork: true
       containers:
         - name: {{ .Values.lvmNode.driverRegistrar.name }}
@@ -71,6 +71,8 @@ spec:
             - "--nodeid=$(OPENEBS_NODE_ID)"
             - "--endpoint=$(OPENEBS_CSI_ENDPOINT)"
             - "--plugin=$(OPENEBS_NODE_DRIVER)"
+            - "--kube-api-qps={{ .Values.lvmNode.kubeClientRateLimiter.qps }}"
+            - "--kube-api-burst={{ .Values.lvmNode.kubeClientRateLimiter.burst }}"
             {{- if .Values.lvmPlugin.ioLimits.enabled }}
             - "--setiolimits"
             - "--container-runtime=$(CONTAINER_RUNTIME)"

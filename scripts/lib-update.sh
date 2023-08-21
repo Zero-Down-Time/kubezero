@@ -38,7 +38,7 @@ patch_chart() {
   tar xfvz charts/$CHART-$VERSION.tgz -C charts && rm charts/$CHART-$VERSION.tgz
 
   # diff -tuNr charts/aws-node-termination-handler.orig charts/aws-node-termination-handler > nth.patch
-  [ -r $CHART.patch ] && patch -p0 -i $CHART.patch --no-backup-if-mismatch
+  [ -r $CHART.patch ] && patch -p0 -i $CHART.patch --no-backup-if-mismatch || true
 }
 
 update_docs() {

@@ -37,7 +37,7 @@ spec:
 {{- if .Values.lvmController.priorityClass.create }}
       priorityClassName: {{ template "lvmlocalpv.lvmController.priorityClassName" . }}
 {{- end }}
-      serviceAccount: {{ .Values.serviceAccount.lvmController.name }}
+      serviceAccountName: {{ .Values.serviceAccount.lvmController.name }}
       containers:
         - name: {{ .Values.lvmController.resizer.name }}
           image: "{{ .Values.lvmController.resizer.image.registry }}{{ .Values.lvmController.resizer.image.repository }}:{{ .Values.lvmController.resizer.image.tag }}"
@@ -121,6 +121,8 @@ spec:
           args :
             - "--endpoint=$(OPENEBS_CSI_ENDPOINT)"
             - "--plugin=$(OPENEBS_CONTROLLER_DRIVER)"
+            - "--kube-api-qps={{ .Values.lvmController.kubeClientRateLimiter.qps }}"
+            - "--kube-api-burst={{ .Values.lvmController.kubeClientRateLimiter.burst }}"
           volumeMounts:
             - name: socket-dir
               mountPath: /var/lib/csi/sockets/pluginproxy/

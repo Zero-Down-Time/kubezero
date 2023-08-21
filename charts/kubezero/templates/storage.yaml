@@ -25,6 +25,7 @@ aws-ebs-csi-driver:
   controller:
     replicaCount: {{ ternary 2 1 .Values.global.highAvailable }}
     k8sTagClusterId: {{ .Values.global.clusterName }}
+    enableMetrics: {{ .Values.metrics.enabled }}
     env:
     - name: AWS_ROLE_ARN
       value: {{ index .Values "storage" "aws-ebs-csi-driver" "IamArn" | quote }}
@@ -33,18 +34,21 @@ aws-ebs-csi-driver:
     - name: AWS_STS_REGIONAL_ENDPOINTS
       value: regional
 
-    {{- if .Values.global.highAvailable }}
-    affinity:
-      podAntiAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchExpressions:
-            - key: app
-              operator: In
-              values:
-              - ebs-csi-controller
-          topologyKey: "kubernetes.io/hostname"
-    {{- end }}
+  {{- if not .Values.global.highAvailable }}
+  sidecars:
+    provisioner:
+      leaderElection:
+        enabled: false
+    attacher:
+      leaderElection:
+        enabled: false
+    resizer:
+      leaderElection:
+        enabled: false
+    volumemodifier:
+      leaderElection:
+        enabled: false
+  {{- end }}
 
 aws-efs-csi-driver:
   enabled: {{ default false (index .Values "storage" "aws-efs-csi-driver" "enabled")}}

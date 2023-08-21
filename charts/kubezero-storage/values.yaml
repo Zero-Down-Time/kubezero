@@ -98,7 +98,8 @@ aws-ebs-csi-driver:
 
   controller:
     replicaCount: 1
-    logLevel: 2
+
+    loggingFormat: json
 
     defaultFsType: xfs
 
@@ -144,6 +145,7 @@ aws-ebs-csi-driver:
         memory: 40Mi
 
   node:
+    loggingFormat: json
     tolerateAllTaints: false
     tolerations:
     - key: kubezero-workergroup

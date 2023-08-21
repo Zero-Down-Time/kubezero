@@ -30,25 +30,3 @@ diff -tuNr charts/aws-efs-csi-driver.orig/templates/controller-deployment.yaml c
        {{- with .Values.controller.affinity }}
        affinity: {{- toYaml . | nindent 8 }}
        {{- end }}
-diff -tuNr charts/aws-efs-csi-driver.orig/templates/node-daemonset.yaml charts/aws-efs-csi-driver/templates/node-daemonset.yaml
---- charts/aws-efs-csi-driver.orig/templates/node-daemonset.yaml	2022-10-11 20:57:20.000000000 +0200
-+++ charts/aws-efs-csi-driver/templates/node-daemonset.yaml	2022-10-12 22:39:19.796397838 +0200
-@@ -40,15 +40,10 @@
-         {{- with .Values.node.nodeSelector }}
-         {{- toYaml . | nindent 8 }}
-         {{- end }}
-+      {{- with .Values.node.affinity }}
-       affinity:
--        nodeAffinity:
--          requiredDuringSchedulingIgnoredDuringExecution:
--            nodeSelectorTerms:
--            - matchExpressions:
--              - key: eks.amazonaws.com/compute-type
--                operator: NotIn
--                values:
--                - fargate
-+        {{- . | toYaml | nindent 8 }}
-+      {{- end }}
-       hostNetwork: true
-       dnsPolicy: {{ .Values.node.dnsPolicy }}
-       {{- with .Values.node.dnsConfig }}
