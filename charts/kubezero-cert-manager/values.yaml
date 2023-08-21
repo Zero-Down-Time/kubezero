@@ -23,6 +23,13 @@ cert-manager:
     leaderElection:
       namespace: "cert-manager"
 
+  extraArgs:
+    - "--logging-format=json"
+    - "--leader-elect=false"
+    - "--dns01-recursive-nameservers-only"
+    # When this flag is enabled, secrets will be automatically removed when the certificate resource is deleted
+    # - --enable-certificate-owner-ref=true
+
   #enableCertificateOwnerRef: true
 
   # On AWS enable Projected Service Accounts to assume IAM role
@@ -64,6 +71,8 @@ cert-manager:
       effect: NoSchedule
     nodeSelector:
       node-role.kubernetes.io/control-plane: ""
+    extraArgs:
+      - "--logging-format=json"
 
   cainjector:
     tolerations:
@@ -71,11 +80,9 @@ cert-manager:
       effect: NoSchedule
     nodeSelector:
       node-role.kubernetes.io/control-plane: ""
-
-  extraArgs:
-    - "--dns01-recursive-nameservers-only"
-    # When this flag is enabled, secrets will be automatically removed when the certificate resource is deleted
-    # - --enable-certificate-owner-ref=true
+    extraArgs:
+      - "--logging-format=json"
+      - "--leader-elect=false"
 
   prometheus:
     servicemonitor:

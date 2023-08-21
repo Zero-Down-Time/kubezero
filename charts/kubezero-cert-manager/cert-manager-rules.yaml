@@ -1,3 +1,4 @@
 rules:
 - name: prometheus-rules
+  condition: 'index .Values "cert-manager" "prometheus" "servicemonitor" "enabled"'
   url: file://rules/cert-manager-mixin-prometheusRule
