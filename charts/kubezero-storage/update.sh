@@ -14,6 +14,8 @@ rm -rf charts/aws-ebs-csi-driver/templates/tests
 patch_chart aws-efs-csi-driver
 
 patch_chart lvm-localpv
+# move snapshotclasses/content from lvm-localpv to toplevel
+mv charts/lvm-localpv/templates/*crd.yaml templates/snapshot-controller
 
 # k8up - CRDs
 VERSION=$(yq eval '.dependencies[] | select(.name=="k8up") | .version' Chart.yaml)
