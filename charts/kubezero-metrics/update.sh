@@ -1,16 +1,12 @@
 #!/bin/bash
 set -ex
 
-helm repo update
+. ../../scripts/lib-update.sh
 
-VERSION=$(yq eval '.dependencies[] | select(.name=="kube-prometheus-stack") | .version' Chart.yaml)
-rm -rf charts/kube-prometheus-stack
-helm pull prometheus-community/kube-prometheus-stack --untar --untardir charts --version $VERSION
+#login_ecr_public
+update_helm
 
-# workaround for https://github.com/prometheus-community/helm-charts/issues/1500
-patch -p0 -i zdt.patch --no-backup-if-mismatch
-
-helm dep update
+patch_chart kube-prometheus-stack
 
 # Create ZDT dashboard, alerts etc configmaps
 cd jsonnet && make
