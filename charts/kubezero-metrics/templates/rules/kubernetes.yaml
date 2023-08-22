@@ -47,11 +47,24 @@ spec:
       for: 15m
       labels:
         severity: warning
+    - alert: KubeDeploymentRolloutStuck
+      annotations:
+        description: Rollout of deployment {{`{{`}} $labels.namespace {{`}}`}}/{{`{{`}} $labels.deployment {{`}}`}} is not progressing for longer than 15 minutes.
+        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubedeploymentrolloutstuck
+        summary: Deployment rollout is not progressing.
+      expr: 'kube_deployment_status_condition{condition="Progressing", status="false",job="kube-state-metrics"}
+
+        != 0
+
+        '
+      for: 15m
+      labels:
+        severity: warning
     - alert: KubeStatefulSetReplicasMismatch
       annotations:
         description: StatefulSet {{`{{`}} $labels.namespace {{`}}`}}/{{`{{`}} $labels.statefulset {{`}}`}} has not matched the expected number of replicas for longer than 15 minutes.
         runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubestatefulsetreplicasmismatch
-        summary: Deployment has not matched the expected number of replicas.
+        summary: StatefulSet has not matched the expected number of replicas.
       expr: "(\n  kube_statefulset_status_replicas_ready{job=\"kube-state-metrics\"}\n    !=\n  kube_statefulset_status_replicas{job=\"kube-state-metrics\"}\n) and (\n  changes(kube_statefulset_status_replicas_updated{job=\"kube-state-metrics\"}[10m])\n    ==\n  0\n)\n"
       for: 15m
       labels:
@@ -155,14 +168,14 @@ spec:
     rules:
     - alert: KubeCPUOvercommit
       annotations:
-        description: Cluster has overcommitted CPU resource requests for Pods by {{`{{`}} $value {{`}}`}} CPU shares and cannot tolerate node failure.
+        description: Cluster {{`{{`}} $labels.cluster {{`}}`}} has overcommitted CPU resource requests for Pods by {{`{{`}} $value {{`}}`}} CPU shares and cannot tolerate node failure.
         runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubecpuovercommit
         summary: Cluster has overcommitted CPU resource requests.
-      expr: 'sum(namespace_cpu:kube_pod_container_resource_requests:sum{}) - (sum(kube_node_status_allocatable{resource="cpu", job="kube-state-metrics"}) - max(kube_node_status_allocatable{resource="cpu", job="kube-state-metrics"})) > 0
+      expr: 'sum(namespace_cpu:kube_pod_container_resource_requests:sum{job="kube-state-metrics",}) by (cluster) - (sum(kube_node_status_allocatable{job="kube-state-metrics",resource="cpu"}) by (cluster) - max(kube_node_status_allocatable{job="kube-state-metrics",resource="cpu"}) by (cluster)) > 0
 
         and
 
-        (sum(kube_node_status_allocatable{resource="cpu", job="kube-state-metrics"}) - max(kube_node_status_allocatable{resource="cpu", job="kube-state-metrics"})) > 0
+        (sum(kube_node_status_allocatable{job="kube-state-metrics",resource="cpu"}) by (cluster) - max(kube_node_status_allocatable{job="kube-state-metrics",resource="cpu"}) by (cluster)) > 0
 
         '
       for: 10m
@@ -170,14 +183,14 @@ spec:
         severity: warning
     - alert: KubeMemoryOvercommit
       annotations:
-        description: Cluster has overcommitted memory resource requests for Pods by {{`{{`}} $value | humanize {{`}}`}} bytes and cannot tolerate node failure.
+        description: Cluster {{`{{`}} $labels.cluster {{`}}`}} has overcommitted memory resource requests for Pods by {{`{{`}} $value | humanize {{`}}`}} bytes and cannot tolerate node failure.
         runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubememoryovercommit
         summary: Cluster has overcommitted memory resource requests.
-      expr: 'sum(namespace_memory:kube_pod_container_resource_requests:sum{}) - (sum(kube_node_status_allocatable{resource="memory", job="kube-state-metrics"}) - max(kube_node_status_allocatable{resource="memory", job="kube-state-metrics"})) > 0
+      expr: 'sum(namespace_memory:kube_pod_container_resource_requests:sum{}) by (cluster) - (sum(kube_node_status_allocatable{resource="memory", job="kube-state-metrics"}) by (cluster) - max(kube_node_status_allocatable{resource="memory", job="kube-state-metrics"}) by (cluster)) > 0
 
         and
 
-        (sum(kube_node_status_allocatable{resource="memory", job="kube-state-metrics"}) - max(kube_node_status_allocatable{resource="memory", job="kube-state-metrics"})) > 0
+        (sum(kube_node_status_allocatable{resource="memory", job="kube-state-metrics"}) by (cluster) - max(kube_node_status_allocatable{resource="memory", job="kube-state-metrics"}) by (cluster)) > 0
 
         '
       for: 10m
@@ -185,19 +198,19 @@ spec:
         severity: warning
     - alert: KubeCPUQuotaOvercommit
       annotations:
-        description: Cluster has overcommitted CPU resource requests for Namespaces.
+        description: Cluster {{`{{`}} $labels.cluster {{`}}`}}  has overcommitted CPU resource requests for Namespaces.
         runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubecpuquotaovercommit
         summary: Cluster has overcommitted CPU resource requests.
-      expr: "sum(min without(resource) (kube_resourcequota{job=\"kube-state-metrics\", type=\"hard\", resource=~\"(cpu|requests.cpu)\"}))\n  /\nsum(kube_node_status_allocatable{resource=\"cpu\", job=\"kube-state-metrics\"})\n  > 1.5\n"
+      expr: "sum(min without(resource) (kube_resourcequota{job=\"kube-state-metrics\", type=\"hard\", resource=~\"(cpu|requests.cpu)\"})) by (cluster)\n  /\nsum(kube_node_status_allocatable{resource=\"cpu\", job=\"kube-state-metrics\"}) by (cluster)\n  > 1.5\n"
       for: 5m
       labels:
         severity: warning
     - alert: KubeMemoryQuotaOvercommit
       annotations:
-        description: Cluster has overcommitted memory resource requests for Namespaces.
+        description: Cluster {{`{{`}} $labels.cluster {{`}}`}}  has overcommitted memory resource requests for Namespaces.
         runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubememoryquotaovercommit
         summary: Cluster has overcommitted memory resource requests.
-      expr: "sum(min without(resource) (kube_resourcequota{job=\"kube-state-metrics\", type=\"hard\", resource=~\"(memory|requests.memory)\"}))\n  /\nsum(kube_node_status_allocatable{resource=\"memory\", job=\"kube-state-metrics\"})\n  > 1.5\n"
+      expr: "sum(min without(resource) (kube_resourcequota{job=\"kube-state-metrics\", type=\"hard\", resource=~\"(memory|requests.memory)\"})) by (cluster)\n  /\nsum(kube_node_status_allocatable{resource=\"memory\", job=\"kube-state-metrics\"}) by (cluster)\n  > 1.5\n"
       for: 5m
       labels:
         severity: warning
@@ -407,7 +420,7 @@ spec:
         description: Kubernetes aggregated API {{`{{`}} $labels.name {{`}}`}}/{{`{{`}} $labels.namespace {{`}}`}} has reported errors. It has appeared unavailable {{`{{`}} $value | humanize {{`}}`}} times averaged over the past 10m.
         runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeaggregatedapierrors
         summary: Kubernetes aggregated API has reported errors.
-      expr: 'sum by(name, namespace, cluster)(increase(aggregator_unavailable_apiservice_total[10m])) > 4
+      expr: 'sum by(name, namespace, cluster)(increase(aggregator_unavailable_apiservice_total{job="apiserver"}[10m])) > 4
 
         '
       labels:
@@ -417,7 +430,7 @@ spec:
         description: Kubernetes aggregated API {{`{{`}} $labels.name {{`}}`}}/{{`{{`}} $labels.namespace {{`}}`}} has been only {{`{{`}} $value | humanize {{`}}`}}% available over the last 10m.
         runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeaggregatedapidown
         summary: Kubernetes aggregated API is down.
-      expr: '(1 - max by(name, namespace, cluster)(avg_over_time(aggregator_unavailable_apiservice[10m]))) * 100 < 85
+      expr: '(1 - max by(name, namespace, cluster)(avg_over_time(aggregator_unavailable_apiservice{job="apiserver"}[10m]))) * 100 < 85
 
         '
       for: 5m
@@ -710,7 +723,7 @@ spec:
       labels:
         verb: write
       record: code:apiserver_request_total:increase30d
-    - expr: 'sum by (cluster, verb, scope) (increase(apiserver_request_slo_duration_seconds_count[1h]))
+    - expr: 'sum by (cluster, verb, scope) (increase(apiserver_request_slo_duration_seconds_count{job="apiserver"}[1h]))
 
         '
       record: cluster_verb_scope:apiserver_request_slo_duration_seconds_count:increase1h
