@@ -1,22 +1,22 @@
-# Revision 162 = 1.17
+# https://grafana.com/grafana/dashboards/7645-istio-control-plane-dashboard/?tab=revisions
 configmap: grafana-dashboards
 gzip: true
 folder: Istio
 condition: '.Values.istiod.telemetry.enabled'
 dashboards:
 - name: istio-control-plane
-  url: https://grafana.com/api/dashboards/7645/revisions/162/download
+  url: https://grafana.com/api/dashboards/7645/revisions/174/download
   tags:
   - Istio
 - name: istio-mesh
-  url: https://grafana.com/api/dashboards/7639/revisions/162/download
+  url: https://grafana.com/api/dashboards/7639/revisions/174/download
   tags:
   - Istio
 - name: istio-service
-  url: https://grafana.com/api/dashboards/7636/revisions/162/download
+  url: https://grafana.com/api/dashboards/7636/revisions/174/download
   tags:
   - Istio
 - name: istio-workload
-  url: https://grafana.com/api/dashboards/7630/revisions/162/download
+  url: https://grafana.com/api/dashboards/7630/revisions/174/download
   tags:
   - Istio

@@ -2,7 +2,7 @@ apiVersion: v2
 name: kubezero-istio
 description: KubeZero Umbrella Chart for Istio
 type: application
-version: 0.10.1
+version: 0.18.2
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
@@ -25,4 +25,4 @@ dependencies:
     version: "1.72.0"
     repository: https://kiali.org/helm-charts
     condition: kiali-server.enabled
-kubeVersion: ">= 1.25.0"
+kubeVersion: ">= 1.26.0"
