@@ -7,8 +7,6 @@ snapshotController:
   logLevel: 2
 
   tolerations:
-  - key: node-role.kubernetes.io/master
-    effect: NoSchedule
   - key: node-role.kubernetes.io/control-plane
     effect: NoSchedule
   nodeSelector:
@@ -37,8 +35,6 @@ lvm-localpv:
   lvmController:
     logLevel: 2
     tolerations:
-    - key: node-role.kubernetes.io/master
-      effect: NoSchedule
     - key: node-role.kubernetes.io/control-plane
       effect: NoSchedule
     nodeSelector:
@@ -74,8 +70,6 @@ k8up:
       #cpu: 400m
 
   tolerations:
-  - key: node-role.kubernetes.io/master
-    effect: NoSchedule
   - key: node-role.kubernetes.io/control-plane
     effect: NoSchedule
   nodeSelector:
@@ -109,8 +103,6 @@ aws-ebs-csi-driver:
     nodeSelector:
       node-role.kubernetes.io/control-plane: ""
     tolerations:
-    - key: node-role.kubernetes.io/master
-      effect: NoSchedule
     - key: node-role.kubernetes.io/control-plane
       effect: NoSchedule
 
@@ -198,8 +190,6 @@ aws-efs-csi-driver:
     logLevel: 2
 
     tolerations:
-    - key: node-role.kubernetes.io/master
-      effect: NoSchedule
     - key: node-role.kubernetes.io/control-plane
       effect: NoSchedule
     nodeSelector:
