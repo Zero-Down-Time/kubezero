@@ -18,7 +18,8 @@ k8up:
 {{- end }}
 
 snapshotController:
-  enabled: {{ default false (index .Values "storage" "gemini" "enabled") }}
+  # install controller if any capable storage driver is enabled
+  enabled: {{ or (index .Values "storage" "lvm-localpv" "enabled") (index .Values "storage" "aws-ebs-csi-driver" "enabled")}}
 
 aws-ebs-csi-driver:
   enabled: {{ default false (index .Values "storage" "aws-ebs-csi-driver" "enabled")}}
