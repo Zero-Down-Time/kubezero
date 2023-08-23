@@ -244,7 +244,7 @@ fluent-bit:
 
   image:
     #repository: public.ecr.aws/zero-downtime/fluent-bit
-    tag: 2.0.10
+    #tag: 2.0.10
 
   testFramework:
     enabled: false
