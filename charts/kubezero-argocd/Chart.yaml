@@ -1,7 +1,7 @@
 apiVersion: v2
 description: KubeZero ArgoCD - config, branding, image-updater (optional)
 name: kubezero-argocd
-version: 0.13.1
+version: 0.13.2
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
@@ -17,7 +17,7 @@ dependencies:
     version: ">= 0.1.6"
     repository: https://cdn.zero-downtime.net/charts/
   - name: argo-cd
-    version: 5.43.4
+    version: 5.43.5
     repository: https://argoproj.github.io/argo-helm
   - name: argocd-apps
     version: 1.4.1
