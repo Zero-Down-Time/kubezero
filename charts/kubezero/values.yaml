@@ -93,7 +93,7 @@ metrics:
 logging:
   enabled: false
   namespace: logging
-  targetRevision: 0.8.6
+  targetRevision: 0.8.7
 
 argocd:
   enabled: false
