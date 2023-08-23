@@ -29,16 +29,50 @@ login_ecr_public() {
     --password-stdin public.ecr.aws
 }
 
-patch_chart() {
-  CHART=$1
+_get_extract_chart() {
+  local CHART=$1
+  local VERSION=$2
 
-  VERSION=$(yq eval '.dependencies[] | select(.name=="'$CHART'") | .version' Chart.yaml)
+  local REPO=$(yq eval '.dependencies[] | select(.name=="'$CHART'") | .repository' Chart.yaml)
+  local URL=$(curl -s $REPO/index.yaml | yq '.entries."'$CHART'".[] | select (.version=="'$VERSION'") | .urls[0]')
+  wget -qO - $URL | tar xfvz - -C charts
+}
+
+patch_chart() {
+  local CHART=$1
+  local VERSION=$(yq eval '.dependencies[] | select(.name=="'$CHART'") | .version' Chart.yaml)
 
   rm -rf charts/$CHART
-  tar xfvz charts/$CHART-$VERSION.tgz -C charts && rm charts/$CHART-$VERSION.tgz
+
+  # If helm already pulled the chart archive use it
+  if [ -f charts/$CHART-$VERSION.tgz ]; then
+    tar xfvz charts/$CHART-$VERSION.tgz -C charts && rm charts/$CHART-$VERSION.tgz
+
+  # otherwise parse Chart.yaml and get it
+  else
+    _get_extract_chart $CHART $VERSION
+  fi
 
   # diff -tuNr charts/aws-node-termination-handler.orig charts/aws-node-termination-handler > nth.patch
   [ -r $CHART.patch ] && patch -p0 -i $CHART.patch --no-backup-if-mismatch || true
+}
+
+patch_rebase() {
+  local CHART=$1
+  local VERSION=$(yq eval '.dependencies[] | select(.name=="'$CHART'") | .version' Chart.yaml)
+
+  rm -rf charts/$CHART
+  _get_extract_chart $CHART $VERSION
+  cp -r charts/$CHART charts/$CHART.orig
+
+  patch -p0 -i $CHART.patch --no-backup-if-mismatch
+}
+
+patch_create() {
+  local CHART=$1
+
+  diff -rtuN charts/$CHART.orig charts/$CHART > $CHART.patch
+  rm -rf charts/$CHART.orig
 }
 
 update_docs() {

@@ -1,6 +1,6 @@
-diff -tuNr charts/lvm-localpv.orig/templates/lvm-controller.yaml charts/lvm-localpv/templates/lvm-controller.yaml
---- charts/lvm-localpv.orig/templates/lvm-controller.yaml	2022-01-11 13:47:28.717133358 +0100
-+++ charts/lvm-localpv/templates/lvm-controller.yaml	2022-01-11 13:49:49.160473040 +0100
+diff -rtuN charts/lvm-localpv.orig/templates/lvm-controller.yaml charts/lvm-localpv/templates/lvm-controller.yaml
+--- charts/lvm-localpv.orig/templates/lvm-controller.yaml	2023-08-23 11:28:23.687014522 +0000
++++ charts/lvm-localpv/templates/lvm-controller.yaml	2023-08-23 11:28:23.690347871 +0000
 @@ -72,16 +72,6 @@
                mountPath: /var/lib/csi/sockets/pluginproxy/
            resources:
