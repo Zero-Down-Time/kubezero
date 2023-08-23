@@ -1,7 +1,7 @@
-diff -tuNr charts/aws-efs-csi-driver.orig/templates/controller-deployment.yaml charts/aws-efs-csi-driver/templates/controller-deployment.yaml
---- charts/aws-efs-csi-driver.orig/templates/controller-deployment.yaml	2022-10-11 20:57:20.000000000 +0200
-+++ charts/aws-efs-csi-driver/templates/controller-deployment.yaml	2022-10-12 22:40:48.100658738 +0200
-@@ -69,9 +73,14 @@
+diff -rtuN charts/aws-efs-csi-driver.orig/templates/controller-deployment.yaml charts/aws-efs-csi-driver/templates/controller-deployment.yaml
+--- charts/aws-efs-csi-driver.orig/templates/controller-deployment.yaml	2023-08-23 11:32:48.964952023 +0000
++++ charts/aws-efs-csi-driver/templates/controller-deployment.yaml	2023-08-23 11:32:48.968285371 +0000
+@@ -76,9 +76,14 @@
              - name: AWS_USE_FIPS_ENDPOINT
                value: "true"
              {{- end }}
@@ -16,7 +16,7 @@ diff -tuNr charts/aws-efs-csi-driver.orig/templates/controller-deployment.yaml c
            ports:
              - name: healthz
                containerPort: {{ .Values.controller.healthPort }}
-@@ -122,6 +131,13 @@
+@@ -137,6 +142,13 @@
        volumes:
          - name: socket-dir
            emptyDir: {}
@@ -30,3 +30,14 @@ diff -tuNr charts/aws-efs-csi-driver.orig/templates/controller-deployment.yaml c
        {{- with .Values.controller.affinity }}
        affinity: {{- toYaml . | nindent 8 }}
        {{- end }}
+diff -rtuN charts/aws-efs-csi-driver.orig/templates/node-daemonset.yaml charts/aws-efs-csi-driver/templates/node-daemonset.yaml
+--- charts/aws-efs-csi-driver.orig/templates/node-daemonset.yaml	2023-08-23 11:32:48.964952023 +0000
++++ charts/aws-efs-csi-driver/templates/node-daemonset.yaml	2023-08-23 11:35:11.605635352 +0000
+@@ -51,6 +51,7 @@
+       {{- with .Values.node.dnsConfig }}
+       dnsConfig: {{- toYaml . | nindent 8 }}
+       {{- end }}
++      hostNetwork: true
+       serviceAccountName: {{ .Values.node.serviceAccount.name }}
+       priorityClassName: system-node-critical
+       {{- with .Values.node.tolerations }}
