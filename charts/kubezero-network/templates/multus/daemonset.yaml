@@ -27,7 +27,7 @@ spec:
       priorityClassName: system-node-critical
       containers:
       - name: kube-multus
-        image: ghcr.io/k8snetworkplumbingwg/multus-cni:{{ .Values.multus.tag }}
+        image: {{ .Values.multus.image.repository }}:{{ .Values.multus.image.tag }}
         command: ["/entrypoint.sh"]
         args:
         - "--multus-conf-file=/tmp/multus-conf/00-multus.conf"
