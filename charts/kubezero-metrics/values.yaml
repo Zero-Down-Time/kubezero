@@ -370,6 +370,7 @@ istio:
     url: ""
     gateway: istio-ingress/ingressgateway
     destination: metrics-grafana
+    port: 80
 
   prometheus:
     enabled: false
@@ -377,6 +378,7 @@ istio:
     url: ""
     gateway: istio-ingress/ingressgateway
     destination: metrics-kube-prometheus-st-prometheus
+    port: 9090
 
   alertmanager:
     enabled: false
@@ -384,3 +386,4 @@ istio:
     url: ""
     gateway: istio-ingress/ingressgateway
     destination: metrics-kube-prometheus-st-alertmanager
+    port: 9093
