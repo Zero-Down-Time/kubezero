@@ -13,7 +13,7 @@ export WORKDIR=/tmp/kubezero
 export HOSTFS=/host
 export CHARTS=/charts
 export KUBE_VERSION=$(kubeadm version -o json | jq -r .clientVersion.gitVersion)
-export KUBE_VERSION_MINOR="v1.$(kubectl version -o json | jq .clientVersion.minor -r)"
+export KUBE_VERSION_MINOR=$(echo $KUBE_VERSION | sed -e 's/\.[0-9]*$//')
 
 export KUBECONFIG="${HOSTFS}/root/.kube/config"
 
