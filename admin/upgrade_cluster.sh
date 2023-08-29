@@ -157,6 +157,9 @@ waitSystemPodsRunning
 
 echo "Applying remaining KubeZero modules..."
 
+# Delete fluent-bit DS being all weird
+kubectl delete ds logging-fluent-bit -n logging || true
+
 control_plane_upgrade "apply_cert-manager, apply_istio, apply_istio-ingress, apply_istio-private-ingress, apply_logging, apply_metrics, apply_argocd"
 
 # Trigger backup of upgraded cluster state
