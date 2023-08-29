@@ -78,20 +78,8 @@ fluentd:
     enabled: false
 
   # No need for docker nor /var/log
-  volumes:
-  - name: etcfluentd-main
-    configMap:
-      name: fluentd-main
-      defaultMode: 0777
-  - name: etcfluentd-config
-    configMap:
-      name: fluentd-config
-      defaultMode: 0777
-  volumeMounts:
-  - name: etcfluentd-main
-    mountPath: /etc/fluent
-  - name: etcfluentd-config
-    mountPath: /etc/fluent/config.d/
+  mountVarLogDirectory: false
+  mountDockerContainersDirectory: false
 
   resources:
     requests:
@@ -118,6 +106,9 @@ fluentd:
       secretKeyRef:
         name: logging-es-elastic-user
         key: elastic
+
+  configMapConfigs:
+    - fluentd-prometheus-conf
 
   fileConfigs:
     00_system.conf: |-
@@ -268,7 +259,7 @@ fluent-bit:
       cpu: 20m
       memory: 32Mi
     limits:
-      memory: 64Mi
+      memory: 128Mi
 
   config:
     output:

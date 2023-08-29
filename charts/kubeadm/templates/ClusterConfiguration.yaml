@@ -76,9 +76,9 @@ apiServer:
     {{- end }}
     feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" ) | trimSuffix "," | quote }}
     enable-admission-plugins: DenyServiceExternalIPs,NodeRestriction,EventRateLimit,ExtendedResourceToleration
-    # {{- if .Values.global.highAvailable }}
-    # goaway-chance: ".001"
-    # {{- end }}
+    {{- if .Values.global.highAvailable }}
+    goaway-chance: ".001"
+    {{- end }}
     logging-format: json
     {{- with .Values.api.extraArgs }}
     {{- toYaml . | nindent 4 }}
