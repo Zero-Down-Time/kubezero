@@ -4,12 +4,12 @@ KubeZero is a Kubernetes distribution providing an integrated container platform
 
 # Design philosophy
 
-- Cloud provider agnostic, bare-metal/self-hosted
 - Focus on security and simplicity over feature creep
-- No vendor lock in, most components are optional and could be easily exchanged
-- Organic Open Source / open and permissive licenses over closed-source solutions
+- No vendor lock in, most components are optional and could be easily changed as needed
 - No premium services / subscriptions required
 - Staying up to date and contributing back to upstream projects, like alpine-cloud-images and others
+- Cloud provider agnostic, bare-metal/self-hosted
+- Organic Open Source / open and permissive licenses over closed-source solutions
 - Corgi approved :dog:
 
 
@@ -28,15 +28,15 @@ KubeZero is distributed as a collection of versioned Helm charts, allowing custo
 gantt
     title KubeZero Support Timeline
     dateFormat  YYYY-MM-DD
-    section 1.24
-    beta     :124b, 2022-11-14, 2022-12-31
-    release  :after 124b, 2023-06-01
     section 1.25
     beta     :125b, 2023-03-01, 2023-03-31
     release  :after 125b, 2023-08-01
     section 1.26
     beta     :126b, 2023-06-01, 2023-06-30
-    release  :after 126b, 2023-10-01
+    release  :after 126b, 2023-11-01
+    section 1.27
+    beta     :127b, 2023-09-01, 2023-09-30
+    release  :after 127b, 2024-02-01
 ```
 
 [Upstream release policy](https://kubernetes.io/releases/)
@@ -44,25 +44,26 @@ gantt
 # Components
 
 ## OS
-- all nodes are based on Alpine V3.17
-- 2 GB encrypted root filesystem
-- no 3rd party dependencies at boot ( other than container registries )
+- all compute nodes are running on Alpine V3.18
+- 2 GB encrypted root file system
+- no external dependencies at boot time, apart from container registries
 - minimal attack surface
 - extremely small memory footprint / overhead
+- cri-o container runtime incl. AppArmor support
 
-## Container runtime
-- cri-o rather than Docker for improved security and performance
+## GitOps
+- cli / cmd line install
+- optional full ArgoCD support and integration
+
+## Featured workloads
+- rootless CI/CD build platform to build containers as part of a CI pipeline, using podman / fuse device plugin support
+- containerized AI models via integrated out of the box support for Nvidia GPU workers as well as AWS Neuron  
 
 ## Control plane
 - all Kubernetes components compiled against Alpine OS using `buildmode=pie`
 - support for single node control plane for small clusters / test environments to reduce costs
 - access to control plane from within the VPC only by default ( VPN access required for Admin tasks )
 - controller nodes are used for various platform admin controllers / operators to reduce costs and noise on worker nodes
-
-## GitOps
-- cli / cmd line install
-- optional full ArgoCD support and integration
-- fuse device plugin support to build containers as part of a CI pipeline leveraging rootless podman build agents
 
 ## AWS integrations
 - IAM roles for service accounts allowing each pod to assume individual IAM roles
