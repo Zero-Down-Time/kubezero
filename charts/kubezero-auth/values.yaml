@@ -1,29 +1,43 @@
 keycloak:
   enabled: false
 
-  replicas: 1
-  podDisruptionBudget:
+  proxy: edge
+  production: true
+
+  auth:
+    adminUser: admin
+    existingSecret: kubezero-auth
+    passwordSecretKey: admin-password
+
+  replicaCount: 1
+
+  pdb:
+    create: false
     minAvailable: 1
+
+  metrics:
+    enabled: false
+    serviceMonitor:
+      enabled: true
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+
+  postgresql:
+    auth:
+      existingSecret: kubezero-auth
+      username: keycloak
+      database: keycloak
+
+    primary:
+      persistence:
+        size: 1Gi
+
+    readReplicas:
+      replicaCount: 0
 
   istio:
     enabled: false
     gateway: istio-ingress/private-ingressgateway
     url: ""
-
-  metrics:
-    enabled: false
-
-postgresql:
-  enabled: false
-
-  auth:
-    existingSecret: kubezero-auth-postgresql
-    username: keycloak
-    database: keycloak
-
-  primary:
-    persistence:
-      size: 1Gi
-
-  readReplicas:
-    replicaCount: 0
