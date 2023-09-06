@@ -14,5 +14,5 @@ spec:
   http:
   - route:
     - destination:
-        host: {{ template "kubezero-lib.fullname" $ }}-service
+        host: {{ template "kubezero-lib.fullname" $ }}-keycloak
 {{- end }}

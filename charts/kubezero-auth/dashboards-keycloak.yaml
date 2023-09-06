@@ -4,5 +4,6 @@ gzip: true
 # folder: 
 dashboards:
 - name: keycloak
-  url: https://grafana.com/api/dashboards/10441/revisions/2/download
+  # url: https://grafana.com/api/dashboards/10441/revisions/2/download
+  url: https://grafana.com/api/dashboards/17878/revisions/1/download
   tags: ['Keycloak', 'Auth']
