@@ -118,19 +118,19 @@ jenkins:
                       numToKeepStr: "10"
 
     installPlugins:
-      - kubernetes:3985.vd26d77b_2a_48a_
-      - kubernetes-credentials-provider:1.225.v14f9e6b_28f53
-      - workflow-aggregator:581.v0c46fa_697ffd
-      - git:5.2.0
-      - basic-branch-build-strategies:81.v05e333931c7d
-      - pipeline-graph-view:183.v9e27732d970f
-      - pipeline-stage-view:2.33
-      - configuration-as-code:1670.v564dc8b_982d0
-      - antisamy-markup-formatter:162.v0e6ec0fcfcf6
-      - prometheus:2.2.3
-      - htmlpublisher:1.32
-      - build-discarder:139.v05696a_7fe240
-      - dark-theme:336.v02165cd8c2ee
+      - kubernetes
+      - kubernetes-credentials-provider
+      - workflow-aggregator
+      - git
+      - basic-branch-build-strategies
+      - pipeline-graph-view
+      - pipeline-stage-view
+      - configuration-as-code
+      - antisamy-markup-formatter
+      - prometheus
+      - htmlpublisher
+      - build-discarder
+      - dark-theme
 
   serviceAccountAgent:
     create: true
