@@ -38,6 +38,11 @@ keycloak:
       replicaCount: 0
 
   istio:
-    enabled: false
-    gateway: istio-ingress/private-ingressgateway
-    url: ""
+    admin:
+      enabled: false
+      gateway: istio-ingress/private-ingressgateway
+      url: ""
+    auth:
+      enabled: false
+      gateway: istio-ingress/ingressgateway
+      url: ""

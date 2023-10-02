@@ -71,6 +71,7 @@ spec:
       tolerations:
       - key: node-role.kubernetes.io/control-plane
         effect: NoSchedule
+      priorityClassName: system-cluster-critical
       volumes:
       - name: aws-token
         projected:

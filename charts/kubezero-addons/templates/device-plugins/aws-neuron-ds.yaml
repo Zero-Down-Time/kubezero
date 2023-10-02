@@ -12,8 +12,6 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      annotations:
-        scheduler.alpha.kubernetes.io/critical-pod: ""
       labels:
         name: neuron-device-plugin-ds
     spec:
