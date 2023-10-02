@@ -105,6 +105,10 @@ jenkins:
             noUsageStatistics: true
             disabledAdministrativeMonitors:
             - "jenkins.security.ResourceDomainRecommendation"
+          appearance:
+            themeManager:
+              disableUserThemes: true
+              theme: "dark"
           unclassified:
             buildDiscarders:
               configuredBuildDiscarders:
@@ -131,6 +135,7 @@ jenkins:
       - htmlpublisher
       - build-discarder
       - dark-theme
+      - matrix-auth
 
   serviceAccountAgent:
     create: true
@@ -139,14 +144,14 @@ jenkins:
   # Preconfigure agents to use zdt podman requires fuse/overlayfs
   agent:
     image: public.ecr.aws/zero-downtime/jenkins-podman
-    tag: v0.4.3
+    tag: v0.4.5
     #alwaysPullImage: true
     podRetention: "Default"
     showRawYaml: false
     podName: "podman-aws"
     customJenkinsLabels:
     - podman-aws-trivy
-    idleMinutes: 15
+    idleMinutes: 30
     containerCap: 2
     annotations:
       container.apparmor.security.beta.kubernetes.io/jnlp: unconfined
@@ -228,7 +233,7 @@ jenkins:
 trivy:
   enabled: false
   image:
-    tag: 0.42.0
+    tag: 0.45.1
   persistence:
     enabled: true
     size: 1Gi

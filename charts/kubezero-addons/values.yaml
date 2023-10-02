@@ -140,6 +140,9 @@ aws-node-termination-handler:
 
 fuseDevicePlugin:
   enabled: false
+  image:
+    name: public.ecr.aws/zero-downtime/fuse-device-plugin
+    tag: v1.2.0
 
 awsNeuron:
   enabled: false

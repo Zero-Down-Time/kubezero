@@ -13,9 +13,15 @@ spec:
       labels:
         name: fuse-device-plugin
     spec:
-      hostNetwork: true
+      priorityClassName: system-node-critical
+      tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+      - key: kubezero-workergroup
+        effect: NoSchedule
+        operator: Exists
       containers:
-      - image: public.ecr.aws/zero-downtime/fuse-device-plugin:v1.1.0
+      - image: "{{ .Values.fuseDevicePlugin.image.name }}:{{ .Values.fuseDevicePlugin.image.tag }}"
         # imagePullPolicy: Always
         name: fuse-device-plugin
         securityContext:

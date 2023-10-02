@@ -1,6 +1,6 @@
 # kubezero-addons
 
-![Version: 0.8.1](https://img.shields.io/badge/Version-0.8.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.26](https://img.shields.io/badge/AppVersion-v1.26-informational?style=flat-square)
+![Version: 0.8.2](https://img.shields.io/badge/Version-0.8.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.26](https://img.shields.io/badge/AppVersion-v1.26-informational?style=flat-square)
 
 KubeZero umbrella chart for various optional cluster addons
 
@@ -18,10 +18,10 @@ Kubernetes: `>= 1.26.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://bitnami-labs.github.io/sealed-secrets | sealed-secrets | 2.12.0 |
-| https://falcosecurity.github.io/charts | falco-control-plane(falco) | 3.5.0 |
-| https://kubernetes-sigs.github.io/external-dns/ | external-dns | 1.13.0 |
-| https://kubernetes.github.io/autoscaler | cluster-autoscaler | 9.29.1 |
+| https://bitnami-labs.github.io/sealed-secrets | sealed-secrets | 2.13.0 |
+| https://falcosecurity.github.io/charts | falco-control-plane(falco) | 3.7.1 |
+| https://kubernetes-sigs.github.io/external-dns/ | external-dns | 1.13.1 |
+| https://kubernetes.github.io/autoscaler | cluster-autoscaler | 9.29.3 |
 | https://nvidia.github.io/k8s-device-plugin | nvidia-device-plugin | 0.14.1 |
 | https://twin.github.io/helm-charts | aws-eks-asg-rolling-update-handler | 1.4.0 |
 | oci://public.ecr.aws/aws-ec2/helm | aws-node-termination-handler | 0.22.0 |
@@ -161,6 +161,8 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | forseti.image.name | string | `"public.ecr.aws/zero-downtime/forseti"` |  |
 | forseti.image.tag | string | `"v0.1.2"` |  |
 | fuseDevicePlugin.enabled | bool | `false` |  |
+| fuseDevicePlugin.image.name | string | `"public.ecr.aws/zero-downtime/fuse-device-plugin"` |  |
+| fuseDevicePlugin.image.tag | string | `"1.2.0"` |  |
 | nvidia-device-plugin.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key | string | `"node.kubernetes.io/instance-type"` |  |
 | nvidia-device-plugin.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator | string | `"In"` |  |
 | nvidia-device-plugin.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[0] | string | `"g5.xlarge"` |  |
