@@ -3,7 +3,7 @@ set -eE
 set -o pipefail
 
 #VERSION="latest"
-VERSION="v1.26"
+VERSION="v1.27"
 ARGO_APP=${1:-/tmp/new-kubezero-argoapp.yaml}
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
@@ -156,9 +156,6 @@ echo "Checking that all pods in kube-system are running ..."
 waitSystemPodsRunning
 
 echo "Applying remaining KubeZero modules..."
-
-# Delete fluent-bit DS being all weird
-kubectl delete ds logging-fluent-bit -n logging || true
 
 control_plane_upgrade "apply_cert-manager, apply_istio, apply_istio-ingress, apply_istio-private-ingress, apply_logging, apply_metrics, apply_argocd"
 

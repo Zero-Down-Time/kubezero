@@ -85,8 +85,6 @@ metadata:
   name: aws-iam-authenticator
   labels:
     k8s-app: aws-iam-authenticator
-  annotations:
-    seccomp.security.alpha.kubernetes.io/pod: runtime/default
 spec:
   selector:
     matchLabels:
@@ -98,6 +96,10 @@ spec:
       labels:
         k8s-app: aws-iam-authenticator
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+
       priorityClassName: system-cluster-critical
 
       # use service account with access to
@@ -115,7 +117,7 @@ spec:
 
       containers:
       - name: aws-iam-authenticator
-        image: public.ecr.aws/zero-downtime/aws-iam-authenticator:v0.6.10
+        image: public.ecr.aws/zero-downtime/aws-iam-authenticator:v0.6.11
         args:
         - server
         - --backend-mode=CRD,MountedFile
