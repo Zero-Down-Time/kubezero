@@ -33,3 +33,5 @@ kubeReserved:
 #  memory.available: "484Mi"
 imageGCLowThresholdPercent: 70
 # kernelMemcgNotification: true
+serializeImagePulls: false
+maxParallelImagePulls: 2

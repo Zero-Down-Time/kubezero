@@ -1,6 +1,6 @@
 {{- /* Feature gates for all control plane components */ -}}
 {{- define "kubeadm.featuregates" }}
-{{- $gates := list "CustomCPUCFSQuotaPeriod" }}
+{{- $gates := list "CustomCPUCFSQuotaPeriod" "MemoryQoS" "UserNamespacesSupport" }}
 {{- if eq .return "csv" }}
 {{- range $key := $gates }}
 {{- $key }}=true,

@@ -4,7 +4,7 @@
 set -x
 
 #VERSION="latest"
-KUBE_VERSION="v1.26.8"
+KUBE_VERSION="v1.27.7"
 WORKDIR=$(mktemp -p /tmp -d kubezero.XXX)
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
