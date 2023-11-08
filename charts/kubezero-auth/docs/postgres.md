@@ -17,11 +17,13 @@ kubectl cp keycloak/kubezero-auth-postgresql-0:/bitnami/postgresql/backup postgr
 ## upgrade
 
 - upgrade auth chart
-
+- set replica of the keycloak statefulSet to 0
+- set replica of the postgres-auth statefulSet to 0
 - delete postgres-auth PVC and POD to flush old DB
 
 ## restore
 
+- restore replica of postgres-auth statefulSet
 - copy backup to new PVC
 ```
 kubectl cp postgres-backup keycloak/kubezero-auth-postgresql-0:/bitnami/postgresql/backup
@@ -32,17 +34,16 @@ kubectl cp postgres-backup keycloak/kubezero-auth-postgresql-0:/bitnami/postgres
 psql -U postgres
 ```
 
-- drop database `keycloak`
+- drop database `keycloak` in case the keycloak instances connected early
 ```
 DROP database keycloak
 ``` 
-if keycloak is running and postgres complains about connected users simply kill the keycloak and retry
 
 - actual restore
 ```
 psql -U postgres -d postgres -f backup
 ```
 
-- restart keycloak once more
+- reset replia of keycloak statefulSet or force ArgoCD sync
 
 success.
