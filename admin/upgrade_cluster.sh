@@ -150,12 +150,24 @@ echo "Adjust kubezero values as needed:"
 # shellcheck disable=SC2015
 argo_used && kubectl edit app kubezero -n argocd || kubectl edit cm kubezero-values -n kube-system
 
-control_plane_upgrade "apply_network, apply_addons, apply_storage"
+# We need to restore the network ready file as cilium decided to rename it
+control_plane_upgrade apply_network
+echo "Wait for all CNI agents to be running ..." 
+waitSystemPodsRunning
+all_nodes_upgrade "cd /host/etc/cni/net.d && ln -s 05-cilium.conflist 05-cilium.conf || true"
+
+# now the rest
+control_plane_upgrade "apply_addons, apply_storage"
 
 echo "Checking that all pods in kube-system are running ..."
 waitSystemPodsRunning
 
 echo "Applying remaining KubeZero modules..."
+
+### Cleanup of some deprecated Istio Crds
+for crd in clusterrbacconfigs.rbac.istio.io rbacconfigs.rbac.istio.io servicerolebindings.rbac.istio.io serviceroles.rbac.istio.io; do
+  kubectl delete crds $crd || true
+done
 
 control_plane_upgrade "apply_cert-manager, apply_istio, apply_istio-ingress, apply_istio-private-ingress, apply_logging, apply_metrics, apply_argocd"
 

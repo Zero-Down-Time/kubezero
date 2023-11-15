@@ -31,7 +31,7 @@ addons:
 network:
   enabled: true
   retain: true
-  targetRevision: 0.4.5
+  targetRevision: 0.4.6
   cilium:
     cluster: {}
 
@@ -59,13 +59,13 @@ storage:
 istio:
   enabled: false
   namespace: istio-system
-  targetRevision: 0.18.2
+  targetRevision: 0.19.4
 
 istio-ingress:
   enabled: false
   chart: kubezero-istio-gateway
   namespace: istio-ingress
-  targetRevision: 0.18.2
+  targetRevision: 0.19.4
   gateway:
     service: {}
 
@@ -76,6 +76,16 @@ istio-private-ingress:
   targetRevision: 0.18.2
   gateway:
     service: {}
+
+telemetry:
+  enabled: false
+  namespace: telemetry
+  targetRevision: 0.1.0
+
+operators:
+  enabled: false
+  namespace: operators
+  targetRevision: 0.1.0
 
 metrics:
   enabled: false

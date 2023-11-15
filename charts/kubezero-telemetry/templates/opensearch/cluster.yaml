@@ -1,0 +1,39 @@
+{{- if .Values.opensearch.nodeSets }}
+apiVersion: opensearch.opster.io/v1
+kind: OpenSearchCluster
+metadata:
+  name: {{ template "kubezero-lib.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{ include "kubezero-lib.labels" . | nindent 4 }}
+spec:
+  general:
+    serviceName: {{ template "kubezero-lib.fullname" . }}
+    version: 2.11.0
+  dashboards:
+    enable: true
+    version: 2.11.0
+    replicas: 1
+    resources:
+      requests:
+         memory: "512Mi"
+         cpu: "200m"
+      limits:
+         memory: "512Mi"
+         cpu: "200m"
+  nodePools:
+    - component: nodes
+      replicas: 2
+      diskSize: "16Gi"
+      nodeSelector:
+      resources:
+         requests:
+            memory: "2Gi"
+            cpu: "500m"
+         limits:
+            memory: "2Gi"
+            cpu: "500m"
+      roles:
+        - "cluster_manager"
+        - "data"
+{{- end }}

@@ -18,7 +18,7 @@ data:
               {
                 "name": "envoy.resource_monitors.fixed_heap",
                 "threshold": {
-                  "value": 0.9
+                  "value": 0.92
                 }
               }
             ]
@@ -29,7 +29,7 @@ data:
               {
                 "name": "envoy.resource_monitors.fixed_heap",
                 "threshold": {
-                  "value": 0.99
+                  "value": 0.98
                 }
               }
             ]

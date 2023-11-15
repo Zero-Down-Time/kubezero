@@ -1,0 +1,28 @@
+apiVersion: v2
+name: kubezero-telemetry
+description: KubeZero Umbrella Chart for OpenTelemetry, Jaeger etc.
+type: application
+version: 0.1.0
+home: https://kubezero.com
+icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
+keywords:
+  - kubezero
+  - otel
+  - OpenTelemetry
+  - jaeger
+maintainers:
+  - name: Stefan Reimer
+    email: stefan@zero-downtime.net
+dependencies:
+  - name: kubezero-lib
+    version: ">= 0.1.6"
+    repository: https://cdn.zero-downtime.net/charts/
+  - name: opentelemetry-collector
+    version: 0.73.1
+    repository: https://open-telemetry.github.io/opentelemetry-helm-charts
+    condition: opentelemetry-collector.enabled
+  - name: jaeger
+    version: 0.72.0
+    repository: https://jaegertracing.github.io/helm-charts
+    condition: jaeger.enabled
+kubeVersion: ">= 1.26.0"

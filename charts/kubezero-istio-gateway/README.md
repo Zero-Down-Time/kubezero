@@ -1,6 +1,6 @@
 # kubezero-istio-gateway
 
-![Version: 0.10.0](https://img.shields.io/badge/Version-0.10.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.19.4](https://img.shields.io/badge/Version-0.19.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Istio gateways
 
@@ -16,12 +16,12 @@ Installs Istio Ingress Gateways, requires kubezero-istio to be installed !
 
 ## Requirements
 
-Kubernetes: `>= 1.25.0`
+Kubernetes: `>= 1.26.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://istio-release.storage.googleapis.com/charts | gateway | 1.17.2 |
+| https://istio-release.storage.googleapis.com/charts | gateway | 1.19.4 |
 
 ## Values
 
@@ -33,12 +33,14 @@ Kubernetes: `>= 1.25.0`
 | gateway.autoscaling.minReplicas | int | `1` |  |
 | gateway.autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
 | gateway.podAnnotations."proxy.istio.io/config" | string | `"{ \"terminationDrainDuration\": \"20s\" }"` |  |
+| gateway.priorityClassName | string | `"system-cluster-critical"` |  |
 | gateway.replicaCount | int | `1` |  |
 | gateway.resources.limits.memory | string | `"512Mi"` |  |
 | gateway.resources.requests.cpu | string | `"50m"` |  |
 | gateway.resources.requests.memory | string | `"64Mi"` |  |
 | gateway.service.externalTrafficPolicy | string | `"Local"` |  |
 | gateway.service.type | string | `"NodePort"` |  |
+| gateway.terminationGracePeriodSeconds | int | `120` |  |
 | proxyProtocol | bool | `true` |  |
 | telemetry.enabled | bool | `false` |  |
 

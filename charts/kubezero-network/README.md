@@ -1,6 +1,6 @@
 # kubezero-network
 
-![Version: 0.4.4](https://img.shields.io/badge/Version-0.4.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.4.6](https://img.shields.io/badge/Version-0.4.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things network
 
@@ -14,13 +14,13 @@ KubeZero umbrella chart for all things network
 
 ## Requirements
 
-Kubernetes: `>= 1.25.0`
+Kubernetes: `>= 1.26.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://helm.cilium.io/ | cilium | 1.13.4 |
-| https://metallb.github.io/metallb | metallb | 0.13.9 |
+| https://helm.cilium.io/ | cilium | 1.14.4 |
+| https://metallb.github.io/metallb | metallb | 0.13.12 |
 
 ## Values
 
@@ -65,5 +65,6 @@ Kubernetes: `>= 1.25.0`
 | multus.clusterNetwork | string | `"cilium"` |  |
 | multus.defaultNetworks | list | `[]` |  |
 | multus.enabled | bool | `false` |  |
-| multus.readinessindicatorfile | string | `"/etc/cni/net.d/05-cilium.conf"` |  |
-| multus.tag | string | `"v3.9.3"` |  |
+| multus.image.repository | string | `"ghcr.io/k8snetworkplumbingwg/multus-cni"` |  |
+| multus.image.tag | string | `"v3.9.3"` |  |
+| multus.readinessindicatorfile | string | `"/etc/cni/net.d/05-cilium.conflist"` |  |
