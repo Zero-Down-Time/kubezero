@@ -1,0 +1,76 @@
+k8saudit:
+  enabled: false
+
+  fullnameOverride: falco-k8saudit
+
+  # -- Disable the drivers since we want to deploy only the k8saudit plugin.
+  driver:
+    enabled: false
+
+  # -- Disable the collectors, no syscall events to enrich with metadata.
+  collectors:
+    enabled: false
+
+  # falcoctl disabled so we can reduce resources quite a bit
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 1000m
+      memory: 512Mi
+
+  nodeSelector:
+    node-role.kubernetes.io/control-plane: ""
+
+  # -- Deploy Falco as a deployment. One instance of Falco is enough. Anyway the number of replicas is configurabale.
+  controller:
+    kind: deployment
+    deployment:
+      # -- Number of replicas when installing Falco using a deployment. Change it if you really know what you are doing.
+      # For more info check the section on Plugins in the README.md file.
+      replicas: 1
+
+  # This provides k8s-audit rules via custom CM
+  mounts:
+    volumeMounts:
+      - mountPath: /etc/falco/rules.d
+        name: rules-volume
+    volumes:
+      - name: rules-volume
+        configMap:
+          name: falco-k8saudit-rules
+
+  falcoctl:
+    artifact:
+      install:
+        enabled: false
+      follow:
+        enabled: false
+
+  services:
+    - name: webhook
+      ports:
+        - port: 9765 # See plugin open_params
+          protocol: TCP
+
+  falco:
+    rules_file:
+      - /etc/falco/rules.d
+    plugins:
+      - name: k8saudit
+        library_path: libk8saudit.so
+        init_config:
+          maxEventSize: 1048576
+        open_params: "http://:9765/k8s-audit"
+      - name: json
+        library_path: libjson.so
+        init_config: ""
+    # Plugins that Falco will load. Note: the same plugins are installed by the falcoctl-artifact-install init container.
+    load_plugins: [k8saudit, json]
+
+    json_output: true
+    buffered_outputs: true
+    log_syslog: false
+    syslog_output:
+      enabled: false

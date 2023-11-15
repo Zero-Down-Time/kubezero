@@ -10,7 +10,7 @@ global:
 
 addons:
   enabled: true
-  targetRevision: 0.8.2
+  targetRevision: 0.8.4
   external-dns:
     enabled: false
   forseti:
@@ -24,8 +24,6 @@ addons:
   aws-node-termination-handler:
     enabled: false
   aws-eks-asg-rolling-update-handler:
-    enabled: false
-  falco-control-plane:
     enabled: false
 
 network:
@@ -76,6 +74,12 @@ istio-private-ingress:
   targetRevision: 0.18.2
   gateway:
     service: {}
+
+falco:
+  enabled: false
+  k8saudit:
+    enabled: false
+  targetRevision: 0.1.0
 
 telemetry:
   enabled: false

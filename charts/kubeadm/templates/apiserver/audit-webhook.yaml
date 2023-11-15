@@ -3,7 +3,7 @@ kind: Config
 clusters:
   - name: falco
     cluster:
-      server: http://falco-control-plane-k8saudit-webhook:9765/k8s-audit
+      server: http://falco-k8saudit-webhook:9765/k8s-audit
 contexts:
   - context:
       cluster: falco

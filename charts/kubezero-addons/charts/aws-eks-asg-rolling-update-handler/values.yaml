@@ -37,3 +37,15 @@ serviceAccount:
   create: true
   #name: aws-eks-asg-rolling-update-handler
   annotations: {}
+
+securityContext: {}
+  # runAsNonRoot: true
+  # runAsUser: 1001
+  # seccompProfile:
+#  type: RuntimeDefault
+
+containerSecurityContext: {}
+  # allowPrivilegeEscalation: false
+  # capabilities:
+  #  drop:
+#    - ALL

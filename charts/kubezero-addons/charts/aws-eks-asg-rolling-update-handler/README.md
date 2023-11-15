@@ -12,3 +12,5 @@ The following table lists the configurable parameters of the aws-eks-asg-rolling
 | resources | CPU/memory resource requests/limits | no | `{}` |
 | podAnnotations | Annotations to add to the aws-eks-asg-rolling-update-handler pod configuration | no | `{}` |
 | podLabels | Labels to add to the aws-eks-asg-rolling-update-handler pod configuration | no | `{}` |
+| securityContext | Pod security context | no | `{}` |
+| containerSecurityContext | Container security context | no | `{}` |

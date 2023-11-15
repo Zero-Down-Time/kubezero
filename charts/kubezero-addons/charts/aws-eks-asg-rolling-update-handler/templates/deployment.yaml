@@ -17,12 +17,16 @@ spec:
 {{ include "aws-eks-asg-rolling-update-handler.labels" . | indent 8 }}
       {{- with .Values.podLabels }}
       {{- toYaml . | nindent 8 }}
-      {{- end }}    
+      {{- end }}
       annotations:
       {{- with .Values.podAnnotations }}
       {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
+      {{- if .Values.securityContext }}
+      securityContext:
+        {{ toYaml .Values.securityContext | nindent 8 | trim }}
+      {{- end }}
       automountServiceAccountToken: true
       serviceAccountName: {{ template "aws-eks-asg-rolling-update-handler.serviceAccountName" . }}
       restartPolicy: Always
@@ -31,6 +35,10 @@ spec:
         - name: {{ template "aws-eks-asg-rolling-update-handler.name" . }}
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.containerSecurityContext }}
+          securityContext:
+            {{ toYaml .Values.containerSecurityContext | nindent 12 | trim }}
+          {{- end }}
           env:
 {{- toYaml .Values.environmentVars | nindent 12 }}
 {{- with .Values.resources }}

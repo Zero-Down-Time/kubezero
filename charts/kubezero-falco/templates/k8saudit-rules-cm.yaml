@@ -1,0 +1,10 @@
+{{- if .Values.k8saudit.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: falco-k8saudit-rules
+  labels:
+    {{- include "falco.labels" . | nindent 4 }}
+data:
+  {{- (.Files.Glob "files/rules/**.yaml").AsConfig | nindent 2 }}
+{{- end }}
