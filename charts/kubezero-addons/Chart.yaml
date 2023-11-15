@@ -2,7 +2,7 @@ apiVersion: v2
 name: kubezero-addons
 description: KubeZero umbrella chart for various optional cluster addons
 type: application
-version: 0.8.2
+version: 0.8.3
 appVersion: v1.26
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
@@ -25,16 +25,16 @@ dependencies:
     repository: https://kubernetes-sigs.github.io/external-dns/
     condition: external-dns.enabled
   - name: cluster-autoscaler
-    version: 9.29.3
+    version: 9.29.5
     repository: https://kubernetes.github.io/autoscaler
     condition: cluster-autoscaler.enabled
   - name: nvidia-device-plugin
-    version: 0.14.1
+    version: 0.14.2
     # https://github.com/NVIDIA/k8s-device-plugin
     repository: https://nvidia.github.io/k8s-device-plugin
     condition: nvidia-device-plugin.enabled
   - name: sealed-secrets
-    version: 2.13.0
+    version: 2.13.2
     repository: https://bitnami-labs.github.io/sealed-secrets
     condition: sealed-secrets.enabled
   - name: aws-node-termination-handler
@@ -42,11 +42,11 @@ dependencies:
     repository: "oci://public.ecr.aws/aws-ec2/helm"
     condition: aws-node-termination-handler.enabled
   - name: aws-eks-asg-rolling-update-handler
-    version: 1.4.0
+    version: 1.5.0
     repository: https://twin.github.io/helm-charts
     condition: aws-eks-asg-rolling-update-handler.enabled
   - name: falco
-    version: 3.7.1
+    version: 3.8.4
     repository: https://falcosecurity.github.io/charts
     condition: falco-control-plane.enabled
     alias: falco-control-plane
