@@ -1,4 +1,3 @@
-{{- if .Values.proxyProtocol }}
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
@@ -16,6 +15,11 @@ spec:
       operation: MERGE
       value:
         listener_filters:
-        - name: envoy.filters.listener.proxy_protocol
         - name: envoy.filters.listener.tls_inspector
-{{- end }}
+          typed_config:
+            "@type": type.googleapis.com/envoy.extensions.filters.listener.tls_inspector.v3.TlsInspector
+        {{- if .Values.proxyProtocol }}
+        - name: envoy.filters.listener.proxy_protocol
+          typed_config:
+            "@type": type.googleapis.com/envoy.extensions.filters.listener.proxy_protocol.v3.ProxyProtocol
+        {{- end }}

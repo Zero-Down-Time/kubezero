@@ -1,14 +1,14 @@
 apiVersion: v2
-name: kubezero-istio-gateway
-description: KubeZero Umbrella Chart for Istio gateways
+name: kubezero-operators
+description: Various operators supported by KubeZero 
 type: application
-version: 0.19.4
+version: 0.1.0
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
   - kubezero
-  - istio
-  - ingress
+  - operators
+  - opensearch
 maintainers:
   - name: Stefan Reimer
     email: stefan@zero-downtime.net
@@ -16,7 +16,8 @@ dependencies:
   - name: kubezero-lib
     version: ">= 0.1.6"
     repository: https://cdn.zero-downtime.net/charts/
-  - name: gateway
-    version: 1.19.4
-    repository: https://istio-release.storage.googleapis.com/charts
+  - name: opensearch-operator
+    version: 2.4.0
+    repository: https://opster.github.io/opensearch-k8s-operator/
+    condition: opensearch-operator.enabled
 kubeVersion: ">= 1.26.0"

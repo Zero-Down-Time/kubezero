@@ -9,7 +9,9 @@ metadata:
     {{- .Values.annotations | toYaml | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  {{- with .Values.replicaCount }}
+  replicas: {{ . }}
+  {{- end }}
   {{- end }}
   # Give the LB 120s to detect and take into service
   # should only be 40s by we are on AWS so ...
@@ -34,7 +36,6 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      terminationGracePeriodSeconds: 120
       serviceAccountName: {{ include "gateway.serviceAccountName" . }}
       securityContext:
       {{- if .Values.securityContext }}
@@ -112,6 +113,10 @@ spec:
       {{- with .Values.topologySpreadConstraints }}
       topologySpreadConstraints:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ $.Values.terminationGracePeriodSeconds }}
+      {{- with .Values.priorityClassName }}
+      priorityClassName: {{ . }}
       {{- end }}
       {{- with .Values.volumes }}
       volumes:

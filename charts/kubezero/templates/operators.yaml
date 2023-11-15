@@ -1,0 +1,15 @@
+{{- define "operators-values" }}
+
+{{- with index .Values "operators" "opensearch-operator" }}
+opensearch-operator:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+
+{{- end }}
+
+
+{{- define "operators-argo" }}
+
+{{- end }}
+
+{{ include "kubezero-app.app" . }}

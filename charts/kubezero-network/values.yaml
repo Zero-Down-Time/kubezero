@@ -22,7 +22,7 @@ multus:
 
   clusterNetwork: "cilium"
   defaultNetworks: []
-  readinessindicatorfile: "/etc/cni/net.d/05-cilium.conf"
+  readinessindicatorfile: "/etc/cni/net.d/05-cilium.conflist"
 
 cilium:
   enabled: false
@@ -45,9 +45,9 @@ cilium:
     #-- Ensure this is false if multus is enabled
     exclusive: false
 
-  #bpf:
-  #  hostLegacyRouting: true
-  #  tproxy: false
+# bpf:
+#   autoMount:
+#     enabled: false
 
   cluster:
     # This should match the second octet of clusterPoolIPv4PodCIDRList
@@ -71,7 +71,7 @@ cilium:
       enabled: false
     hostRoot: "/sys/fs/cgroup"
 
-  tunnel: geneve
+  tunnelProtocol: geneve
 
   prometheus:
     enabled: false

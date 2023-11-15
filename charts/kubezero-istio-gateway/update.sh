@@ -9,3 +9,5 @@ update_helm
 export ISTIO_VERSION=$(yq eval '.dependencies[] | select(.name=="gateway") | .version' Chart.yaml)
 
 patch_chart gateway
+
+update_docs

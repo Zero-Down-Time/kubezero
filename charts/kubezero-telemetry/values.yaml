@@ -1,0 +1,34 @@
+opentelemetry-collector:
+  enabled: false
+
+  mode: deployment
+
+jaeger:
+  enabled: false
+
+# allInOne:
+#   enabled: true
+# storage:
+#   type: none
+# collector:
+#   enabled: false
+# query:
+#   enabled: false
+
+  agent:
+    enabled: false
+
+  storage:
+    type: elasticsearch
+
+  provisionDataStore:
+    cassandra: false
+    elasticsearch: false
+
+  istio:
+    enabled: false
+    gateway: istio-ingress/private-ingressgateway
+    url: jaeger.example.com
+
+opensearch:
+  nodeSets: {}

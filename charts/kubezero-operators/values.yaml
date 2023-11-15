@@ -1,0 +1,15 @@
+opensearch-operator:
+  enabled: false
+
+  # otherwise service names will be >63 chars
+  fullnameOverride: telemetry
+
+  # not needed for now
+  kubeRbacProxy:
+    enable: false
+
+  tolerations:
+  - key: node-role.kubernetes.io/control-plane
+    effect: NoSchedule
+  nodeSelector:
+    node-role.kubernetes.io/control-plane: ""
