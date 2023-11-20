@@ -30,7 +30,7 @@ RUN helm repo add kubezero https://cdn.zero-downtime.net/charts && \
     mkdir -p /var/lib/kubezero
 
 ADD admin/kubezero.sh admin/libhelm.sh admin/migrate_argo_values.py /usr/bin
-ADD admin/libhelm.sh admin/pre-upgrade.sh /var/lib/kubezero
+ADD admin/libhelm.sh /var/lib/kubezero
 
 ADD charts/kubeadm /charts/kubeadm
 ADD charts/kubezero /charts/kubezero
