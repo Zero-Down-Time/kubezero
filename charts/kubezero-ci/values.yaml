@@ -153,8 +153,6 @@ jenkins:
     - podman-aws-trivy
     idleMinutes: 30
     containerCap: 2
-    annotations:
-      container.apparmor.security.beta.kubernetes.io/jnlp: unconfined
     resources:
       requests:
         cpu: ""
