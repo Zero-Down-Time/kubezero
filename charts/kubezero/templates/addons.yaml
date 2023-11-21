@@ -131,11 +131,6 @@ sealed-secrets:
   {{- end }}
 {{- end }}
 
-{{- with index .Values "addons" "falco-control-plane" }}
-falco-control-plane:
-  {{- toYaml . | nindent 2 }}
-{{- end }}
-
 {{- if .Values.global.aws }}
 # AWS only
 aws-node-termination-handler:

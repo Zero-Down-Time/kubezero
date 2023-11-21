@@ -111,7 +111,7 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | cluster-autoscaler.extraArgs.scan-interval | string | `"30s"` |  |
 | cluster-autoscaler.extraArgs.skip-nodes-with-local-storage | bool | `false` |  |
 | cluster-autoscaler.image.repository | string | `"registry.k8s.io/autoscaling/cluster-autoscaler"` |  |
-| cluster-autoscaler.image.tag | string | `"v1.26.4"` |  |
+| cluster-autoscaler.image.tag | string | `"v1.27.3"` |  |
 | cluster-autoscaler.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | cluster-autoscaler.podDisruptionBudget | bool | `false` |  |
 | cluster-autoscaler.prometheusRule.enabled | bool | `false` |  |

@@ -8,6 +8,22 @@ import yaml
 def migrate(values):
     """Actual changes here"""
 
+    # Cleanup
+    values.pop("Domain", None)
+    values.pop("clusterName", None)
+    if "addons" in values:
+        if not values["addons"]:
+            values.pop("addons")
+
+    # migrate eck operator to new operator module
+    try:
+        if values["logging"]["eck-operator"]["enabled"]:
+            if "operators" not in values:
+                values["operators"] = {}
+            values["operators"]["eck-operator"] = { "enabled": true }
+    except KeyError:
+        pass
+
     return values
 
 
