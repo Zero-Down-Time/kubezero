@@ -1,8 +1,4 @@
 {{- define "logging-values" }}
-{{- with index .Values "logging" "eck-operator" }}
-eck-operator:
-  {{- toYaml . | nindent 2 }}
-{{- end }}
 
 {{- if .Values.logging.elastic_password }}
 elastic_password: {{ .Values.logging.elastic_password }}
