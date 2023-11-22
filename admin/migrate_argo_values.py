@@ -19,8 +19,9 @@ def migrate(values):
     try:
         if values["logging"]["eck-operator"]["enabled"]:
             if "operators" not in values:
-                values["operators"] = {}
-            values["operators"]["eck-operator"] = { "enabled": true }
+                values["operators"] = { "enabled": True }
+            values["operators"]["eck-operator"] = { "enabled": True }
+            values["logging"].pop("eck-operator", None)
     except KeyError:
         pass
 
