@@ -1,0 +1,1034 @@
+:root {
+  --color-primary: #347d39;
+  --color-secondary: #373e47;
+  --border-radius: 6px;
+  --color-body: #0d1117;
+  --color-navbar: #161b22;
+  --color-footer: #161b22;
+  --color-text-light: #a6aab5;
+  --color-text-light-2: #adbac7;
+  --color-grey-light: var(--color-text-light);
+  --color-text: #bbc0ca;
+  --color-box-body: #22272e;
+  --color-markup-code-block: #636e7b66;
+  --color-light: #22272e;
+  --color-button: #22272e;
+  --color-input-background: #22272e;
+  --color-input-border-hover: #8e8c8c;
+  --color-input-text: #adbac7;
+  --color-box-header: #22272e;
+  --color-active: #22272e;
+  --color-menu: #22272e;
+  --color-caret: var(--color-text);
+  --is-dark-theme: true;
+  --color-blue: #4796f9;
+  --color-input-background: #22272e;
+  --color-primary-contrast: #adbac7;
+  --color-text-light-2: #a6aab5;
+  --color-box-body: #161b22;
+  --color-box-header: #161b22;
+  --color-green-light: #16ab39;
+  --color-nav-bg: #161b22;
+  --color-header-wrapper: #161b22;
+  --color-nav-hover-bg: #808080;
+
+  /* code editor colors are set in https://github.com/go-gitea/gitea/blob/f5b300ea77081a1b78ac044cb1c0f9225538d091/web_src/js/features/codeeditor.js#L82-L97.  */
+  /* monaco editor dark theme is toggled via variable `--is-dark-theme` */
+  --color-primary-light-3: #71798e;
+  --color-editor-line-highlight: #71798e;
+  --color-code-bg: var(--color-input-background);
+}
+
+.ui.list .list > .item > .content,
+.ui.list > .item > .content {
+  color: unset;
+}
+
+.ui.list .list > .item .description,
+.ui.list > .item .description {
+  color: var(--color-text);
+}
+
+.ui.repository.list,
+.ui.user.list {
+  background: var(--color-box-body);
+  padding: 1em;
+  border-radius: 0.75em;
+}
+
+.ui.header .sub.header {
+  color: #636e7b;
+}
+
+.ui .error.header {
+  border-color: var(--color-red) !important;
+  background-color: var(--color-red) !important;
+  color: #cdd9e5fff !important;
+}
+
+.ui.modal > .header {
+  background: var(--color-secondary);
+  color: #dbdbdb;
+}
+
+.ui.modal > .actions {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+
+.ui.modal > .content {
+  background: #383c4a;
+}
+
+.ui.green.buttons .button,
+.ui.green.button {
+  background-color: #347d39;
+  color: #cdd9e5 !important;
+  border-radius: 2em;
+  padding: 5px 10px;
+}
+
+.repository.file.list #repo-files-table tbody .svg.octicon-file-directory,
+.repository.file.list #repo-files-table tbody .svg.octicon-file-submodule {
+  color: #768390;
+}
+
+a,
+.ui.breadcrumb a {
+  /* color: var(--color-text); */
+  color: var(--color-blue);
+}
+
+.repo-title a {
+  color: var(--color-blue) !important;
+}
+
+.ui.table > thead > tr > th {
+  background: #636e7b1a;
+  color: #dbdbdb !important;
+}
+
+.repository.file.list #repo-files-table tr {
+  background: #22272e;
+}
+
+.repo-icon {
+  display: inline-block;
+  transform: scale(0.75);
+  margin-right: -0.05rem !important;
+}
+
+.repository.file.list #file-buttons .ui.button {
+  color: #cdd9e5 !important;
+}
+
+.ui.basic.green.button,
+.ui.basic.green.buttons .button,
+.ui.basic.primary.button,
+.ui.basic.primary.buttons .button {
+  background-color: #22272e !important;
+  box-shadow: inset 0 0 0 1px rgba(34, 36, 38, 0.15) !important;
+  color: #cdd9e5 !important;
+}
+
+.ui.basic.green.button:focus,
+.ui.basic.green.buttons .button:focus,
+.ui.basic.primary.button:focus,
+.ui.basic.primary.buttons .button:focus {
+  box-shadow: inset 0 0 0 0px #808080 !important;
+}
+
+.ui.basic.green.button:hover,
+.ui.basic.green.buttons .button:hover,
+.ui.basic.primary.button:hover,
+.ui.basic.primary.buttons .button:hover {
+  background-color: #22272e !important;
+}
+
+.ui.basic.green.button:hover,
+.ui.basic.green.buttons .button:hover,
+.ui.basic.primary.button:hover,
+.ui.basic.primary.buttons .button:hover {
+  box-shadow: inset 0 0 0 0px #808080 !important;
+}
+
+.issue.list {
+  list-style: none;
+  margin-top: 1rem;
+  background-color: #22272e;
+  border-radius: 6px;
+  padding: 3px 10px 3px 10px;
+  border: 1px solid #373e47;
+}
+
+.ui.menu .item {
+  background-color: #22272e;
+}
+
+.ui.horizontal.segments > .segment {
+  background-color: #22272e;
+  border-radius: 6px;
+}
+
+.ui.attached.header {
+  border-radius: 6px;
+}
+
+.repository.file.list .repo-description {
+  color: #adbac7;
+}
+
+.commit-summary a.default-link {
+  color: #adbac7 !important;
+}
+
+.markup h1,
+.markup h2,
+.markup h3,
+.markup h4,
+.markup h5,
+.markup h6 {
+  color: #adbac7;
+}
+
+.markup code,
+.markup tt {
+  color: #adbac7;
+}
+
+.markup p,
+.markup blockquote,
+.markup details,
+.markup ul,
+.markup ol,
+.markup dl,
+.markup table,
+.markup pre {
+  color: #adbac7;
+}
+
+.repo-list-link {
+  color: var(--color-blue) !important;
+}
+
+.ui.menu.two.item .item {
+  border: 1px solid #373e47;
+  background: #161b22;
+}
+
+a,
+.push.news {
+  color: null;
+}
+
+.ui.header {
+  color: #a6aab5;
+}
+
+.repo-description {
+  color: #a6aab5 !important;
+}
+
+a.ui.label {
+  color: #adbac7 !important;
+  border-color: var(--color-secondary) !important;
+}
+
+.ui.label {
+  border-color: var(--color-secondary) !important;
+}
+
+.ui.menu .item {
+  color: #adbac7;
+}
+
+.ui .sha.label {
+  padding: 6px 10px 6px;
+}
+
+/* repo list dashboard */
+.feeds .list ul li.private {
+  background-color: #22272e;
+}
+
+/* ssh and search repository fields */
+input,
+textarea,
+.ui.input > input,
+.ui.form input:not([type]),
+.ui.form select,
+.ui.form textarea,
+.ui.form input[type="date"],
+.ui.form input[type="datetime-local"],
+.ui.form input[type="email"],
+.ui.form input[type="file"],
+.ui.form input[type="number"],
+.ui.form input[type="password"],
+.ui.form input[type="search"],
+.ui.form input[type="tel"],
+.ui.form input[type="text"],
+.ui.form input[type="time"],
+.ui.form input[type="url"],
+.ui.selection.dropdown,
+.ui.checkbox label:before,
+.ui.checkbox input:checked ~ label:before,
+.ui.checkbox input:not([type="radio"]):indeterminate ~ label:before {
+  border-color: #373e47 !important;
+}
+
+/* hover repository rows */
+.repository.file.list #repo-files-table tr:hover {
+  background-color: var(--color-hover);
+}
+
+/* due date boxes */
+.repository .metas #deadlineForm input {
+  border-color: var(--color-secondary);
+}
+
+/* border color dependencies block in issues */
+#new-dependency-drop-list.ui.selection.dropdown {
+  border-color: var(--color-secondary);
+}
+
+.page-content .ui.button {
+  border-color: var(--color-secondary);
+}
+
+/* border color form fields settings page */
+input,
+textarea,
+.ui.input > input,
+.ui.form input:not([type]),
+.ui.form select,
+.ui.form textarea,
+.ui.form input[type="date"],
+.ui.form input[type="datetime-local"],
+.ui.form input[type="email"],
+.ui.form input[type="file"],
+.ui.form input[type="number"],
+.ui.form input[type="password"],
+.ui.form input[type="search"],
+.ui.form input[type="tel"],
+.ui.form input[type="text"],
+.ui.form input[type="time"],
+.ui.form input[type="url"],
+.ui.selection.dropdown,
+.ui.checkbox label:before,
+.ui.checkbox input:checked ~ label:before,
+.ui.checkbox input:not([type="radio"]):indeterminate ~ label:before {
+  border-color: var(--color-secondary);
+}
+
+/* background color of code display */
+.lines-code {
+  background-color: #22272e;
+}
+
+.code-diff-unified .add-code,
+.code-diff-unified .add-code td,
+.code-diff-split .add-code .lines-num-new,
+.code-diff-split .add-code .lines-type-marker-new,
+.code-diff-split .add-code .lines-code-new,
+.code-diff-split .del-code .add-code.lines-num-new,
+.code-diff-split .del-code .add-code.lines-type-marker-new,
+.code-diff-split .del-code .add-code.lines-code-new {
+  background: rgba(70, 149, 74, 0.15);
+}
+
+.tag-code,
+.tag-code td {
+  background-color: var(--color-body);
+}
+
+/* green code color dark theme */
+.chroma .s2 {
+  color: #8ddb8c;
+}
+
+.chroma .k {
+  color: #f47067;
+}
+
+.chroma .m {
+  color: #6cb6ff;
+}
+
+.chroma .nf {
+  color: #96d0ff;
+}
+
+.chroma .nb {
+  color: var(--color-blue);
+}
+
+.chroma .nx {
+  color: var(--color-text);
+}
+
+.chroma .nv {
+  color: #08dddd;
+}
+
+.chroma .si {
+  color: #8ddb8c;
+}
+
+.chroma .nt {
+  color: #50eb75;
+}
+
+.chroma .nd {
+  color: #c4cfcf;
+}
+
+.chroma .o {
+  color: #eb3243;
+}
+
+.chroma .nc {
+  color: #16e9e9;
+}
+
+.chroma .nn {
+  color: #16e9e9;
+}
+
+.chroma .s {
+  color: #8ddb8c;
+}
+
+/* border color repo files */
+.repository.file.list #repo-files-table td {
+  // border-bottom: 1px solid #373e47;
+}
+
+/* text color repo files */
+.repository.file.list #repo-files-table td {
+  color: var(--color-text-light) !important;
+  background: #161b22;
+}
+
+.repository.file.list #repo-files-table td a {
+  /* color: #7f8699 !important; */
+  color: var(--color-blue) !important;
+}
+
+/* gpg commit label  */
+.repository #commits-table td.sha .sha.label.isSigned.isVerified,
+.repository #repo-files-table .sha.label.isSigned.isVerified,
+.repository #rev-list .sha.label.isSigned.isVerified,
+.repository
+  .timeline-item.commits-list
+  .singular-commit
+  .sha.label.isSigned.isVerified {
+  border: 1.5px solid #21ba45 !important;
+  background: transparent;
+  border-radius: 6px;
+}
+
+/* color of active tabular item, e.g. in PR view (conversations, commits, files changed) */
+.ui.tabular.menu .active.item,
+.ui.tabular.menu .active.item:hover {
+  background: var(--color-navbar);
+  border-bottom: 3px solid #f78166 !important;
+  border: 0px solid black;
+  color: #adbac7;
+}
+
+/* repo watch and fork counters */
+.ui.basic.labels:not(.tag):not(.image):not(.ribbon) .label,
+.ui.basic.label:not(.tag):not(.image):not(.ribbon) {
+  color: #adbac7;
+}
+
+.repo-buttons .ui.labeled.button.disabled > .label {
+  color: #adbac7;
+}
+
+/* border color of warning message */
+.ui.warning.message {
+  background-color: #22272e;
+  color: var(--color-text);
+}
+
+.ui.warning.message,
+.ui.attached.warning.message {
+  box-shadow: null;
+}
+
+.ui.warning.message,
+.ui.attached.warning.message {
+  box-shadow: 0 0 0 0px #c9ba9b inset, 0 0 #0000;
+}
+
+/* repo svg icons */
+.repository.view.issue .comment-list .timeline-item .badge .svg {
+  fill: #cdd9e5fff !important;
+}
+
+/* background emoji reactions */
+.repository .segment.reactions .ui.label.basic.blue {
+  background-color: transparent;
+}
+
+.ui.positive.message {
+  background-color: #22272e;
+  color: #cdd9e5;
+}
+
+.ui.positive.message,
+.ui.attached.positive.message {
+  box-shadow: 0 0 0 1px #347d39 inset, 0 0 #0000;
+}
+
+/* diff color deletion */
+.code-diff-unified .del-code,
+.code-diff-unified .del-code td,
+.code-diff-split .del-code .lines-num-old,
+.code-diff-split .del-code .lines-type-marker-old,
+.code-diff-split .del-code .lines-code-old {
+  background: rgba(229, 83, 75, 0.15);
+}
+
+/* diff color neutral */
+.lines-num,
+.lines-code {
+  background-color: var(--color-navbar);
+}
+
+.lines-type-marker {
+  background-color: var(--color-navbar);
+}
+
+a.blob-excerpt {
+  background: var(--color-body);
+}
+
+/* PR open label */
+.ui.green.labels .label,
+.ui.ui.ui.green.label {
+  background-color: #347d39;
+}
+
+/* bg color of PR comment form */
+.ui.form,
+.ui.form .field .dropdown,
+.ui.form .field .dropdown .menu > .item {
+  background-color: var(--color-navbar);
+}
+
+.comment-code-cloud {
+  background-color: var(--color-navbar);
+}
+
+/* remove border of "new file" button */
+.ui.buttons .button:first-child {
+  border-left: 1px solid var(--color-markup-code-block);
+}
+
+/* border color of dropdown svg */
+.ui.form,
+.ui.form .field .dropdown,
+.ui.form .field .dropdown .menu > .item {
+  background-color: var(--color-border);
+  /* border: 0px solid black !important; */
+}
+
+/* hover font color */
+.ui.secondary.pointing.menu .active.item,
+.ui.secondary.pointing.menu .active.item:hover,
+.ui.secondary.pointing.menu .dropdown.item:hover,
+.ui.secondary.pointing.menu .link.item:hover,
+.ui.secondary.pointing.menu a.item:hover {
+  color: var(--color-text);
+}
+
+.ui.selection.active.dropdown,
+.ui.selection.active.dropdown:hover,
+.ui.selection.active.dropdown .menu,
+.ui.selection.active.dropdown:hover .menu {
+  border-color: #373e47;
+}
+
+/* user avatar background */
+.user.profile .ui.card #profile-avatar {
+  background: var(--color-navbar);
+}
+
+.ui.cards > .card > .content,
+.ui.card > .content {
+  background: var(--color-navbar);
+}
+
+.user.profile .ui.card .extra.content ul li:not(:last-child) {
+  border-bottom: 1px solid var(--color-secondary);
+  background-color: var(--color-navbar);
+}
+
+.user.profile .ui.card .extra.content ul li {
+  background-color: var(--color-navbar);
+}
+
+/* right border of profile search bar */
+.ui.action.input:not([class*="left action"]) > input {
+  border-right-color: var(--color-secondary);
+}
+
+.ui.action.input:not([class*="left action"]) > input:focus {
+  border-right-color: var(--color-secondary);
+}
+
+/* font color line numbers */
+.lines-num span:after {
+  color: var(--color-text);
+}
+
+/* gpg key signed message */
+.repository .ui.attached.isSigned.isVerified.message {
+  background-color: var(--color-primary);
+  color: black;
+}
+
+.repository .ui.attached.isSigned.isVerified.message .ui.text {
+  color: var(--color-active);
+}
+
+.ui .info.segment.top {
+  background-color: var(--color-navbar) !important;
+}
+
+.repository .ui.attached.isSigned.isVerified.top,
+.repository .ui.attached.isSigned.isVerified.message {
+  border-top: 0px solid var(--color-text);
+}
+
+.repository .ui.attached.isSigned.isVerified {
+  border-left: 0px solid var(--color-text);
+  border-right: 0px solid var(--color-text);
+}
+
+.repository .ui.attached.isSigned.isVerified:last-child,
+.repository .ui.attached.isSigned.isVerified.bottom {
+  border-bottom: 0px solid #a3c293;
+}
+
+/* info message banner colors */
+.ui.info.message {
+  background-color: var(--color-navbar);
+  color: var(--color-text);
+}
+
+/* PR timelines colors */
+.repository.view.issue .comment-list .timeline-item .badge .svg {
+  fill: black;
+}
+
+.repository.view.issue .comment-list .timeline-item .badge {
+  background-color: var(--color-navbar);
+  color: var(--color-text);
+  width: 30px;
+  height: 30px;
+  margin-left: -31px;
+}
+
+.repository.view.issue .comment-list .timeline-item .badge.badge-commit {
+  border-color: var(--color-navbar);
+  background: var(--color-navbar);
+}
+
+.repository.view.issue .comment-list .timeline:before {
+  background-color: #373e47;
+}
+
+.repository.view.issue .comment-list .timeline-item .badge .svg {
+  width: 20px;
+  height: 20px;
+  padding: 3px;
+}
+
+input {
+  caret-color: var(--color-text);
+}
+
+.removed-code {
+  background: #b70f22;
+  color: var(--color-text);
+}
+
+.added-code {
+  background: #0d8b2c;
+  color: var(--color-text);
+}
+
+/* review - pending label */
+.ui.basic.labels .yellow.label,
+.ui.ui.ui.basic.yellow.label {
+  background: var(--color-project-board-bg);
+  color: #333 !important;
+}
+
+/* green checkmark background when approving PRs */
+.bg-green {
+  background: var(--color-primary) !important;
+}
+
+i.green.icon.icon.icon.icon {
+  color: var(--color-primary);
+}
+
+span.green .svg {
+  color: var(--color-primary);
+}
+
+/* highlight color bg for highlighted lines */
+.lines-code.active,
+.lines-code .active {
+  border-radius: 6px;
+  background: #000000 !important;
+}
+
+.ui.ui.ui.ui.table tr.active,
+.ui.ui.table td.active {
+  box-shadow: 0 0 #000000de inset;
+  background: #e0e0e0;
+  color: --var(--color-text);
+}
+
+/* navbar font size */
+.ui.secondary.menu .item {
+  font-size: 13px;
+}
+
+#navbar .item {
+  margin: 0;
+  padding: 0.5em;
+  font-size: 14px;
+}
+
+.following.bar #navbar {
+  width: 100vw;
+  border-bottom: 1px solid #373e47;
+  /* default 52px */
+  min-height: 40px;
+  padding: 0 0.5rem;
+  background: var(--color-navbar);
+}
+
+::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 0 6px var(--color-navbar);
+}
+::-webkit-scrollbar-thumb:hover {
+  box-shadow: inset 0 0 0 6px var(--color-text);
+}
+
+.following.bar #navbar .brand {
+  margin-top: -2px;
+}
+
+/* border colors of search fields, e.g. "find repository" on main page */
+input:hover,
+textarea:hover,
+.ui.input input:hover,
+.ui.form input:not([type]):hover,
+.ui.form select:hover,
+.ui.form textarea:hover,
+.ui.form input[type="date"]:hover,
+.ui.form input[type="datetime-local"]:hover,
+.ui.form input[type="email"]:hover,
+.ui.form input[type="file"]:hover,
+.ui.form input[type="number"]:hover,
+.ui.form input[type="password"]:hover,
+.ui.form input[type="search"]:hover,
+.ui.form input[type="tel"]:hover,
+.ui.form input[type="text"]:hover,
+.ui.form input[type="time"]:hover,
+.ui.form input[type="url"]:hover,
+.ui.selection.dropdown:hover,
+.ui.checkbox label:hover:before,
+.ui.checkbox label:active:before,
+.ui.radio.checkbox label:after,
+.ui.radio.checkbox input:focus ~ label:before,
+.ui.radio.checkbox input:checked ~ label:before {
+  border-color: var(--color-secondary);
+}
+
+a:hover,
+a.muted:hover,
+.ui.breadcrumb a:hover {
+  color: var(--color-blue);
+}
+
+input:focus,
+textarea:focus,
+.ui.input input:focus,
+.ui.form input:not([type]):focus,
+.ui.form select:focus,
+.ui.form textarea:focus,
+.ui.form input[type="date"]:focus,
+.ui.form input[type="datetime-local"]:focus,
+.ui.form input[type="email"]:focus,
+.ui.form input[type="file"]:focus,
+.ui.form input[type="number"]:focus,
+.ui.form input[type="password"]:focus,
+.ui.form input[type="search"]:focus,
+.ui.form input[type="tel"]:focus,
+.ui.form input[type="text"]:focus,
+.ui.form input[type="time"]:focus,
+.ui.form input[type="url"]:focus,
+.ui.selection.dropdown:focus,
+.ui.checkbox input:focus ~ label:before,
+.ui.checkbox input:not([type="radio"]):indeterminate:focus ~ label:before,
+.ui.checkbox input:checked:focus ~ label:before,
+.ui.radio.checkbox input:focus:checked ~ label:before {
+  border-color: ;
+}
+
+.repo-icon {
+  display: none;
+}
+
+/* reduce navbar bottom margin */
+.ui.ui.ui.container:not(.fluid) {
+  margin-bottom: -3px;
+}
+
+.ui.green.button {
+  padding: 5px 16px;
+  line-height: 20px;
+}
+
+.ui.green.labels .label,
+.ui.ui.ui.green.label {
+  padding: 2px 5px;
+  line-height: 20px;
+  color: #cdd9e5 !important;
+  border-radius: 2em;
+}
+
+.ui.tabular.menu .active.item {
+  margin-bottom: 1px;
+}
+
+/* repository icon for directories */
+.repository.file.list #repo-files-table tbody .svg.octicon-file-directory-fill,
+.repository.file.list #repo-files-table tbody .svg.octicon-file-submodule {
+  color: #768390;
+}
+
+.ui.secondary.pointing.menu .item > .circular.label {
+  line-height: 10px;
+}
+
+.ui.grey.labels .label,
+.ui.ui.ui.grey.label {
+  line-height: 10px;
+}
+
+.ui.primary.label,
+.ui.primary.labels .label {
+  background-color: #373e47 !important;
+}
+
+// timeline view icon color
+.repository.view.issue .comment-list .timeline-item .badge .svg {
+  fill: #cdd9e5 !important;
+}
+
+/* borders -------------------------------------------------------------------*/
+
+// border width of active item in repo view
+.ui.tabular.menu .active.item,
+.ui.tabular.menu .active.item:hover {
+  border-width: initial;
+}
+
+// README border
+.ui.attached:not(.message) + .ui.attached.segment:not(.top) {
+  border-width: inherit;
+}
+
+.ui.top.attached.header {
+  border-width: inherit;
+  border: 1px solid #373e47;
+}
+
+.following.bar.light {
+  border-bottom: 0px solid var(--color-secondary);
+}
+
+.ui.action.input:not([class*="left action"]) > input {
+  border-width: inherit;
+}
+
+.ui.action.input > .dropdown:last-child,
+.ui.action.input > .button:last-child,
+.ui.action.input > .buttons:last-child > .button {
+  border-width: inherit;
+}
+
+.ui.action.input:not([class*="left action"])
+  > .ui.dropdown.selection:not(:focus):not(:hover) {
+  border-width: inherit;
+}
+
+.repository #clone-panel #repo-clone-https,
+.repository #clone-panel #repo-clone-ssh {
+  border-width: inherit;
+}
+
+.ui.action.input > .dropdown:not(:first-child),
+.ui.action.input > .button:not(:first-child),
+.ui.action.input > .buttons:not(:first-child) > .button {
+  border-width: inherit;
+}
+
+.ui.segment,
+.ui.segments,
+.ui.attached.segment {
+  border-width: inherit;
+}
+
+.ui.table {
+  border-width: inherit;
+}
+
+footer {
+  border-width: inherit;
+}
+
+.page-content .ui.button {
+  border-width: inherit;
+}
+
+.repo-buttons .ui.labeled.button > .label {
+  border-width: inherit;
+  border: 1px solid #373e47 !important;
+}
+
+.repo-button-row .button {
+  height: unset;
+}
+
+.repository .repository-summary .segment.language-stats {
+  height: 14px;
+  border-radius: 6px;
+}
+
+.ui.table[class*="single line"],
+.ui.table [class*="single line"] {
+  white-space: nowrap;
+  border: 1px solid #373e47;
+}
+
+.ui.tiny.input {
+  font-size: 0.85714286em;
+  border: 1px solid #373e47;
+  border-radius: 6px;
+}
+
+.ui.fluid.input {
+  border: 1px solid #373e47 !important;
+  border-radius: 6px;
+}
+
+.repository.view.issue .comment-list .comment > .content > div:last-child {
+  border: 0px solid #373e47 !important;
+}
+.ui.basic.secondary.buttons .button,
+.ui.basic.secondary.button {
+  color: var(--color-text) !important;
+  border: 1px solid #373e47 !important;
+}
+.ui.small.buttons .dropdown,
+.ui.small.buttons .dropdown .menu > .item,
+.ui.small.buttons .button,
+.ui.small.buttons .or,
+.ui.ui.ui.ui.small.button {
+  border: 1px solid #373e47 !important;
+}
+
+.ui.table > tr > td,
+.ui.table > tbody > tr > td {
+  border-top-color: #373e47;
+}
+
+.ui.basic.primary.button,
+.ui.basic.primary.buttons .button {
+  color: #adbac7 !important;
+  font-weight: 500 !important;
+}
+
+.feeds .list ul li .repo-list-link {
+  background: #161b22;
+}
+.ui.attached:not(.message) + .ui.attached.segment:not(.top) {
+  border: 1px solid #373e47;
+}
+.ui.menu .active.item,
+.ui.menu .active.item:hover,
+.ui.vertical.menu .active.item,
+.ui.vertical.menu .active.item:hover {
+  background: #161b22;
+  font-weight: 500;
+  color: #adbac7;
+}
+.ui.primary.labels .label,
+.ui.ui.ui.primary.label {
+  color: #a6aab5;
+}
+.issue.list a:not(.label):hover {
+  color: var(--color-blue) !important;
+}
+.ui.segment,
+.ui.segments,
+.ui.attached.segment {
+  border: 1px solid #373e47 !important;
+}
+.repository.view.issue .comment-list .comment .comment-container {
+  border: 1px solid #373e47;
+  border-radius: 0px;
+}
+.repository.view.issue .comment-list .comment > .content > div:first-child {
+  border-bottom: 1px solid #373e47 !important;
+}
+.tag-code,
+.tag-code td,
+.tag-code .blob-excerpt {
+  background-color: var(--color-body);
+}
+
+/* issue \& PR count labels */
+.ui.menu .item > .label {
+  background: rgba(99, 110, 123, 0.4);
+  color: #cdd9e5;
+}
+
+.ui.basic.red.buttons .button,
+.ui.basic.red.button {
+  color: var(--color-red);
+  border: 1px solid var(--color-red);
+  border-radius: 16px;
+  padding: 5px 16px;
+  line-height: 20px;
+}
+
+#navbar a.item .notification_count {
+  color: var(--color-text);
+}
+
+.ui.secondary.menu .dropdown.item:hover,
+.ui.secondary.menu a.item:hover {
+  color: #e3e3e3;
+}
+
+.ui.secondary.menu .active.item,
+.ui.secondary.menu .active.item:hover {
+  color: #e3e3e3;
+  background-color: var(--color-nav-bg);
+}
+
+// list in Pull requests view
+.issue.list > .item .desc {
+  color: var(--color-text);
+}

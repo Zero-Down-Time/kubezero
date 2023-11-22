@@ -34,6 +34,20 @@ gitea:
     limits:
       memory: "2048Mi"
 
+  extraVolumes:
+    - name: gitea-themes
+      configMap:
+        name: gitea-kubezero-ci-themes
+
+  extraVolumeMounts:
+    - name: gitea-themes
+      readOnly: true
+      mountPath: "/data/gitea/public/assets/css" 
+
+  checkDeprecation: false
+  test:
+    enabled: false
+
   gitea:
     admin:
       existingSecret: gitea-admin-secret
@@ -55,6 +69,9 @@ gitea:
         PROVIDER: memory
       queue:
         TYPE: level
+      ui:
+        THEMES: "gitea,github-dark"
+        DEFAULT_THEME: "github-dark"
 
   redis-cluster:
     enabled: false
