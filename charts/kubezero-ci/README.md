@@ -1,6 +1,6 @@
 # kubezero-ci
 
-![Version: 0.7.3](https://img.shields.io/badge/Version-0.7.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.8.3](https://img.shields.io/badge/Version-0.8.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things CI
 
@@ -20,9 +20,9 @@ Kubernetes: `>= 1.25.0`
 |------------|------|---------|
 | https://aquasecurity.github.io/helm-charts/ | trivy | 0.7.0 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://charts.jenkins.io | jenkins | 4.6.4 |
-| https://dl.gitea.io/charts/ | gitea | 9.4.0 |
-| https://docs.renovatebot.com/helm-charts | renovate | 36.93.5 |
+| https://charts.jenkins.io | jenkins | 4.8.3 |
+| https://dl.gitea.io/charts/ | gitea | 9.6.0 |
+| https://docs.renovatebot.com/helm-charts | renovate | 36.109.4 |
 
 # Jenkins
 - default build retention 10 builds, 32days
@@ -75,10 +75,9 @@ Kubernetes: `>= 1.25.0`
 | gitea.securityContext.capabilities.add[0] | string | `"SYS_CHROOT"` |  |
 | gitea.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | gitea.strategy.type | string | `"Recreate"` |  |
-| jenkins.agent.annotations."container.apparmor.security.beta.kubernetes.io/jnlp" | string | `"unconfined"` |  |
 | jenkins.agent.containerCap | int | `2` |  |
 | jenkins.agent.customJenkinsLabels[0] | string | `"podman-aws-trivy"` |  |
-| jenkins.agent.idleMinutes | int | `15` |  |
+| jenkins.agent.idleMinutes | int | `30` |  |
 | jenkins.agent.image | string | `"public.ecr.aws/zero-downtime/jenkins-podman"` |  |
 | jenkins.agent.podName | string | `"podman-aws"` |  |
 | jenkins.agent.podRetention | string | `"Default"` |  |
@@ -87,7 +86,7 @@ Kubernetes: `>= 1.25.0`
 | jenkins.agent.resources.requests.cpu | string | `""` |  |
 | jenkins.agent.resources.requests.memory | string | `""` |  |
 | jenkins.agent.showRawYaml | bool | `false` |  |
-| jenkins.agent.tag | string | `"v0.4.3"` |  |
+| jenkins.agent.tag | string | `"v0.4.5"` |  |
 | jenkins.agent.yamlMergeStrategy | string | `"merge"` |  |
 | jenkins.agent.yamlTemplate | string | `"apiVersion: v1\nkind: Pod\nspec:\n  securityContext:\n    fsGroup: 1000\n  serviceAccountName: jenkins-podman-aws\n  containers:\n  - name: jnlp\n    resources:\n      requests:\n        cpu: \"512m\"\n        memory: \"1024Mi\"\n      limits:\n        cpu: \"4\"\n        memory: \"6144Mi\"\n        github.com/fuse: 1\n    volumeMounts:\n    - name: aws-token\n      mountPath: \"/var/run/secrets/sts.amazonaws.com/serviceaccount/\"\n      readOnly: true\n    - name: host-registries-conf\n      mountPath: \"/home/jenkins/.config/containers/registries.conf\"\n      readOnly: true\n  volumes:\n  - name: aws-token\n    projected:\n      sources:\n      - serviceAccountToken:\n          path: token\n          expirationSeconds: 86400\n          audience: \"sts.amazonaws.com\"\n  - name: host-registries-conf\n    hostPath:\n      path: /etc/containers/registries.conf\n      type: File"` |  |
 | jenkins.controller.JCasC.configScripts.zdt-settings | string | `"jenkins:\n  noUsageStatistics: true\n  disabledAdministrativeMonitors:\n  - \"jenkins.security.ResourceDomainRecommendation\"\nappearance:\n  themeManager:\n    disableUserThemes: true\n    theme: \"dark\"\nunclassified:\n  buildDiscarders:\n    configuredBuildDiscarders:\n    - \"jobBuildDiscarder\"\n    - defaultBuildDiscarder:\n        discarder:\n          logRotator:\n            artifactDaysToKeepStr: \"32\"\n            artifactNumToKeepStr: \"10\"\n            daysToKeepStr: \"100\"\n            numToKeepStr: \"10\"\n"` |  |
@@ -100,6 +99,7 @@ Kubernetes: `>= 1.25.0`
 | jenkins.controller.installPlugins[10] | string | `"htmlpublisher"` |  |
 | jenkins.controller.installPlugins[11] | string | `"build-discarder"` |  |
 | jenkins.controller.installPlugins[12] | string | `"dark-theme"` |  |
+| jenkins.controller.installPlugins[13] | string | `"matrix-auth"` |  |
 | jenkins.controller.installPlugins[1] | string | `"kubernetes-credentials-provider"` |  |
 | jenkins.controller.installPlugins[2] | string | `"workflow-aggregator"` |  |
 | jenkins.controller.installPlugins[3] | string | `"git"` |  |
@@ -139,7 +139,7 @@ Kubernetes: `>= 1.25.0`
 | renovate.env.LOG_FORMAT | string | `"json"` |  |
 | renovate.securityContext.fsGroup | int | `1000` |  |
 | trivy.enabled | bool | `false` |  |
-| trivy.image.tag | string | `"0.42.0"` |  |
+| trivy.image.tag | string | `"0.45.1"` |  |
 | trivy.persistence.enabled | bool | `true` |  |
 | trivy.persistence.size | string | `"1Gi"` |  |
 | trivy.rbac.create | bool | `false` |  |
