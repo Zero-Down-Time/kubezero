@@ -152,12 +152,17 @@ argo_used && kubectl edit app kubezero -n argocd || kubectl edit cm kubezero-val
 
 # We need to restore the network ready file as cilium decided to rename it
 control_plane_upgrade apply_network
+
 echo "Wait for all CNI agents to be running ..." 
-waitSystemPodsRunning
+kubectl rollout status ds/cilium -n kube-system --timeout=60s
+
 all_nodes_upgrade "cd /host/etc/cni/net.d && ln -s 05-cilium.conflist 05-cilium.conf || true"
 
 # now the rest
-control_plane_upgrade "apply_addons, apply_storage"
+control_plane_upgrade "apply_addons, apply_storage, apply_operators"
+
+# Remove legacy eck-operator as part of logging if running
+kubectl delete statefulset elastic-operator -n logging || true
 
 echo "Checking that all pods in kube-system are running ..."
 waitSystemPodsRunning
@@ -169,7 +174,7 @@ for crd in clusterrbacconfigs.rbac.istio.io rbacconfigs.rbac.istio.io servicerol
   kubectl delete crds $crd || true
 done
 
-control_plane_upgrade "apply_cert-manager, apply_istio, apply_istio-ingress, apply_istio-private-ingress, apply_logging, apply_metrics, apply_argocd"
+control_plane_upgrade "apply_cert-manager, apply_istio, apply_istio-ingress, apply_istio-private-ingress, apply_logging, apply_metrics, apply_telemetry, apply_argocd"
 
 # Trigger backup of upgraded cluster state
 kubectl create job --from=cronjob/kubezero-backup kubezero-backup-$VERSION -n kube-system
