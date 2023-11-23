@@ -29,6 +29,9 @@ Something along the lines of https://github.com/onfido/k8s-cleanup which doesnt 
 - https://github.com/ishantanu/awesome-kubectl-plugins
 - https://github.com/kubernetes/kubernetes/blob/master/cluster/gce/gci/configure-helper.sh
 
+## AppArmor
+- https://github.com/containers/common/blob/e2da7bec2245bfc3920e7698d9cab1a6393f0623/pkg/apparmor/apparmor_linux_template.go
+
 ## Update Api-server config
 Add the following extraArgs to the ClusterConfiguration configMap in the kube-system namespace:
 `kubectl edit -n kube-system cm kubeadm-config`
