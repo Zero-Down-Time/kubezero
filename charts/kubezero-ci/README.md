@@ -22,7 +22,7 @@ Kubernetes: `>= 1.25.0`
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
 | https://charts.jenkins.io | jenkins | 4.8.3 |
 | https://dl.gitea.io/charts/ | gitea | 9.6.0 |
-| https://docs.renovatebot.com/helm-charts | renovate | 36.109.4 |
+| https://docs.renovatebot.com/helm-charts | renovate | 37.64.3 |
 
 # Jenkins
 - default build retention 10 builds, 32days
@@ -48,12 +48,20 @@ Kubernetes: `>= 1.25.0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| gitea.checkDeprecation | bool | `false` |  |
 | gitea.enabled | bool | `false` |  |
+| gitea.extraVolumeMounts[0].mountPath | string | `"/data/gitea/public/assets/css"` |  |
+| gitea.extraVolumeMounts[0].name | string | `"gitea-themes"` |  |
+| gitea.extraVolumeMounts[0].readOnly | bool | `true` |  |
+| gitea.extraVolumes[0].configMap.name | string | `"gitea-kubezero-ci-themes"` |  |
+| gitea.extraVolumes[0].name | string | `"gitea-themes"` |  |
 | gitea.gitea.admin.existingSecret | string | `"gitea-admin-secret"` |  |
 | gitea.gitea.config.cache.ADAPTER | string | `"memory"` |  |
 | gitea.gitea.config.database.DB_TYPE | string | `"sqlite3"` |  |
 | gitea.gitea.config.queue.TYPE | string | `"level"` |  |
 | gitea.gitea.config.session.PROVIDER | string | `"memory"` |  |
+| gitea.gitea.config.ui.DEFAULT_THEME | string | `"github-dark"` |  |
+| gitea.gitea.config.ui.THEMES | string | `"gitea,github-dark"` |  |
 | gitea.gitea.demo | bool | `false` |  |
 | gitea.gitea.metrics.enabled | bool | `false` |  |
 | gitea.gitea.metrics.serviceMonitor.enabled | bool | `true` |  |
@@ -75,6 +83,7 @@ Kubernetes: `>= 1.25.0`
 | gitea.securityContext.capabilities.add[0] | string | `"SYS_CHROOT"` |  |
 | gitea.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | gitea.strategy.type | string | `"Recreate"` |  |
+| gitea.test.enabled | bool | `false` |  |
 | jenkins.agent.containerCap | int | `2` |  |
 | jenkins.agent.customJenkinsLabels[0] | string | `"podman-aws-trivy"` |  |
 | jenkins.agent.idleMinutes | int | `30` |  |

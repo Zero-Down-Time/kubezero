@@ -166,6 +166,8 @@ jenkins:
     podRetention: "Default"
     showRawYaml: false
     podName: "podman-aws"
+    annotations:
+      container.apparmor.security.beta.kubernetes.io/jnlp: unconfined
     customJenkinsLabels:
     - podman-aws-trivy
     idleMinutes: 30
