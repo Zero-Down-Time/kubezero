@@ -30,14 +30,3 @@ diff -rtuN charts/aws-efs-csi-driver.orig/templates/controller-deployment.yaml c
        {{- with .Values.controller.affinity }}
        affinity: {{- toYaml . | nindent 8 }}
        {{- end }}
-diff -rtuN charts/aws-efs-csi-driver.orig/templates/node-daemonset.yaml charts/aws-efs-csi-driver/templates/node-daemonset.yaml
---- charts/aws-efs-csi-driver.orig/templates/node-daemonset.yaml	2023-08-23 11:32:48.964952023 +0000
-+++ charts/aws-efs-csi-driver/templates/node-daemonset.yaml	2023-08-23 11:35:11.605635352 +0000
-@@ -51,6 +51,7 @@
-       {{- with .Values.node.dnsConfig }}
-       dnsConfig: {{- toYaml . | nindent 8 }}
-       {{- end }}
-+      hostNetwork: true
-       serviceAccountName: {{ .Values.node.serviceAccount.name }}
-       priorityClassName: system-node-critical
-       {{- with .Values.node.tolerations }}

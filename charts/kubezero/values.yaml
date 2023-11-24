@@ -7,6 +7,7 @@ kubezero:
 global:
   highAvailable: false
   clusterName: zdt-trial-cluster
+  aws: {}
 
 addons:
   enabled: true
@@ -40,7 +41,7 @@ cert-manager:
 
 storage:
   enabled: false
-  targetRevision: 0.8.3
+  targetRevision: 0.8.4
   lvm-localpv:
     enabled: false
   aws-ebs-csi-driver:

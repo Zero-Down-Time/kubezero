@@ -109,6 +109,11 @@ aws-ebs-csi-driver:
     # k8sTagClusterId: <CLUSTER_NAME>
     # region: <AWS_DEFAULT_REGION>
 
+    # Enable once we have a customer needing it
+    # so far the default storageclass does just fine and we rather have different classes
+    volumeModificationFeature:
+      enabled: false
+
     #env:
     #  ebsPlugin:
       #- name: AWS_ROLE_ARN
@@ -142,6 +147,7 @@ aws-ebs-csi-driver:
   node:
     loggingFormat: json
     tolerateAllTaints: false
+    priorityClassName: system-node-critical
     tolerations:
     - key: kubezero-workergroup
       effect: NoSchedule
@@ -195,6 +201,8 @@ aws-efs-csi-driver:
     nodeSelector:
       node-role.kubernetes.io/control-plane: ""
 
+    regionalStsEndpoints: true
+
     #extraEnv:
     #- name: AWS_ROLE_ARN
     #  value: "<aws-efs-csi-driver IAM ROLE ARN>"
@@ -205,6 +213,8 @@ aws-efs-csi-driver:
 
   node:
     logLevel: 2
+
+    volMetricsOptIn: true
 
     resources:
       requests:
