@@ -1,13 +1,13 @@
 {{- define "addons-values" }}
 
 clusterBackup:
-  enabled: {{ ternary "true" "false" (or (hasKey .Values.global "aws") .Values.addons.clusterBackup.enabled) }}
+  enabled: {{ ternary "true" "false" (or (hasKey .Values.global.aws "region") .Values.addons.clusterBackup.enabled) }}
 
   {{- with omit .Values.addons.clusterBackup "enabled" }}
   {{- toYaml . | nindent 2 }}
   {{- end }}
 
-  {{- if .Values.global.aws }}
+  {{- if .Values.global.aws.region }}
   # AWS
   extraEnv:
     - name: AWS_DEFAULT_REGION
@@ -15,13 +15,13 @@ clusterBackup:
   {{- end }}
 
 forseti:
-  enabled: {{ ternary "true" "false" (or (hasKey .Values.global "aws") .Values.addons.forseti.enabled) }}
+  enabled: {{ ternary "true" "false" (or (hasKey .Values.global.aws "region") .Values.addons.forseti.enabled) }}
 
   {{- with omit .Values.addons.forseti "enabled" }}
   {{- toYaml . | nindent 2 }}
   {{- end }}
 
-  {{- if .Values.global.aws }}
+  {{- if .Values.global.aws.region }}
   # AWS
   aws:
     region: {{ $.Values.global.aws.region }}
@@ -29,13 +29,13 @@ forseti:
   {{- end }}
 
 external-dns:
-  enabled: {{ ternary "true" "false" (or (hasKey .Values.global "aws") (index .Values "addons" "external-dns" "enabled")) }}
+  enabled: {{ ternary "true" "false" (or (hasKey .Values.global.aws "region") (index .Values "addons" "external-dns" "enabled")) }}
 
   {{- with omit (index .Values "addons" "external-dns") "enabled" }}
   {{- toYaml . | nindent 2 }}
   {{- end }}
 
-  {{- if .Values.global.aws }}
+  {{- if .Values.global.aws.region }}
   # AWS
   txtOwnerId: {{ .Values.global.clusterName }}
   provider: aws
@@ -66,7 +66,7 @@ external-dns:
   {{- end }}
 
 cluster-autoscaler:
-  enabled: {{ ternary "true" "false" (or (hasKey .Values.global "aws") (index .Values "addons" "cluster-autoscaler" "enabled")) }}
+  enabled: {{ ternary "true" "false" (or (hasKey .Values.global.aws "region") (index .Values "addons" "cluster-autoscaler" "enabled")) }}
 
   {{- with omit (index .Values "addons" "cluster-autoscaler") "enabled" }}
   {{- toYaml . | nindent 2 }}
@@ -83,7 +83,7 @@ cluster-autoscaler:
   #  enabled: {{ .enabled }}
   {{- end }}
 
-  {{- if .Values.global.aws }}
+  {{- if .Values.global.aws.region }}
   # AWS
   awsRegion: {{ .Values.global.aws.region }}
 
@@ -131,7 +131,7 @@ sealed-secrets:
   {{- end }}
 {{- end }}
 
-{{- if .Values.global.aws }}
+{{- if .Values.global.aws.region }}
 # AWS only
 aws-node-termination-handler:
   enabled: {{ default "true" (index .Values "addons" "aws-node-termination-handler" "enabled") }}

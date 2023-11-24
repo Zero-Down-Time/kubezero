@@ -18,7 +18,6 @@ fmt:
 
 generate: clean build.sh
 	bash build.sh $<
-	patch -p0 -i rules-fix.patch
 	jsonnet -J vendor -m rules -e '(import "prometheusRules.libsonnet")'
 	jsonnet -J vendor -m dashboards -e '(import "dashboards.libsonnet")'
 
