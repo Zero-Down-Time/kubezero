@@ -15,11 +15,11 @@ spec:
       operation: MERGE
       value:
         listener_filters:
-        - name: envoy.filters.listener.tls_inspector
-          typed_config:
-            "@type": type.googleapis.com/envoy.extensions.filters.listener.tls_inspector.v3.TlsInspector
         {{- if .Values.proxyProtocol }}
         - name: envoy.filters.listener.proxy_protocol
           typed_config:
             "@type": type.googleapis.com/envoy.extensions.filters.listener.proxy_protocol.v3.ProxyProtocol
         {{- end }}
+        - name: envoy.filters.listener.tls_inspector
+          typed_config:
+            "@type": type.googleapis.com/envoy.extensions.filters.listener.tls_inspector.v3.TlsInspector
