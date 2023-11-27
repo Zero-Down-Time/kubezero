@@ -37,7 +37,7 @@ network:
 cert-manager:
   enabled: false
   namespace: cert-manager
-  targetRevision: 0.9.5
+  targetRevision: 0.9.6
 
 storage:
   enabled: false

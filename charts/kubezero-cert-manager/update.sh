@@ -8,7 +8,7 @@ update_helm
 update_jsonnet
 
 # Install cert-mamanger mixin
-jb install gitlab.com/uneeq-oss/cert-manager-mixin@master
+jb install github.com/imusmanmalik/cert-manager-mixin@main
 
 # Install rules
 rm -rf rules && mkdir -p rules
@@ -17,3 +17,5 @@ jsonnet -J vendor -m rules rules.jsonnet
 
 # Fetch dashboards from Grafana.com and update ZDT CM
 ../kubezero-metrics/sync_grafana_dashboards.py dashboards.yaml templates/grafana-dashboards.yaml
+
+update_docs

@@ -4,12 +4,12 @@ condition: 'index .Values.cilium.prometheus.enabled'
 folder: KubeZero
 dashboards:
 - name: cilium-agents
-  url: https://grafana.com/api/dashboards/16611/revisions/1/download
+  url: https://raw.githubusercontent.com/cilium/cilium/main/install/kubernetes/cilium/files/cilium-agent/dashboards/cilium-dashboard.json
   tags:
   - cilium
   - network
 - name: cilium-operator
-  url: https://grafana.com/api/dashboards/16612/revisions/1/download
+  url: https://raw.githubusercontent.com/cilium/cilium/main/install/kubernetes/cilium/files/cilium-operator/dashboards/cilium-operator-dashboard.json
   tags:
   - cilium
   - network

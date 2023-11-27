@@ -18,8 +18,8 @@
           "subdir": "contrib/mixin"
         }
       },
-      "version": "e2e17c75fe1006ea44b6ad793fa7b23f5e3546f4",
-      "sum": "GdePvMDfLQcVhwzk/Ephi/jC27ywGObLB5t0eC0lXd4="
+      "version": "e1d79097d53709813bae0195e71f4bee53ecab2d",
+      "sum": "xuUBd2vqF7asyVDe5CE08uPT/RxAdy8O75EjFJoMXXU="
     },
     {
       "source": {
@@ -54,12 +54,52 @@
     {
       "source": {
         "git": {
+          "remote": "https://github.com/grafana/grafonnet.git",
+          "subdir": "gen/grafonnet-v10.0.0"
+        }
+      },
+      "version": "bb2afaffbcefeae1035cd691ab06a486e0022002",
+      "sum": "gj/20VIGucG2vDGjG7YdHLC4yUUfrpuaneUYaRmymOM="
+    },
+    {
+      "source": {
+        "git": {
           "remote": "https://github.com/grafana/jsonnet-libs.git",
           "subdir": "grafana-builder"
         }
       },
-      "version": "62aec8403a5c38d5dc97ba596703753289b1c33b",
-      "sum": "xEFMv4+ObwP5L1Wu0XK5agWci4AJzNApys6iKAQxLlQ="
+      "version": "32685d75e4ae753e06ab3bea13df9d59bb5da46a",
+      "sum": "VmOxvg9FuY9UYr3lN6ZJe2HhuIErJoWimPybQr3S3yQ="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/imusmanmalik/cert-manager-mixin.git",
+          "subdir": ""
+        }
+      },
+      "version": "72a094ff162bbd93921803994241d73900592c9a",
+      "sum": "h+YvBTXL5A02165i3yt3SxSAbFftChtXYJ0nYFnOAqo="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/jsonnet-libs/docsonnet.git",
+          "subdir": "doc-util"
+        }
+      },
+      "version": "503e5c8fe96d6b55775037713ac10b184709ad93",
+      "sum": "BY4u0kLF3Qf/4IB4HnX9S5kEQIpHb4MUrppp6WLDtlU="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/jsonnet-libs/xtd.git",
+          "subdir": ""
+        }
+      },
+      "version": "c1a315a7dbead0335a5e0486acc5583395b22a24",
+      "sum": "UVdL+uuFI8BSQgLfMJEJk2WDKsQXNT3dRHcr2Ti9rLI="
     },
     {
       "source": {
@@ -68,8 +108,8 @@
           "subdir": ""
         }
       },
-      "version": "46fc905d5b2981642043088ac7902ea50db2903e",
-      "sum": "8FAie1MXww5Ip9F8hQWkU9Fio1Af+hO4weQuuexioIQ="
+      "version": "2dbe4f9625a811b8b89f0495e74509c74779da82",
+      "sum": "Fe7bN9E6qeKNUdENjQvYttgf4S1DDqXRVB80wdmQgHQ="
     },
     {
       "source": {
@@ -78,7 +118,7 @@
           "subdir": "jsonnet/kube-state-metrics"
         }
       },
-      "version": "570970378edf10655dd81e662658359eb10d9329",
+      "version": "98b38ba9bbfdff27b359c58adecab30cc1311a78",
       "sum": "+dOzAK+fwsFf97uZpjcjTcEJEC1H8hh/j8f5uIQK/5g="
     },
     {
@@ -88,7 +128,7 @@
           "subdir": "jsonnet/kube-state-metrics-mixin"
         }
       },
-      "version": "570970378edf10655dd81e662658359eb10d9329",
+      "version": "98b38ba9bbfdff27b359c58adecab30cc1311a78",
       "sum": "qclI7LwucTjBef3PkGBkKxF0mfZPbHnn4rlNWKGtR4c="
     },
     {
@@ -98,8 +138,8 @@
           "subdir": "jsonnet/kube-prometheus"
         }
       },
-      "version": "4b5b94347dd71b3649fef612ab3b8cf237ac48b9",
-      "sum": "8AeC579AWxP6VzLTxQ/ccIrwOY0G782ZceLlWmOL5/o="
+      "version": "0fe6411003b3b9a969a61220fc17a94e2c0be94f",
+      "sum": "paNe3vjoMkCzrTCW1RCPLcXo+ymOPi9AxA98C/1nbrY="
     },
     {
       "source": {
@@ -108,7 +148,7 @@
           "subdir": "jsonnet/mixin"
         }
       },
-      "version": "8b947d4ff1329440a46903c16f05717b24170061",
+      "version": "ffd2f20e64114e07bdfe1ed20181cdb1cd25168a",
       "sum": "n3flMIzlADeyygb0uipZ4KPp2uNSjdtkrwgHjTC7Ca4=",
       "name": "prometheus-operator-mixin"
     },
@@ -119,8 +159,8 @@
           "subdir": "jsonnet/prometheus-operator"
         }
       },
-      "version": "8b947d4ff1329440a46903c16f05717b24170061",
-      "sum": "LLGbS2uangsA5enNpZKxwdCAPZnO1Bj+W+o8Esk0QLw="
+      "version": "ffd2f20e64114e07bdfe1ed20181cdb1cd25168a",
+      "sum": "IGuHwz77oTKx9Vi1dnTng/RBV/QQ2YfAdB+WPqK/w5g="
     },
     {
       "source": {
@@ -129,8 +169,8 @@
           "subdir": "doc/alertmanager-mixin"
         }
       },
-      "version": "6fe1a24df07eed6f6818abd500708040beee7d7b",
-      "sum": "1d7ZKYArJKacAWXLUz0bRC1uOkozee/PPw97/W5zGhc=",
+      "version": "4494abfce419d1bbd3cb1a2c0b6584da88ac9b64",
+      "sum": "IpF46ZXsm+0wJJAPtAre8+yxTNZA57mBqGpBP/r7/kw=",
       "name": "alertmanager"
     },
     {
@@ -140,8 +180,8 @@
           "subdir": "docs/node-mixin"
         }
       },
-      "version": "f2b274350a07bfd8afcad1a62ef561f8a303fcc2",
-      "sum": "By6n6U10hYDogUsyhsaKZehbhzxBZZobJloiKyKadgM="
+      "version": "12f1744e799e04373c7a29b42bf8b8a332c82790",
+      "sum": "QZwFBpulndqo799gkR5rP2/WdcQKQkNnaBwhaOI8Jeg="
     },
     {
       "source": {
@@ -150,8 +190,8 @@
           "subdir": "documentation/prometheus-mixin"
         }
       },
-      "version": "4d8e380269da5912265274469ff873142bbbabc3",
-      "sum": "8OngT76gVXOUROOOeP9yTe6E/dn+2D2J34Dn690QCG0=",
+      "version": "965e603fa792bca0900ac76eb45ae84c81af1cdf",
+      "sum": "rNvddVTMNfaguOGzEGoeKjUsfhlXJBUImC+SIFNNCiM=",
       "name": "prometheus"
     },
     {
@@ -161,8 +201,9 @@
           "subdir": "config/crd/bases"
         }
       },
-      "version": "2b8c6d372d90942c3b53a9b225a82441be8c5b7b",
-      "sum": "L3lljFFoFB+nhXnyo8Yl1hKqe60nhHXY0IZCO3H2iVk="
+      "version": "551856d42dff02ec38c5b0ea6a2d99c4cb127e82",
+      "sum": "bY/Pcrrbynguq8/HaI88cQ3B2hLv/xc+76QILY7IL+g=",
+      "name": "pyrra"
     },
     {
       "source": {
@@ -171,19 +212,9 @@
           "subdir": "mixin"
         }
       },
-      "version": "8fcd30ffcedf9e2728518dc2970d070d4c301302",
-      "sum": "WhheqsiX0maUXByZFsb9xhCEsGXK2955bPmPPf1x+Cs=",
+      "version": "9d6f82e55d13c162c00620045f109dbff5cb9344",
+      "sum": "HhSSbGGCNHCMy1ee5jElYDm0yS9Vesa7QB2/SHKdjsY=",
       "name": "thanos-mixin"
-    },
-    {
-      "source": {
-        "git": {
-          "remote": "https://gitlab.com/uneeq-oss/cert-manager-mixin.git",
-          "subdir": ""
-        }
-      },
-      "version": "eae22f642aaa5d422e4766f6811df2158fc05539",
-      "sum": "DOg3fzS0OWrjjRPVsKgxID/rk9AC3ESQ4gDELc2RNgM="
     }
   ],
   "legacyImports": false
