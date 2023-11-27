@@ -19,7 +19,7 @@ dependencies:
     version: ">= 0.1.6"
     repository: https://cdn.zero-downtime.net/charts/
   - name: kube-prometheus-stack
-    version: 48.6.0
+    version: 54.2.2
     repository: https://prometheus-community.github.io/helm-charts
   - name: prometheus-adapter
     version: 4.9.0

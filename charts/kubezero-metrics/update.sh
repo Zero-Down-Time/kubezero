@@ -20,3 +20,5 @@ cd -
 
 # Delete not used upstream dashboards or rules
 rm -rf charts/kube-prometheus-stack/templates/grafana/dashboards-1.14 charts/kube-prometheus-stack/templates/prometheus/rules-1.14
+
+update_docs
