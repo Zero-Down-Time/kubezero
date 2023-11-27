@@ -4,8 +4,8 @@
     {
       "source": {
         "git": {
-          "remote": "https://github.com/prometheus-operator/kube-prometheus.git",
-          "subdir": "jsonnet/kube-prometheus"
+          "remote": "https://github.com/imusmanmalik/cert-manager-mixin.git",
+          "subdir": ""
         }
       },
       "version": "main"
@@ -13,11 +13,11 @@
     {
       "source": {
         "git": {
-          "remote": "https://gitlab.com/uneeq-oss/cert-manager-mixin.git",
-          "subdir": ""
+          "remote": "https://github.com/prometheus-operator/kube-prometheus.git",
+          "subdir": "jsonnet/kube-prometheus"
         }
       },
-      "version": "master"
+      "version": "main"
     }
   ],
   "legacyImports": true
