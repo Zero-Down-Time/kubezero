@@ -1,6 +1,6 @@
 # kubezero-metrics
 
-![Version: 0.9.2](https://img.shields.io/badge/Version-0.9.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.9.5](https://img.shields.io/badge/Version-0.9.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Prometheus, Grafana and Alertmanager as well as all Kubernetes integrations.
 
@@ -14,14 +14,14 @@ KubeZero Umbrella Chart for Prometheus, Grafana and Alertmanager as well as all 
 
 ## Requirements
 
-Kubernetes: `>= 1.25.0`
+Kubernetes: `>= 1.26.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | kube-prometheus-stack | 45.27.2 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://prometheus-community.github.io/helm-charts | prometheus-adapter | 4.1.1 |
-| https://prometheus-community.github.io/helm-charts | prometheus-pushgateway | 2.1.3 |
+| https://prometheus-community.github.io/helm-charts | kube-prometheus-stack | 54.2.2 |
+| https://prometheus-community.github.io/helm-charts | prometheus-adapter | 4.9.0 |
+| https://prometheus-community.github.io/helm-charts | prometheus-pushgateway | 2.4.2 |
 
 ## Values
 
@@ -31,16 +31,19 @@ Kubernetes: `>= 1.25.0`
 | istio.alertmanager.enabled | bool | `false` |  |
 | istio.alertmanager.gateway | string | `"istio-ingress/ingressgateway"` |  |
 | istio.alertmanager.ipBlocks | list | `[]` |  |
+| istio.alertmanager.port | int | `9093` |  |
 | istio.alertmanager.url | string | `""` |  |
 | istio.grafana.destination | string | `"metrics-grafana"` |  |
 | istio.grafana.enabled | bool | `false` |  |
 | istio.grafana.gateway | string | `"istio-ingress/ingressgateway"` |  |
 | istio.grafana.ipBlocks | list | `[]` |  |
+| istio.grafana.port | int | `80` |  |
 | istio.grafana.url | string | `""` |  |
 | istio.prometheus.destination | string | `"metrics-kube-prometheus-st-prometheus"` |  |
 | istio.prometheus.enabled | bool | `false` |  |
 | istio.prometheus.gateway | string | `"istio-ingress/ingressgateway"` |  |
 | istio.prometheus.ipBlocks | list | `[]` |  |
+| istio.prometheus.port | int | `9090` |  |
 | istio.prometheus.url | string | `""` |  |
 | kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].env[0].name | string | `"SNS_FORWARDER_ARN_PREFIX"` |  |
 | kube-prometheus-stack.alertmanager.alertmanagerSpec.containers[0].env[0].valueFrom.fieldRef.fieldPath | string | `"metadata.annotations['kubezero.com/sns_forwarder_ARN_PREFIX']"` |  |
@@ -162,7 +165,7 @@ Kubernetes: `>= 1.25.0`
 | kube-prometheus-stack.prometheus.prometheusSpec.portName | string | `"http-prometheus"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.resources.limits.memory | string | `"4Gi"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.resources.requests.cpu | string | `"500m"` |  |
-| kube-prometheus-stack.prometheus.prometheusSpec.resources.requests.memory | string | `"512Mi"` |  |
+| kube-prometheus-stack.prometheus.prometheusSpec.resources.requests.memory | string | `"2Gi"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.retention | string | `"8d"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.ruleSelectorNilUsesHelmValues | bool | `false` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues | bool | `false` |  |
