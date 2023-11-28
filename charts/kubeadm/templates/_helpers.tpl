@@ -1,4 +1,5 @@
 {{- /* Feature gates for all control plane components */ -}}
+{{- /* ToAdd: "PodAndContainerStatsFromCRI" */ -}}
 {{- define "kubeadm.featuregates" }}
 {{- $gates := list "CustomCPUCFSQuotaPeriod" "MemoryQoS" }}
 {{- if eq .return "csv" }}

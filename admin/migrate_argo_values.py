@@ -15,6 +15,13 @@ def migrate(values):
         if not values["addons"]:
             values.pop("addons")
 
+    # fix argoCD CM
+    try:
+        if not values["argocd"]["configs"]["cm"]["url"].startswith("http"):
+            values["argocd"]["configs"]["cm"]["url"] = "https://" + values["argocd"]["configs"]["cm"]["url"]
+    except KeyError:
+        pass
+
     # migrate eck operator to new operator module
     try:
         if values["logging"]["eck-operator"]["enabled"]:

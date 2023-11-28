@@ -1,9 +1,9 @@
 annotations:
   artifacthub.io/changes: |
-    - kind: added
-      description: "Added events permission to ClusteRole"
+    - kind: changed
+      description: "Updated Fluent Bit OCI image to v2.2.0."
 apiVersion: v1
-appVersion: 2.1.8
+appVersion: 2.2.0
 description: Fast and lightweight log processor and forwarder or Linux, OSX and BSD
   family operating systems.
 home: https://fluentbit.io/
@@ -24,4 +24,4 @@ maintainers:
 name: fluent-bit
 sources:
 - https://github.com/fluent/fluent-bit/
-version: 0.37.1
+version: 0.40.0
