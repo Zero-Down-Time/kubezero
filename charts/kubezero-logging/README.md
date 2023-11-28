@@ -1,6 +1,6 @@
 # kubezero-logging
 
-![Version: 0.8.6](https://img.shields.io/badge/Version-0.8.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6.0](https://img.shields.io/badge/AppVersion-1.6.0-informational?style=flat-square)
+![Version: 0.8.9](https://img.shields.io/badge/Version-0.8.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6.0](https://img.shields.io/badge/AppVersion-1.6.0-informational?style=flat-square)
 
 KubeZero Umbrella Chart for complete EFK stack
 
@@ -14,14 +14,13 @@ KubeZero Umbrella Chart for complete EFK stack
 
 ## Requirements
 
-Kubernetes: `>= 1.24.0`
+Kubernetes: `>= 1.26.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | eck-operator | 2.4.0 |
-|  | fluent-bit | 0.24.0 |
-|  | fluentd | 0.3.9 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
+| https://fluent.github.io/helm-charts | fluent-bit | 0.40.0 |
+| https://fluent.github.io/helm-charts | fluentd | 0.5.0 |
 
 ## Changes from upstream
 ### ECK
@@ -88,9 +87,9 @@ Kubernetes: `>= 1.24.0`
 | fluent-bit.daemonSetVolumes[1].hostPath.path | string | `"/var/lib/containers/logs"` |  |
 | fluent-bit.daemonSetVolumes[1].name | string | `"newlog"` |  |
 | fluent-bit.enabled | bool | `false` |  |
-| fluent-bit.image.tag | string | `"2.0.10"` |  |
+| fluent-bit.image | string | `nil` |  |
 | fluent-bit.luaScripts."kubezero.lua" | string | `"function nest_k8s_ns(tag, timestamp, record)\n    if not record['kubernetes']['namespace_name'] then\n        return 0, 0, 0\n    end\n    new_record = {}\n    for key, val in pairs(record) do\n        if key == 'kube' then\n            new_record[key] = {}\n            new_record[key][record['kubernetes']['namespace_name']] = record[key]\n        else\n            new_record[key] = record[key]\n        end\n    end\n    return 1, timestamp, new_record\nend\n"` |  |
-| fluent-bit.resources.limits.memory | string | `"64Mi"` |  |
+| fluent-bit.resources.limits.memory | string | `"128Mi"` |  |
 | fluent-bit.resources.requests.cpu | string | `"20m"` |  |
 | fluent-bit.resources.requests.memory | string | `"32Mi"` |  |
 | fluent-bit.serviceMonitor.enabled | bool | `false` |  |
@@ -98,6 +97,7 @@ Kubernetes: `>= 1.24.0`
 | fluent-bit.testFramework.enabled | bool | `false` |  |
 | fluent-bit.tolerations[0].effect | string | `"NoSchedule"` |  |
 | fluent-bit.tolerations[0].operator | string | `"Exists"` |  |
+| fluentd.configMapConfigs[0] | string | `"fluentd-prometheus-conf"` |  |
 | fluentd.dashboards.enabled | bool | `false` |  |
 | fluentd.enabled | bool | `false` |  |
 | fluentd.env[0].name | string | `"FLUENTD_CONF"` |  |
@@ -115,6 +115,8 @@ Kubernetes: `>= 1.24.0`
 | fluentd.kind | string | `"Deployment"` |  |
 | fluentd.metrics.serviceMonitor.additionalLabels.release | string | `"metrics"` |  |
 | fluentd.metrics.serviceMonitor.enabled | bool | `false` |  |
+| fluentd.mountDockerContainersDirectory | bool | `false` |  |
+| fluentd.mountVarLogDirectory | bool | `false` |  |
 | fluentd.output.host | string | `"logging-es-http"` |  |
 | fluentd.podSecurityPolicy.enabled | bool | `false` |  |
 | fluentd.replicaCount | int | `1` |  |
@@ -128,16 +130,6 @@ Kubernetes: `>= 1.24.0`
 | fluentd.service.ports[1].name | string | `"http-fluentd"` |  |
 | fluentd.service.ports[1].protocol | string | `"TCP"` |  |
 | fluentd.shared_key | string | `"cloudbender"` |  |
-| fluentd.volumeMounts[0].mountPath | string | `"/etc/fluent"` |  |
-| fluentd.volumeMounts[0].name | string | `"etcfluentd-main"` |  |
-| fluentd.volumeMounts[1].mountPath | string | `"/etc/fluent/config.d/"` |  |
-| fluentd.volumeMounts[1].name | string | `"etcfluentd-config"` |  |
-| fluentd.volumes[0].configMap.defaultMode | int | `511` |  |
-| fluentd.volumes[0].configMap.name | string | `"fluentd-main"` |  |
-| fluentd.volumes[0].name | string | `"etcfluentd-main"` |  |
-| fluentd.volumes[1].configMap.defaultMode | int | `511` |  |
-| fluentd.volumes[1].configMap.name | string | `"fluentd-config"` |  |
-| fluentd.volumes[1].name | string | `"etcfluentd-config"` |  |
 | kibana.count | int | `1` |  |
 | kibana.istio.enabled | bool | `false` |  |
 | kibana.istio.gateway | string | `"istio-system/ingressgateway"` |  |

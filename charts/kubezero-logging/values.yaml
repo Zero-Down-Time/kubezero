@@ -1,15 +1,6 @@
 # use this for backwards compatability
 # fullnameOverride: ""
 
-eck-operator:
-  enabled: false
-  installCRDs: false
-  tolerations:
-  - key: node-role.kubernetes.io/control-plane
-    effect: NoSchedule
-  nodeSelector:
-    node-role.kubernetes.io/control-plane: ""
-
 # Version for ElasticSearch and Kibana have to match so we define it at top-level
 version: 7.17.3
 
