@@ -10,7 +10,7 @@ spec:
   gateways:
   - {{ .Values.istio.gateway }}
   hosts:
-  - {{ index .Values "argo-cd" "configs" "cm" "url" }}
+  - {{ get (urlParse (index .Values "argo-cd" "configs" "cm" "url")) "host" }}
   http:
   - name: grpc
     match:

@@ -35,8 +35,8 @@ argo-cd:
       ui.bannerpermanent: "true"
       ui.bannerposition: "bottom"
 
-      # argo-cd.server.config.url -- ArgoCD hostname to be exposed via Istio
-      url: argocd.example.com
+      # argo-cd.server.config.url -- ArgoCD URL being exposed via Istio
+      url: https://argocd.example.com
 
       timeout.reconciliation: 300
 

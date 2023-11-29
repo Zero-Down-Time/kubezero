@@ -1,6 +1,6 @@
 # kubezero-ci
 
-![Version: 0.8.3](https://img.shields.io/badge/Version-0.8.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.8.4](https://img.shields.io/badge/Version-0.8.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things CI
 
@@ -20,9 +20,9 @@ Kubernetes: `>= 1.25.0`
 |------------|------|---------|
 | https://aquasecurity.github.io/helm-charts/ | trivy | 0.7.0 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://charts.jenkins.io | jenkins | 4.8.3 |
-| https://dl.gitea.io/charts/ | gitea | 9.6.0 |
-| https://docs.renovatebot.com/helm-charts | renovate | 37.64.3 |
+| https://charts.jenkins.io | jenkins | 4.9.1 |
+| https://dl.gitea.io/charts/ | gitea | 9.6.1 |
+| https://docs.renovatebot.com/helm-charts | renovate | 37.68.4 |
 
 # Jenkins
 - default build retention 10 builds, 32days
@@ -84,6 +84,7 @@ Kubernetes: `>= 1.25.0`
 | gitea.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | gitea.strategy.type | string | `"Recreate"` |  |
 | gitea.test.enabled | bool | `false` |  |
+| jenkins.agent.annotations."container.apparmor.security.beta.kubernetes.io/jnlp" | string | `"unconfined"` |  |
 | jenkins.agent.containerCap | int | `2` |  |
 | jenkins.agent.customJenkinsLabels[0] | string | `"podman-aws-trivy"` |  |
 | jenkins.agent.idleMinutes | int | `30` |  |
