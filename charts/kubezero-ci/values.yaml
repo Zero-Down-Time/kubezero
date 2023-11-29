@@ -250,7 +250,7 @@ jenkins:
 trivy:
   enabled: false
   image:
-    tag: 0.45.1
+    tag: 0.47.0
   persistence:
     enabled: true
     size: 1Gi
