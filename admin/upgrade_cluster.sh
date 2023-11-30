@@ -145,9 +145,9 @@ argo_used && disable_argo
 
 control_plane_upgrade kubeadm_upgrade
 
-echo "Adjust kubezero values as needed:"
+#echo "Adjust kubezero values as needed:"
 # shellcheck disable=SC2015
-argo_used && kubectl edit app kubezero -n argocd || kubectl edit cm kubezero-values -n kube-system
+#argo_used && kubectl edit app kubezero -n argocd || kubectl edit cm kubezero-values -n kube-system
 
 # v1.27
 # We need to restore the network ready file as cilium decided to rename it
@@ -185,6 +185,12 @@ for c in $controllers; do
     kubectl annotate node $c ${l}-
   done
   kubectl label node $c topology.ebs.csi.aws.com/zone-
+done
+
+# Fix for legacy cert-manager CRDs to be upgraded
+for crd_name in certificaterequests.cert-manager.io certificates.cert-manager.io challenges.acme.cert-manager.io clusterissuers.cert-manager.io issuers.cert-manager.io orders.acme.cert-manager.io; do
+  manager_index="$(kubectl get crd "${crd_name}" --show-managed-fields --output json | jq -r '.metadata.managedFields | map(.manager == "cainjector") | index(true)')"
+  [ "$manager_index" != "null" ] && kubectl patch crd "${crd_name}" --type=json -p="[{\"op\": \"remove\", \"path\": \"/metadata/managedFields/${manager_index}\"}]"
 done
 # v1.27
 

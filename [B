@@ -1,0 +1,164 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kubezero
+  namespace: argocd
+spec:
+  destination:
+    namespace: argocd
+    server: https://kubernetes.default.svc
+  project: kubezero
+  source:
+    chart: kubezero
+    helm:
+      values: |
+        argocd:
+          enabled: true
+          configs:
+            cm:
+              url: https://argocd.vi.epmyalptest.com
+          istio:
+            enabled: true
+            gateway: istio-ingress/private-ingressgateway
+        cert-manager:
+          enabled: true
+          IamArn: arn:aws:iam::561550319853:role/us-east-1.plaympe-test-vi.cert-manager
+          clusterIssuer:
+            name: letsencrypt-dns-prod
+            email: admin@dice.net
+            server: https://acme-v02.api.letsencrypt.org/directory
+            solvers:
+              - dns01:
+                  route53:
+                    region: us-east-1
+                selector:
+                  dnsZones:
+                    - epmyalptest.com
+                    - vi.epmyalptest.com
+                    - plaympetest.com
+                    - vi.plaympetest.com
+        global:
+          aws:
+            accountId: '561550319853'
+            region: us-east-1
+          clusterName: plaympe-test-vi
+          highAvailable: false
+        istio:
+          enabled: true
+          rateLimiting:
+            enabled: true
+        istio-ingress:
+          enabled: true
+          certificates:
+            - name: ingress-cert
+              dnsNames:
+                - '*.epmyalptest.com'
+                - '*.vi.epmyalptest.com'
+                - '*.plaympetest.com'
+                - '*.vi.plaympetest.com'
+        istio-private-ingress:
+          enabled: true
+          certificates:
+            - name: private-ingress-cert
+              dnsNames:
+                - '*.epmyalptest.com'
+                - '*.vi.epmyalptest.com'
+                - '*.plaympetest.com'
+                - '*.vi.plaympetest.com'
+        kubezero:
+          gitSync:
+            path: clusters/plaympe-test/us-east-1
+            repoURL: https://bitbucket.org/destinymedia/kubernetes
+            targetRevision: HEAD
+          syncPolicy:
+            automated:
+              prune: true
+        logging:
+          enabled: true
+          fluent-bit:
+            enabled: true
+            config:
+              extraRecords:
+                source.clustername: plaympe-test-vi
+              output:
+                host: fluentd.or.epmyalptest.com
+                tls: true
+        metrics:
+          enabled: true
+          istio:
+            alertmanager:
+              enabled: true
+              gateway: istio-ingress/private-ingressgateway
+              url: alertmanager.vi.epmyalptest.com
+            grafana:
+              enabled: true
+              gateway: istio-ingress/private-ingressgateway
+              url: metrics.vi.epmyalptest.com
+            prometheus:
+              enabled: true
+              gateway: istio-ingress/private-ingressgateway
+              url: prometheus.vi.epmyalptest.com
+          kube-prometheus-stack:
+            alertmanager:
+              enabled: true
+              alertmanagerSpec:
+                externalUrl: https://alertmanager.vi.epmyalptest.com
+            prometheus:
+              prometheusSpec:
+                externalUrl: https://prometheus.vi.epmyalptest.com
+        network:
+          cilium:
+            enabled: true
+            cluster:
+              name: plaympe-test-vi
+              id: 221
+            ipam:
+              operator:
+                clusterPoolIPv4PodCIDRList:
+                  - 10.221.0.0/16
+        operators:
+          enabled: true
+          eck-operator:
+            enabled: true
+        storage:
+          enabled: true
+          aws-ebs-csi-driver:
+            enabled: true
+            IamArn: arn:aws:iam::561550319853:role/us-east-1.plaympe-test-vi.ebs-csi-controller-sa
+          aws-efs-csi-driver:
+            enabled: true
+            IamArn: arn:aws:iam::561550319853:role/us-east-1.plaympe-test-vi.efs-csi-controller-sa
+            PersistentVolumes:
+              - name: services-dsny-cache
+                claimRef:
+                  name: dsny-cache
+                  namespace: services
+                volumeAttributes:
+                  encryptInTransit: 'false'
+                volumeHandle: fs-ec4ad96f:/services/dsny-cache
+              - name: services-geolocation
+                claimRef:
+                  name: geolocation
+                  namespace: services
+                volumeAttributes:
+                  encryptInTransit: 'false'
+                volumeHandle: fs-ec4ad96f:/services/geolocation
+              - name: platform-geolocation
+                claimRef:
+                  name: geolocation
+                  namespace: platform
+                volumeAttributes:
+                  encryptInTransit: 'false'
+                volumeHandle: fs-ec4ad96f:/platform/geolocation
+              - name: services-soundmouse
+                claimRef:
+                  name: soundmouse
+                  namespace: services
+                volumeAttributes:
+                  encryptInTransit: 'false'
+                volumeHandle: fs-ec4ad96f:/services/soundmouse
+    repoURL: https://cdn.zero-downtime.net/charts
+    targetRevision: 1.27.8
+  syncPolicy:
+    automated:
+      prune: true
