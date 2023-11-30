@@ -61,8 +61,6 @@ aws-efs-csi-driver:
       value: {{ index .Values "storage" "aws-efs-csi-driver" "IamArn" | quote }}
     - name: AWS_WEB_IDENTITY_TOKEN_FILE
       value: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
-    - name: AWS_STS_REGIONAL_ENDPOINTS
-      value: regional
 
     # The EFS controller steel needs hostnetwork and cannot update on single node control planes otherwise
     {{- if not .Values.global.highAvailable }}
