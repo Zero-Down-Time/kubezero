@@ -150,6 +150,7 @@ echo "Adjust kubezero values as needed:"
 # shellcheck disable=SC2015
 argo_used && kubectl edit app kubezero -n argocd || kubectl edit cm kubezero-values -n kube-system
 
+# v1.27
 # We need to restore the network ready file as cilium decided to rename it
 control_plane_upgrade apply_network
 
@@ -157,22 +158,36 @@ echo "Wait for all CNI agents to be running ..."
 kubectl rollout status ds/cilium -n kube-system --timeout=60s
 
 all_nodes_upgrade "cd /host/etc/cni/net.d && ln -s 05-cilium.conflist 05-cilium.conf || true"
+# v1.27
 
 # now the rest
 control_plane_upgrade "apply_addons, apply_storage, apply_operators"
 
+# v1.27
 # Remove legacy eck-operator as part of logging if running
 kubectl delete statefulset elastic-operator -n logging || true
+# v1.27
 
 echo "Checking that all pods in kube-system are running ..."
 waitSystemPodsRunning
 
 echo "Applying remaining KubeZero modules..."
 
+# v1.27
 ### Cleanup of some deprecated Istio Crds
 for crd in clusterrbacconfigs.rbac.istio.io rbacconfigs.rbac.istio.io servicerolebindings.rbac.istio.io serviceroles.rbac.istio.io; do
   kubectl delete crds $crd || true
 done
+
+# Cleanup of some legacy node labels and annotations
+controllers=$(kubectl get nodes -l node-role.kubernetes.io/control-plane -o json | jq .items[].metadata.name -r)
+for c in $controllers; do
+  for l in projectcalico.org/IPv4VXLANTunnelAddr projectcalico.org/IPv4Address kubeadm.alpha.kubernetes.io/cri-socket; do
+    kubectl annotate node $c ${l}-
+  done
+  kubectl label node $c topology.ebs.csi.aws.com/zone-
+done
+# v1.27
 
 control_plane_upgrade "apply_cert-manager, apply_istio, apply_istio-ingress, apply_istio-private-ingress, apply_logging, apply_metrics, apply_telemetry, apply_argocd"
 

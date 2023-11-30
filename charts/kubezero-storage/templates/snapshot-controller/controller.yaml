@@ -46,7 +46,7 @@ spec:
       serviceAccountName: snapshot-controller
       containers:
         - name: snapshot-controller
-          image: registry.k8s.io/sig-storage/snapshot-controller:v6.2.2
+          image: {{ .Values.snapshotController.image.name }}:{{ .Values.snapshotController.image.tag }}
           args:
             - "--v={{ .Values.snapshotController.logLevel }}"
             {{- if gt (int .Values.snapshotController.replicas) 1 }}
