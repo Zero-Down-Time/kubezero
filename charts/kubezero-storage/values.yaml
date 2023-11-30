@@ -3,6 +3,11 @@ crd:
 
 snapshotController:
   enabled: false
+
+  image:
+    name: registry.k8s.io/sig-storage/snapshot-controller
+    tag: v6.3.0
+
   replicas: 1
   logLevel: 2
 
