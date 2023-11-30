@@ -143,7 +143,6 @@ argo_used && disable_argo
 
 #all_nodes_upgrade ""
 
-
 control_plane_upgrade kubeadm_upgrade
 
 echo "Adjust kubezero values as needed:"
@@ -155,7 +154,7 @@ argo_used && kubectl edit app kubezero -n argocd || kubectl edit cm kubezero-val
 control_plane_upgrade apply_network
 
 echo "Wait for all CNI agents to be running ..." 
-kubectl rollout status ds/cilium -n kube-system --timeout=60s
+kubectl rollout status ds/cilium -n kube-system --timeout=120s
 
 all_nodes_upgrade "cd /host/etc/cni/net.d && ln -s 05-cilium.conflist 05-cilium.conf || true"
 # v1.27
@@ -182,7 +181,7 @@ done
 # Cleanup of some legacy node labels and annotations
 controllers=$(kubectl get nodes -l node-role.kubernetes.io/control-plane -o json | jq .items[].metadata.name -r)
 for c in $controllers; do
-  for l in projectcalico.org/IPv4VXLANTunnelAddr projectcalico.org/IPv4Address kubeadm.alpha.kubernetes.io/cri-socket; do
+  for l in projectcalico.org/IPv4VXLANTunnelAddr projectcalico.org/IPv4Address; do
     kubectl annotate node $c ${l}-
   done
   kubectl label node $c topology.ebs.csi.aws.com/zone-
