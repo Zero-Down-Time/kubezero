@@ -25,6 +25,7 @@ spec:
       node.processors: {{ .processors }}
       {{- end }}
       indices.memory.index_buffer_size: "20%"
+      index.store.type: niofs
     podTemplate:
       # Remove once https://github.com/elastic/elasticsearch/pull/65923 is merged
       {{- if $.Values.es.s3Snapshot.iamrole }}
@@ -61,7 +62,7 @@ spec:
           {{- if .jvm_heap }}
           env:
           - name: ES_JAVA_OPTS
-            value: -Xms{{ .jvm_heap }}g -Xmx{{ .jvm_heap }}g
+            value: -Xms{{ .jvm_heap }} -Xmx{{ .jvm_heap }}
           {{- end }}
         #{{- if $.Values.es.s3Snapshot.iamrole }}
         #  - name: AWS_ROLE_ARN
