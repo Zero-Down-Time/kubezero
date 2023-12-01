@@ -222,7 +222,7 @@ aws-efs-csi-driver:
     resources:
       requests:
         cpu: 20m
-        memory: 64Mi
+        memory: 96Mi
       limits:
         memory: 128Mi
 

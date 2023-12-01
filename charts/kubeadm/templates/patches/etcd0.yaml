@@ -3,6 +3,6 @@ spec:
   - name: etcd
     resources:
       requests:
-        cpu: 200m
-        memory: 192Mi
+        cpu: 50m
+        memory: 256Mi
         #ephemeral-storage: 1Gi
