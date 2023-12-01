@@ -96,12 +96,12 @@ argo-cd:
         enabled: true
 
     resources:
-      # limits:
+      limits:
         # cpu: 500m
-        # memory: 2048Mi
+        memory: 2048Mi
       requests:
         cpu: 100m
-        memory: 256Mi
+        memory: 512Mi
 
   repoServer:
     metrics:
