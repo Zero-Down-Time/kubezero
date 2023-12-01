@@ -4,5 +4,5 @@ spec:
   - name: kube-apiserver
     resources:
       requests:
-        cpu: 200m
-        memory: 1Gi
+        cpu: 250m
+        memory: 1268Mi
