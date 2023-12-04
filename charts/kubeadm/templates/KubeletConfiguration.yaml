@@ -6,6 +6,7 @@ cgroupDriver: cgroupfs
 logging:
   format: json
 hairpinMode: hairpin-veth
+ContainerRuntimeEndpoint: "unix:///var/run/crio/crio.sock"
 {{- if .Values.systemd }}
 resolvConf: /run/systemd/resolve/resolv.conf
 {{- end }}
@@ -32,6 +33,5 @@ kubeReserved:
 #evictionHard:
 #  memory.available: "484Mi"
 imageGCLowThresholdPercent: 70
-# kernelMemcgNotification: true
 serializeImagePulls: false
-maxParallelImagePulls: 2
+maxParallelImagePulls: 4
