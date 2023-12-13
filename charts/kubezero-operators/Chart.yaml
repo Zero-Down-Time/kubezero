@@ -18,7 +18,7 @@ dependencies:
     repository: https://cdn.zero-downtime.net/charts/
   - name: opensearch-operator
     version: 2.4.0
-    repository: https://opster.github.io/opensearch-k8s-operator/
+    repository: https://opensearch-project.github.io/opensearch-k8s-operator/
     condition: opensearch-operator.enabled
   - name: eck-operator
     version: 2.9.0
