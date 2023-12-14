@@ -39,3 +39,7 @@ telemetry:
   enabled: false
 
 proxyProtocol: true
+
+hardening:
+  rejectUnderscoresHeaders: true
+  unescapeSlahes: true

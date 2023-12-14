@@ -88,6 +88,10 @@ certificates:
 {{- end }}
 {{- end }}
 proxyProtocol: {{ default true (index .Values "istio-ingress" "proxyProtocol") }}
+{{- with (index .Values "istio-ingress" "hardening") }}
+hardening:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
 
 {{- end }}
 
