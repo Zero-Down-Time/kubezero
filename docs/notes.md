@@ -52,3 +52,11 @@ See: https://github.com/int128/kauthproxy
 Once installed simply execute:  
 `kubectl auth-proxy -n kubernetes-dashboard https://kubernetes-dashboard.svc`  
 and access the dashboard via the automatically opened browser window.
+
+
+## Istio
+HTTP Body size
+- https://github.com/istio/istio/issues/26152
+
+AccessLogs:
+- https://dev.to/ironcore864/a-comprehensive-tutorial-on-service-mesh-istio-envoy-access-log-and-log-filtering-2j3i

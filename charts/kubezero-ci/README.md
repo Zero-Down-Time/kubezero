@@ -149,7 +149,7 @@ Kubernetes: `>= 1.25.0`
 | renovate.env.LOG_FORMAT | string | `"json"` |  |
 | renovate.securityContext.fsGroup | int | `1000` |  |
 | trivy.enabled | bool | `false` |  |
-| trivy.image.tag | string | `"0.45.1"` |  |
+| trivy.image.tag | string | `"0.47.0"` |  |
 | trivy.persistence.enabled | bool | `true` |  |
 | trivy.persistence.size | string | `"1Gi"` |  |
 | trivy.rbac.create | bool | `false` |  |
