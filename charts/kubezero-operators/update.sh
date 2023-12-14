@@ -15,3 +15,5 @@ helm template charts/eck-operator/charts/eck-operator-crds --name-template loggi
 
 rm -rf charts/eck-operator/charts
 yq eval -Mi 'del(.dependencies)' charts/eck-operator/Chart.yaml
+
+update_docs

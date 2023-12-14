@@ -19,28 +19,28 @@ data:
     User clamav
     ExitOnOOM yes
     Foreground yes
-    MaxScanSize {{.Values.clamav.limits.scanSize}}M
-    MaxFileSize {{.Values.clamav.limits.fileSize}}M
+    MaxScanSize {{.Values.limits.scanSize}}M
+    MaxFileSize {{.Values.limits.fileSize}}M
 
     #  Close the connection when the data size limit is exceeded.
     #  The value should match your MTA's limit for a maximum attachment size.
     #  Default: 25M
-    StreamMaxLength {{.Values.clamav.limits.scanSize}}M
+    StreamMaxLength {{.Values.limits.scanSize}}M
 
     # Maximum length the queue of pending connections may grow to.
     # Default: 200
-    MaxConnectionQueueLength {{.Values.clamav.limits.connectionQueueLength}}
+    MaxConnectionQueueLength {{.Values.limits.connectionQueueLength}}
 
     # Maximum number of threads running at the same time.
     # Default: 10
-    MaxThreads {{.Values.clamav.limits.maxThreads}}
+    MaxThreads {{.Values.limits.maxThreads}}
 
     # This option specifies how long to wait (in milliseconds) if the send buffer
     # is full.
     # Keep this value low to prevent clamd hanging.
     #
     # Default: 500
-    SendBufTimeout {{.Values.clamav.limits.sendBufTimeout}}
+    SendBufTimeout {{.Values.limits.sendBufTimeout}}
 
   freshclam.conf: |
     LogTime yes
@@ -49,4 +49,4 @@ data:
     Checks 24
     LogSyslog no
     DatabaseOwner root
-    DatabaseMirror {{ .Values.clamav.freshclam.mirrors }}
+    DatabaseMirror {{ .Values.freshclam.mirrors }}
