@@ -32,7 +32,7 @@ spec:
           use_remote_address: true
           normalize_path: true
           merge_slashes: true
-          {{- if .Values.hardening.unescapeSlahes }}
+          {{- if .Values.hardening.unescapeSlashes }}
           path_with_escaped_slashes_action: UNESCAPE_AND_REDIRECT
           {{- end }}
           common_http_protocol_options:

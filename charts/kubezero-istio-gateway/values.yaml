@@ -42,4 +42,4 @@ proxyProtocol: true
 
 hardening:
   rejectUnderscoresHeaders: true
-  unescapeSlahes: true
+  unescapeSlashes: true
