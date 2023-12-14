@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "kubezero-lib.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.clamav.replicaCount }}
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       {{- include "kubezero-lib.selectorLabels" . | nindent 6 }}
@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: clamav
-        image: "{{ .Values.clamav.image }}:{{ default .Chart.AppVersion .Values.clamav.version }}_base"
+        image: "{{ .Values.image.repository }}:{{ default .Chart.AppVersion .Values.image.tag }}_{{ .Values.image.type }}"
         ports:
         - containerPort: 3310
           name: clamav
@@ -41,7 +41,7 @@ spec:
           successThreshold: 1
           timeoutSeconds: 3
         resources:
-          {{- toYaml .Values.clamav.resources | nindent 10 }}
+          {{- toYaml .Values.resources | nindent 10 }}
         volumeMounts:
           - mountPath: /var/lib/clamav
             name: signatures
@@ -53,15 +53,15 @@ spec:
       - name: config-volume
         configMap:
           name: {{ include "kubezero-lib.fullname" . }}
-      {{- with .Values.clamav.nodeSelector }}
+      {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.clamav.affinity }}
+      {{- with .Values.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.clamav.tolerations }}
+      {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -70,7 +70,7 @@ spec:
       name: signatures
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      {{- with .Values.clamav.storageClassName }}
+      {{- with .Values.storageClassName }}
       storageClassName: {{ . }}
       {{- end }}
       resources:

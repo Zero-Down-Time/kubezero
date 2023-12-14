@@ -1,9 +1,9 @@
 gitea:
   enabled: false
 
-  #image:
-    #tag: 1.17.4
-    #rootless: true
+  image:
+    tag: 1.21.2
+    rootless: true
 
   repliaCount: 1
 
@@ -161,7 +161,7 @@ jenkins:
   # Preconfigure agents to use zdt podman requires fuse/overlayfs
   agent:
     image: public.ecr.aws/zero-downtime/jenkins-podman
-    tag: v0.4.5
+    tag: v0.4.6
     #alwaysPullImage: true
     podRetention: "Default"
     showRawYaml: false

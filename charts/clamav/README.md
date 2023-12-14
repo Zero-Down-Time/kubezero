@@ -1,8 +1,8 @@
 # clamav
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.104.0](https://img.shields.io/badge/AppVersion-0.104.0-informational?style=flat-square)
+![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.2.1](https://img.shields.io/badge/AppVersion-1.2.1-informational?style=flat-square)
 
-Chart for deploying a ClamavD on kubernetes as statfulSet
+Chart for deploying a ClamAVd on Kubernetes as statfulSet
 
 **Homepage:** <https://kubezero.com>
 
@@ -10,32 +10,31 @@ Chart for deploying a ClamavD on kubernetes as statfulSet
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Quarky9 |  |  |
+| Stefan Reimer | <stefan@zero-downtime.net> |  |
 
 ## Requirements
 
-Kubernetes: `>= 1.18.0`
+Kubernetes: `>= 1.26.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.4 |
+| https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| clamav.freshclam.mirrors | string | `"database.clamav.net"` | A list of clamav mirrors to be used by the clamav service |
-| clamav.image | string | `"clamav/clamav"` | The clamav docker image |
-| clamav.limits.connectionQueueLength | int | `100` | Maximum length the queue of pending connections may grow to |
-| clamav.limits.fileSize | int | `20` | The largest file size scanable by clamav, in MB |
-| clamav.limits.maxThreads | int | `4` | Maximum number of threads running at the same time. |
-| clamav.limits.scanSize | int | `100` | The largest scan size permitted in clamav, in MB |
-| clamav.limits.sendBufTimeout | int | `500` |  |
-| clamav.replicaCount | int | `1` |  |
-| clamav.resources | object | `{"requests":{"cpu":"300m","memory":"1300M"}}` | The resource requests and limits for the clamav service |
-| clamav.version | string | `"unstable"` | The clamav docker image version - defaults to .Chart.appVersion |
+| freshclam.mirrors | string | `"database.clamav.net"` | A list of clamav mirrors to be used by the clamav service |
 | fullnameOverride | string | `""` | override the full name of the clamav chart |
+| image | object | `{"repository":"clamav/clamav","type":"base"}` | The clamav docker image |
+| limits.connectionQueueLength | int | `100` | Maximum length the queue of pending connections may grow to |
+| limits.fileSize | int | `20` | The largest file size scanable by clamav, in MB |
+| limits.maxThreads | int | `4` | Maximum number of threads running at the same time. |
+| limits.scanSize | int | `100` | The largest scan size permitted in clamav, in MB |
+| limits.sendBufTimeout | int | `500` |  |
 | nameOverride | string | `""` | override the name of the clamav chart |
+| replicaCount | int | `1` |  |
+| resources | object | `{"requests":{"cpu":"300m","memory":"2000M"}}` | The resource requests and limits for the clamav service |
 | service.port | int | `3310` | The port to be used by the clamav service |
 
 ----------------------------------------------
