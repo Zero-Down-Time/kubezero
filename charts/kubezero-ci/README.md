@@ -1,6 +1,6 @@
 # kubezero-ci
 
-![Version: 0.8.5](https://img.shields.io/badge/Version-0.8.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.8.6](https://img.shields.io/badge/Version-0.8.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things CI
 
@@ -20,9 +20,9 @@ Kubernetes: `>= 1.25.0`
 |------------|------|---------|
 | https://aquasecurity.github.io/helm-charts/ | trivy | 0.7.0 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://charts.jenkins.io | jenkins | 4.9.2 |
-| https://dl.gitea.io/charts/ | gitea | 9.6.1 |
-| https://docs.renovatebot.com/helm-charts | renovate | 37.92.4 |
+| https://charts.jenkins.io | jenkins | 4.12.1 |
+| https://dl.gitea.io/charts/ | gitea | 10.1.0 |
+| https://docs.renovatebot.com/helm-charts | renovate | 37.153.2 |
 
 # Jenkins
 - default build retention 10 builds, 32days
@@ -66,7 +66,7 @@ Kubernetes: `>= 1.25.0`
 | gitea.gitea.metrics.enabled | bool | `false` |  |
 | gitea.gitea.metrics.serviceMonitor.enabled | bool | `true` |  |
 | gitea.image.rootless | bool | `true` |  |
-| gitea.image.tag | string | `"1.21.2"` |  |
+| gitea.image.tag | string | `"1.21.4"` |  |
 | gitea.istio.enabled | bool | `false` |  |
 | gitea.istio.gateway | string | `"istio-ingress/private-ingressgateway"` |  |
 | gitea.istio.url | string | `"git.example.com"` |  |
@@ -112,6 +112,7 @@ Kubernetes: `>= 1.25.0`
 | jenkins.controller.installPlugins[11] | string | `"build-discarder"` |  |
 | jenkins.controller.installPlugins[12] | string | `"dark-theme"` |  |
 | jenkins.controller.installPlugins[13] | string | `"matrix-auth"` |  |
+| jenkins.controller.installPlugins[14] | string | `"reverse-proxy-auth-plugin"` |  |
 | jenkins.controller.installPlugins[1] | string | `"kubernetes-credentials-provider"` |  |
 | jenkins.controller.installPlugins[2] | string | `"workflow-aggregator"` |  |
 | jenkins.controller.installPlugins[3] | string | `"git"` |  |
