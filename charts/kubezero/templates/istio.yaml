@@ -2,12 +2,15 @@
 istiod:
   telemetry:
     enabled: {{ $.Values.metrics.enabled }}
-{{- if .Values.global.highAvailable }}
   pilot:
+{{- if .Values.global.highAvailable }}
     replicaCount: 2
 global:
   defaultPodDisruptionBudget:
     enabled: true
+{{- else }}
+    extraContainerArgs:
+    - --leader-elect=false
 {{- end }}
 {{- with  index .Values "istio" "kiali-server" }}
 kiali-server:

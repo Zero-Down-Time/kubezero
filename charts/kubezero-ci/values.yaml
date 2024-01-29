@@ -2,7 +2,7 @@ gitea:
   enabled: false
 
   image:
-    tag: 1.21.2
+    #tag: 1.21.4
     rootless: true
 
   repliaCount: 1
@@ -153,6 +153,7 @@ jenkins:
       - build-discarder
       - dark-theme
       - matrix-auth
+      - reverse-proxy-auth-plugin
 
   serviceAccountAgent:
     create: true
