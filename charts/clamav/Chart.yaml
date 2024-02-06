@@ -2,7 +2,7 @@ apiVersion: v2
 name: clamav
 description: Chart for deploying a ClamAVd on Kubernetes as statfulSet
 type: application
-version: "0.3.0"
+version: "0.3.1"
 appVersion: "1.2.1"
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
