@@ -10,7 +10,7 @@ data:
     LogTime yes
     LogClean yes
     LogSyslog no
-    LogVerbose no
+    LogVerbose yes
     LogFileMaxSize 0
     LogFile /dev/stdout
     DatabaseDirectory /var/lib/clamav

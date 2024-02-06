@@ -1,6 +1,6 @@
 # clamav
 
-![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.2.1](https://img.shields.io/badge/AppVersion-1.2.1-informational?style=flat-square)
+![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.2.1](https://img.shields.io/badge/AppVersion-1.2.1-informational?style=flat-square)
 
 Chart for deploying a ClamAVd on Kubernetes as statfulSet
 
@@ -28,7 +28,7 @@ Kubernetes: `>= 1.26.0`
 | fullnameOverride | string | `""` | override the full name of the clamav chart |
 | image | object | `{"repository":"clamav/clamav","type":"base"}` | The clamav docker image |
 | limits.connectionQueueLength | int | `100` | Maximum length the queue of pending connections may grow to |
-| limits.fileSize | int | `20` | The largest file size scanable by clamav, in MB |
+| limits.fileSize | int | `25` | The largest file size scanable by clamav, in MB |
 | limits.maxThreads | int | `4` | Maximum number of threads running at the same time. |
 | limits.scanSize | int | `100` | The largest scan size permitted in clamav, in MB |
 | limits.sendBufTimeout | int | `500` |  |
