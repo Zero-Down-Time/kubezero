@@ -5,31 +5,33 @@ jaeger:
   {{- with .Values.telemetry.jaeger }}
   {{- toYaml . | nindent 2 }}
   {{- end }}
+
+  collector:
+    serviceMonitor:
+      enabled: {{ .Values.metrics.enabled }}
+  query:
+    serviceMonitor:
+      enabled: {{ .Values.metrics.enabled }}
 {{- end }}
 
 {{- if .Values.telemetry.opensearch }}
 opensearch:
   {{- if .Values.telemetry.opensearch.nodeSets }}
   nodeSets:
-  {{- with .Values.telemetry.opensearch.nodeSets }}
-  {{- toYaml . | nindent 2 }}
-  {{- end }}
-  {{- end }}
-  prometheus: {{ .Values.metrics.enabled }}
-
-  {{- if .Values.telemetry.opensearch.s3Snapshot }}
-  s3Snapshot:
-    {{- with .Values.telemetry.opensearch.s3Snapshot }}
+    {{- with .Values.telemetry.opensearch.nodeSets }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
   {{- end }}
-{{- end }}
 
-{{- if .Values.telemetry.dashboard }}
-dashboard:
-  {{- with .Values.telemetry.dashboard }}
-  {{- toYaml . | nindent 2 }}
+  {{- if .Values.telemetry.opensearch.dashboard }}
+  dashboard:
+    {{- with .Values.telemetry.opensearch.dashboard }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
   {{- end }}
+
+  prometheus: {{ .Values.metrics.enabled }}
+
 {{- end }}
 
 {{- end }}

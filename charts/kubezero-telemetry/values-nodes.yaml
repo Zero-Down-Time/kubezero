@@ -52,20 +52,20 @@ opensearch:
   version: 2.11.1
   prometheus: false
 
-  nodeSets: []
-  #- name: default-nodes 
-  #  replicas: 2
-  #  storage:
-  #    size: 16Gi
-  #    class: my-fancy-SSDs
-  #  zone: us-west-2a
-  #  resources:
-  #    limits:
-  #      #cpu: 1
-  #      memory: 2Gi
-  #    requests:
-  #      cpu: 500m
-  #      memory: 2Gi
+  nodeSets:
+  - name: default
+    replicas: 2
+    storage:
+      size: 16Gi
+      class: my-fancy-SSDs
+    zone: us-west-2a
+    resources:
+      limits:
+        #cpu: 1
+        memory: 2Gi
+      requests:
+        cpu: 500m
+        memory: 2Gi
 
   dashboard:
     enabled: false
