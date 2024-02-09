@@ -32,7 +32,7 @@ Kubernetes: `>= 1.26.0`
 | eck-operator.tolerations[0].effect | string | `"NoSchedule"` |  |
 | eck-operator.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | opensearch-operator.enabled | bool | `false` |  |
-| opensearch-operator.fullnameOverride | string | `"telemetry"` |  |
+| opensearch-operator.fullnameOverride | string | `"opensearch-operator"` |  |
 | opensearch-operator.kubeRbacProxy.enable | bool | `false` |  |
 | opensearch-operator.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | opensearch-operator.tolerations[0].effect | string | `"NoSchedule"` |  |

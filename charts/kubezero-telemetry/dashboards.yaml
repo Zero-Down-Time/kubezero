@@ -1,0 +1,14 @@
+configmap: grafana-dashboards
+gzip: true
+folder: Telemetry
+dashboards:
+- name: jaeger
+  url: https://grafana.com/api/dashboards/10001/revisions/2/download
+  tags:
+  - Jaeger
+  - Telemetry
+- name: opensearch
+  url: https://grafana.com/api/dashboards/15178/revisions/2/download
+  tags:
+  - OpenSearch
+  - Telemetry

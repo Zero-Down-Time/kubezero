@@ -16,5 +16,5 @@ spec:
     - destination:
         host: {{ .Release.Name }}-jaeger-query
         port:
-          number: 16686
+          number: 80
 {{- end }}

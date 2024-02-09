@@ -2,11 +2,16 @@ opensearch-operator:
   enabled: false
 
   # otherwise service names will be >63 chars
-  fullnameOverride: telemetry
+  fullnameOverride: opensearch-operator
 
   # not needed for now
   kubeRbacProxy:
     enable: false
+
+  manager:
+    extraEnv:
+      - name: SKIP_INIT_CONTAINER
+        value: "true"
 
   tolerations:
   - key: node-role.kubernetes.io/control-plane

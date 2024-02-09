@@ -23,6 +23,9 @@ cert-manager:
     leaderElection:
       namespace: "cert-manager"
 
+  # remove secrets if the cert is deleted
+  enableCertificateOwnerRef: true
+
   extraArgs:
     - "--logging-format=json"
     - "--leader-elect=false"
