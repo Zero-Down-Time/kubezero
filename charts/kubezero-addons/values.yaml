@@ -54,7 +54,7 @@ aws-eks-asg-rolling-update-handler:
   enabled: false
   image:
     repository: twinproduction/aws-eks-asg-rolling-update-handler
-    tag: v1.8.2
+    tag: v1.8.3
 
   environmentVars:
     - name: CLUSTER_NAME
