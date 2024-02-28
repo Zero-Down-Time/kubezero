@@ -1,0 +1,23 @@
+apiVersion: v2
+description: KubeZero Argo - Events, Workflow, CD
+name: kubezero-argo
+version: 0.1.0
+home: https://kubezero.com
+icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
+keywords:
+  - kubezero
+  - argo-events
+  - argo-workflow
+maintainers:
+  - name: Stefan Reimer
+    email: stefan@zero-downtime.net
+# Url: https://github.com/argoproj/argo-helm/tree/main/charts
+dependencies:
+  - name: kubezero-lib
+    version: ">= 0.1.6"
+    repository: https://cdn.zero-downtime.net/charts/
+  - name: argo-events
+    version: 2.4.3
+    repository: https://argoproj.github.io/argo-helm
+    condition: argo-events.enabled
+kubeVersion: ">= 1.26.0"
