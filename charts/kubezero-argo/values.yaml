@@ -1,2 +1,32 @@
 argo-events:
   enabled: false
+  configs:
+    jetstream:
+      # Default JetStream settings, could be overridden by EventBus JetStream spec
+      # Ref: https://docs.nats.io/running-a-nats-service/configuration#jetstream
+      settings:
+        # -- Maximum size of the memory storage (e.g. 1G)
+        maxMemoryStore: -1
+        # -- Maximum size of the file storage (e.g. 20G)
+        maxFileStore: -1
+      streamConfig:
+        # -- Maximum number of messages before expiring oldest message
+        maxMsgs: 1000000
+        # -- Maximum age of existing messages, i.e. “72h”, “4h35m”
+        maxAge: 72h
+        # Total size of messages before expiring oldest message, 0 means unlimited.
+        maxBytes: 1GB
+        # -- Number of replicas, defaults to 3 and requires minimal 3
+        replicas: 1
+        # -- Not documented at the moment
+        duplicates: 300s
+      # Supported versions of JetStream eventbus
+      # see: https://github.com/nats-io/k8s/blob/main/helm/charts/nats/values.yaml
+      # do NOT use -alpine tag as the entrypoint differs
+      versions:
+        - version: 2.10.11
+          natsImage: nats:2.10.11-scratch
+          metricsExporterImage: natsio/prometheus-nats-exporter:0.14.0
+          configReloaderImage: natsio/nats-server-config-reloader:0.14.1
+          startCommand: /nats-server
+

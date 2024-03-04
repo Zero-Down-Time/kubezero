@@ -74,8 +74,6 @@ spec:
           name: {{ template "kubezero-lib.fullname" . }}-nodes-transport-tls
         nodesDn:
           - 'CN={{ template "kubezero-lib.fullname" . }}-nodes'
-          - 'CN={{ template "kubezero-lib.fullname" . }}-nodes-*'
-          - 'CN={{ template "kubezero-lib.fullname" . }}-bootstrap-0'
         adminDn:
           - 'CN={{ template "kubezero-lib.fullname" . }}-admin'
       http:
