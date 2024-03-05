@@ -2,7 +2,7 @@ apiVersion: v2
 name: kubezero-sql
 description: KubeZero umbrella chart for SQL databases, Percona XtraDB Cluster
 type: application
-version: 0.3.2
+version: 0.3.3
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
@@ -18,11 +18,11 @@ dependencies:
     version: ">= 0.1.6"
     repository: https://cdn.zero-downtime.net/charts/
   - name: pxc-operator
-    version: 1.12.1
+    version: 1.14.0
     repository: https://percona.github.io/percona-helm-charts/
     condition: pxc-operator.enabled
   - name: mariadb-galera
-    version: 7.4.7
+    version: 7.5.5
     repository: https://charts.bitnami.com/bitnami
     condition: mariadb-galera.enabled
 kubeVersion: ">= 1.24.0"
