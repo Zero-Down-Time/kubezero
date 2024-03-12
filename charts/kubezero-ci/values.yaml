@@ -90,8 +90,9 @@ jenkins:
   enabled: false
 
   controller:
-    tag: alpine-jdk17
-    #tagLabel: alpine
+    image:
+      tag: alpine-jdk17
+      #tagLabel: alpine
     disableRememberMe: true
     prometheus:
       enabled: false
@@ -161,8 +162,9 @@ jenkins:
 
   # Preconfigure agents to use zdt podman requires fuse/overlayfs
   agent:
-    image: public.ecr.aws/zero-downtime/jenkins-podman
-    tag: v0.4.6
+    image:
+      repository: public.ecr.aws/zero-downtime/jenkins-podman
+      tag: v0.4.6
     #alwaysPullImage: true
     podRetention: "Default"
     showRawYaml: false
@@ -251,7 +253,7 @@ jenkins:
 trivy:
   enabled: false
   image:
-    tag: 0.47.0
+    tag: 0.49.1
   persistence:
     enabled: true
     size: 1Gi
