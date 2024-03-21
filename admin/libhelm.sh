@@ -4,7 +4,7 @@
 API_VERSIONS="-a monitoring.coreos.com/v1 -a snapshot.storage.k8s.io/v1 -a policy/v1/PodDisruptionBudget"
 
 #VERSION="latest"
-VERSION="v1.27"
+VERSION="v1.28"
 
 # Waits for max 300s and retries
 function wait_for() {

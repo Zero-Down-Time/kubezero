@@ -1,9 +1,9 @@
 {{- /* Feature gates for all control plane components */ -}}
-{{- /* ToAdd: "PodAndContainerStatsFromCRI" */ -}}
 {{- /* Issues: "MemoryQoS" */ -}}
-{{- /* v1.28: "NodeSwap" */ -}}
+{{- /* v1.30?: "NodeSwap" */ -}}
+{{- /* v1.29: remove/beta now "SidecarContainers" */ -}}
 {{- define "kubeadm.featuregates" }}
-{{- $gates := list "CustomCPUCFSQuotaPeriod" }}
+{{- $gates := list "CustomCPUCFSQuotaPeriod" "SidecarContainers" "PodAndContainerStatsFromCRI" }}
 {{- if eq .return "csv" }}
 {{- range $key := $gates }}
 {{- $key }}=true,
