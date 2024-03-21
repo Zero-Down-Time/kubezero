@@ -9,7 +9,7 @@ networking:
   podSubnet: 10.244.0.0/16
 etcd:
   local:
-    # imageTag: 3.5.5-0
+    # imageTag: 3.5.12-0
     extraArgs:
       ### DNS discovery
       #discovery-srv: {{ .Values.domain }}
