@@ -24,21 +24,22 @@ spec:
             volumeMounts:
             - name: host
               mountPath: /host
+              readOnly: true
             - name: workdir
               mountPath: /tmp
-            env: 
+            env:
             - name: DEBUG
               value: ""
             - name: RESTIC_REPOSITORY
-              valueFrom: 
-                secretKeyRef: 
+              valueFrom:
+                secretKeyRef:
                   name: kubezero-backup-restic
                   key: repository
             - name: RESTIC_PASSWORD
-              valueFrom: 
-                secretKeyRef: 
+              valueFrom:
+                secretKeyRef:
                   name: kubezero-backup-restic
-                  key: password 
+                  key: password
             {{- with .Values.clusterBackup.extraEnv }}
               {{- toYaml . | nindent 12 }}
             {{- end }}

@@ -2,7 +2,7 @@ apiVersion: v2
 name: kubezero-network
 description: KubeZero umbrella chart for all things network
 type: application
-version: 0.4.7
+version: 0.5.0
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:

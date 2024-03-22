@@ -1,6 +1,6 @@
 # kubezero-network
 
-![Version: 0.4.6](https://img.shields.io/badge/Version-0.4.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things network
 
@@ -19,8 +19,8 @@ Kubernetes: `>= 1.26.0`
 | Repository | Name | Version |
 |------------|------|---------|
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://helm.cilium.io/ | cilium | 1.14.4 |
-| https://metallb.github.io/metallb | metallb | 0.13.12 |
+| https://helm.cilium.io/ | cilium | 1.15.2 |
+| https://metallb.github.io/metallb | metallb | 0.14.3 |
 
 ## Values
 
@@ -56,7 +56,7 @@ Kubernetes: `>= 1.26.0`
 | cilium.resources.limits.memory | string | `"1024Mi"` |  |
 | cilium.resources.requests.cpu | string | `"10m"` |  |
 | cilium.resources.requests.memory | string | `"256Mi"` |  |
-| cilium.tunnel | string | `"geneve"` |  |
+| cilium.tunnelProtocol | string | `"geneve"` |  |
 | metallb.controller.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | metallb.controller.tolerations[0].effect | string | `"NoSchedule"` |  |
 | metallb.controller.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |

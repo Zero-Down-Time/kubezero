@@ -22,7 +22,7 @@ spec:
   # the snapshot controller won't be marked as ready if the v1 CRDs are unavailable
   # in #504 the snapshot-controller will exit after around 7.5 seconds if it
   # can't find the v1 CRDs so this value should be greater than that
-  minReadySeconds: 15
+  minReadySeconds: 35
   strategy:
     rollingUpdate:
       maxSurge: 0
@@ -33,7 +33,7 @@ spec:
       labels:
         app: snapshot-controller
     spec:
-      affinity:          
+      affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:

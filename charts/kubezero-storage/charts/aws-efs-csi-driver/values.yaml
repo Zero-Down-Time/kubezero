@@ -11,14 +11,14 @@ useFIPS: false
 
 image:
   repository: amazon/aws-efs-csi-driver
-  tag: "v1.7.1"
+  tag: "v1.7.6"
   pullPolicy: IfNotPresent
 
 sidecars:
   livenessProbe:
     image:
       repository: public.ecr.aws/eks-distro/kubernetes-csi/livenessprobe
-      tag: v2.10.0-eks-1-27-3
+      tag: v2.11.0-eks-1-29-2
       pullPolicy: IfNotPresent
     resources: {}
     securityContext:
@@ -27,7 +27,7 @@ sidecars:
   nodeDriverRegistrar:
     image:
       repository: public.ecr.aws/eks-distro/kubernetes-csi/node-driver-registrar
-      tag: v2.8.0-eks-1-27-3
+      tag: v2.9.3-eks-1-29-2
       pullPolicy: IfNotPresent
     resources: {}
     securityContext:
@@ -36,7 +36,7 @@ sidecars:
   csiProvisioner:
     image:
       repository: public.ecr.aws/eks-distro/kubernetes-csi/external-provisioner
-      tag: v3.5.0-eks-1-27-3
+      tag: v3.6.3-eks-1-29-2
       pullPolicy: IfNotPresent
     resources: {}
     securityContext:
@@ -63,6 +63,12 @@ controller:
   # path on efs when deleteing an access point
   deleteAccessPointRootDir: false
   podAnnotations: {}
+  podLabel: {}
+  hostNetwork: false
+  priorityClassName: system-cluster-critical
+  dnsPolicy: ClusterFirst
+  dnsConfig: {}
+  additionalLabels: {}
   resources:
     {}
     # We usually recommend not to specify default resources and to leave this as a conscious
@@ -80,6 +86,8 @@ controller:
   tolerations:
     - key: CriticalAddonsOnly
       operator: Exists
+    - key: efs.csi.aws.com/agent-not-ready
+      operator: Exists
   affinity: {}
   # Specifies whether a service account should be created
   serviceAccount:
@@ -96,6 +104,12 @@ controller:
     runAsUser: 0
     runAsGroup: 0
     fsGroup: 0
+  # securityContext on the controller container
+  # Setting privileged=false will cause the "delete-access-point-root-dir" controller option to fail
+  containerSecurityContext:
+    privileged: true
+  leaderElectionRenewDeadline: 10s
+  leaderElectionLeaseDuration: 15s
 
 
 ## Node daemonset variables
