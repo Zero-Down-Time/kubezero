@@ -1,12 +1,9 @@
-crd:
-  volumeSnapshot: true
-
 snapshotController:
   enabled: false
 
   image:
     name: registry.k8s.io/sig-storage/snapshot-controller
-    tag: v6.3.0
+    tag: v7.0.1
 
   replicas: 1
   logLevel: 2
@@ -27,6 +24,11 @@ snapshotController:
 
 lvm-localpv:
   enabled: false
+
+  crds:
+    csi:
+      volumeSnapshots:
+        enabled: false
 
   lvmNode:
     logLevel: 2
@@ -190,6 +192,8 @@ aws-ebs-csi-driver:
       type: gp3
       encrypted: "true"
 
+  helmTester:
+    enabled: false
 
 aws-efs-csi-driver:
   enabled: false

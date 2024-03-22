@@ -107,7 +107,6 @@ aws-node-termination-handler:
 
   fullnameOverride: "aws-node-termination-handler"
 
-  checkASGTagBeforeDraining: false
   # -- "zdt:kubezero:nth:${ClusterName}"
   managedTag: "zdt:kubezero:nth:${ClusterName}"
 
@@ -161,7 +160,7 @@ awsNeuron:
 
   image:
     name: public.ecr.aws/neuron/neuron-device-plugin
-    tag: 2.12.5.0
+    tag: 2.19.16.0
 
 nvidia-device-plugin:
   enabled: false
@@ -201,7 +200,7 @@ cluster-autoscaler:
 
   image:
     repository: registry.k8s.io/autoscaling/cluster-autoscaler
-    tag: v1.27.3
+    tag: v1.28.2
 
   autoDiscovery:
     clusterName: ""
@@ -236,7 +235,7 @@ cluster-autoscaler:
   # On AWS enable Projected Service Accounts to assume IAM role
   #extraEnv:
   # AWS_ROLE_ARN: <IamArn>
-  # AWS_WEB_IDENTITY_TOKEN_FILE: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token" 
+  # AWS_WEB_IDENTITY_TOKEN_FILE: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
   # AWS_STS_REGIONAL_ENDPOINTS: "regional"
 
   #extraVolumes:

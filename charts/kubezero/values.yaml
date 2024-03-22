@@ -11,7 +11,7 @@ global:
 
 addons:
   enabled: true
-  targetRevision: 0.8.4
+  targetRevision: 0.8.5
   external-dns:
     enabled: false
   forseti:
@@ -30,7 +30,7 @@ addons:
 network:
   enabled: true
   retain: true
-  targetRevision: 0.4.6
+  targetRevision: 0.5.0
   cilium:
     cluster: {}
 
@@ -41,7 +41,7 @@ cert-manager:
 
 storage:
   enabled: false
-  targetRevision: 0.8.4
+  targetRevision: 0.8.5
   lvm-localpv:
     enabled: false
   aws-ebs-csi-driver:

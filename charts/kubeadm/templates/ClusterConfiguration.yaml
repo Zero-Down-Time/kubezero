@@ -73,6 +73,7 @@ apiServer:
     {{- end }}
     {{- if .Values.api.awsIamAuth.enabled }}
     authentication-token-webhook-config-file: /etc/kubernetes/apiserver/aws-iam-authenticator.yaml
+    authentication-token-webhook-cache-ttl: 3600s
     {{- end }}
     feature-gates: {{ include "kubeadm.featuregates" ( dict "return" "csv" ) | trimSuffix "," | quote }}
     enable-admission-plugins: DenyServiceExternalIPs,NodeRestriction,EventRateLimit,ExtendedResourceToleration

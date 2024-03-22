@@ -6,16 +6,25 @@ set -ex
 #login_ecr_public
 update_helm
 
-patch_chart gemini
-
 patch_chart aws-ebs-csi-driver
-rm -rf charts/aws-ebs-csi-driver/templates/tests
 
 patch_chart aws-efs-csi-driver
 
 patch_chart lvm-localpv
-# move snapshotclasses/content from lvm-localpv to toplevel
-mv charts/lvm-localpv/templates/*crd.yaml templates/snapshot-controller
+
+patch_chart gemini
+
+# snapshotter
+# https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/master/deploy/kubernetes/snapshot-controller/rbac-snapshot-controller.yaml
+# https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/master/deploy/kubernetes/snapshot-controller/setup-snapshot-controller.yaml
+
+for crd in volumesnapshotclasses volumesnapshotcontents volumesnapshots; do
+  _f="templates/snapshot-controller/${crd}-crd.yaml"
+  echo "{{- if .Values.snapshotController.enabled }}" > $_f
+  curl -L -s https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/master/client/config/crd/snapshot.storage.k8s.io_${crd}.yaml >> $_f
+  echo "{{- end }}" >> $_f
+done
+
 
 # k8up - CRDs
 VERSION=$(yq eval '.dependencies[] | select(.name=="k8up") | .version' Chart.yaml)
