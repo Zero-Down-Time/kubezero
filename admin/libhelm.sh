@@ -211,8 +211,7 @@ spec:
       hostIPC: true
       hostPID: true
       tolerations:
-      - key: node-role.kubernetes.io/control-plane
-        operator: Exists
+      - operator: Exists
         effect: NoSchedule
       initContainers:
       - name: node-upgrade
