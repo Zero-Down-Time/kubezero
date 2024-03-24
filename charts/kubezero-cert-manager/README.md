@@ -1,6 +1,6 @@
 # kubezero-cert-manager
 
-![Version: 0.9.6](https://img.shields.io/badge/Version-0.9.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.9.7](https://img.shields.io/badge/Version-0.9.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for cert-manager
 
@@ -19,7 +19,7 @@ Kubernetes: `>= 1.26.0`
 | Repository | Name | Version |
 |------------|------|---------|
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://charts.jetstack.io | cert-manager | v1.13.2 |
+| https://charts.jetstack.io | cert-manager | v1.14.4 |
 
 ## AWS - OIDC IAM roles
 
@@ -37,6 +37,7 @@ If your resolvers need additional sercrets like CloudFlare API tokens etc. make 
 | cert-manager.cainjector.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | cert-manager.cainjector.tolerations[0].effect | string | `"NoSchedule"` |  |
 | cert-manager.cainjector.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
+| cert-manager.enableCertificateOwnerRef | bool | `true` |  |
 | cert-manager.enabled | bool | `true` |  |
 | cert-manager.extraArgs[0] | string | `"--logging-format=json"` |  |
 | cert-manager.extraArgs[1] | string | `"--leader-elect=false"` |  |

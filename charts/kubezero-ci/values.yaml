@@ -2,7 +2,7 @@ gitea:
   enabled: false
 
   image:
-    #tag: 1.21.4
+    tag: 1.21.9
     rootless: true
 
   repliaCount: 1
@@ -42,7 +42,7 @@ gitea:
   extraVolumeMounts:
     - name: gitea-themes
       readOnly: true
-      mountPath: "/data/gitea/public/assets/css" 
+      mountPath: "/data/gitea/public/assets/css"
 
   checkDeprecation: false
   test:
@@ -72,6 +72,8 @@ gitea:
       ui:
         THEMES: "gitea,github-dark"
         DEFAULT_THEME: "github-dark"
+      log:
+        LEVEL: warn
 
   redis-cluster:
     enabled: false
