@@ -25,6 +25,7 @@ argo-cd:
   {{- end }}
 
 argocd-apps:
+  enabled: {{ default "false" (index .Values "argo" "argo-cd" "enabled") }}
   projects:
     kubezero:
       namespace: argocd

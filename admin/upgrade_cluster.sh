@@ -31,7 +31,14 @@ waitSystemPodsRunning
 
 echo "Applying remaining KubeZero modules..."
 
-control_plane_upgrade "apply_cert-manager, apply_istio, apply_istio-ingress, apply_istio-private-ingress, apply_logging, apply_metrics, apply_telemetry, apply_argocd"
+### v1.28
+# - remove old argocd app, all resources will be taken over by argo.argo-cd
+kubectl patch app argocd -n argocd \
+    --type json \
+    --patch='[ { "op": "remove", "path": "/metadata/finalizers" } ]' && \
+  kubectl delete app argocd -n argocd || true
+
+control_plane_upgrade "apply_cert-manager, apply_istio, apply_istio-ingress, apply_istio-private-ingress, apply_logging, apply_metrics, apply_telemetry, apply_argo"
 
 # Trigger backup of upgraded cluster state
 kubectl create job --from=cronjob/kubezero-backup kubezero-backup-$VERSION -n kube-system

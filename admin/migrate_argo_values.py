@@ -8,27 +8,11 @@ import yaml
 def migrate(values):
     """Actual changes here"""
 
-    # Cleanup
-    values.pop("Domain", None)
-    values.pop("clusterName", None)
-    if "addons" in values:
-        if not values["addons"]:
-            values.pop("addons")
-
-    # fix argoCD CM
+    # argoCD moves to argo module
     try:
-        if not values["argocd"]["configs"]["cm"]["url"].startswith("http"):
-            values["argocd"]["configs"]["cm"]["url"] = "https://" + values["argocd"]["configs"]["cm"]["url"]
-    except KeyError:
-        pass
-
-    # migrate eck operator to new operator module
-    try:
-        if values["logging"]["eck-operator"]["enabled"]:
-            if "operators" not in values:
-                values["operators"] = { "enabled": True }
-            values["operators"]["eck-operator"] = { "enabled": True }
-            values["logging"].pop("eck-operator", None)
+        if values["argocd"]["enabled"]:
+            values["argo"] = { "enabled": True, "argo-cd": values["argocd"] }
+            values.pop("argocd")
     except KeyError:
         pass
 
