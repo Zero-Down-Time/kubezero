@@ -8,7 +8,7 @@ metadata:
     {{- include "kubezero-lib.labels" . | nindent 4 }}
 spec:
   gateways:
-  - {{ .Values.istio.gateway }}
+  - {{ index .Values "argo-cd" "istio" "gateway" }}
   hosts:
   - {{ get (urlParse (index .Values "argo-cd" "configs" "cm" "url")) "host" }}
   http:
@@ -19,13 +19,13 @@ spec:
           prefix: argocd-client
     route:
     - destination:
-        host: argocd-server
+        host: argo-argocd-server
         port:
           number: 443
   - name: http
     route:
     - destination:
-        host: argocd-server
+        host: argo-argocd-server
         port:
           number: 80
 {{- end }}

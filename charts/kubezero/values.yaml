@@ -30,18 +30,18 @@ addons:
 network:
   enabled: true
   retain: true
-  targetRevision: 0.5.0
+  targetRevision: 0.5.1
   cilium:
     cluster: {}
 
 cert-manager:
   enabled: false
   namespace: cert-manager
-  targetRevision: 0.9.6
+  targetRevision: 0.9.7
 
 storage:
   enabled: false
-  targetRevision: 0.8.5
+  targetRevision: 0.8.6
   lvm-localpv:
     enabled: false
   aws-ebs-csi-driver:
@@ -110,11 +110,13 @@ logging:
   namespace: logging
   targetRevision: 0.8.10
 
-argocd:
+argo:
   enabled: false
   namespace: argocd
-  targetRevision: 0.13.3
-  argocd-image-updater:
+  targetRevision: 0.2.0
+  argo-cd:
     enabled: false
-  istio:
+    istio:
+      enabled: false
+  argocd-image-updater:
     enabled: false
