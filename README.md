@@ -33,7 +33,7 @@ gantt
     release  :after 127b, 2024-04-30
     section 1.28
     beta     :128b, 2024-03-01, 2024-04-30
-    release  :after 128b, 2023-08-31
+    release  :after 128b, 2024-08-31
     section 1.29
     beta     :129b, 2024-06-01, 2024-06-30
     release  :after 129b, 2024-11-30
