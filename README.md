@@ -18,7 +18,7 @@ KubeZero is a Kubernetes distribution providing an integrated container platform
 
 
 # Version / Support Matrix
-KubeZero releases track the same *minor* version of Kubernetes.  
+KubeZero releases track the same *minor* version of Kubernetes.
 Any 1.26.X-Y release of Kubezero supports any Kubernetes cluster 1.26.X.
 
 KubeZero is distributed as a collection of versioned Helm charts, allowing custom upgrade schedules and module versions as needed.
@@ -28,15 +28,15 @@ KubeZero is distributed as a collection of versioned Helm charts, allowing custo
 gantt
     title KubeZero Support Timeline
     dateFormat  YYYY-MM-DD
-    section 1.25
-    beta     :125b, 2023-03-01, 2023-03-31
-    release  :after 125b, 2023-08-01
-    section 1.26
-    beta     :126b, 2023-06-01, 2023-06-30
-    release  :after 126b, 2023-11-01
     section 1.27
     beta     :127b, 2023-09-01, 2023-09-30
-    release  :after 127b, 2024-02-01
+    release  :after 127b, 2024-04-30
+    section 1.28
+    beta     :128b, 2024-03-01, 2024-04-30
+    release  :after 128b, 2023-08-31
+    section 1.29
+    beta     :129b, 2024-06-01, 2024-06-30
+    release  :after 129b, 2024-11-30
 ```
 
 [Upstream release policy](https://kubernetes.io/releases/)
@@ -57,7 +57,7 @@ gantt
 
 ## Featured workloads
 - rootless CI/CD build platform to build containers as part of a CI pipeline, using podman / fuse device plugin support
-- containerized AI models via integrated out of the box support for Nvidia GPU workers as well as AWS Neuron  
+- containerized AI models via integrated out of the box support for Nvidia GPU workers as well as AWS Neuron
 
 ## Control plane
 - all Kubernetes components compiled against Alpine OS using `buildmode=pie`
@@ -85,12 +85,12 @@ gantt
 - CSI Snapshot controller and Gemini snapshot groups and retention
 
 ## Ingress
-- AWS Network Loadbalancer and Istio Ingress controllers  
+- AWS Network Loadbalancer and Istio Ingress controllers
 - no additional costs per exposed service
 - real client source IP available to workloads via HTTP header and access logs
 - ACME SSL Certificate handling via cert-manager incl. renewal etc.
 - support for TCP services
-- optional rate limiting support 
+- optional rate limiting support
 - optional full service mesh
 
 ## Metrics
