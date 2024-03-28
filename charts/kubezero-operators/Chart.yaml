@@ -2,7 +2,7 @@ apiVersion: v2
 name: kubezero-operators
 description: Various operators supported by KubeZero 
 type: application
-version: 0.1.1
+version: 0.1.2
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
@@ -21,7 +21,7 @@ dependencies:
     repository: https://opensearch-project.github.io/opensearch-k8s-operator/
     condition: opensearch-operator.enabled
   - name: eck-operator
-    version: 2.11.1
+    version: 2.12.1
     repository: https://helm.elastic.co
     condition: eck-operator.enabled
 kubeVersion: ">= 1.26.0"
