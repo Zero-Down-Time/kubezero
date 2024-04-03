@@ -49,11 +49,11 @@ jaeger:
     url: jaeger.example.com
 
 opensearch:
-  version: 2.11.1
+  version: 2.12.0
   prometheus: false
 
   nodeSets: []
-  #- name: default-nodes 
+  #- name: default-nodes
   #  replicas: 2
   #  storage:
   #    size: 16Gi

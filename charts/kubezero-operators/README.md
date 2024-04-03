@@ -1,6 +1,6 @@
 # kubezero-operators
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 Various operators supported by KubeZero
 
@@ -19,7 +19,7 @@ Kubernetes: `>= 1.26.0`
 | Repository | Name | Version |
 |------------|------|---------|
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://helm.elastic.co | eck-operator | 2.11.1 |
+| https://helm.elastic.co | eck-operator | 2.12.1 |
 | https://opensearch-project.github.io/opensearch-k8s-operator/ | opensearch-operator | 2.5.1 |
 
 ## Values
@@ -34,6 +34,8 @@ Kubernetes: `>= 1.26.0`
 | opensearch-operator.enabled | bool | `false` |  |
 | opensearch-operator.fullnameOverride | string | `"opensearch-operator"` |  |
 | opensearch-operator.kubeRbacProxy.enable | bool | `false` |  |
+| opensearch-operator.manager.extraEnv[0].name | string | `"SKIP_INIT_CONTAINER"` |  |
+| opensearch-operator.manager.extraEnv[0].value | string | `"true"` |  |
 | opensearch-operator.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | opensearch-operator.tolerations[0].effect | string | `"NoSchedule"` |  |
 | opensearch-operator.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
