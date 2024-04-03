@@ -15,9 +15,9 @@ k8saudit:
   resources:
     requests:
       cpu: 100m
-      memory: 256Mi
+      memory: 64Mi
     limits:
-      cpu: 1000m
+      cpu: 1
       memory: 512Mi
 
   nodeSelector:
@@ -43,10 +43,16 @@ k8saudit:
 
   falcoctl:
     artifact:
-      install:
-        enabled: false
       follow:
         enabled: false
+    # Since 0.37 the plugins are not part of the image anymore
+    # but we provide our rules static via our CM
+    config:
+      artifact:
+        allowedTypes:
+          - plugin
+        install:
+          refs: [k8saudit:0.7.0,json:0.7.2]
 
   services:
     - name: webhook
