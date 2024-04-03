@@ -80,7 +80,7 @@ falco:
   enabled: false
   k8saudit:
     enabled: false
-  targetRevision: 0.1.0
+  targetRevision: 0.1.2
 
 telemetry:
   enabled: false
