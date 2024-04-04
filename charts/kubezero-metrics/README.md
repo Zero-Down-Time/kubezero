@@ -1,6 +1,6 @@
 # kubezero-metrics
 
-![Version: 0.9.5](https://img.shields.io/badge/Version-0.9.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.9.6](https://img.shields.io/badge/Version-0.9.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Prometheus, Grafana and Alertmanager as well as all Kubernetes integrations.
 
@@ -19,9 +19,9 @@ Kubernetes: `>= 1.26.0`
 | Repository | Name | Version |
 |------------|------|---------|
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://prometheus-community.github.io/helm-charts | kube-prometheus-stack | 54.2.2 |
-| https://prometheus-community.github.io/helm-charts | prometheus-adapter | 4.9.0 |
-| https://prometheus-community.github.io/helm-charts | prometheus-pushgateway | 2.4.2 |
+| https://prometheus-community.github.io/helm-charts | kube-prometheus-stack | 57.2.0 |
+| https://prometheus-community.github.io/helm-charts | prometheus-adapter | 4.9.1 |
+| https://prometheus-community.github.io/helm-charts | prometheus-pushgateway | 2.8.0 |
 
 ## Values
 
@@ -177,29 +177,30 @@ Kubernetes: `>= 1.26.0`
 | kube-prometheus-stack.prometheusOperator.enabled | bool | `true` |  |
 | kube-prometheus-stack.prometheusOperator.logFormat | string | `"json"` |  |
 | kube-prometheus-stack.prometheusOperator.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
-| kube-prometheus-stack.prometheusOperator.resources.limits.memory | string | `"64Mi"` |  |
-| kube-prometheus-stack.prometheusOperator.resources.requests.cpu | string | `"20m"` |  |
-| kube-prometheus-stack.prometheusOperator.resources.requests.memory | string | `"32Mi"` |  |
+| kube-prometheus-stack.prometheusOperator.resources.limits.memory | string | `"128Mi"` |  |
+| kube-prometheus-stack.prometheusOperator.resources.requests.cpu | string | `"10m"` |  |
+| kube-prometheus-stack.prometheusOperator.resources.requests.memory | string | `"64Mi"` |  |
 | kube-prometheus-stack.prometheusOperator.tolerations[0].effect | string | `"NoSchedule"` |  |
 | kube-prometheus-stack.prometheusOperator.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | prometheus-adapter.enabled | bool | `true` |  |
 | prometheus-adapter.logLevel | int | `1` |  |
+| prometheus-adapter.metricsRelistInterval | string | `"3m"` |  |
 | prometheus-adapter.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | prometheus-adapter.prometheus.url | string | `"http://metrics-kube-prometheus-st-prometheus"` |  |
 | prometheus-adapter.rules.default | bool | `false` |  |
 | prometheus-adapter.rules.resource.cpu.containerLabel | string | `"container"` |  |
-| prometheus-adapter.rules.resource.cpu.containerQuery | string | `"sum(irate(container_cpu_usage_seconds_total{<<.LabelMatchers>>,container!=\"POD\",container!=\"\",pod!=\"\"}[5m])) by (<<.GroupBy>>)"` |  |
-| prometheus-adapter.rules.resource.cpu.nodeQuery | string | `"sum(1 - irate(node_cpu_seconds_total{mode=\"idle\"}[5m]) * on(namespace, pod) group_left(node) node_namespace_pod:kube_pod_info:{<<.LabelMatchers>>}) by (<<.GroupBy>>)"` |  |
+| prometheus-adapter.rules.resource.cpu.containerQuery | string | `"sum by (<<.GroupBy>>) (\n  irate (\n      container_cpu_usage_seconds_total{<<.LabelMatchers>>,container!=\"\",pod!=\"\"}[120s]\n  )\n)\n"` |  |
+| prometheus-adapter.rules.resource.cpu.nodeQuery | string | `"sum(1 - irate(node_cpu_seconds_total{<<.LabelMatchers>>, mode=\"idle\"}[120s])) by (<<.GroupBy>>)\n"` |  |
+| prometheus-adapter.rules.resource.cpu.resources.overrides.instance.resource | string | `"node"` |  |
 | prometheus-adapter.rules.resource.cpu.resources.overrides.namespace.resource | string | `"namespace"` |  |
-| prometheus-adapter.rules.resource.cpu.resources.overrides.node.resource | string | `"node"` |  |
 | prometheus-adapter.rules.resource.cpu.resources.overrides.pod.resource | string | `"pod"` |  |
 | prometheus-adapter.rules.resource.memory.containerLabel | string | `"container"` |  |
-| prometheus-adapter.rules.resource.memory.containerQuery | string | `"sum(container_memory_working_set_bytes{<<.LabelMatchers>>,container!=\"POD\",container!=\"\",pod!=\"\"}) by (<<.GroupBy>>)"` |  |
-| prometheus-adapter.rules.resource.memory.nodeQuery | string | `"sum(node_memory_MemTotal_bytes{job=\"node-exporter\",<<.LabelMatchers>>} - node_memory_MemAvailable_bytes{job=\"node-exporter\",<<.LabelMatchers>>}) by (<<.GroupBy>>)"` |  |
+| prometheus-adapter.rules.resource.memory.containerQuery | string | `"sum by (<<.GroupBy>>) (\n  container_memory_working_set_bytes{<<.LabelMatchers>>,container!=\"\",pod!=\"\",container!=\"POD\"}\n)\n"` |  |
+| prometheus-adapter.rules.resource.memory.nodeQuery | string | `"sum(node_memory_MemTotal_bytes{<<.LabelMatchers>>} - node_memory_MemAvailable_bytes{<<.LabelMatchers>>}) by (<<.GroupBy>>)\n"` |  |
+| prometheus-adapter.rules.resource.memory.resources.overrides.instance.resource | string | `"node"` |  |
 | prometheus-adapter.rules.resource.memory.resources.overrides.namespace.resource | string | `"namespace"` |  |
-| prometheus-adapter.rules.resource.memory.resources.overrides.node.resource | string | `"node"` |  |
 | prometheus-adapter.rules.resource.memory.resources.overrides.pod.resource | string | `"pod"` |  |
-| prometheus-adapter.rules.resource.window | string | `"5m"` |  |
+| prometheus-adapter.rules.resource.window | string | `"2m"` |  |
 | prometheus-adapter.tolerations[0].effect | string | `"NoSchedule"` |  |
 | prometheus-adapter.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | prometheus-pushgateway.enabled | bool | `false` |  |
