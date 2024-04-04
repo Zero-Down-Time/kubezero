@@ -29,16 +29,7 @@ login_ecr_public() {
     --password-stdin public.ecr.aws
 }
 
-_get_extract_chart() {
-  local CHART=$1
-  local VERSION=$2
-
-  local REPO=$(yq eval '.dependencies[] | select(.name=="'$CHART'") | .repository' Chart.yaml)
-  local URL=$(curl -s $REPO/index.yaml | yq '.entries."'$CHART'".[] | select (.version=="'$VERSION'") | .urls[0]')
-  wget -qO - $URL | tar xfvz - -C charts
-}
-
-patch_chart() {
+get_extract_chart() {
   local CHART=$1
   local VERSION=$(yq eval '.dependencies[] | select(.name=="'$CHART'") | .version' Chart.yaml)
 
@@ -50,19 +41,26 @@ patch_chart() {
 
   # otherwise parse Chart.yaml and get it
   else
-    _get_extract_chart $CHART $VERSION
-  fi
+    local REPO=$(yq eval '.dependencies[] | select(.name=="'$CHART'") | .repository' Chart.yaml)
+    local URL=$(curl -s $REPO/index.yaml | yq '.entries."'$CHART'".[] | select (.version=="'$VERSION'") | .urls[0]')
 
-  # diff -tuNr charts/aws-node-termination-handler.orig charts/aws-node-termination-handler > nth.patch
+    wget -qO - $URL | tar xfvz - -C charts
+  fi
+}
+
+patch_chart() {
+  local CHART=$1
+
+  get_extract_chart $CHART
+
   [ -r $CHART.patch ] && patch -p0 -i $CHART.patch --no-backup-if-mismatch || true
 }
 
 patch_rebase() {
   local CHART=$1
-  local VERSION=$(yq eval '.dependencies[] | select(.name=="'$CHART'") | .version' Chart.yaml)
 
-  rm -rf charts/$CHART
-  _get_extract_chart $CHART $VERSION
+  get_extract_chart $CHART
+
   cp -r charts/$CHART charts/$CHART.orig
 
   patch -p0 -i $CHART.patch --no-backup-if-mismatch

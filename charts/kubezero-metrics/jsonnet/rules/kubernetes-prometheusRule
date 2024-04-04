@@ -340,11 +340,11 @@
                {
                   "alert": "KubePersistentVolumeFillingUp",
                   "annotations": {
-                     "description": "The PersistentVolume claimed by {{ $labels.persistentvolumeclaim }} in Namespace {{ $labels.namespace }} is only {{ $value | humanizePercentage }} free.",
+                     "description": "The PersistentVolume claimed by {{ $labels.persistentvolumeclaim }} in Namespace {{ $labels.namespace }} {{ with $labels.cluster -}} on Cluster {{ . }} {{- end }} is only {{ $value | humanizePercentage }} free.",
                      "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumefillingup",
                      "summary": "PersistentVolume is filling up."
                   },
-                  "expr": "(\n  kubelet_volume_stats_available_bytes{job=\"kubelet\", metrics_path=\"/metrics\"}\n    /\n  kubelet_volume_stats_capacity_bytes{job=\"kubelet\", metrics_path=\"/metrics\"}\n) < 0.03\nand\nkubelet_volume_stats_used_bytes{job=\"kubelet\", metrics_path=\"/metrics\"} > 0\nunless on(namespace, persistentvolumeclaim)\nkube_persistentvolumeclaim_access_mode{ access_mode=\"ReadOnlyMany\"} == 1\nunless on(namespace, persistentvolumeclaim)\nkube_persistentvolumeclaim_labels{label_excluded_from_alerts=\"true\"} == 1\n",
+                  "expr": "(\n  kubelet_volume_stats_available_bytes{job=\"kubelet\", metrics_path=\"/metrics\"}\n    /\n  kubelet_volume_stats_capacity_bytes{job=\"kubelet\", metrics_path=\"/metrics\"}\n) < 0.03\nand\nkubelet_volume_stats_used_bytes{job=\"kubelet\", metrics_path=\"/metrics\"} > 0\nunless on(cluster, namespace, persistentvolumeclaim)\nkube_persistentvolumeclaim_access_mode{ access_mode=\"ReadOnlyMany\"} == 1\nunless on(cluster, namespace, persistentvolumeclaim)\nkube_persistentvolumeclaim_labels{label_excluded_from_alerts=\"true\"} == 1\n",
                   "for": "1m",
                   "labels": {
                      "severity": "critical"
@@ -353,11 +353,11 @@
                {
                   "alert": "KubePersistentVolumeFillingUp",
                   "annotations": {
-                     "description": "Based on recent sampling, the PersistentVolume claimed by {{ $labels.persistentvolumeclaim }} in Namespace {{ $labels.namespace }} is expected to fill up within four days. Currently {{ $value | humanizePercentage }} is available.",
+                     "description": "Based on recent sampling, the PersistentVolume claimed by {{ $labels.persistentvolumeclaim }} in Namespace {{ $labels.namespace }} {{ with $labels.cluster -}} on Cluster {{ . }} {{- end }} is expected to fill up within four days. Currently {{ $value | humanizePercentage }} is available.",
                      "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumefillingup",
                      "summary": "PersistentVolume is filling up."
                   },
-                  "expr": "(\n  kubelet_volume_stats_available_bytes{job=\"kubelet\", metrics_path=\"/metrics\"}\n    /\n  kubelet_volume_stats_capacity_bytes{job=\"kubelet\", metrics_path=\"/metrics\"}\n) < 0.15\nand\nkubelet_volume_stats_used_bytes{job=\"kubelet\", metrics_path=\"/metrics\"} > 0\nand\npredict_linear(kubelet_volume_stats_available_bytes{job=\"kubelet\", metrics_path=\"/metrics\"}[6h], 4 * 24 * 3600) < 0\nunless on(namespace, persistentvolumeclaim)\nkube_persistentvolumeclaim_access_mode{ access_mode=\"ReadOnlyMany\"} == 1\nunless on(namespace, persistentvolumeclaim)\nkube_persistentvolumeclaim_labels{label_excluded_from_alerts=\"true\"} == 1\n",
+                  "expr": "(\n  kubelet_volume_stats_available_bytes{job=\"kubelet\", metrics_path=\"/metrics\"}\n    /\n  kubelet_volume_stats_capacity_bytes{job=\"kubelet\", metrics_path=\"/metrics\"}\n) < 0.15\nand\nkubelet_volume_stats_used_bytes{job=\"kubelet\", metrics_path=\"/metrics\"} > 0\nand\npredict_linear(kubelet_volume_stats_available_bytes{job=\"kubelet\", metrics_path=\"/metrics\"}[6h], 4 * 24 * 3600) < 0\nunless on(cluster, namespace, persistentvolumeclaim)\nkube_persistentvolumeclaim_access_mode{ access_mode=\"ReadOnlyMany\"} == 1\nunless on(cluster, namespace, persistentvolumeclaim)\nkube_persistentvolumeclaim_labels{label_excluded_from_alerts=\"true\"} == 1\n",
                   "for": "1h",
                   "labels": {
                      "severity": "warning"
@@ -366,11 +366,11 @@
                {
                   "alert": "KubePersistentVolumeInodesFillingUp",
                   "annotations": {
-                     "description": "The PersistentVolume claimed by {{ $labels.persistentvolumeclaim }} in Namespace {{ $labels.namespace }} only has {{ $value | humanizePercentage }} free inodes.",
+                     "description": "The PersistentVolume claimed by {{ $labels.persistentvolumeclaim }} in Namespace {{ $labels.namespace }} {{ with $labels.cluster -}} on Cluster {{ . }} {{- end }} only has {{ $value | humanizePercentage }} free inodes.",
                      "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumeinodesfillingup",
                      "summary": "PersistentVolumeInodes are filling up."
                   },
-                  "expr": "(\n  kubelet_volume_stats_inodes_free{job=\"kubelet\", metrics_path=\"/metrics\"}\n    /\n  kubelet_volume_stats_inodes{job=\"kubelet\", metrics_path=\"/metrics\"}\n) < 0.03\nand\nkubelet_volume_stats_inodes_used{job=\"kubelet\", metrics_path=\"/metrics\"} > 0\nunless on(namespace, persistentvolumeclaim)\nkube_persistentvolumeclaim_access_mode{ access_mode=\"ReadOnlyMany\"} == 1\nunless on(namespace, persistentvolumeclaim)\nkube_persistentvolumeclaim_labels{label_excluded_from_alerts=\"true\"} == 1\n",
+                  "expr": "(\n  kubelet_volume_stats_inodes_free{job=\"kubelet\", metrics_path=\"/metrics\"}\n    /\n  kubelet_volume_stats_inodes{job=\"kubelet\", metrics_path=\"/metrics\"}\n) < 0.03\nand\nkubelet_volume_stats_inodes_used{job=\"kubelet\", metrics_path=\"/metrics\"} > 0\nunless on(cluster, namespace, persistentvolumeclaim)\nkube_persistentvolumeclaim_access_mode{ access_mode=\"ReadOnlyMany\"} == 1\nunless on(cluster, namespace, persistentvolumeclaim)\nkube_persistentvolumeclaim_labels{label_excluded_from_alerts=\"true\"} == 1\n",
                   "for": "1m",
                   "labels": {
                      "severity": "critical"
@@ -379,11 +379,11 @@
                {
                   "alert": "KubePersistentVolumeInodesFillingUp",
                   "annotations": {
-                     "description": "Based on recent sampling, the PersistentVolume claimed by {{ $labels.persistentvolumeclaim }} in Namespace {{ $labels.namespace }} is expected to run out of inodes within four days. Currently {{ $value | humanizePercentage }} of its inodes are free.",
+                     "description": "Based on recent sampling, the PersistentVolume claimed by {{ $labels.persistentvolumeclaim }} in Namespace {{ $labels.namespace }} {{ with $labels.cluster -}} on Cluster {{ . }} {{- end }} is expected to run out of inodes within four days. Currently {{ $value | humanizePercentage }} of its inodes are free.",
                      "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumeinodesfillingup",
                      "summary": "PersistentVolumeInodes are filling up."
                   },
-                  "expr": "(\n  kubelet_volume_stats_inodes_free{job=\"kubelet\", metrics_path=\"/metrics\"}\n    /\n  kubelet_volume_stats_inodes{job=\"kubelet\", metrics_path=\"/metrics\"}\n) < 0.15\nand\nkubelet_volume_stats_inodes_used{job=\"kubelet\", metrics_path=\"/metrics\"} > 0\nand\npredict_linear(kubelet_volume_stats_inodes_free{job=\"kubelet\", metrics_path=\"/metrics\"}[6h], 4 * 24 * 3600) < 0\nunless on(namespace, persistentvolumeclaim)\nkube_persistentvolumeclaim_access_mode{ access_mode=\"ReadOnlyMany\"} == 1\nunless on(namespace, persistentvolumeclaim)\nkube_persistentvolumeclaim_labels{label_excluded_from_alerts=\"true\"} == 1\n",
+                  "expr": "(\n  kubelet_volume_stats_inodes_free{job=\"kubelet\", metrics_path=\"/metrics\"}\n    /\n  kubelet_volume_stats_inodes{job=\"kubelet\", metrics_path=\"/metrics\"}\n) < 0.15\nand\nkubelet_volume_stats_inodes_used{job=\"kubelet\", metrics_path=\"/metrics\"} > 0\nand\npredict_linear(kubelet_volume_stats_inodes_free{job=\"kubelet\", metrics_path=\"/metrics\"}[6h], 4 * 24 * 3600) < 0\nunless on(cluster, namespace, persistentvolumeclaim)\nkube_persistentvolumeclaim_access_mode{ access_mode=\"ReadOnlyMany\"} == 1\nunless on(cluster, namespace, persistentvolumeclaim)\nkube_persistentvolumeclaim_labels{label_excluded_from_alerts=\"true\"} == 1\n",
                   "for": "1h",
                   "labels": {
                      "severity": "warning"
@@ -392,7 +392,7 @@
                {
                   "alert": "KubePersistentVolumeErrors",
                   "annotations": {
-                     "description": "The persistent volume {{ $labels.persistentvolume }} has status {{ $labels.phase }}.",
+                     "description": "The persistent volume {{ $labels.persistentvolume }} {{ with $labels.cluster -}} on Cluster {{ . }} {{- end }} has status {{ $labels.phase }}.",
                      "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumeerrors",
                      "summary": "PersistentVolume is having issues with provisioning."
                   },
@@ -789,6 +789,97 @@
             ]
          },
          {
+            "interval": "3m",
+            "name": "kube-apiserver-availability.rules",
+            "rules": [
+               {
+                  "expr": "avg_over_time(code_verb:apiserver_request_total:increase1h[30d]) * 24 * 30\n",
+                  "record": "code_verb:apiserver_request_total:increase30d"
+               },
+               {
+                  "expr": "sum by (cluster, code) (code_verb:apiserver_request_total:increase30d{verb=~\"LIST|GET\"})\n",
+                  "labels": {
+                     "verb": "read"
+                  },
+                  "record": "code:apiserver_request_total:increase30d"
+               },
+               {
+                  "expr": "sum by (cluster, code) (code_verb:apiserver_request_total:increase30d{verb=~\"POST|PUT|PATCH|DELETE\"})\n",
+                  "labels": {
+                     "verb": "write"
+                  },
+                  "record": "code:apiserver_request_total:increase30d"
+               },
+               {
+                  "expr": "sum by (cluster, verb, scope) (increase(apiserver_request_sli_duration_seconds_count{job=\"apiserver\"}[1h]))\n",
+                  "record": "cluster_verb_scope:apiserver_request_sli_duration_seconds_count:increase1h"
+               },
+               {
+                  "expr": "sum by (cluster, verb, scope) (avg_over_time(cluster_verb_scope:apiserver_request_sli_duration_seconds_count:increase1h[30d]) * 24 * 30)\n",
+                  "record": "cluster_verb_scope:apiserver_request_sli_duration_seconds_count:increase30d"
+               },
+               {
+                  "expr": "sum by (cluster, verb, scope, le) (increase(apiserver_request_sli_duration_seconds_bucket[1h]))\n",
+                  "record": "cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase1h"
+               },
+               {
+                  "expr": "sum by (cluster, verb, scope, le) (avg_over_time(cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase1h[30d]) * 24 * 30)\n",
+                  "record": "cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase30d"
+               },
+               {
+                  "expr": "1 - (\n  (\n    # write too slow\n    sum by (cluster) (cluster_verb_scope:apiserver_request_sli_duration_seconds_count:increase30d{verb=~\"POST|PUT|PATCH|DELETE\"})\n    -\n    sum by (cluster) (cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase30d{verb=~\"POST|PUT|PATCH|DELETE\",le=\"1\"})\n  ) +\n  (\n    # read too slow\n    sum by (cluster) (cluster_verb_scope:apiserver_request_sli_duration_seconds_count:increase30d{verb=~\"LIST|GET\"})\n    -\n    (\n      (\n        sum by (cluster) (cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase30d{verb=~\"LIST|GET\",scope=~\"resource|\",le=\"1\"})\n        or\n        vector(0)\n      )\n      +\n      sum by (cluster) (cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase30d{verb=~\"LIST|GET\",scope=\"namespace\",le=\"5\"})\n      +\n      sum by (cluster) (cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase30d{verb=~\"LIST|GET\",scope=\"cluster\",le=\"30\"})\n    )\n  ) +\n  # errors\n  sum by (cluster) (code:apiserver_request_total:increase30d{code=~\"5..\"} or vector(0))\n)\n/\nsum by (cluster) (code:apiserver_request_total:increase30d)\n",
+                  "labels": {
+                     "verb": "all"
+                  },
+                  "record": "apiserver_request:availability30d"
+               },
+               {
+                  "expr": "1 - (\n  sum by (cluster) (cluster_verb_scope:apiserver_request_sli_duration_seconds_count:increase30d{verb=~\"LIST|GET\"})\n  -\n  (\n    # too slow\n    (\n      sum by (cluster) (cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase30d{verb=~\"LIST|GET\",scope=~\"resource|\",le=\"1\"})\n      or\n      vector(0)\n    )\n    +\n    sum by (cluster) (cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase30d{verb=~\"LIST|GET\",scope=\"namespace\",le=\"5\"})\n    +\n    sum by (cluster) (cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase30d{verb=~\"LIST|GET\",scope=\"cluster\",le=\"30\"})\n  )\n  +\n  # errors\n  sum by (cluster) (code:apiserver_request_total:increase30d{verb=\"read\",code=~\"5..\"} or vector(0))\n)\n/\nsum by (cluster) (code:apiserver_request_total:increase30d{verb=\"read\"})\n",
+                  "labels": {
+                     "verb": "read"
+                  },
+                  "record": "apiserver_request:availability30d"
+               },
+               {
+                  "expr": "1 - (\n  (\n    # too slow\n    sum by (cluster) (cluster_verb_scope:apiserver_request_sli_duration_seconds_count:increase30d{verb=~\"POST|PUT|PATCH|DELETE\"})\n    -\n    sum by (cluster) (cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase30d{verb=~\"POST|PUT|PATCH|DELETE\",le=\"1\"})\n  )\n  +\n  # errors\n  sum by (cluster) (code:apiserver_request_total:increase30d{verb=\"write\",code=~\"5..\"} or vector(0))\n)\n/\nsum by (cluster) (code:apiserver_request_total:increase30d{verb=\"write\"})\n",
+                  "labels": {
+                     "verb": "write"
+                  },
+                  "record": "apiserver_request:availability30d"
+               },
+               {
+                  "expr": "sum by (cluster,code,resource) (rate(apiserver_request_total{job=\"apiserver\",verb=~\"LIST|GET\"}[5m]))\n",
+                  "labels": {
+                     "verb": "read"
+                  },
+                  "record": "code_resource:apiserver_request_total:rate5m"
+               },
+               {
+                  "expr": "sum by (cluster,code,resource) (rate(apiserver_request_total{job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[5m]))\n",
+                  "labels": {
+                     "verb": "write"
+                  },
+                  "record": "code_resource:apiserver_request_total:rate5m"
+               },
+               {
+                  "expr": "sum by (cluster, code, verb) (increase(apiserver_request_total{job=\"apiserver\",verb=~\"LIST|GET|POST|PUT|PATCH|DELETE\",code=~\"2..\"}[1h]))\n",
+                  "record": "code_verb:apiserver_request_total:increase1h"
+               },
+               {
+                  "expr": "sum by (cluster, code, verb) (increase(apiserver_request_total{job=\"apiserver\",verb=~\"LIST|GET|POST|PUT|PATCH|DELETE\",code=~\"3..\"}[1h]))\n",
+                  "record": "code_verb:apiserver_request_total:increase1h"
+               },
+               {
+                  "expr": "sum by (cluster, code, verb) (increase(apiserver_request_total{job=\"apiserver\",verb=~\"LIST|GET|POST|PUT|PATCH|DELETE\",code=~\"4..\"}[1h]))\n",
+                  "record": "code_verb:apiserver_request_total:increase1h"
+               },
+               {
+                  "expr": "sum by (cluster, code, verb) (increase(apiserver_request_total{job=\"apiserver\",verb=~\"LIST|GET|POST|PUT|PATCH|DELETE\",code=~\"5..\"}[1h]))\n",
+                  "record": "code_verb:apiserver_request_total:increase1h"
+               }
+            ]
+         },
+         {
             "name": "kube-apiserver-burnrate.rules",
             "rules": [
                {
@@ -909,97 +1000,6 @@
                      "verb": "write"
                   },
                   "record": "cluster_quantile:apiserver_request_sli_duration_seconds:histogram_quantile"
-               }
-            ]
-         },
-         {
-            "interval": "3m",
-            "name": "kube-apiserver-availability.rules",
-            "rules": [
-               {
-                  "expr": "avg_over_time(code_verb:apiserver_request_total:increase1h[30d]) * 24 * 30\n",
-                  "record": "code_verb:apiserver_request_total:increase30d"
-               },
-               {
-                  "expr": "sum by (cluster, code) (code_verb:apiserver_request_total:increase30d{verb=~\"LIST|GET\"})\n",
-                  "labels": {
-                     "verb": "read"
-                  },
-                  "record": "code:apiserver_request_total:increase30d"
-               },
-               {
-                  "expr": "sum by (cluster, code) (code_verb:apiserver_request_total:increase30d{verb=~\"POST|PUT|PATCH|DELETE\"})\n",
-                  "labels": {
-                     "verb": "write"
-                  },
-                  "record": "code:apiserver_request_total:increase30d"
-               },
-               {
-                  "expr": "sum by (cluster, verb, scope) (increase(apiserver_request_sli_duration_seconds_count{job=\"apiserver\"}[1h]))\n",
-                  "record": "cluster_verb_scope:apiserver_request_sli_duration_seconds_count:increase1h"
-               },
-               {
-                  "expr": "sum by (cluster, verb, scope) (avg_over_time(cluster_verb_scope:apiserver_request_sli_duration_seconds_count:increase1h[30d]) * 24 * 30)\n",
-                  "record": "cluster_verb_scope:apiserver_request_sli_duration_seconds_count:increase30d"
-               },
-               {
-                  "expr": "sum by (cluster, verb, scope, le) (increase(apiserver_request_sli_duration_seconds_bucket[1h]))\n",
-                  "record": "cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase1h"
-               },
-               {
-                  "expr": "sum by (cluster, verb, scope, le) (avg_over_time(cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase1h[30d]) * 24 * 30)\n",
-                  "record": "cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase30d"
-               },
-               {
-                  "expr": "1 - (\n  (\n    # write too slow\n    sum by (cluster) (cluster_verb_scope:apiserver_request_sli_duration_seconds_count:increase30d{verb=~\"POST|PUT|PATCH|DELETE\"})\n    -\n    sum by (cluster) (cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase30d{verb=~\"POST|PUT|PATCH|DELETE\",le=\"1\"})\n  ) +\n  (\n    # read too slow\n    sum by (cluster) (cluster_verb_scope:apiserver_request_sli_duration_seconds_count:increase30d{verb=~\"LIST|GET\"})\n    -\n    (\n      (\n        sum by (cluster) (cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase30d{verb=~\"LIST|GET\",scope=~\"resource|\",le=\"1\"})\n        or\n        vector(0)\n      )\n      +\n      sum by (cluster) (cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase30d{verb=~\"LIST|GET\",scope=\"namespace\",le=\"5\"})\n      +\n      sum by (cluster) (cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase30d{verb=~\"LIST|GET\",scope=\"cluster\",le=\"30\"})\n    )\n  ) +\n  # errors\n  sum by (cluster) (code:apiserver_request_total:increase30d{code=~\"5..\"} or vector(0))\n)\n/\nsum by (cluster) (code:apiserver_request_total:increase30d)\n",
-                  "labels": {
-                     "verb": "all"
-                  },
-                  "record": "apiserver_request:availability30d"
-               },
-               {
-                  "expr": "1 - (\n  sum by (cluster) (cluster_verb_scope:apiserver_request_sli_duration_seconds_count:increase30d{verb=~\"LIST|GET\"})\n  -\n  (\n    # too slow\n    (\n      sum by (cluster) (cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase30d{verb=~\"LIST|GET\",scope=~\"resource|\",le=\"1\"})\n      or\n      vector(0)\n    )\n    +\n    sum by (cluster) (cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase30d{verb=~\"LIST|GET\",scope=\"namespace\",le=\"5\"})\n    +\n    sum by (cluster) (cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase30d{verb=~\"LIST|GET\",scope=\"cluster\",le=\"30\"})\n  )\n  +\n  # errors\n  sum by (cluster) (code:apiserver_request_total:increase30d{verb=\"read\",code=~\"5..\"} or vector(0))\n)\n/\nsum by (cluster) (code:apiserver_request_total:increase30d{verb=\"read\"})\n",
-                  "labels": {
-                     "verb": "read"
-                  },
-                  "record": "apiserver_request:availability30d"
-               },
-               {
-                  "expr": "1 - (\n  (\n    # too slow\n    sum by (cluster) (cluster_verb_scope:apiserver_request_sli_duration_seconds_count:increase30d{verb=~\"POST|PUT|PATCH|DELETE\"})\n    -\n    sum by (cluster) (cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase30d{verb=~\"POST|PUT|PATCH|DELETE\",le=\"1\"})\n  )\n  +\n  # errors\n  sum by (cluster) (code:apiserver_request_total:increase30d{verb=\"write\",code=~\"5..\"} or vector(0))\n)\n/\nsum by (cluster) (code:apiserver_request_total:increase30d{verb=\"write\"})\n",
-                  "labels": {
-                     "verb": "write"
-                  },
-                  "record": "apiserver_request:availability30d"
-               },
-               {
-                  "expr": "sum by (cluster,code,resource) (rate(apiserver_request_total{job=\"apiserver\",verb=~\"LIST|GET\"}[5m]))\n",
-                  "labels": {
-                     "verb": "read"
-                  },
-                  "record": "code_resource:apiserver_request_total:rate5m"
-               },
-               {
-                  "expr": "sum by (cluster,code,resource) (rate(apiserver_request_total{job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[5m]))\n",
-                  "labels": {
-                     "verb": "write"
-                  },
-                  "record": "code_resource:apiserver_request_total:rate5m"
-               },
-               {
-                  "expr": "sum by (cluster, code, verb) (increase(apiserver_request_total{job=\"apiserver\",verb=~\"LIST|GET|POST|PUT|PATCH|DELETE\",code=~\"2..\"}[1h]))\n",
-                  "record": "code_verb:apiserver_request_total:increase1h"
-               },
-               {
-                  "expr": "sum by (cluster, code, verb) (increase(apiserver_request_total{job=\"apiserver\",verb=~\"LIST|GET|POST|PUT|PATCH|DELETE\",code=~\"3..\"}[1h]))\n",
-                  "record": "code_verb:apiserver_request_total:increase1h"
-               },
-               {
-                  "expr": "sum by (cluster, code, verb) (increase(apiserver_request_total{job=\"apiserver\",verb=~\"LIST|GET|POST|PUT|PATCH|DELETE\",code=~\"4..\"}[1h]))\n",
-                  "record": "code_verb:apiserver_request_total:increase1h"
-               },
-               {
-                  "expr": "sum by (cluster, code, verb) (increase(apiserver_request_total{job=\"apiserver\",verb=~\"LIST|GET|POST|PUT|PATCH|DELETE\",code=~\"5..\"}[1h]))\n",
-                  "record": "code_verb:apiserver_request_total:increase1h"
                }
             ]
          },
@@ -1194,7 +1194,7 @@
                   "record": "node_namespace_pod:kube_pod_info:"
                },
                {
-                  "expr": "count by (cluster, node) (\n  node_cpu_seconds_total{mode=\"idle\",job=\"node-exporter\"}\n  * on (namespace, pod) group_left(node)\n  topk by(namespace, pod) (1, node_namespace_pod:kube_pod_info:)\n)\n",
+                  "expr": "count by (cluster, node) (\n  node_cpu_seconds_total{mode=\"idle\",job=\"node-exporter\"}\n  * on (cluster, namespace, pod) group_left(node)\n  topk by(cluster, namespace, pod) (1, node_namespace_pod:kube_pod_info:)\n)\n",
                   "record": "node:node_num_cpu:sum"
                },
                {

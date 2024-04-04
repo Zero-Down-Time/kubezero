@@ -95,7 +95,7 @@ spec:
         description: Prometheus {{`{{`}}$labels.namespace{{`}}`}}/{{`{{`}}$labels.pod{{`}}`}} is not ingesting samples.
         runbook_url: https://runbooks.prometheus-operator.dev/runbooks/prometheus/prometheusnotingestingsamples
         summary: Prometheus is not ingesting samples.
-      expr: "(\n  rate(prometheus_tsdb_head_samples_appended_total{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m]) <= 0\nand\n  (\n    sum without(scrape_job) (prometheus_target_metadata_cache_entries{job=\"prometheus-k8s\",namespace=\"monitoring\"}) > 0\n  or\n    sum without(rule_group) (prometheus_rule_group_rules{job=\"prometheus-k8s\",namespace=\"monitoring\"}) > 0\n  )\n)\n"
+      expr: "(\n  sum without(type) (rate(prometheus_tsdb_head_samples_appended_total{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m])) <= 0\nand\n  (\n    sum without(scrape_job) (prometheus_target_metadata_cache_entries{job=\"prometheus-k8s\",namespace=\"monitoring\"}) > 0\n  or\n    sum without(rule_group) (prometheus_rule_group_rules{job=\"prometheus-k8s\",namespace=\"monitoring\"}) > 0\n  )\n)\n"
       for: 10m
       labels:
         severity: warning
