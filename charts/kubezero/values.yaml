@@ -108,7 +108,7 @@ metrics:
 logging:
   enabled: false
   namespace: logging
-  targetRevision: 0.8.10
+  targetRevision: 0.8.11
 
 argo:
   enabled: false
