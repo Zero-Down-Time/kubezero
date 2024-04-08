@@ -2,8 +2,9 @@
 {{- /* Issues: "MemoryQoS" */ -}}
 {{- /* v1.30?: "NodeSwap" */ -}}
 {{- /* v1.29: remove/beta now "SidecarContainers" */ -}}
+{{- /* v1.28: "PodAndContainerStatsFromCRI" still not working */ -}}
 {{- define "kubeadm.featuregates" }}
-{{- $gates := list "CustomCPUCFSQuotaPeriod" "SidecarContainers" "PodAndContainerStatsFromCRI" }}
+{{- $gates := list "CustomCPUCFSQuotaPeriod" "SidecarContainers" }}
 {{- if eq .return "csv" }}
 {{- range $key := $gates }}
 {{- $key }}=true,
