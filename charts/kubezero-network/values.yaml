@@ -84,6 +84,11 @@ cilium:
     tolerations:
     - key: node-role.kubernetes.io/control-plane
       effect: NoSchedule
+    # the operator removes the taints,
+    # so we need to break chicken egg on single controller
+    - key: node.cilium.io/agent-not-ready
+      effect: NoSchedule
+
     nodeSelector:
       node-role.kubernetes.io/control-plane: ""
     prometheus:
