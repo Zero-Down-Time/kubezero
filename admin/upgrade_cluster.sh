@@ -13,6 +13,13 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 echo "Checking that all pods in kube-system are running ..."
 waitSystemPodsRunning
 
+### v1.28
+# - remove old argocd app, all resources will be taken over by argo.argo-cd
+argo_used && kubectl patch app argocd -n argocd \
+    --type json \
+    --patch='[ { "op": "remove", "path": "/metadata/finalizers" } ]' && \
+  kubectl delete app argocd -n argocd || true
+
 argo_used && disable_argo
 
 #all_nodes_upgrade ""
@@ -24,19 +31,12 @@ control_plane_upgrade kubeadm_upgrade
 #argo_used && kubectl edit app kubezero -n argocd || kubectl edit cm kubezero-values -n kube-system
 
 # upgrade modules
-control_plane_upgrade "apply_network apply_addons, apply_storage, apply_operators"
+control_plane_upgrade "apply_network, apply_addons, apply_storage, apply_operators"
 
 echo "Checking that all pods in kube-system are running ..."
 waitSystemPodsRunning
 
 echo "Applying remaining KubeZero modules..."
-
-### v1.28
-# - remove old argocd app, all resources will be taken over by argo.argo-cd
-kubectl patch app argocd -n argocd \
-    --type json \
-    --patch='[ { "op": "remove", "path": "/metadata/finalizers" } ]' && \
-  kubectl delete app argocd -n argocd || true
 
 control_plane_upgrade "apply_cert-manager, apply_istio, apply_istio-ingress, apply_istio-private-ingress, apply_logging, apply_metrics, apply_telemetry, apply_argo"
 
