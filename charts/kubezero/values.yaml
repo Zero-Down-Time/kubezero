@@ -11,7 +11,7 @@ global:
 
 addons:
   enabled: true
-  targetRevision: 0.8.5
+  targetRevision: 0.8.6
   external-dns:
     enabled: false
   forseti:
@@ -41,7 +41,7 @@ cert-manager:
 
 storage:
   enabled: false
-  targetRevision: 0.8.6
+  targetRevision: 0.8.7
   lvm-localpv:
     enabled: false
   aws-ebs-csi-driver:
@@ -58,13 +58,13 @@ storage:
 istio:
   enabled: false
   namespace: istio-system
-  targetRevision: 0.21.0
+  targetRevision: 0.21.1
 
 istio-ingress:
   enabled: false
   chart: kubezero-istio-gateway
   namespace: istio-ingress
-  targetRevision: 0.21.0
+  targetRevision: 0.21.1
   gateway:
     service: {}
 
@@ -72,7 +72,7 @@ istio-private-ingress:
   enabled: false
   chart: kubezero-istio-gateway
   namespace: istio-ingress
-  targetRevision: 0.21.0
+  targetRevision: 0.21.1
   gateway:
     service: {}
 
@@ -85,7 +85,7 @@ falco:
 telemetry:
   enabled: false
   namespace: telemetry
-  targetRevision: 0.2.0
+  targetRevision: 0.2.1
 
 operators:
   enabled: false
@@ -95,7 +95,7 @@ operators:
 metrics:
   enabled: false
   namespace: monitoring
-  targetRevision: 0.9.6
+  targetRevision: 0.9.8
   istio:
     grafana: {}
     prometheus: {}
@@ -113,7 +113,7 @@ logging:
 argo:
   enabled: false
   namespace: argocd
-  targetRevision: 0.2.0
+  targetRevision: 0.2.1
   argo-cd:
     enabled: false
     istio:
