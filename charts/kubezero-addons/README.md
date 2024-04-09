@@ -1,6 +1,6 @@
 # kubezero-addons
 
-![Version: 0.8.5](https://img.shields.io/badge/Version-0.8.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.28](https://img.shields.io/badge/AppVersion-v1.28-informational?style=flat-square)
+![Version: 0.8.6](https://img.shields.io/badge/Version-0.8.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.28](https://img.shields.io/badge/AppVersion-v1.28-informational?style=flat-square)
 
 KubeZero umbrella chart for various optional cluster addons
 
@@ -18,8 +18,8 @@ Kubernetes: `>= 1.26.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://bitnami-labs.github.io/sealed-secrets | sealed-secrets | 2.15.1 |
-| https://kubernetes-sigs.github.io/external-dns/ | external-dns | 1.14.3 |
+| https://bitnami-labs.github.io/sealed-secrets | sealed-secrets | 2.15.3 |
+| https://kubernetes-sigs.github.io/external-dns/ | external-dns | 1.14.4 |
 | https://kubernetes.github.io/autoscaler | cluster-autoscaler | 9.36.0 |
 | https://nvidia.github.io/k8s-device-plugin | nvidia-device-plugin | 0.14.5 |
 | https://twin.github.io/helm-charts | aws-eks-asg-rolling-update-handler | 1.5.0 |
@@ -73,7 +73,6 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | aws-eks-asg-rolling-update-handler.securityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
 | aws-eks-asg-rolling-update-handler.tolerations[0].effect | string | `"NoSchedule"` |  |
 | aws-eks-asg-rolling-update-handler.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
-| aws-node-termination-handler.checkASGTagBeforeDraining | bool | `false` |  |
 | aws-node-termination-handler.deleteLocalData | bool | `true` |  |
 | aws-node-termination-handler.emitKubernetesEvents | bool | `true` |  |
 | aws-node-termination-handler.enableProbesServer | bool | `true` |  |
