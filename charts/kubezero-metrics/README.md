@@ -1,6 +1,6 @@
 # kubezero-metrics
 
-![Version: 0.9.6](https://img.shields.io/badge/Version-0.9.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.9.7](https://img.shields.io/badge/Version-0.9.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Prometheus, Grafana and Alertmanager as well as all Kubernetes integrations.
 
@@ -19,7 +19,7 @@ Kubernetes: `>= 1.26.0`
 | Repository | Name | Version |
 |------------|------|---------|
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://prometheus-community.github.io/helm-charts | kube-prometheus-stack | 57.2.0 |
+| https://prometheus-community.github.io/helm-charts | kube-prometheus-stack | 58.0.0 |
 | https://prometheus-community.github.io/helm-charts | prometheus-adapter | 4.9.1 |
 | https://prometheus-community.github.io/helm-charts | prometheus-pushgateway | 2.8.0 |
 
@@ -103,7 +103,9 @@ Kubernetes: `>= 1.26.0`
 | kube-prometheus-stack.coreDns.enabled | bool | `true` |  |
 | kube-prometheus-stack.defaultRules.create | bool | `false` |  |
 | kube-prometheus-stack.grafana."grafana.ini"."auth.anonymous".enabled | bool | `true` |  |
+| kube-prometheus-stack.grafana."grafana.ini"."log.console".format | string | `"json"` |  |
 | kube-prometheus-stack.grafana."grafana.ini".alerting.enabled | bool | `false` |  |
+| kube-prometheus-stack.grafana."grafana.ini".analytics.check_for_plugin_updates | bool | `false` |  |
 | kube-prometheus-stack.grafana."grafana.ini".analytics.check_for_updates | bool | `false` |  |
 | kube-prometheus-stack.grafana."grafana.ini".dashboards.default_home_dashboard_path | string | `"/tmp/dashboards/KubeZero/home.json"` |  |
 | kube-prometheus-stack.grafana."grafana.ini".dashboards.min_refresh_interval | string | `"30s"` |  |
