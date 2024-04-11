@@ -13,13 +13,6 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 echo "Checking that all pods in kube-system are running ..."
 waitSystemPodsRunning
 
-### v1.28
-# - remove old argocd app, all resources will be taken over by argo.argo-cd
-argo_used && kubectl patch app argocd -n argocd \
-    --type json \
-    --patch='[ { "op": "remove", "path": "/metadata/finalizers" } ]' && \
-  kubectl delete app argocd -n argocd || true
-
 argo_used && disable_argo
 
 #all_nodes_upgrade ""
@@ -29,6 +22,19 @@ control_plane_upgrade kubeadm_upgrade
 #echo "Adjust kubezero values as needed:"
 # shellcheck disable=SC2015
 #argo_used && kubectl edit app kubezero -n argocd || kubectl edit cm kubezero-values -n kube-system
+
+### v1.28
+# - remove old argocd app, all resources will be taken over by argo.argo-cd
+argo_used && rc=$? || rc=$?
+if [ $rc -eq 0 ]; then
+  kubectl patch app argocd -n argocd \
+    --type json \
+    --patch='[ { "op": "remove", "path": "/metadata/finalizers" } ]' && \
+  kubectl delete app argocd -n argocd || true
+
+  # remove legacy argocd app resources, but NOT kubezero-git-sync nor the appproject
+  kubectl api-resources --verbs=list --namespaced -o name | grep -ve 'app.*argoproj' | xargs -n 1 kubectl delete --ignore-not-found -l argocd.argoproj.io/instance=argocd -n argocd
+fi
 
 # upgrade modules
 control_plane_upgrade "apply_network, apply_addons, apply_storage, apply_operators"
