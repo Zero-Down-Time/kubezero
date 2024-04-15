@@ -52,6 +52,10 @@ opensearch:
   version: 2.11.1
   prometheus: false
 
+  # custom cluster settings
+  #settings:
+  # index.number_of_shards: 1
+
   nodeSets:
   - name: default
     replicas: 2

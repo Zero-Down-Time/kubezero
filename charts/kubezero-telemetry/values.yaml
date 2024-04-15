@@ -49,8 +49,12 @@ jaeger:
     url: jaeger.example.com
 
 opensearch:
-  version: 2.12.0
+  version: 2.13.0
   prometheus: false
+
+  # custom cluster settings
+  #settings:
+  # index.number_of_shards: 1
 
   nodeSets: []
   #- name: default-nodes

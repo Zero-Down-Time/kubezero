@@ -30,6 +30,11 @@ opensearch:
     {{- end }}
   {{- end }}
 
+  {{- with .Values.telemetry.opensearch.settings }}
+  settings:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
   prometheus: {{ .Values.metrics.enabled }}
 
 {{- end }}

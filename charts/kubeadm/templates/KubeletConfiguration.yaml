@@ -6,7 +6,7 @@ cgroupDriver: cgroupfs
 logging:
   format: json
 hairpinMode: hairpin-veth
-ContainerRuntimeEndpoint: "unix:///var/run/crio/crio.sock"
+containerRuntimeEndpoint: "unix:///var/run/crio/crio.sock"
 {{- if .Values.systemd }}
 resolvConf: /run/systemd/resolve/resolv.conf
 {{- end }}

@@ -7,3 +7,5 @@ set -ex
 
 #login_ecr_public
 update_helm
+
+update_docs

@@ -17,6 +17,14 @@ spec:
       enable: {{ .Values.opensearch.prometheus }}
       tlsConfig:
         insecureSkipVerify: true
+    podSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      runAsNonRoot: true
+      fsGroup: 1000
+    securityContext:
+      allowPrivilegeEscalation: false
+      privileged: false
   {{- if .Values.opensearch.dashboard.enabled }}
   # https://github.com/opensearch-project/OpenSearch-Dashboards/blob/main/config/opensearch_dashboards.yml
   dashboards:
@@ -56,15 +64,18 @@ spec:
               opster.io/opensearch-cluster: {{ template "kubezero-lib.fullname" $ }}
       additionalConfig:
         index.codec: zstd_no_dict
-        indices.time_series_index.default_index_merge_policy: log_byte_size 
+        indices.time_series_index.default_index_merge_policy: log_byte_size
         {{- with .zone }}
         cluster.routing.allocation.awareness.attributes: k8s_node_name,zone
         node.attr.zone: {{ . }}
         {{- end }}
+        {{- with $.Values.opensearch.settings }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     {{- end }}
   security:
     config:
-      adminSecret: 
+      adminSecret:
         name: {{ template "kubezero-lib.fullname" . }}-admin-tls
     tls:
       transport:
