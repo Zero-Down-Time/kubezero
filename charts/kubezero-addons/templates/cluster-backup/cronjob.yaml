@@ -24,7 +24,7 @@ spec:
             volumeMounts:
             - name: host
               mountPath: /host
-              readOnly: true
+              #readOnly: true
             - name: workdir
               mountPath: /tmp
             env:
