@@ -57,10 +57,8 @@ argocd-apps:
         server: https://kubernetes.default.svc
         namespace: argocd
 
-      {{- with .Values.kubezero.syncPolicy }}
       syncPolicy:
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- toYaml (default dict .Values.kubezero.syncPolicy) | nindent 8 }}
 
 argocd-image-updater:
   enabled: {{ default "false" (index .Values "argo" "argocd-image-updater" "enabled") }}
