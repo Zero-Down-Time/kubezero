@@ -1,6 +1,6 @@
 # kubezero-addons
 
-![Version: 0.8.6](https://img.shields.io/badge/Version-0.8.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.28](https://img.shields.io/badge/AppVersion-v1.28-informational?style=flat-square)
+![Version: 0.8.7](https://img.shields.io/badge/Version-0.8.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.28](https://img.shields.io/badge/AppVersion-v1.28-informational?style=flat-square)
 
 KubeZero umbrella chart for various optional cluster addons
 
@@ -21,7 +21,7 @@ Kubernetes: `>= 1.26.0`
 | https://bitnami-labs.github.io/sealed-secrets | sealed-secrets | 2.15.3 |
 | https://kubernetes-sigs.github.io/external-dns/ | external-dns | 1.14.4 |
 | https://kubernetes.github.io/autoscaler | cluster-autoscaler | 9.36.0 |
-| https://nvidia.github.io/k8s-device-plugin | nvidia-device-plugin | 0.14.5 |
+| https://nvidia.github.io/k8s-device-plugin | nvidia-device-plugin | 0.15.0 |
 | https://twin.github.io/helm-charts | aws-eks-asg-rolling-update-handler | 1.5.0 |
 | oci://public.ecr.aws/aws-ec2/helm | aws-node-termination-handler | 0.23.0 |
 
