@@ -18,7 +18,7 @@ dependencies:
     version: ">= 0.1.6"
     repository: https://cdn.zero-downtime.net/charts/
   - name: opentelemetry-collector
-    version: 0.87.0
+    version: 0.89.0
     repository: https://open-telemetry.github.io/opentelemetry-helm-charts
     condition: opentelemetry-collector.enabled
   - name: jaeger
