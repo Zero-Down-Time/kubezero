@@ -25,4 +25,8 @@ dependencies:
     version: 3.0.3
     repository: https://jaegertracing.github.io/helm-charts
     condition: jaeger.enabled
+  - name: fluentd
+    version: 0.5.2
+    repository: https://fluent.github.io/helm-charts
+    condition: fluentd.enabled
 kubeVersion: ">= 1.26.0"
