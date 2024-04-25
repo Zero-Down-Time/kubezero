@@ -1,6 +1,6 @@
 # kubezero-telemetry
 
-![Version: 0.2.2](https://img.shields.io/badge/Version-0.2.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.2.3](https://img.shields.io/badge/Version-0.2.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for OpenTelemetry, Jaeger etc.
 
@@ -19,8 +19,8 @@ Kubernetes: `>= 1.26.0`
 | Repository | Name | Version |
 |------------|------|---------|
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://jaegertracing.github.io/helm-charts | jaeger | 2.1.0 |
-| https://open-telemetry.github.io/opentelemetry-helm-charts | opentelemetry-collector | 0.87.0 |
+| https://jaegertracing.github.io/helm-charts | jaeger | 3.0.3 |
+| https://open-telemetry.github.io/opentelemetry-helm-charts | opentelemetry-collector | 0.89.0 |
 
 ## Values
 
