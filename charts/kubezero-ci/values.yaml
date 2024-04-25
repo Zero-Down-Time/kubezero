@@ -171,6 +171,7 @@ jenkins:
     podRetention: "Default"
     showRawYaml: false
     podName: "podman-aws"
+    serviceAccount: jenkins-podman-aws
     annotations:
       container.apparmor.security.beta.kubernetes.io/jnlp: unconfined
     customJenkinsLabels:
@@ -198,7 +199,6 @@ jenkins:
       spec:
         securityContext:
           fsGroup: 1000
-        serviceAccountName: jenkins-podman-aws
         containers:
         - name: jnlp
           resources:
