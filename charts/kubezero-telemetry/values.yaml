@@ -18,6 +18,9 @@ jaeger:
         http:
           name: otlp-http
           port: 4318
+    extraEnv:
+      - name: ES_TAGS_AS_FIELDS_ALL
+        value: "true"
     serviceMonitor:
       enabled: false
 

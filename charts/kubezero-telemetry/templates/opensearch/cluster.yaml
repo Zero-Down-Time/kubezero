@@ -55,6 +55,10 @@ spec:
       roles:
         - "cluster_manager"
         - "data"
+      {{- if gt (int .replicas) 1 }}
+      pdb:
+        enable: true
+        maxUnavailable: 1
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname
@@ -62,6 +66,7 @@ spec:
           labelSelector:
             matchLabels:
               opster.io/opensearch-cluster: {{ template "kubezero-lib.fullname" $ }}
+      {{- end }}
       additionalConfig:
         index.codec: zstd_no_dict
         indices.time_series_index.default_index_merge_policy: log_byte_size

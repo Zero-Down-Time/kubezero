@@ -2,7 +2,7 @@ gitea:
   enabled: false
 
   image:
-    tag: 1.21.9
+    tag: 1.21.11
     rootless: true
 
   repliaCount: 1
@@ -103,6 +103,13 @@ jenkins:
     javaOpts: "-XX:+UseContainerSupport -XX:+UseStringDeduplication -Dhudson.model.DirectoryBrowserSupport.CSP=\"sandbox allow-popups; default-src 'none'; img-src 'self' cdn.zero-downtime.net; style-src 'unsafe-inline';\""
     jenkinsOpts: "--sessionTimeout=300 --sessionEviction=10800"
 
+    # Until we setup the logging and metrics pipelines in OTEL
+    containerEnv:
+      - name: OTEL_LOGS_EXPORTER
+        value: "none"
+      - name: OTEL_METRICS_EXPORTER
+        value: "none"
+
     resources:
       requests:
         cpu: "250m"
@@ -130,6 +137,18 @@ jenkins:
               disableUserThemes: true
               theme: "dark"
           unclassified:
+            openTelemetry:
+              configurationProperties: |-
+                otel.exporter.otlp.protocol=grpc
+                otel.instrumentation.jenkins.web.enabled=false
+              ignoredSteps: "dir,echo,isUnix,pwd,properties"
+              #endpoint: "telemetry-jaeger-collector.telemetry:4317"
+              exportOtelConfigurationAsEnvironmentVariables: false
+              #observabilityBackends:
+              # - jaeger:
+              #     jaegerBaseUrl: "https://jaeger.example.com"
+              #     name: "KubeZero Jaeger"
+              serviceName: "Jenkins"
             buildDiscarders:
               configuredBuildDiscarders:
               - "jobBuildDiscarder"
@@ -157,6 +176,7 @@ jenkins:
       - dark-theme
       - matrix-auth
       - reverse-proxy-auth-plugin
+      - opentelemetry
 
   serviceAccountAgent:
     create: true
@@ -255,7 +275,7 @@ jenkins:
 trivy:
   enabled: false
   image:
-    tag: 0.49.1
+    tag: 0.50.1
   persistence:
     enabled: true
     size: 1Gi
