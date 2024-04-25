@@ -44,8 +44,8 @@ gantt
 # Components
 
 ## OS
-- all compute nodes are running on Alpine V3.18
-- 2 GB encrypted root file system
+- all compute nodes are running on Alpine V3.19
+- 1 or 2 GB encrypted root file system
 - no external dependencies at boot time, apart from container registries
 - minimal attack surface
 - extremely small memory footprint / overhead
