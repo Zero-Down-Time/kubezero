@@ -1,0 +1,38 @@
+{{- if not .Values.extraFilesConfigMapNameOverride }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentd-config-{{ include "fluentd.shortReleaseName" . }}
+  labels:
+    {{- include "fluentd.labels" . | nindent 4 }}
+data:
+{{- range $key, $value := .Values.fileConfigs }}
+  {{$key }}: |-
+    {{- $value | nindent 4 }}
+{{- end }}
+{{- end }}
+
+{{- if not .Values.mainConfigMapNameOverride }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentd-main-{{ include "fluentd.shortReleaseName" . }}
+  labels:
+    {{- include "fluentd.labels" . | nindent 4 }}
+data:
+  fluent.conf: |-
+    # do not collect fluentd logs to avoid infinite loops.
+    <label @FLUENT_LOG>
+      <match **>
+        @type null
+        @id ignore_fluent_logs
+      </match>
+    </label>
+
+    @include config.d/*.conf
+    {{- range $key := .Values.configMapConfigs }}
+    {{- print "@include " $key ".d/*"  | nindent 4 }}
+    {{- end }}
+{{- end }}

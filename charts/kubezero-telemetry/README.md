@@ -19,6 +19,7 @@ Kubernetes: `>= 1.26.0`
 | Repository | Name | Version |
 |------------|------|---------|
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
+| https://fluent.github.io/helm-charts | fluentd | 0.5.2 |
 | https://jaegertracing.github.io/helm-charts | jaeger | 3.0.3 |
 | https://open-telemetry.github.io/opentelemetry-helm-charts | opentelemetry-collector | 0.89.0 |
 

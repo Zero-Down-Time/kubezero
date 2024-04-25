@@ -1,0 +1,28 @@
+{{- if .Values.rbac.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "fluentd.fullname" . }}
+  labels:
+    {{- include "fluentd.labels" . | nindent 4 }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+      - namespaces
+    verbs:
+      - get
+      - list
+      - watch
+  {{- if and .Values.podSecurityPolicy.enabled (semverCompare "<1.25-0" .Capabilities.KubeVersion.GitVersion) }}
+  - apiGroups:
+      - policy
+    resourceNames:
+      - {{ include "fluentd.fullname" . }}
+    resources:
+      - podsecuritypolicies
+    verbs:
+      - use
+  {{- end }}
+{{- end -}}
