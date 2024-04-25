@@ -1,10 +1,11 @@
 {{- /* Feature gates for all control plane components */ -}}
-{{- /* Issues: "MemoryQoS" */ -}}
-{{- /* v1.30?: "NodeSwap" */ -}}
-{{- /* v1.29: remove/beta now "SidecarContainers" */ -}}
-{{- /* v1.28: "PodAndContainerStatsFromCRI" still not working */ -}}
+{{- /* Issues: MemoryQoS */ -}}
+{{- /* v1.28: PodAndContainerStatsFromCRI still not working */ -}}
+{{- /* v1.28: UnknownVersionInteroperabilityProxy requires StorageVersionAPI which is still alpha in 1.30 */ -}}
+{{- /* v1.29: remove/beta SidecarContainers */ -}}
+{{- /* v1.30: remove/beta KubeProxyDrainingTerminatingNodes */ -}}
 {{- define "kubeadm.featuregates" }}
-{{- $gates := list "CustomCPUCFSQuotaPeriod" "SidecarContainers" }}
+{{- $gates := list "CustomCPUCFSQuotaPeriod" "SidecarContainers" "KubeProxyDrainingTerminatingNodes" }}
 {{- if eq .return "csv" }}
 {{- range $key := $gates }}
 {{- $key }}=true,

@@ -23,6 +23,9 @@ cilium:
       enabled: {{ .Values.metrics.enabled }}
 
   operator:
+    {{- if .Values.global.highAvailable }}
+    replicas: 2
+    {{- end }}
     prometheus:
       enabled: {{ .Values.metrics.enabled }}
       serviceMonitor:
