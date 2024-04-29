@@ -1,25 +1,26 @@
 # Parse version from latest git semver tag
 GIT_TAG ?= $(shell git describe --tags --match v*.*.* 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
-GIT_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD 2>/dev/null | sed -e 's/[^a-zA-Z0-9]/-/g')
+GIT_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD 2>/dev/null)
 
-TAG := $(GIT_TAG)
+TAG ::= $(GIT_TAG)
 # append branch name to tag if NOT main nor master
 ifeq (,$(filter main master, $(GIT_BRANCH)))
 	# If branch is substring of tag, omit branch name
 	ifeq ($(findstring $(GIT_BRANCH), $(GIT_TAG)),)
 		# only append branch name if not equal tag
 		ifneq ($(GIT_TAG), $(GIT_BRANCH))
-			TAG = $(GIT_TAG)-$(GIT_BRANCH)
+			# Sanitize GIT_BRANCH to allowed Docker tag character set
+			TAG = $(GIT_TAG)-$(shell echo $$GIT_BRANCH | sed -e 's/[^a-zA-Z0-9]/-/g')
 		endif
 	endif
 endif
 
-ARCH := amd64
-ALL_ARCHS := amd64 arm64
+ARCH ::= amd64
+ALL_ARCHS ::= amd64 arm64
 _ARCH = $(or $(filter $(ARCH),$(ALL_ARCHS)),$(error $$ARCH [$(ARCH)] must be exactly one of "$(ALL_ARCHS)"))
 
 ifneq ($(TRIVY_REMOTE),)
-	TRIVY_OPTS := --server $(TRIVY_REMOTE)
+	TRIVY_OPTS ::= --server $(TRIVY_REMOTE)
 endif
 
 .SILENT: ; # no need for @
@@ -45,7 +46,7 @@ test:: ## test built artificats
 
 scan: ## Scan image using trivy
 	echo "Scanning $(IMAGE):$(TAG)-$(_ARCH) using Trivy $(TRIVY_REMOTE)"
-	trivy image $(TRIVY_OPTS) localhost/$(IMAGE):$(TAG)-$(_ARCH)
+	trivy image $(TRIVY_OPTS) --quiet --no-progress localhost/$(IMAGE):$(TAG)-$(_ARCH)
 
 # first tag and push all actual images
 # create new manifest for each tag and add all available TAG-ARCH before pushing
@@ -77,7 +78,7 @@ rm-image:
 
 ## some useful tasks during development
 ci-pull-upstream: ## pull latest shared .ci subtree
-	git stash && git subtree pull --prefix .ci ssh://git@git.zero-downtime.net/ZeroDownTime/ci-tools-lib.git master --squash && git stash pop
+	git subtree pull --prefix .ci ssh://git@git.zero-downtime.net/ZeroDownTime/ci-tools-lib.git master --squash -m "Merge latest ci-tools-lib"
 
 create-repo: ## create new AWS ECR public repository
 	aws ecr-public create-repository --repository-name $(IMAGE) --region $(REGION)
