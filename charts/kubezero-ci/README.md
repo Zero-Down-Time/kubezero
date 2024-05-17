@@ -1,6 +1,6 @@
 # kubezero-ci
 
-![Version: 0.8.10](https://img.shields.io/badge/Version-0.8.10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.8.11](https://img.shields.io/badge/Version-0.8.11-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things CI
 
@@ -20,9 +20,9 @@ Kubernetes: `>= 1.25.0`
 |------------|------|---------|
 | https://aquasecurity.github.io/helm-charts/ | trivy | 0.7.0 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://charts.jenkins.io | jenkins | 5.1.6 |
+| https://charts.jenkins.io | jenkins | 5.1.18 |
 | https://dl.gitea.io/charts/ | gitea | 10.1.4 |
-| https://docs.renovatebot.com/helm-charts | renovate | 37.321.1 |
+| https://docs.renovatebot.com/helm-charts | renovate | 37.368.2 |
 
 # Jenkins
 - default build retention 10 builds, 32days
@@ -71,9 +71,7 @@ Kubernetes: `>= 1.25.0`
 | gitea.istio.enabled | bool | `false` |  |
 | gitea.istio.gateway | string | `"istio-ingress/private-ingressgateway"` |  |
 | gitea.istio.url | string | `"git.example.com"` |  |
-| gitea.persistence.create | bool | `false` |  |
-| gitea.persistence.enabled | bool | `true` |  |
-| gitea.persistence.mount | bool | `true` |  |
+| gitea.persistence.claimName | string | `"data-gitea-0"` |  |
 | gitea.persistence.size | string | `"4Gi"` |  |
 | gitea.postgresql-ha.enabled | bool | `false` |  |
 | gitea.postgresql.enabled | bool | `false` |  |

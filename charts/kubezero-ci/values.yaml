@@ -13,10 +13,7 @@ gitea:
 
   # Since V9 they default to RWX and deployment, we default to old existing RWO from statefulset
   persistence:
-    enabled: true
-    mount: true
-    create: false
-    #claimName: <set per install>
+    claimName: data-gitea-0
     size: 4Gi
 
   securityContext:
