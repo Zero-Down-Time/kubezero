@@ -19,7 +19,11 @@ function wait_for() {
 
 
 function chart_location() {
-  echo "$1 --repo https://cdn.zero-downtime.net/charts"
+  if [ -n "$LOCAL_DEV" ]; then
+    echo $CHARTS/$1
+  else
+    echo "$1 --repo https://cdn.zero-downtime.net/charts"
+  fi
 }
 
 
@@ -105,8 +109,8 @@ function delete_ns() {
 
 # Extract crds via helm calls and apply delta=crds only
 function _crds() {
-  helm template $(chart_location $chart) -n $namespace --name-template $module $targetRevision --skip-crds --set ${module}.installCRDs=false -f $WORKDIR/values.yaml $API_VERSIONS --kube-version $KUBE_VERSION > $WORKDIR/helm-no-crds.yaml
-  helm template $(chart_location $chart) -n $namespace --name-template $module $targetRevision --include-crds --set ${module}.installCRDs=true -f $WORKDIR/values.yaml $API_VERSIONS --kube-version $KUBE_VERSION > $WORKDIR/helm-crds.yaml
+  helm secrets --evaluate-templates template $(chart_location $chart) -n $namespace --name-template $module $targetRevision --skip-crds --set ${module}.installCRDs=false -f $WORKDIR/values.yaml $API_VERSIONS --kube-version $KUBE_VERSION > $WORKDIR/helm-no-crds.yaml
+  helm secrets --evaluate-templates template $(chart_location $chart) -n $namespace --name-template $module $targetRevision --include-crds --set ${module}.installCRDs=true -f $WORKDIR/values.yaml $API_VERSIONS --kube-version $KUBE_VERSION > $WORKDIR/helm-crds.yaml
   diff -e $WORKDIR/helm-no-crds.yaml $WORKDIR/helm-crds.yaml | head -n-1 | tail -n+2 > $WORKDIR/crds.yaml
 
   # Only apply if there are actually any crds
@@ -120,7 +124,7 @@ function _crds() {
 # helm template | kubectl apply -f -
 # confine to one namespace if possible
 function render() {
-  helm template $(chart_location $chart) -n $namespace --name-template $module $targetRevision --skip-crds -f $WORKDIR/values.yaml $API_VERSIONS --kube-version $KUBE_VERSION $@ \
+  helm secrets --evaluate-templates template $(chart_location $chart) -n $namespace --name-template $module $targetRevision --skip-crds -f $WORKDIR/values.yaml $API_VERSIONS --kube-version $KUBE_VERSION $@ \
     | python3 -c '
 #!/usr/bin/python3
 import yaml
@@ -168,9 +172,6 @@ function _helm() {
 
     render
     kubectl $action -f $WORKDIR/helm.yaml --server-side --force-conflicts && rc=$? || rc=$?
-
-    # Try again without server-side, review with 1.26, required for cert-manager during 1.25
-    [ $rc -ne 0 ] && kubectl $action -f $WORKDIR/helm.yaml && rc=$? || rc=$?
 
     # Optional post hook
     declare -F ${module}-post && ${module}-post

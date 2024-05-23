@@ -6,6 +6,8 @@ set -x
 ARTIFACTS=($(echo $1 | tr "," "\n"))
 ACTION=${2:-apply}
 
+LOCAL_DEV=1
+
 #VERSION="latest"
 KUBE_VERSION="$(kubectl version -o json | jq -r .serverVersion.gitVersion)"
 
