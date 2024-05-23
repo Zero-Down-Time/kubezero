@@ -26,4 +26,8 @@ dependencies:
     version: 0.14.5
     repository: https://metallb.github.io/metallb
     condition: metallb.enabled
+  - name: haproxy
+    version: 1.22.0
+    repository: https://haproxytech.github.io/helm-charts
+    condition: haproxy.enabled
 kubeVersion: ">= 1.26.0"
