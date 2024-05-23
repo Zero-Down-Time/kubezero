@@ -1,6 +1,6 @@
 # kubezero-argo
 
-![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square)
+![Version: 0.2.2](https://img.shields.io/badge/Version-0.2.2-informational?style=flat-square)
 
 KubeZero Argo - Events, Workflow, CD
 
@@ -18,23 +18,22 @@ Kubernetes: `>= 1.26.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://argoproj.github.io/argo-helm | argo-cd | 6.7.10 |
+| https://argoproj.github.io/argo-helm | argo-cd | 6.9.2 |
 | https://argoproj.github.io/argo-helm | argo-events | 2.4.4 |
 | https://argoproj.github.io/argo-helm | argocd-apps | 2.0.0 |
-| https://argoproj.github.io/argo-helm | argocd-image-updater | 0.9.6 |
+| https://argoproj.github.io/argo-helm | argocd-image-updater | 0.10.0 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| argo-cd.applicationSet.enabled | bool | `false` |  |
 | argo-cd.configs.cm."resource.customizations" | string | `"cert-manager.io/Certificate:\n  # Lua script for customizing the health status assessment\n  health.lua: |\n    hs = {}\n    if obj.status ~= nil then\n      if obj.status.conditions ~= nil then\n        for i, condition in ipairs(obj.status.conditions) do\n          if condition.type == \"Ready\" and condition.status == \"False\" then\n            hs.status = \"Degraded\"\n            hs.message = condition.message\n            return hs\n          end\n          if condition.type == \"Ready\" and condition.status == \"True\" then\n            hs.status = \"Healthy\"\n            hs.message = condition.message\n            return hs\n          end\n        end\n      end\n    end\n    hs.status = \"Progressing\"\n    hs.message = \"Waiting for certificate\"\n    return hs\n"` |  |
 | argo-cd.configs.cm."timeout.reconciliation" | string | `"300s"` |  |
-| argo-cd.configs.cm."ui.bannercontent" | string | `"KubeZero v1.27 - Release notes"` |  |
+| argo-cd.configs.cm."ui.bannercontent" | string | `"KubeZero v1.28 - Release notes"` |  |
 | argo-cd.configs.cm."ui.bannerpermanent" | string | `"true"` |  |
 | argo-cd.configs.cm."ui.bannerposition" | string | `"bottom"` |  |
-| argo-cd.configs.cm."ui.bannerurl" | string | `"https://kubezero.com/releases/v1.27"` |  |
+| argo-cd.configs.cm."ui.bannerurl" | string | `"https://kubezero.com/releases/v1.28"` |  |
 | argo-cd.configs.cm.url | string | `"https://argocd.example.com"` |  |
 | argo-cd.configs.params."controller.operation.processors" | string | `"5"` |  |
 | argo-cd.configs.params."controller.status.processors" | string | `"10"` |  |
@@ -50,13 +49,37 @@ Kubernetes: `>= 1.26.0`
 | argo-cd.controller.resources.requests.memory | string | `"512Mi"` |  |
 | argo-cd.dex.enabled | bool | `false` |  |
 | argo-cd.enabled | bool | `false` |  |
+| argo-cd.global.image.repository | string | `"public.ecr.aws/zero-downtime/zdt-argocd"` |  |
+| argo-cd.global.image.tag | string | `"v2.11.0"` |  |
 | argo-cd.global.logging.format | string | `"json"` |  |
 | argo-cd.istio.enabled | bool | `false` |  |
 | argo-cd.istio.gateway | string | `"istio-ingress/ingressgateway"` |  |
 | argo-cd.istio.ipBlocks | list | `[]` |  |
 | argo-cd.notifications.enabled | bool | `false` |  |
+| argo-cd.repoServer.clusterRoleRules.enabled | bool | `true` |  |
+| argo-cd.repoServer.clusterRoleRules.rules[0].apiGroups[0] | string | `""` |  |
+| argo-cd.repoServer.clusterRoleRules.rules[0].resources[0] | string | `"secrets"` |  |
+| argo-cd.repoServer.clusterRoleRules.rules[0].verbs[0] | string | `"get"` |  |
+| argo-cd.repoServer.clusterRoleRules.rules[0].verbs[1] | string | `"watch"` |  |
+| argo-cd.repoServer.clusterRoleRules.rules[0].verbs[2] | string | `"list"` |  |
+| argo-cd.repoServer.initContainers[0].command[0] | string | `"/usr/local/bin/sa2kubeconfig.sh"` |  |
+| argo-cd.repoServer.initContainers[0].command[1] | string | `"/home/argocd/.kube/config"` |  |
+| argo-cd.repoServer.initContainers[0].image | string | `"public.ecr.aws/zero-downtime/zdt-argocd:v2.11.0"` |  |
+| argo-cd.repoServer.initContainers[0].imagePullPolicy | string | `"IfNotPresent"` |  |
+| argo-cd.repoServer.initContainers[0].name | string | `"create-kubeconfig"` |  |
+| argo-cd.repoServer.initContainers[0].securityContext.allowPrivilegeEscalation | bool | `false` |  |
+| argo-cd.repoServer.initContainers[0].securityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| argo-cd.repoServer.initContainers[0].securityContext.readOnlyRootFilesystem | bool | `true` |  |
+| argo-cd.repoServer.initContainers[0].securityContext.runAsNonRoot | bool | `true` |  |
+| argo-cd.repoServer.initContainers[0].securityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
+| argo-cd.repoServer.initContainers[0].volumeMounts[0].mountPath | string | `"/home/argocd/.kube"` |  |
+| argo-cd.repoServer.initContainers[0].volumeMounts[0].name | string | `"kubeconfigs"` |  |
 | argo-cd.repoServer.metrics.enabled | bool | `false` |  |
 | argo-cd.repoServer.metrics.serviceMonitor.enabled | bool | `true` |  |
+| argo-cd.repoServer.volumeMounts[0].mountPath | string | `"/home/argocd/.kube"` |  |
+| argo-cd.repoServer.volumeMounts[0].name | string | `"kubeconfigs"` |  |
+| argo-cd.repoServer.volumes[0].emptyDir | object | `{}` |  |
+| argo-cd.repoServer.volumes[0].name | string | `"kubeconfigs"` |  |
 | argo-cd.server.metrics.enabled | bool | `false` |  |
 | argo-cd.server.metrics.serviceMonitor.enabled | bool | `true` |  |
 | argo-cd.server.service.servicePortHttpsName | string | `"grpc"` |  |
@@ -87,6 +110,7 @@ Kubernetes: `>= 1.26.0`
 | argocd-image-updater.sshConfig.config | string | `"Host *\n  PubkeyAcceptedAlgorithms +ssh-rsa\n  HostkeyAlgorithms +ssh-rsa\n"` |  |
 
 ## Resources
+- https://github.com/argoproj/argoproj/blob/main/docs/end_user_threat_model.pdf
 - https://argoproj.github.io/argo-cd/operator-manual/metrics/
 - https://raw.githubusercontent.com/argoproj/argo-cd/master/examples/dashboard.json
 

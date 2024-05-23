@@ -36,19 +36,16 @@ argocd-apps:
   projects: {}
   applications: {}
 
+
 argo-cd:
   enabled: false
-  #configs:
-  #  secret:
-  #    `htpasswd -nbBC 10 "" $ARGO_PWD | tr -d ':\n' | sed 's/$2y/$2a/'`
-  #    argocdServerAdminPassword: "$2a$10$ivKzaXVxMqdeDSfS3nqi1Od3iDbnL7oXrixzDfZFRHlXHnAG6LydG"
-  #    argocdServerAdminPasswordMtime: "2020-04-24T15:33:09BST"
 
   global:
     logging:
       format: json
-  # image:
-  #   tag: v2.1.6
+    image:
+      repository: public.ecr.aws/zero-downtime/zdt-argocd
+      tag: v2.11.0
 
   configs:
     styles: |
@@ -94,6 +91,10 @@ argo-cd:
 
     secret:
       createSecret: false
+      # `htpasswd -nbBC 10 "" $ARGO_PWD | tr -d ':\n' | sed 's/$2y/$2a/'`
+      # argocdServerAdminPassword: "$2a$10$ivKzaXVxMqdeDSfS3nqi1Od3iDbnL7oXrixzDfZFRHlXHnAG6LydG"
+      # argocdServerAdminPassword: "ref+file://secrets.yaml#/test"
+      # argocdServerAdminPasswordMtime: "2020-04-24T15:33:09BST"
 
     ssh:
       extraHosts: "git.zero-downtime.net ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC8YdJ4YcOK7A0K7qOWsRjCS+wHTStXRcwBe7gjG43HPSNijiCKoGf/c+tfNsRhyouawg7Law6M6ahmS/jKWBpznRIM+OdOFVSuhnK/nr6h6wG3/ZfdLicyAPvx1/STGY/Fc6/zXA88i/9PV+g84gSVmhf3fGY92wokiASiu9DU4T9dT1gIkdyOX6fbMi1/mMKLSrHnAQcjyasYDvw9ISCJ95EoSwbj7O4c+7jo9fxYvdCfZZZAEZGozTRLAAO0AnjVcRah7bZV/jfHJuhOipV/TB7UVAhlVv1dfGV7hoTp9UKtKZFJF4cjIrSGxqQA/mdhSdLgkepK7yc4Jp2xGnaarhY29DfqsQqop+ugFpTbj7Xy5Rco07mXc6XssbAZhI1xtCOX20N4PufBuYippCK5AE6AiAyVtJmvfGQk4HP+TjOyhFo7PZm3wc9Hym7IBBVC0Sl30K8ddufkAgHwNGvvu1ZmD9ZWaMOXJDHBCZGMMr16QREZwVtZTwMEQalc7/yqmuqMhmcJIfs/GA2Lt91y+pq9C8XyeUL0VFPch0vkcLSRe3ghMZpRFJ/ht307xPcLzgTJqN6oQtNNDzSQglSEjwhge2K4GyWcIh+oGsWxWz5dHyk1iJmw90Y976BZIl/mYVgbTtZAJ81oGe/0k5rAe+LDL+Yq6tG28QFOg0QmiQ=="
@@ -125,6 +126,41 @@ argo-cd:
       serviceMonitor:
         enabled: true
 
+    volumes:
+      - name: kubeconfigs
+        emptyDir: {}
+    volumeMounts:
+    - mountPath: /home/argocd/.kube
+      name: kubeconfigs
+
+    # Allow vals to read internal secrets across all namespaces
+    clusterRoleRules:
+      enabled: true
+      rules:
+        - apiGroups: [""]
+          resources: ["secrets"]
+          verbs: ["get", "watch", "list"]
+
+    initContainers:
+      - name: create-kubeconfig
+        image: public.ecr.aws/zero-downtime/zdt-argocd:v2.11.0
+        imagePullPolicy: IfNotPresent
+        command:
+          - /usr/local/bin/sa2kubeconfig.sh
+          - /home/argocd/.kube/config
+        volumeMounts:
+        - mountPath: /home/argocd/.kube
+          name: kubeconfigs
+        securityContext:
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop:
+            - ALL
+
   server:
     # Rename former https port to grpc, works with istio + insecure
     service:
@@ -139,9 +175,6 @@ argo-cd:
   #   affinity:
 
   dex:
-    enabled: false
-
-  applicationSet:
     enabled: false
 
   notifications:
