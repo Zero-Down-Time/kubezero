@@ -31,8 +31,13 @@ cilium:
       serviceMonitor:
         enabled: {{ .Values.metrics.enabled }}
 
-{{- with index .Values "network" "metallb" }}
+{{- with .Values.network.metallb }}
 metallb:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+
+{{- with .Values.network.haproxy }}
+haproxy:
   {{- toYaml . | nindent 2 }}
 {{- end }}
 

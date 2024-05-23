@@ -71,6 +71,7 @@ cilium:
       enabled: false
     hostRoot: "/sys/fs/cgroup"
 
+  routingMode: tunnel
   tunnelProtocol: geneve
 
   prometheus:
