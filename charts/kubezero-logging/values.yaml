@@ -240,7 +240,14 @@ fluent-bit:
   #dnsPolicy: ClusterFirstWithHostNet
 
   tolerations:
-    - effect: NoSchedule
+    - key: kubezero-workergroup
+      effect: NoSchedule
+      operator: Exists
+    - key: nvidia.com/gpu
+      effect: NoSchedule
+      operator: Exists
+    - key: aws.amazon.com/neuron
+      effect: NoSchedule
       operator: Exists
 
   resources:
