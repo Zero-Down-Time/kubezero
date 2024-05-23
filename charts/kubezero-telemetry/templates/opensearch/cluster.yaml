@@ -1,5 +1,5 @@
-#pluginsList: ["repository-s3","https://github.com/aiven/prometheus-exporter-plugin-for-opensearch/releases/download/2.11.1.0/prometheus-exporter-2.11.1.0.zip"]
 {{- if .Values.opensearch.nodeSets }}
+#pluginsList: ["repository-s3","https://github.com/aiven/prometheus-exporter-plugin-for-opensearch/releases/download/2.11.1.0/prometheus-exporter-2.11.1.0.zip"]
 apiVersion: opensearch.opster.io/v1
 kind: OpenSearchCluster
 metadata:
@@ -21,7 +21,6 @@ spec:
       runAsUser: 1000
       runAsGroup: 1000
       runAsNonRoot: true
-      fsGroup: 1000
     securityContext:
       allowPrivilegeEscalation: false
       privileged: false
@@ -38,6 +37,18 @@ spec:
       limits:
          memory: "1Gi"
          #cpu: "200m"
+    podSecurityContext:
+      runAsNonRoot: true
+      fsGroup: 1000
+    securityContext:
+      capabilities:
+        drop:
+        - ALL
+      privileged: false
+    additionalConfig:
+      opensearchDashboards.branding.useExpandedHeader: "false"
+      opensearchDashboards.branding.applicationTitle: "KubeZero Dashboards"
+      opensearchDashboards.branding.mark.defaultUrl: "https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png"
   {{- end }}
   nodePools:
     {{- range .Values.opensearch.nodeSets }}
