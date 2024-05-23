@@ -60,6 +60,7 @@ Kubernetes: `>= 1.26.0`
 | cilium.resources.requests.cpu | string | `"10m"` |  |
 | cilium.resources.requests.memory | string | `"256Mi"` |  |
 | cilium.tunnelProtocol | string | `"geneve"` |  |
+| haproxy.enabled | bool | `false` |  |
 | metallb.controller.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | metallb.controller.tolerations[0].effect | string | `"NoSchedule"` |  |
 | metallb.controller.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |

@@ -3,6 +3,8 @@
 # Simulate well-known CRDs being available
 API_VERSIONS="-a monitoring.coreos.com/v1 -a snapshot.storage.k8s.io/v1 -a policy/v1/PodDisruptionBudget"
 
+export HELM_SECRETS_BACKEND="vals"
+
 #VERSION="latest"
 VERSION="v1.28"
 
