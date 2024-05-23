@@ -109,3 +109,6 @@ cilium:
           group: cert-manager.io
           kind: ClusterIssuer
           name: kubezero-local-ca-issuer
+
+haproxy:
+  enabled: false
