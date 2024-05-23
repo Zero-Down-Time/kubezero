@@ -9,8 +9,9 @@ metadata:
   annotations:
     storageclass.kubernetes.io/is-default-class: "true"
   {{- end }}
-volumeBindingMode: WaitForFirstConsumer  
+volumeBindingMode: WaitForFirstConsumer
 reclaimPolicy: Delete
+allowVolumeExpansion: true
 parameters:
   storage: lvm
   vgpattern: {{ default "openebs.*" ( index .Values "lvm-localpv" "storageClass" "vgpattern") }}
