@@ -52,7 +52,7 @@ jaeger:
     url: jaeger.example.com
 
 opensearch:
-  version: 2.13.0
+  version: 2.14.0
   prometheus: false
 
   # custom cluster settings
@@ -80,3 +80,382 @@ opensearch:
       enabled: false
       gateway: istio-ingress/private-ingressgateway
       url: telemetry-dashboard.example.com
+
+# New logging pipeline
+fluentd:
+  enabled: false
+  image:
+    repository: public.ecr.aws/zero-downtime/fluentd-concenter
+    tag: v1.16.5-1-g09dc31c
+  istio:
+    enabled: false
+
+  kind: StatefulSet
+
+  replicaCount: 1
+
+  #plugins:
+  #- fluent-plugin-s3
+
+  source:
+    sharedKey: secretref+k8s://v1/Secret/kube-system/kubezero-secrets/telemetry.fluentd.source.sharedKey # "cloudbender"
+
+  output:
+    # Defaults to OpenSearch in same namespace
+    host: telemetry
+    user: admin
+    password: admin
+
+  service:
+    ports:
+    - name: tcp-forward
+      protocol: TCP
+      containerPort: 24224
+    - name: http-fluentd
+      protocol: TCP
+      containerPort: 9880
+
+  metrics:
+    serviceMonitor:
+      enabled: false
+
+  dashboards:
+    enabled: false
+
+  # No need for docker nor /var/log
+  mountVarLogDirectory: false
+  mountDockerContainersDirectory: false
+
+  # no rbac required until we need WebAuth identity for eg. s3
+  rbac:
+    create: false
+
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      memory: 512Mi
+
+  persistence:
+    enabled: true
+    storageClass: ""
+    size: 1Gi
+
+  volumes:
+    - name: trust-store
+      secret:
+        secretName: telemetry-nodes-http-tls
+        items:
+        - key: tls.crt
+          path: ca.crt
+
+  volumeMounts:
+    - name: trust-store
+      mountPath: "/run/pki"
+      readOnly: true
+
+  securityContext:
+    capabilities:
+      drop:
+      - ALL
+    #readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 100
+
+  configMapConfigs:
+    - fluentd-prometheus-conf
+
+  fileConfigs:
+    00_system.conf: |-
+      <system>
+        root_dir /fluentd/log
+        log_level info
+        ignore_repeated_log_interval 60s
+        ignore_same_log_interval 60s
+        workers 1
+      </system>
+    01_sources.conf: |-
+      <source>
+        @type http
+        @label @KUBERNETES
+        port 9880
+        bind 0.0.0.0
+        keepalive_timeout 30
+      </source>
+
+      <source>
+        @type forward
+        @label @KUBERNETES
+        port 24224
+        bind 0.0.0.0
+        # skip_invalid_event true
+        send_keepalive_packet true
+        <security>
+          self_hostname "telemetry-fluentd"
+          shared_key {{ .Values.source.sharedKey }}
+        </security>
+      </source>
+
+    02_filters.conf: |-
+      <label @KUBERNETES>
+        # prevent log feedback loops, discard logs from our own pods
+        <match kube.logging.fluentd>
+          @type relabel
+          @label @FLUENT_LOG
+        </match>
+
+        # Exclude current fluent-bit multiline noise
+        # Still relevant ??
+        <filter kube.logging.fluent-bit>
+          @type grep
+          <exclude>
+            key log
+            pattern /could not append content to multiline context/
+          </exclude>
+        </filter>
+
+        # Generate Hash ID to break endless loop for already ingested events during retries
+        <filter **>
+          @type opensearch_genid
+          use_entire_record true
+        </filter>
+
+        # Route through DISPATCH for Prometheus metrics
+        <match **>
+          @type relabel
+          @label @DISPATCH
+        </match>
+      </label>
+
+    04_outputs.conf: |-
+      <label @OUTPUT>
+        <match **>
+          @id out_os
+          @type opensearch
+          # @log_level debug
+          include_tag_key true
+
+          id_key _hash
+          remove_keys _hash
+          write_operation create
+
+          # we have oj in the fluentd-concenter image
+          prefer_oj_serializer true
+
+          # KubeZero pipeline incl. GeoIP etc.
+          #pipeline fluentd
+
+          http_backend typhoeus
+          ca_file /run/pki/ca.crt
+
+          port 9200
+          scheme https
+          hosts {{ .Values.output.host }}
+          user {{ .Values.output.user }}
+          password {{ .Values.output.password }}
+
+          log_es_400_reason
+          logstash_format true
+          reconnect_on_error true
+          reload_on_failure true
+          request_timeout 300s
+          #sniffer_class_name Fluent::Plugin::OpenSearchSimpleSniffer
+
+          #with_transporter_log true
+
+          verify_es_version_at_startup false
+          default_opensearch_version 2
+          #suppress_type_name true
+
+          # Retry failed bulk requests
+          # https://github.com/uken/fluent-plugin-elasticsearch#unrecoverable-error-types
+          unrecoverable_error_types ["out_of_memory_error"]
+          bulk_message_request_threshold 1048576
+
+          <buffer>
+            @type file
+
+            flush_mode interval
+            flush_thread_count 2
+            flush_interval 10s
+
+            chunk_limit_size 2MB
+            total_limit_size 1GB
+
+            flush_at_shutdown true
+            retry_type exponential_backoff
+            retry_timeout 6h
+            overflow_action drop_oldest_chunk
+            disable_chunk_backup true
+          </buffer>
+        </match>
+      </label>
+
+fluent-bit:
+  enabled: false
+
+  #image:
+    #repository: public.ecr.aws/zero-downtime/fluent-bit
+    #tag: 2.0.10
+
+  testFramework:
+    enabled: false
+
+  serviceMonitor:
+    enabled: false
+
+  #rbac:
+  #  nodeAccess: true
+  #hostNetwork: true
+  #dnsPolicy: ClusterFirstWithHostNet
+
+  tolerations:
+    - effect: NoSchedule
+      operator: Exists
+
+  resources:
+    requests:
+      cpu: 20m
+      memory: 48Mi
+    limits:
+      memory: 128Mi
+
+  config:
+    output:
+      host: telemetry-fluentd
+      sharedKey: secretref+k8s://v1/Secret/kube-system/kubezero-secrets/telemetry.fluentd.source.sharedKey
+      tls: false
+
+    input:
+      memBufLimit: 16MB
+      refreshInterval: 5
+
+    logLevel: info
+    flushInterval: 5
+
+    #extraRecords:
+    #  source.clustername: MyKubeCluster
+
+    service: |
+      [SERVICE]
+          Flush {{ .Values.config.flushInterval }}
+          Daemon Off
+          Log_Level {{ .Values.config.logLevel }}
+          Parsers_File parsers.conf
+          Parsers_File custom_parsers.conf
+          HTTP_Server On
+          HTTP_Listen 0.0.0.0
+          HTTP_Port {{ .Values.service.port }}
+          Health_Check On
+    inputs: |
+      [INPUT]
+          Name tail
+          Path /var/log/containers/*.log
+          # Exclude ourselves to current error spam, https://github.com/fluent/fluent-bit/issues/5769
+          Exclude_Path *logging-fluent-bit*
+          multiline.parser cri
+          Tag cri.*
+          Skip_Long_Lines On
+          Skip_Empty_Lines On
+          DB /var/log/flb_kube.db
+          DB.Sync Normal
+          DB.locking true
+          # Buffer_Max_Size 1M
+          {{- with .Values.config.input }}
+          Mem_Buf_Limit {{ default "16MB" .memBufLimit }}
+          Refresh_Interval {{ default 5 .refreshInterval }}
+          {{- end }}
+
+    filters: |
+      [FILTER]
+          Name parser
+          Match cri.*
+          Parser cri-log
+          Key_Name log
+
+      [FILTER]
+          Name kubernetes
+          Match cri.*
+          Merge_Log On
+          Merge_Log_Key kube
+          Kube_Tag_Prefix cri.var.log.containers.
+          Keep_Log Off
+          K8S-Logging.Parser Off
+          K8S-Logging.Exclude Off
+          Kube_Meta_Cache_TTL 3600s
+          Buffer_Size 0
+          #Use_Kubelet true
+
+      {{- if index .Values "config" "extraRecords" }}
+
+      [FILTER]
+          Name record_modifier
+          Match cri.*
+          {{- range $k,$v := index .Values "config" "extraRecords" }}
+          Record {{ $k }} {{ $v }}
+          {{- end }}
+      {{- end }}
+
+      [FILTER]
+          Name rewrite_tag
+          Match cri.*
+          Emitter_Name kube_tag_rewriter
+          Rule $kubernetes['pod_id'] .* kube.$kubernetes['namespace_name'].$kubernetes['container_name'] false
+
+      [FILTER]
+          Name    lua
+          Match   kube.*
+          script  /fluent-bit/scripts/kubezero.lua
+          call    nest_k8s_ns
+
+    outputs: |
+      [OUTPUT]
+          Match *
+          Name forward
+          Host {{ .Values.config.output.host }}
+          Port 24224
+          Shared_Key {{ .Values.config.output.sharedKey }}
+          tls {{ ternary "on" "off" .Values.config.output.tls }}
+          Send_options true
+          Require_ack_response true
+
+    customParsers: |
+      [PARSER]
+          Name cri-log
+          Format regex
+          Regex ^(?<time>.+) (?<stream>stdout|stderr) (?<logtag>F|P) (?<log>.*)$
+          Time_Key    time
+          Time_Format %Y-%m-%dT%H:%M:%S.%L%z
+
+  luaScripts:
+    kubezero.lua: |
+      function nest_k8s_ns(tag, timestamp, record)
+          if not record['kubernetes']['namespace_name'] then
+              return 0, 0, 0
+          end
+          new_record = {}
+          for key, val in pairs(record) do
+              if key == 'kube' then
+                  new_record[key] = {}
+                  new_record[key][record['kubernetes']['namespace_name']] = record[key]
+              else
+                  new_record[key] = record[key]
+              end
+          end
+          return 1, timestamp, new_record
+      end
+
+  daemonSetVolumes:
+  - name: varlog
+    hostPath:
+      path: /var/log
+  - name: newlog
+    hostPath:
+      path: /var/lib/containers/logs
+
+  daemonSetVolumeMounts:
+  - name: varlog
+    mountPath: /var/log
+  - name: newlog
+    mountPath: /var/lib/containers/logs

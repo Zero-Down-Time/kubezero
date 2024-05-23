@@ -1,3 +1,4 @@
+{{- if .Values.opensearch.nodeSets }}
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
@@ -68,3 +69,4 @@ spec:
   commonName: {{ template "kubezero-lib.fullname" . }}-admin
   privateKey:
     encoding: PKCS8
+{{- end }}

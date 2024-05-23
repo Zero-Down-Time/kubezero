@@ -9,7 +9,7 @@ metadata:
 data:
 {{- range $key, $value := .Values.fileConfigs }}
   {{$key }}: |-
-    {{- $value | nindent 4 }}
+    {{- (tpl $value $) | nindent 4 }}
 {{- end }}
 {{- end }}
 
