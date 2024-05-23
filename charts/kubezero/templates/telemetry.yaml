@@ -1,5 +1,26 @@
 {{- define "telemetry-values" }}
 
+{{- if index .Values "telemetry" "fluent-bit" }}
+fluent-bit:
+  {{- with index .Values.telemetry "fluent-bit" }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+
+  serviceMonitor:
+    enabled: {{ .Values.metrics.enabled }}
+{{- end }}
+
+{{- if .Values.telemetry.fluentd }}
+fluentd:
+  {{- with .Values.telemetry.fluentd }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+
+  metrics:
+    serviceMonitor:
+      enabled: {{ .Values.metrics.enabled }}
+{{- end }}
+
 {{- if .Values.telemetry.jaeger }}
 jaeger:
   {{- with .Values.telemetry.jaeger }}
