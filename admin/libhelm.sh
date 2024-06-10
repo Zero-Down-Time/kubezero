@@ -109,11 +109,18 @@ function delete_ns() {
 }
 
 
-# Extract crds via helm calls and apply delta=crds only
+# Extract crds via helm calls
 function _crds() {
-  helm secrets --evaluate-templates template $(chart_location $chart) -n $namespace --name-template $module $targetRevision --skip-crds --set ${module}.installCRDs=false -f $WORKDIR/values.yaml $API_VERSIONS --kube-version $KUBE_VERSION > $WORKDIR/helm-no-crds.yaml
-  helm secrets --evaluate-templates template $(chart_location $chart) -n $namespace --name-template $module $targetRevision --include-crds --set ${module}.installCRDs=true -f $WORKDIR/values.yaml $API_VERSIONS --kube-version $KUBE_VERSION > $WORKDIR/helm-crds.yaml
-  diff -e $WORKDIR/helm-no-crds.yaml $WORKDIR/helm-crds.yaml | head -n-1 | tail -n+2 > $WORKDIR/crds.yaml
+  helm secrets --evaluate-templates template $(chart_location $chart) -n $namespace --name-template $module $targetRevision --include-crds --set ${module}.installCRDs=true -f $WORKDIR/values.yaml $API_VERSIONS --kube-version $KUBE_VERSION $@ | python3 -c '
+#!/usr/bin/python3
+import yaml
+import sys
+
+for manifest in yaml.safe_load_all(sys.stdin):
+    if manifest:
+        if "kind" in manifest and manifest["kind"] == "CustomResourceDefinition":
+          print("---")
+          print(yaml.dump(manifest))' > $WORKDIR/crds.yaml
 
   # Only apply if there are actually any crds
   if [ -s $WORKDIR/crds.yaml ]; then
@@ -134,6 +141,8 @@ import sys
 
 for manifest in yaml.safe_load_all(sys.stdin):
     if manifest:
+        if "kind" in manifest and manifest["kind"] == "CustomResourceDefinition":
+          continue
         if "metadata" in manifest and "namespace" not in manifest["metadata"]:
             manifest["metadata"]["namespace"] = sys.argv[1]
         print("---")

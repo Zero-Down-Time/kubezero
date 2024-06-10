@@ -113,3 +113,117 @@ cilium:
 
 haproxy:
   enabled: false
+
+  replicaCount: 1
+
+  # enable pdb if replica > 1
+  PodDisruptionBudget:
+    enable: false
+    minAvailable: 1
+
+  containerPorts:
+    http: 8080
+    https: null
+    prometheus: 8404
+    stat: null
+
+  serviceMonitor:
+    enabled: false
+    endpoints:
+      - port: prometheus
+        path: /metrics
+        scheme: http
+        interval: 30s
+        params:
+          no-maint:
+            - empty
+  config: |
+    frontend fe_main
+      bind :8080
+      default_backend be_main
+
+    backend be_main
+      server web1 10.0.0.1:8080 check
+
+  includes:
+    global.cfg: |
+      global
+        log stdout format raw local0
+        maxconn 2048
+
+      defaults
+        log global
+        mode tcp
+        option http-server-close
+        timeout connect 10s
+        timeout client 30s
+        timeout client-fin 30s
+        timeout server 30s
+        timeout tunnel  1h
+
+      resolvers coredns
+        accepted_payload_size 4096
+        parse-resolv-conf
+        hold valid    10s
+        hold other    10s
+        hold refused  10s
+        hold nx       10s
+        hold timeout  10s
+
+    prometheus.cfg: |
+      frontend prometheus
+        bind *:8404
+        mode http
+        http-request use-service prometheus-exporter if { path /metrics }
+        no log
+        stats enable
+        stats uri /stats
+        stats refresh 10s
+        stats auth admin:letmein
+
+  args:
+    defaults:
+      - "-f"
+      - "/usr/local/etc/haproxy/includes/global.cfg"
+      - "-f"
+      - "/usr/local/etc/haproxy/includes/prometheus.cfg"
+      - "-f"
+      - "/usr/local/etc/haproxy/haproxy.cfg"
+
+  livenessProbe:
+    failureThreshold: 3
+    successThreshold: 1
+    initialDelaySeconds: 0
+    timeoutSeconds: 1
+    tcpSocket:
+      port: 8404
+    periodSeconds: 10
+
+  readinessProbe:
+    failureThreshold: 3
+    successThreshold: 1
+    initialDelaySeconds: 0
+    timeoutSeconds: 1
+    tcpSocket:
+      port: 8404
+    periodSeconds: 10
+
+  securityContext:
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    seccompProfile:
+      type: RuntimeDefault
+
+  resources:
+    requests:
+      cpu: 10m
+      memory: 48Mi
+  #  limits:
+  #    cpu: 250m
+  #    memory: 128Mi

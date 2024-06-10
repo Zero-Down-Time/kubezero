@@ -1,0 +1,10 @@
+configmap: haproxy-grafana-dashboards
+gzip: true
+condition: 'index .Values.haproxy.serviceMonitor.enabled'
+folder: KubeZero
+dashboards:
+- name: HAProxy
+  url: https://grafana.com/api/dashboards/12693/revisions/8/download
+  tags:
+  - haproxy
+  - network

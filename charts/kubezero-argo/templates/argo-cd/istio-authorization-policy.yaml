@@ -19,7 +19,7 @@ spec:
         {{- toYaml (index .Values "argo-cd" "istio" "ipBlocks") | nindent 8 }}
     to:
     - operation:
-        hosts: [{{ index .Values "argo-cd" "configs" "cm" "url" | quote }}]
+        hosts: [{{ get (urlParse (index .Values "argo-cd" "configs" "cm" "url")) "host" }}]
     when:
     - key: connection.sni
       values:
