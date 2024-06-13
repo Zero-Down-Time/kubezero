@@ -1,6 +1,6 @@
 # kubezero-ci
 
-![Version: 0.8.11](https://img.shields.io/badge/Version-0.8.11-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.8.12](https://img.shields.io/badge/Version-0.8.12-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things CI
 
@@ -20,9 +20,9 @@ Kubernetes: `>= 1.25.0`
 |------------|------|---------|
 | https://aquasecurity.github.io/helm-charts/ | trivy | 0.7.0 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://charts.jenkins.io | jenkins | 5.1.18 |
-| https://dl.gitea.io/charts/ | gitea | 10.1.4 |
-| https://docs.renovatebot.com/helm-charts | renovate | 37.368.2 |
+| https://charts.jenkins.io | jenkins | 5.2.1 |
+| https://dl.gitea.io/charts/ | gitea | 10.2.0 |
+| https://docs.renovatebot.com/helm-charts | renovate | 37.406.2 |
 
 # Jenkins
 - default build retention 10 builds, 32days
@@ -67,7 +67,6 @@ Kubernetes: `>= 1.25.0`
 | gitea.gitea.metrics.enabled | bool | `false` |  |
 | gitea.gitea.metrics.serviceMonitor.enabled | bool | `true` |  |
 | gitea.image.rootless | bool | `true` |  |
-| gitea.image.tag | string | `"1.21.11"` |  |
 | gitea.istio.enabled | bool | `false` |  |
 | gitea.istio.gateway | string | `"istio-ingress/private-ingressgateway"` |  |
 | gitea.istio.url | string | `"git.example.com"` |  |
@@ -91,6 +90,7 @@ Kubernetes: `>= 1.25.0`
 | jenkins.agent.idleMinutes | int | `30` |  |
 | jenkins.agent.image.repository | string | `"public.ecr.aws/zero-downtime/jenkins-podman"` |  |
 | jenkins.agent.image.tag | string | `"v0.5.0"` |  |
+| jenkins.agent.inheritYamlMergeStrategy | bool | `true` |  |
 | jenkins.agent.podName | string | `"podman-aws"` |  |
 | jenkins.agent.podRetention | string | `"Default"` |  |
 | jenkins.agent.resources.limits.cpu | string | `""` |  |

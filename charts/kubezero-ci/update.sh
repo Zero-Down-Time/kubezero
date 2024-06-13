@@ -10,4 +10,7 @@ update_helm
 ../kubezero-metrics/sync_grafana_dashboards.py dashboard-jenkins.yaml templates/jenkins/grafana-dashboard.yaml
 ../kubezero-metrics/sync_grafana_dashboards.py dashboard-gitea.yaml templates/gitea/grafana-dashboard.yaml
 
+#Gitea dark theme
+# https://codeberg.org/pat-s/gitea-github-theme
+#
 update_docs
