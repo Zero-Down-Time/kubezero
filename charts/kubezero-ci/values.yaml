@@ -90,7 +90,7 @@ jenkins:
 
   controller:
     image:
-      tag: alpine-jdk17
+      tag: lts-alpine-jdk21
       #tagLabel: alpine
     disableRememberMe: true
     prometheus:
@@ -183,12 +183,12 @@ jenkins:
   agent:
     image:
       repository: public.ecr.aws/zero-downtime/jenkins-podman
-      tag: v0.5.0
+      tag: v0.5.1
     #alwaysPullImage: true
     podRetention: "Default"
     showRawYaml: false
     podName: "podman-aws"
-    serviceAccount: jenkins-podman-aws
+    defaultsProviderTemplate: "podman-aws"
     annotations:
       container.apparmor.security.beta.kubernetes.io/jnlp: unconfined
     customJenkinsLabels:
@@ -217,6 +217,7 @@ jenkins:
       spec:
         securityContext:
           fsGroup: 1000
+        serviceAccountName: jenkins-podman-aws
         containers:
         - name: jnlp
           resources:
@@ -273,7 +274,7 @@ jenkins:
 trivy:
   enabled: false
   image:
-    tag: 0.50.1
+    tag: 0.52.1
   persistence:
     enabled: true
     size: 1Gi
