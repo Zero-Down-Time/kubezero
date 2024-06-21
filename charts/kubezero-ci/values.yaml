@@ -90,7 +90,7 @@ jenkins:
 
   controller:
     image:
-      tag: lts-alpine-jdk21
+      tag: alpine-jdk21
       #tagLabel: alpine
     disableRememberMe: true
     prometheus:
@@ -211,13 +211,15 @@ jenkins:
     #   value: "<IAM ROLE ARN>"
     yamlMergeStrategy: "merge"
     inheritYamlMergeStrategy: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    serviceAccount: jenkins-podman-aws
     yamlTemplate: |-
       apiVersion: v1
       kind: Pod
       spec:
         securityContext:
           fsGroup: 1000
-        serviceAccountName: jenkins-podman-aws
         containers:
         - name: jnlp
           resources:

@@ -1,0 +1,15 @@
+diff --git a/charts/jenkins/templates/_helpers.tpl b/charts/jenkins/templates/_helpers.tpl
+index 5eee71cb..da104151 100644
+--- charts/jenkins/templates/_helpers.tpl
++++ charts/jenkins/templates/_helpers.tpl
+@@ -558,7 +558,9 @@ Create the name of the service account to use
+ Create the name of the service account for Jenkins agents to use
+ */}}
+ {{- define "jenkins.serviceAccountAgentName" -}}
+-{{- if .Values.serviceAccountAgent.create -}}
++{{- if .Values.agent.serviceAccount -}}
++    {{ .Values.agent.serviceAccount }}
++{{- else if .Values.serviceAccountAgent.create -}}
+     {{ default (printf "%s-%s" (include "jenkins.fullname" .) "agent") .Values.serviceAccountAgent.name }}
+ {{- else -}}
+     {{ default "default" .Values.serviceAccountAgent.name }}
