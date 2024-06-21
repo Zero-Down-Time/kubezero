@@ -5,9 +5,6 @@ API_VERSIONS="-a monitoring.coreos.com/v1 -a snapshot.storage.k8s.io/v1 -a polic
 
 export HELM_SECRETS_BACKEND="vals"
 
-#VERSION="latest"
-VERSION="v1.28"
-
 # Waits for max 300s and retries
 function wait_for() {
   local TRIES=0
@@ -277,7 +274,7 @@ spec:
   hostPID: true
   containers:
   - name: kubezero-admin
-    image: public.ecr.aws/zero-downtime/kubezero-admin:${VERSION}
+    image: public.ecr.aws/zero-downtime/kubezero-admin:${KUBE_VERSION}
     imagePullPolicy: Always
     command: ["kubezero.sh"]
     args: [$TASKS]

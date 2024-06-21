@@ -2,6 +2,8 @@
 set -eE
 set -o pipefail
 
+KUBE_VERSION=v1.29
+
 ARGO_APP=${1:-/tmp/new-kubezero-argoapp.yaml}
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )

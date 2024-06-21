@@ -26,8 +26,7 @@ CHARTS="$(dirname $SCRIPT_DIR)/charts"
 ################
 function cert-manager-post() {
   # If any error occurs, wait for initial webhook deployment and try again
-  # see: https://cert-manager.io/docs/concepts/webhook/#webhook-connection-problems-shortly-af
-ter-cert-manager-installation
+  # see: https://cert-manager.io/docs/concepts/webhook/#webhook-connection-problems-shortly-after-cert-manager-installation
 
   if [ $rc -ne 0 ]; then
     wait_for "kubectl get deployment -n $namespace cert-manager-webhook"
@@ -37,8 +36,7 @@ ter-cert-manager-installation
   fi
 
   wait_for "kubectl get ClusterIssuer -n $namespace kubezero-local-ca-issuer"
-  kubectl wait --timeout=180s --for=condition=Ready -n $namespace ClusterIssuer/kubezero-local
--ca-issuer
+  kubectl wait --timeout=180s --for=condition=Ready -n $namespace ClusterIssuer/kubezero-local-ca-issuer
 }
 
 
