@@ -61,8 +61,8 @@ Kubernetes: `>= 1.25.0`
 | gitea.gitea.config.log.LEVEL | string | `"warn"` |  |
 | gitea.gitea.config.queue.TYPE | string | `"level"` |  |
 | gitea.gitea.config.session.PROVIDER | string | `"memory"` |  |
-| gitea.gitea.config.ui.DEFAULT_THEME | string | `"github-dark"` |  |
-| gitea.gitea.config.ui.THEMES | string | `"gitea,github-dark"` |  |
+| gitea.gitea.config.ui.DEFAULT_THEME | string | `"gitea-dark"` |  |
+| gitea.gitea.config.ui.THEMES | string | `"gitea-light,gitea-dark,github-dark"` |  |
 | gitea.gitea.demo | bool | `false` |  |
 | gitea.gitea.metrics.enabled | bool | `false` |  |
 | gitea.gitea.metrics.serviceMonitor.enabled | bool | `true` |  |
@@ -87,9 +87,10 @@ Kubernetes: `>= 1.25.0`
 | jenkins.agent.annotations."container.apparmor.security.beta.kubernetes.io/jnlp" | string | `"unconfined"` |  |
 | jenkins.agent.containerCap | int | `2` |  |
 | jenkins.agent.customJenkinsLabels[0] | string | `"podman-aws-trivy"` |  |
+| jenkins.agent.defaultsProviderTemplate | string | `"podman-aws"` |  |
 | jenkins.agent.idleMinutes | int | `30` |  |
 | jenkins.agent.image.repository | string | `"public.ecr.aws/zero-downtime/jenkins-podman"` |  |
-| jenkins.agent.image.tag | string | `"v0.5.0"` |  |
+| jenkins.agent.image.tag | string | `"v0.5.1"` |  |
 | jenkins.agent.inheritYamlMergeStrategy | bool | `true` |  |
 | jenkins.agent.podName | string | `"podman-aws"` |  |
 | jenkins.agent.podRetention | string | `"Default"` |  |
@@ -97,6 +98,8 @@ Kubernetes: `>= 1.25.0`
 | jenkins.agent.resources.limits.memory | string | `""` |  |
 | jenkins.agent.resources.requests.cpu | string | `""` |  |
 | jenkins.agent.resources.requests.memory | string | `""` |  |
+| jenkins.agent.runAsGroup | int | `1000` |  |
+| jenkins.agent.runAsUser | int | `1000` |  |
 | jenkins.agent.serviceAccount | string | `"jenkins-podman-aws"` |  |
 | jenkins.agent.showRawYaml | bool | `false` |  |
 | jenkins.agent.yamlMergeStrategy | string | `"merge"` |  |
@@ -108,7 +111,7 @@ Kubernetes: `>= 1.25.0`
 | jenkins.controller.containerEnv[1].value | string | `"none"` |  |
 | jenkins.controller.disableRememberMe | bool | `true` |  |
 | jenkins.controller.enableRawHtmlMarkupFormatter | bool | `true` |  |
-| jenkins.controller.image.tag | string | `"alpine-jdk17"` |  |
+| jenkins.controller.image.tag | string | `"alpine-jdk21"` |  |
 | jenkins.controller.initContainerResources.limits.memory | string | `"1024Mi"` |  |
 | jenkins.controller.initContainerResources.requests.cpu | string | `"50m"` |  |
 | jenkins.controller.initContainerResources.requests.memory | string | `"256Mi"` |  |
@@ -157,7 +160,7 @@ Kubernetes: `>= 1.25.0`
 | renovate.env.LOG_FORMAT | string | `"json"` |  |
 | renovate.securityContext.fsGroup | int | `1000` |  |
 | trivy.enabled | bool | `false` |  |
-| trivy.image.tag | string | `"0.50.1"` |  |
+| trivy.image.tag | string | `"0.52.1"` |  |
 | trivy.persistence.enabled | bool | `true` |  |
 | trivy.persistence.size | string | `"1Gi"` |  |
 | trivy.rbac.create | bool | `false` |  |
