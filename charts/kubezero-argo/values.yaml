@@ -54,8 +54,8 @@ argo-cd:
       .sidebar { background: linear-gradient(to bottom, #6A4D79, #493558, #2D1B30, #0D0711); }
 
     cm:
-      ui.bannercontent: "KubeZero v1.28 - Release notes"
-      ui.bannerurl: "https://kubezero.com/releases/v1.28"
+      ui.bannercontent: "KubeZero v1.29 - Release notes"
+      ui.bannerurl: "https://kubezero.com/releases/v1.29"
       ui.bannerpermanent: "true"
       ui.bannerposition: "bottom"
 
