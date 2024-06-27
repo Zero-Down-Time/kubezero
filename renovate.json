@@ -17,6 +17,5 @@
     }
   ],
   "ignorePaths": ["charts/*/charts/**"],
-  "enabledManagers": ["dockerfile", "helmv3", "helm-values"],
-  "baseBranches": ["$default", "/^release\\/.*/"]
+  "enabledManagers": ["dockerfile", "helmv3", "helm-values"]
 }
