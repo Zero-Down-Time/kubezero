@@ -31,4 +31,8 @@ spec:
      - name: delete
        actions:
          - delete: {}
+   ismTemplate:
+     indexPatterns:
+       - "logstash-*"
+       - "jaeger-*"
 {{- end }}
