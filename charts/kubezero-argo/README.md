@@ -1,6 +1,6 @@
 # kubezero-argo
 
-![Version: 0.2.2](https://img.shields.io/badge/Version-0.2.2-informational?style=flat-square)
+![Version: 0.2.3](https://img.shields.io/badge/Version-0.2.3-informational?style=flat-square)
 
 KubeZero Argo - Events, Workflow, CD
 
@@ -18,7 +18,7 @@ Kubernetes: `>= 1.26.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://argoproj.github.io/argo-helm | argo-cd | 6.9.2 |
+| https://argoproj.github.io/argo-helm | argo-cd | 7.1.3 |
 | https://argoproj.github.io/argo-helm | argo-events | 2.4.4 |
 | https://argoproj.github.io/argo-helm | argocd-apps | 2.0.0 |
 | https://argoproj.github.io/argo-helm | argocd-image-updater | 0.10.0 |
