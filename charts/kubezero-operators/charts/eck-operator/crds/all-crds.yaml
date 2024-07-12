@@ -5,12 +5,13 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
+    helm.sh/resource-policy: keep
   labels:
     app.kubernetes.io/instance: 'logging'
     app.kubernetes.io/managed-by: 'Helm'
     app.kubernetes.io/name: 'eck-operator-crds'
-    app.kubernetes.io/version: '2.12.1'
-    helm.sh/chart: 'eck-operator-crds-2.12.1'
+    app.kubernetes.io/version: '2.13.0'
+    helm.sh/chart: 'eck-operator-crds-2.13.0'
   name: agents.agent.k8s.elastic.co
 spec:
   group: agent.k8s.elastic.co
@@ -245,7 +246,8 @@ spec:
                         - `url`: the URL to reach the Elastic resource
                         - `username`: the username of the user to be authenticated to the Elastic resource
                         - `password`: the password of the user to be authenticated to the Elastic resource
-                        - `ca.crt`: the CA certificate in PEM format (optional).
+                        - `ca.crt`: the CA certificate in PEM format (optional)
+                        - `api-key`: the key to authenticate against the Elastic resource instead of a username and password (supported only for `elasticsearchRefs` in AgentSpec and in BeatSpec)
                         This field cannot be used in combination with the other fields name, namespace or serviceName.
                       type: string
                     serviceName:
@@ -280,7 +282,8 @@ spec:
                       - `url`: the URL to reach the Elastic resource
                       - `username`: the username of the user to be authenticated to the Elastic resource
                       - `password`: the password of the user to be authenticated to the Elastic resource
-                      - `ca.crt`: the CA certificate in PEM format (optional).
+                      - `ca.crt`: the CA certificate in PEM format (optional)
+                      - `api-key`: the key to authenticate against the Elastic resource instead of a username and password (supported only for `elasticsearchRefs` in AgentSpec and in BeatSpec)
                       This field cannot be used in combination with the other fields name, namespace or serviceName.
                     type: string
                   serviceName:
@@ -725,7 +728,8 @@ spec:
                       - `url`: the URL to reach the Elastic resource
                       - `username`: the username of the user to be authenticated to the Elastic resource
                       - `password`: the password of the user to be authenticated to the Elastic resource
-                      - `ca.crt`: the CA certificate in PEM format (optional).
+                      - `ca.crt`: the CA certificate in PEM format (optional)
+                      - `api-key`: the key to authenticate against the Elastic resource instead of a username and password (supported only for `elasticsearchRefs` in AgentSpec and in BeatSpec)
                       This field cannot be used in combination with the other fields name, namespace or serviceName.
                     type: string
                   serviceName:
@@ -1132,12 +1136,13 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
+    helm.sh/resource-policy: keep
   labels:
     app.kubernetes.io/instance: 'logging'
     app.kubernetes.io/managed-by: 'Helm'
     app.kubernetes.io/name: 'eck-operator-crds'
-    app.kubernetes.io/version: '2.12.1'
-    helm.sh/chart: 'eck-operator-crds-2.12.1'
+    app.kubernetes.io/version: '2.13.0'
+    helm.sh/chart: 'eck-operator-crds-2.13.0'
   name: apmservers.apm.k8s.elastic.co
 spec:
   group: apm.k8s.elastic.co
@@ -1219,7 +1224,8 @@ spec:
                       - `url`: the URL to reach the Elastic resource
                       - `username`: the username of the user to be authenticated to the Elastic resource
                       - `password`: the password of the user to be authenticated to the Elastic resource
-                      - `ca.crt`: the CA certificate in PEM format (optional).
+                      - `ca.crt`: the CA certificate in PEM format (optional)
+                      - `api-key`: the key to authenticate against the Elastic resource instead of a username and password (supported only for `elasticsearchRefs` in AgentSpec and in BeatSpec)
                       This field cannot be used in combination with the other fields name, namespace or serviceName.
                     type: string
                   serviceName:
@@ -1663,7 +1669,8 @@ spec:
                       - `url`: the URL to reach the Elastic resource
                       - `username`: the username of the user to be authenticated to the Elastic resource
                       - `password`: the password of the user to be authenticated to the Elastic resource
-                      - `ca.crt`: the CA certificate in PEM format (optional).
+                      - `ca.crt`: the CA certificate in PEM format (optional)
+                      - `api-key`: the key to authenticate against the Elastic resource instead of a username and password (supported only for `elasticsearchRefs` in AgentSpec and in BeatSpec)
                       This field cannot be used in combination with the other fields name, namespace or serviceName.
                     type: string
                   serviceName:
@@ -2352,12 +2359,13 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
+    helm.sh/resource-policy: keep
   labels:
     app.kubernetes.io/instance: 'logging'
     app.kubernetes.io/managed-by: 'Helm'
     app.kubernetes.io/name: 'eck-operator-crds'
-    app.kubernetes.io/version: '2.12.1'
-    helm.sh/chart: 'eck-operator-crds-2.12.1'
+    app.kubernetes.io/version: '2.13.0'
+    helm.sh/chart: 'eck-operator-crds-2.13.0'
   name: beats.beat.k8s.elastic.co
 spec:
   group: beat.k8s.elastic.co
@@ -2592,7 +2600,8 @@ spec:
                       - `url`: the URL to reach the Elastic resource
                       - `username`: the username of the user to be authenticated to the Elastic resource
                       - `password`: the password of the user to be authenticated to the Elastic resource
-                      - `ca.crt`: the CA certificate in PEM format (optional).
+                      - `ca.crt`: the CA certificate in PEM format (optional)
+                      - `api-key`: the key to authenticate against the Elastic resource instead of a username and password (supported only for `elasticsearchRefs` in AgentSpec and in BeatSpec)
                       This field cannot be used in combination with the other fields name, namespace or serviceName.
                     type: string
                   serviceName:
@@ -2626,7 +2635,8 @@ spec:
                       - `url`: the URL to reach the Elastic resource
                       - `username`: the username of the user to be authenticated to the Elastic resource
                       - `password`: the password of the user to be authenticated to the Elastic resource
-                      - `ca.crt`: the CA certificate in PEM format (optional).
+                      - `ca.crt`: the CA certificate in PEM format (optional)
+                      - `api-key`: the key to authenticate against the Elastic resource instead of a username and password (supported only for `elasticsearchRefs` in AgentSpec and in BeatSpec)
                       This field cannot be used in combination with the other fields name, namespace or serviceName.
                     type: string
                   serviceName:
@@ -2670,7 +2680,8 @@ spec:
                                 - `url`: the URL to reach the Elastic resource
                                 - `username`: the username of the user to be authenticated to the Elastic resource
                                 - `password`: the password of the user to be authenticated to the Elastic resource
-                                - `ca.crt`: the CA certificate in PEM format (optional).
+                                - `ca.crt`: the CA certificate in PEM format (optional)
+                                - `api-key`: the key to authenticate against the Elastic resource instead of a username and password (supported only for `elasticsearchRefs` in AgentSpec and in BeatSpec)
                                 This field cannot be used in combination with the other fields name, namespace or serviceName.
                               type: string
                             serviceName:
@@ -2710,7 +2721,8 @@ spec:
                                 - `url`: the URL to reach the Elastic resource
                                 - `username`: the username of the user to be authenticated to the Elastic resource
                                 - `password`: the password of the user to be authenticated to the Elastic resource
-                                - `ca.crt`: the CA certificate in PEM format (optional).
+                                - `ca.crt`: the CA certificate in PEM format (optional)
+                                - `api-key`: the key to authenticate against the Elastic resource instead of a username and password (supported only for `elasticsearchRefs` in AgentSpec and in BeatSpec)
                                 This field cannot be used in combination with the other fields name, namespace or serviceName.
                               type: string
                             serviceName:
@@ -2836,12 +2848,13 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
+    helm.sh/resource-policy: keep
   labels:
     app.kubernetes.io/instance: 'logging'
     app.kubernetes.io/managed-by: 'Helm'
     app.kubernetes.io/name: 'eck-operator-crds'
-    app.kubernetes.io/version: '2.12.1'
-    helm.sh/chart: 'eck-operator-crds-2.12.1'
+    app.kubernetes.io/version: '2.13.0'
+    helm.sh/chart: 'eck-operator-crds-2.13.0'
   name: elasticmapsservers.maps.k8s.elastic.co
 spec:
   group: maps.k8s.elastic.co
@@ -2935,7 +2948,8 @@ spec:
                       - `url`: the URL to reach the Elastic resource
                       - `username`: the username of the user to be authenticated to the Elastic resource
                       - `password`: the password of the user to be authenticated to the Elastic resource
-                      - `ca.crt`: the CA certificate in PEM format (optional).
+                      - `ca.crt`: the CA certificate in PEM format (optional)
+                      - `api-key`: the key to authenticate against the Elastic resource instead of a username and password (supported only for `elasticsearchRefs` in AgentSpec and in BeatSpec)
                       This field cannot be used in combination with the other fields name, namespace or serviceName.
                     type: string
                   serviceName:
@@ -3433,12 +3447,13 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
+    helm.sh/resource-policy: keep
   labels:
     app.kubernetes.io/instance: 'logging'
     app.kubernetes.io/managed-by: 'Helm'
     app.kubernetes.io/name: 'eck-operator-crds'
-    app.kubernetes.io/version: '2.12.1'
-    helm.sh/chart: 'eck-operator-crds-2.12.1'
+    app.kubernetes.io/version: '2.13.0'
+    helm.sh/chart: 'eck-operator-crds-2.13.0'
   name: elasticsearchautoscalers.autoscaling.k8s.elastic.co
 spec:
   group: autoscaling.k8s.elastic.co
@@ -3790,12 +3805,13 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
+    helm.sh/resource-policy: keep
   labels:
     app.kubernetes.io/instance: 'logging'
     app.kubernetes.io/managed-by: 'Helm'
     app.kubernetes.io/name: 'eck-operator-crds'
-    app.kubernetes.io/version: '2.12.1'
-    helm.sh/chart: 'eck-operator-crds-2.12.1'
+    app.kubernetes.io/version: '2.13.0'
+    helm.sh/chart: 'eck-operator-crds-2.13.0'
   name: elasticsearches.elasticsearch.k8s.elastic.co
 spec:
   group: elasticsearch.k8s.elastic.co
@@ -3859,6 +3875,10 @@ spec:
                 description: Auth contains user authentication and authorization security
                   settings for Elasticsearch.
                 properties:
+                  disableElasticUser:
+                    description: DisableElasticUser disables the default elastic user
+                      that is created by ECK.
+                    type: boolean
                   fileRealm:
                     description: FileRealm to propagate to the Elasticsearch cluster.
                     items:
@@ -4330,7 +4350,8 @@ spec:
                                 - `url`: the URL to reach the Elastic resource
                                 - `username`: the username of the user to be authenticated to the Elastic resource
                                 - `password`: the password of the user to be authenticated to the Elastic resource
-                                - `ca.crt`: the CA certificate in PEM format (optional).
+                                - `ca.crt`: the CA certificate in PEM format (optional)
+                                - `api-key`: the key to authenticate against the Elastic resource instead of a username and password (supported only for `elasticsearchRefs` in AgentSpec and in BeatSpec)
                                 This field cannot be used in combination with the other fields name, namespace or serviceName.
                               type: string
                             serviceName:
@@ -4370,7 +4391,8 @@ spec:
                                 - `url`: the URL to reach the Elastic resource
                                 - `username`: the username of the user to be authenticated to the Elastic resource
                                 - `password`: the password of the user to be authenticated to the Elastic resource
-                                - `ca.crt`: the CA certificate in PEM format (optional).
+                                - `ca.crt`: the CA certificate in PEM format (optional)
+                                - `api-key`: the key to authenticate against the Elastic resource instead of a username and password (supported only for `elasticsearchRefs` in AgentSpec and in BeatSpec)
                                 This field cannot be used in combination with the other fields name, namespace or serviceName.
                               type: string
                             serviceName:
@@ -6500,12 +6522,13 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
+    helm.sh/resource-policy: keep
   labels:
     app.kubernetes.io/instance: 'logging'
     app.kubernetes.io/managed-by: 'Helm'
     app.kubernetes.io/name: 'eck-operator-crds'
-    app.kubernetes.io/version: '2.12.1'
-    helm.sh/chart: 'eck-operator-crds-2.12.1'
+    app.kubernetes.io/version: '2.13.0'
+    helm.sh/chart: 'eck-operator-crds-2.13.0'
   name: enterprisesearches.enterprisesearch.k8s.elastic.co
 spec:
   group: enterprisesearch.k8s.elastic.co
@@ -6598,7 +6621,8 @@ spec:
                       - `url`: the URL to reach the Elastic resource
                       - `username`: the username of the user to be authenticated to the Elastic resource
                       - `password`: the password of the user to be authenticated to the Elastic resource
-                      - `ca.crt`: the CA certificate in PEM format (optional).
+                      - `ca.crt`: the CA certificate in PEM format (optional)
+                      - `api-key`: the key to authenticate against the Elastic resource instead of a username and password (supported only for `elasticsearchRefs` in AgentSpec and in BeatSpec)
                       This field cannot be used in combination with the other fields name, namespace or serviceName.
                     type: string
                   serviceName:
@@ -7170,7 +7194,8 @@ spec:
                       - `url`: the URL to reach the Elastic resource
                       - `username`: the username of the user to be authenticated to the Elastic resource
                       - `password`: the password of the user to be authenticated to the Elastic resource
-                      - `ca.crt`: the CA certificate in PEM format (optional).
+                      - `ca.crt`: the CA certificate in PEM format (optional)
+                      - `api-key`: the key to authenticate against the Elastic resource instead of a username and password (supported only for `elasticsearchRefs` in AgentSpec and in BeatSpec)
                       This field cannot be used in combination with the other fields name, namespace or serviceName.
                     type: string
                   serviceName:
@@ -7654,12 +7679,13 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
+    helm.sh/resource-policy: keep
   labels:
     app.kubernetes.io/instance: 'logging'
     app.kubernetes.io/managed-by: 'Helm'
     app.kubernetes.io/name: 'eck-operator-crds'
-    app.kubernetes.io/version: '2.12.1'
-    helm.sh/chart: 'eck-operator-crds-2.12.1'
+    app.kubernetes.io/version: '2.13.0'
+    helm.sh/chart: 'eck-operator-crds-2.13.0'
   name: kibanas.kibana.k8s.elastic.co
 spec:
   group: kibana.k8s.elastic.co
@@ -7741,7 +7767,8 @@ spec:
                       - `url`: the URL to reach the Elastic resource
                       - `username`: the username of the user to be authenticated to the Elastic resource
                       - `password`: the password of the user to be authenticated to the Elastic resource
-                      - `ca.crt`: the CA certificate in PEM format (optional).
+                      - `ca.crt`: the CA certificate in PEM format (optional)
+                      - `api-key`: the key to authenticate against the Elastic resource instead of a username and password (supported only for `elasticsearchRefs` in AgentSpec and in BeatSpec)
                       This field cannot be used in combination with the other fields name, namespace or serviceName.
                     type: string
                   serviceName:
@@ -7771,7 +7798,8 @@ spec:
                       - `url`: the URL to reach the Elastic resource
                       - `username`: the username of the user to be authenticated to the Elastic resource
                       - `password`: the password of the user to be authenticated to the Elastic resource
-                      - `ca.crt`: the CA certificate in PEM format (optional).
+                      - `ca.crt`: the CA certificate in PEM format (optional)
+                      - `api-key`: the key to authenticate against the Elastic resource instead of a username and password (supported only for `elasticsearchRefs` in AgentSpec and in BeatSpec)
                       This field cannot be used in combination with the other fields name, namespace or serviceName.
                     type: string
                   serviceName:
@@ -8229,7 +8257,8 @@ spec:
                                 - `url`: the URL to reach the Elastic resource
                                 - `username`: the username of the user to be authenticated to the Elastic resource
                                 - `password`: the password of the user to be authenticated to the Elastic resource
-                                - `ca.crt`: the CA certificate in PEM format (optional).
+                                - `ca.crt`: the CA certificate in PEM format (optional)
+                                - `api-key`: the key to authenticate against the Elastic resource instead of a username and password (supported only for `elasticsearchRefs` in AgentSpec and in BeatSpec)
                                 This field cannot be used in combination with the other fields name, namespace or serviceName.
                               type: string
                             serviceName:
@@ -8269,7 +8298,8 @@ spec:
                                 - `url`: the URL to reach the Elastic resource
                                 - `username`: the username of the user to be authenticated to the Elastic resource
                                 - `password`: the password of the user to be authenticated to the Elastic resource
-                                - `ca.crt`: the CA certificate in PEM format (optional).
+                                - `ca.crt`: the CA certificate in PEM format (optional)
+                                - `api-key`: the key to authenticate against the Elastic resource instead of a username and password (supported only for `elasticsearchRefs` in AgentSpec and in BeatSpec)
                                 This field cannot be used in combination with the other fields name, namespace or serviceName.
                               type: string
                             serviceName:
@@ -8952,12 +8982,13 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
+    helm.sh/resource-policy: keep
   labels:
     app.kubernetes.io/instance: 'logging'
     app.kubernetes.io/managed-by: 'Helm'
     app.kubernetes.io/name: 'eck-operator-crds'
-    app.kubernetes.io/version: '2.12.1'
-    helm.sh/chart: 'eck-operator-crds-2.12.1'
+    app.kubernetes.io/version: '2.13.0'
+    helm.sh/chart: 'eck-operator-crds-2.13.0'
   name: logstashes.logstash.k8s.elastic.co
 spec:
   group: logstash.k8s.elastic.co
@@ -9063,7 +9094,8 @@ spec:
                         - `url`: the URL to reach the Elastic resource
                         - `username`: the username of the user to be authenticated to the Elastic resource
                         - `password`: the password of the user to be authenticated to the Elastic resource
-                        - `ca.crt`: the CA certificate in PEM format (optional).
+                        - `ca.crt`: the CA certificate in PEM format (optional)
+                        - `api-key`: the key to authenticate against the Elastic resource instead of a username and password (supported only for `elasticsearchRefs` in AgentSpec and in BeatSpec)
                         This field cannot be used in combination with the other fields name, namespace or serviceName.
                       type: string
                     serviceName:
@@ -9112,7 +9144,8 @@ spec:
                                 - `url`: the URL to reach the Elastic resource
                                 - `username`: the username of the user to be authenticated to the Elastic resource
                                 - `password`: the password of the user to be authenticated to the Elastic resource
-                                - `ca.crt`: the CA certificate in PEM format (optional).
+                                - `ca.crt`: the CA certificate in PEM format (optional)
+                                - `api-key`: the key to authenticate against the Elastic resource instead of a username and password (supported only for `elasticsearchRefs` in AgentSpec and in BeatSpec)
                                 This field cannot be used in combination with the other fields name, namespace or serviceName.
                               type: string
                             serviceName:
@@ -9152,7 +9185,8 @@ spec:
                                 - `url`: the URL to reach the Elastic resource
                                 - `username`: the username of the user to be authenticated to the Elastic resource
                                 - `password`: the password of the user to be authenticated to the Elastic resource
-                                - `ca.crt`: the CA certificate in PEM format (optional).
+                                - `ca.crt`: the CA certificate in PEM format (optional)
+                                - `api-key`: the key to authenticate against the Elastic resource instead of a username and password (supported only for `elasticsearchRefs` in AgentSpec and in BeatSpec)
                                 This field cannot be used in combination with the other fields name, namespace or serviceName.
                               type: string
                             serviceName:
@@ -10172,12 +10206,13 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
+    helm.sh/resource-policy: keep
   labels:
     app.kubernetes.io/instance: 'logging'
     app.kubernetes.io/managed-by: 'Helm'
     app.kubernetes.io/name: 'eck-operator-crds'
-    app.kubernetes.io/version: '2.12.1'
-    helm.sh/chart: 'eck-operator-crds-2.12.1'
+    app.kubernetes.io/version: '2.13.0'
+    helm.sh/chart: 'eck-operator-crds-2.13.0'
   name: stackconfigpolicies.stackconfigpolicy.k8s.elastic.co
 spec:
   group: stackconfigpolicy.k8s.elastic.co

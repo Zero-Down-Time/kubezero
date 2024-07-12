@@ -1,6 +1,6 @@
 # kubezero-telemetry
 
-![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.3.3](https://img.shields.io/badge/Version-0.3.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for OpenTelemetry, Jaeger etc.
 
@@ -19,10 +19,10 @@ Kubernetes: `>= 1.26.0`
 | Repository | Name | Version |
 |------------|------|---------|
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://fluent.github.io/helm-charts | fluent-bit | 0.46.2 |
+| https://fluent.github.io/helm-charts | fluent-bit | 0.47.1 |
 | https://fluent.github.io/helm-charts | fluentd | 0.5.2 |
-| https://jaegertracing.github.io/helm-charts | jaeger | 3.0.8 |
-| https://open-telemetry.github.io/opentelemetry-helm-charts | opentelemetry-collector | 0.92.0 |
+| https://jaegertracing.github.io/helm-charts | jaeger | 3.1.1 |
+| https://open-telemetry.github.io/opentelemetry-helm-charts | opentelemetry-collector | 0.97.1 |
 
 ## Values
 
@@ -100,6 +100,7 @@ Kubernetes: `>= 1.26.0`
 | fluentd.volumes[0].secret.items[0].path | string | `"ca.crt"` |  |
 | fluentd.volumes[0].secret.secretName | string | `"telemetry-nodes-http-tls"` |  |
 | jaeger.agent.enabled | bool | `false` |  |
+| jaeger.collector.enabled | bool | `false` |  |
 | jaeger.collector.extraEnv[0].name | string | `"ES_TAGS_AS_FIELDS_ALL"` |  |
 | jaeger.collector.extraEnv[0].value | string | `"true"` |  |
 | jaeger.collector.service.otlp.grpc.name | string | `"otlp-grpc"` |  |
@@ -128,9 +129,41 @@ Kubernetes: `>= 1.26.0`
 | opensearch.dashboard.istio.url | string | `"telemetry-dashboard.example.com"` |  |
 | opensearch.nodeSets | list | `[]` |  |
 | opensearch.prometheus | bool | `false` |  |
-| opensearch.version | string | `"2.14.0"` |  |
+| opensearch.version | string | `"2.15.0"` |  |
+| opentelemetry-collector.config.exporters.opensearch/trace.http.auth.authenticator | string | `"basicauth/client"` |  |
+| opentelemetry-collector.config.exporters.opensearch/trace.http.endpoint | string | `"https://telemetry:9200"` |  |
+| opentelemetry-collector.config.exporters.opensearch/trace.http.tls.insecure | bool | `false` |  |
+| opentelemetry-collector.config.exporters.opensearch/trace.http.tls.insecure_skip_verify | bool | `true` |  |
+| opentelemetry-collector.config.extensions.basicauth/client.client_auth.password | string | `"admin"` |  |
+| opentelemetry-collector.config.extensions.basicauth/client.client_auth.username | string | `"admin"` |  |
+| opentelemetry-collector.config.extensions.health_check.endpoint | string | `"${env:MY_POD_IP}:13133"` |  |
+| opentelemetry-collector.config.extensions.memory_ballast | object | `{}` |  |
+| opentelemetry-collector.config.processors.batch | object | `{}` |  |
+| opentelemetry-collector.config.processors.memory_limiter | string | `nil` |  |
+| opentelemetry-collector.config.receivers.jaeger | string | `nil` |  |
+| opentelemetry-collector.config.receivers.otlp.protocols.grpc.endpoint | string | `"${env:MY_POD_IP}:4317"` |  |
+| opentelemetry-collector.config.receivers.otlp.protocols.http.endpoint | string | `"${env:MY_POD_IP}:4318"` |  |
+| opentelemetry-collector.config.receivers.zipkin | string | `nil` |  |
+| opentelemetry-collector.config.service.extensions[0] | string | `"health_check"` |  |
+| opentelemetry-collector.config.service.extensions[1] | string | `"memory_ballast"` |  |
+| opentelemetry-collector.config.service.extensions[2] | string | `"basicauth/client"` |  |
+| opentelemetry-collector.config.service.pipelines.logs | string | `nil` |  |
+| opentelemetry-collector.config.service.pipelines.metrics | string | `nil` |  |
+| opentelemetry-collector.config.service.pipelines.traces.exporters[0] | string | `"opensearch/trace"` |  |
+| opentelemetry-collector.config.service.pipelines.traces.processors[0] | string | `"memory_limiter"` |  |
+| opentelemetry-collector.config.service.pipelines.traces.processors[1] | string | `"batch"` |  |
+| opentelemetry-collector.config.service.pipelines.traces.receivers[0] | string | `"otlp"` |  |
+| opentelemetry-collector.config.service.telemetry.metrics.address | string | `"${env:MY_POD_IP}:8888"` |  |
 | opentelemetry-collector.enabled | bool | `false` |  |
+| opentelemetry-collector.image.repository | string | `"otel/opentelemetry-collector-contrib"` |  |
 | opentelemetry-collector.mode | string | `"deployment"` |  |
+| opentelemetry-collector.podDisruptionBudget.enabled | bool | `false` |  |
+| opentelemetry-collector.ports.jaeger-compact.enabled | bool | `false` |  |
+| opentelemetry-collector.ports.jaeger-grpc.enabled | bool | `false` |  |
+| opentelemetry-collector.ports.jaeger-thrift.enabled | bool | `false` |  |
+| opentelemetry-collector.ports.metrics.enabled | bool | `true` |  |
+| opentelemetry-collector.ports.zipkin.enabled | bool | `false` |  |
+| opentelemetry-collector.serviceMonitor.enabled | bool | `false` |  |
 
 ## Resources
 - https://opensearch.org/docs/latest/dashboards/branding/#condensed-header

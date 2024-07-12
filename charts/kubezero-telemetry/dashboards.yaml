@@ -3,11 +3,11 @@ gzip: true
 folder: Telemetry
 #condition: '.Values.telemetry.metrics.enabled'
 dashboards:
-- name: jaeger
-  url: https://grafana.com/api/dashboards/10001/revisions/2/download
-  tags:
-  - Jaeger
-  - Telemetry
+#- name: jaeger
+#  url: https://grafana.com/api/dashboards/10001/revisions/2/download
+#  tags:
+#  - Jaeger
+#  - Telemetry
 - name: opensearch
   url: https://grafana.com/api/dashboards/15178/revisions/2/download
   tags:
