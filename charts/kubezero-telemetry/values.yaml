@@ -3,6 +3,74 @@ opentelemetry-collector:
 
   mode: deployment
 
+  image:
+    repository: "otel/opentelemetry-collector-contrib"
+
+  config:
+    extensions:
+      health_check:
+        endpoint: ${env:MY_POD_IP}:13133
+      memory_ballast: {}
+
+    exporters:
+      otlp/jaeger:
+        endpoint: telemetry-jaeger-collector:4317
+        tls:
+          insecure: true
+
+    processors:
+      batch: {}
+      # If set to null, will be overridden with values based on k8s resource limits
+      memory_limiter: null
+
+    receivers:
+      jaeger: null
+      zipkin: null
+      otlp:
+        protocols:
+          grpc:
+            endpoint: ${env:MY_POD_IP}:4317
+          http:
+            endpoint: ${env:MY_POD_IP}:4318
+    service:
+      telemetry:
+        metrics:
+          address: ${env:MY_POD_IP}:8888
+      extensions:
+        - health_check
+        - memory_ballast
+      pipelines:
+        metrics: null
+        logs: null
+        traces:
+          exporters:
+            - otlp/jaeger
+          processors:
+            - memory_limiter
+            - batch
+          receivers:
+            - otlp
+
+  ports:
+    jaeger-compact:
+      enabled: false
+    jaeger-thrift:
+      enabled: false
+    jaeger-grpc:
+      enabled: false
+    zipkin:
+      enabled: false
+    metrics:
+      enabled: true
+
+  serviceMonitor:
+    enabled: false
+
+  podDisruptionBudget:
+    enabled: false
+    # minAvailable: 2
+    # maxUnavailable: 1
+
 jaeger:
   enabled: false
 
@@ -15,12 +83,12 @@ jaeger:
         grpc:
           name: otlp-grpc
           port: 4317
-        http:
-          name: otlp-http
-          port: 4318
-    extraEnv:
-      - name: ES_TAGS_AS_FIELDS_ALL
-        value: "true"
+   #    http:
+   #      name: otlp-http
+   #      port: 4318
+   #extraEnv:
+   #  - name: ES_TAGS_AS_FIELDS_ALL
+   #    value: "true"
     serviceMonitor:
       enabled: false
 
@@ -52,7 +120,7 @@ jaeger:
     url: jaeger.example.com
 
 opensearch:
-  version: 2.14.0
+  version: 2.15.0
   prometheus: false
 
   # custom cluster settings
@@ -302,6 +370,15 @@ fluent-bit:
   testFramework:
     enabled: false
 
+  service:
+    internalTrafficPolicy: Local
+
+  extraPorts:
+    - name: otel
+      port: 4318
+      containerPort: 4318
+      protocol: TCP
+
   serviceMonitor:
     enabled: false
 
@@ -326,6 +403,9 @@ fluent-bit:
       host: telemetry-fluentd
       sharedKey: secretref+k8s://v1/Secret/kube-system/kubezero-secrets/telemetry.fluentd.source.sharedKey
       tls: false
+
+    output_otel:
+      host: telemetry-opentelemetry-collector
 
     input:
       memBufLimit: 16MB
@@ -353,6 +433,7 @@ fluent-bit:
           Name tail
           Path /var/log/containers/*.log
           # Exclude ourselves to current error spam, https://github.com/fluent/fluent-bit/issues/5769
+          # Todo: Rather limit / filter spam message than exclude all together -> ideally locally, next dataprepper
           Exclude_Path *logging-fluent-bit*
           multiline.parser cri
           Tag cri.*
@@ -363,9 +444,13 @@ fluent-bit:
           DB.locking true
           # Buffer_Max_Size 1M
           {{- with .Values.config.input }}
-          Mem_Buf_Limit {{ default "16MB" .memBufLimit }}
-          Refresh_Interval {{ default 5 .refreshInterval }}
+          Mem_Buf_Limit {{ .memBufLimit }}
+          Refresh_Interval {{ .refreshInterval }}
           {{- end }}
+
+      [INPUT]
+          Name opentelemetry
+          Tag otel
 
     filters: |
       [FILTER]
@@ -411,7 +496,7 @@ fluent-bit:
 
     outputs: |
       [OUTPUT]
-          Match *
+          Match kube.*
           Name forward
           Host {{ .Values.config.output.host }}
           Port 24224
@@ -419,6 +504,15 @@ fluent-bit:
           tls {{ ternary "on" "off" .Values.config.output.tls }}
           Send_options true
           Require_ack_response true
+
+      [OUTPUT]
+          Name opentelemetry
+          Match otel
+          Host {{ .Values.config.output_otel.host }}
+          Port 4318
+          #Metrics_uri /v1/metrics
+          Traces_uri   /v1/traces
+          #Logs_uri    /v1/logs
 
     customParsers: |
       [PARSER]
