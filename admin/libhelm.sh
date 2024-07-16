@@ -158,9 +158,10 @@ function _helm() {
   local namespace="$(yq eval '.spec.destination.namespace' $WORKDIR/kubezero/templates/${module}.yaml)"
 
   targetRevision=""
-  _version="$(yq eval '.spec.source.targetRevision' $WORKDIR/kubezero/templates/${module}.yaml)"
-
-  [ -n "$_version" ] && targetRevision="--version $_version"
+  if [ -z "$LOCAL_DEV" ]; then
+    _version="$(yq eval '.spec.source.targetRevision' $WORKDIR/kubezero/templates/${module}.yaml)"
+    [ -n "$_version" ] && targetRevision="--version $_version"
+  fi
 
   yq eval '.spec.source.helm.values' $WORKDIR/kubezero/templates/${module}.yaml > $WORKDIR/values.yaml
 

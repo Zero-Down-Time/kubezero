@@ -21,6 +21,23 @@ fluentd:
       enabled: {{ .Values.metrics.enabled }}
 {{- end }}
 
+{{- if index .Values "telemetry" "data-prepper" }}
+data-prepper:
+  {{- with index .Values "telemetry" "data-prepper" }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+{{- end }}
+
+{{- if index .Values "telemetry" "opentelemetry-collector" }}
+opentelemetry-collector:
+  {{- with index .Values "telemetry" "opentelemetry-collector" }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+
+  serviceMonitor:
+    enabled: {{ .Values.metrics.enabled }}
+{{- end }}
+
 {{- if .Values.telemetry.jaeger }}
 jaeger:
   {{- with .Values.telemetry.jaeger }}
