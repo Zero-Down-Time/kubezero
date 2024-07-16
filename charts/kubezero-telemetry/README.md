@@ -1,6 +1,6 @@
 # kubezero-telemetry
 
-![Version: 0.3.3](https://img.shields.io/badge/Version-0.3.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for OpenTelemetry, Jaeger etc.
 
@@ -23,6 +23,7 @@ Kubernetes: `>= 1.26.0`
 | https://fluent.github.io/helm-charts | fluentd | 0.5.2 |
 | https://jaegertracing.github.io/helm-charts | jaeger | 3.1.1 |
 | https://open-telemetry.github.io/opentelemetry-helm-charts | opentelemetry-collector | 0.97.1 |
+| https://opensearch-project.github.io/helm-charts/ | data-prepper | 0.1.0 |
 
 ## Values
 
@@ -33,12 +34,13 @@ Kubernetes: `>= 1.26.0`
 | fluent-bit.config.flushInterval | int | `5` |  |
 | fluent-bit.config.input.memBufLimit | string | `"16MB"` |  |
 | fluent-bit.config.input.refreshInterval | int | `5` |  |
-| fluent-bit.config.inputs | string | `"[INPUT]\n    Name tail\n    Path /var/log/containers/*.log\n    # Exclude ourselves to current error spam, https://github.com/fluent/fluent-bit/issues/5769\n    Exclude_Path *logging-fluent-bit*\n    multiline.parser cri\n    Tag cri.*\n    Skip_Long_Lines On\n    Skip_Empty_Lines On\n    DB /var/log/flb_kube.db\n    DB.Sync Normal\n    DB.locking true\n    # Buffer_Max_Size 1M\n    {{- with .Values.config.input }}\n    Mem_Buf_Limit {{ default \"16MB\" .memBufLimit }}\n    Refresh_Interval {{ default 5 .refreshInterval }}\n    {{- end }}\n"` |  |
+| fluent-bit.config.inputs | string | `"[INPUT]\n    Name tail\n    Path /var/log/containers/*.log\n    # Exclude ourselves to current error spam, https://github.com/fluent/fluent-bit/issues/5769\n    # Todo: Rather limit / filter spam message than exclude all together -> ideally locally, next dataprepper\n    Exclude_Path *logging-fluent-bit*\n    multiline.parser cri\n    Tag cri.*\n    Skip_Long_Lines On\n    Skip_Empty_Lines On\n    DB /var/log/flb_kube.db\n    DB.Sync Normal\n    DB.locking true\n    # Buffer_Max_Size 1M\n    {{- with .Values.config.input }}\n    Mem_Buf_Limit {{ .memBufLimit }}\n    Refresh_Interval {{ .refreshInterval }}\n    {{- end }}\n\n[INPUT]\n    Name opentelemetry\n    Tag otel\n"` |  |
 | fluent-bit.config.logLevel | string | `"info"` |  |
 | fluent-bit.config.output.host | string | `"telemetry-fluentd"` |  |
 | fluent-bit.config.output.sharedKey | string | `"secretref+k8s://v1/Secret/kube-system/kubezero-secrets/telemetry.fluentd.source.sharedKey"` |  |
 | fluent-bit.config.output.tls | bool | `false` |  |
-| fluent-bit.config.outputs | string | `"[OUTPUT]\n    Match *\n    Name forward\n    Host {{ .Values.config.output.host }}\n    Port 24224\n    Shared_Key {{ .Values.config.output.sharedKey }}\n    tls {{ ternary \"on\" \"off\" .Values.config.output.tls }}\n    Send_options true\n    Require_ack_response true\n"` |  |
+| fluent-bit.config.output_otel.host | string | `"telemetry-opentelemetry-collector"` |  |
+| fluent-bit.config.outputs | string | `"[OUTPUT]\n    Match kube.*\n    Name forward\n    Host {{ .Values.config.output.host }}\n    Port 24224\n    Shared_Key {{ .Values.config.output.sharedKey }}\n    tls {{ ternary \"on\" \"off\" .Values.config.output.tls }}\n    Send_options true\n    Require_ack_response true\n\n[OUTPUT]\n    Name opentelemetry\n    Match otel\n    Host {{ .Values.config.output_otel.host }}\n    Port 4318\n    #Metrics_uri /v1/metrics\n    Traces_uri   /v1/traces\n    #Logs_uri    /v1/logs\n"` |  |
 | fluent-bit.config.service | string | `"[SERVICE]\n    Flush {{ .Values.config.flushInterval }}\n    Daemon Off\n    Log_Level {{ .Values.config.logLevel }}\n    Parsers_File parsers.conf\n    Parsers_File custom_parsers.conf\n    HTTP_Server On\n    HTTP_Listen 0.0.0.0\n    HTTP_Port {{ .Values.service.port }}\n    Health_Check On\n"` |  |
 | fluent-bit.daemonSetVolumeMounts[0].mountPath | string | `"/var/log"` |  |
 | fluent-bit.daemonSetVolumeMounts[0].name | string | `"varlog"` |  |
@@ -49,10 +51,15 @@ Kubernetes: `>= 1.26.0`
 | fluent-bit.daemonSetVolumes[1].hostPath.path | string | `"/var/lib/containers/logs"` |  |
 | fluent-bit.daemonSetVolumes[1].name | string | `"newlog"` |  |
 | fluent-bit.enabled | bool | `false` |  |
+| fluent-bit.extraPorts[0].containerPort | int | `4318` |  |
+| fluent-bit.extraPorts[0].name | string | `"otel"` |  |
+| fluent-bit.extraPorts[0].port | int | `4318` |  |
+| fluent-bit.extraPorts[0].protocol | string | `"TCP"` |  |
 | fluent-bit.luaScripts."kubezero.lua" | string | `"function nest_k8s_ns(tag, timestamp, record)\n    if not record['kubernetes']['namespace_name'] then\n        return 0, 0, 0\n    end\n    new_record = {}\n    for key, val in pairs(record) do\n        if key == 'kube' then\n            new_record[key] = {}\n            new_record[key][record['kubernetes']['namespace_name']] = record[key]\n        else\n            new_record[key] = record[key]\n        end\n    end\n    return 1, timestamp, new_record\nend\n"` |  |
 | fluent-bit.resources.limits.memory | string | `"128Mi"` |  |
 | fluent-bit.resources.requests.cpu | string | `"20m"` |  |
 | fluent-bit.resources.requests.memory | string | `"48Mi"` |  |
+| fluent-bit.service.internalTrafficPolicy | string | `"Local"` |  |
 | fluent-bit.serviceMonitor.enabled | bool | `false` |  |
 | fluent-bit.testFramework.enabled | bool | `false` |  |
 | fluent-bit.tolerations[0].effect | string | `"NoSchedule"` |  |
@@ -100,9 +107,6 @@ Kubernetes: `>= 1.26.0`
 | fluentd.volumes[0].secret.items[0].path | string | `"ca.crt"` |  |
 | fluentd.volumes[0].secret.secretName | string | `"telemetry-nodes-http-tls"` |  |
 | jaeger.agent.enabled | bool | `false` |  |
-| jaeger.collector.enabled | bool | `false` |  |
-| jaeger.collector.extraEnv[0].name | string | `"ES_TAGS_AS_FIELDS_ALL"` |  |
-| jaeger.collector.extraEnv[0].value | string | `"true"` |  |
 | jaeger.collector.service.otlp.grpc.name | string | `"otlp-grpc"` |  |
 | jaeger.collector.service.otlp.grpc.port | int | `4317` |  |
 | jaeger.collector.service.otlp.http.name | string | `"otlp-http"` |  |
@@ -130,12 +134,8 @@ Kubernetes: `>= 1.26.0`
 | opensearch.nodeSets | list | `[]` |  |
 | opensearch.prometheus | bool | `false` |  |
 | opensearch.version | string | `"2.15.0"` |  |
-| opentelemetry-collector.config.exporters.opensearch/trace.http.auth.authenticator | string | `"basicauth/client"` |  |
-| opentelemetry-collector.config.exporters.opensearch/trace.http.endpoint | string | `"https://telemetry:9200"` |  |
-| opentelemetry-collector.config.exporters.opensearch/trace.http.tls.insecure | bool | `false` |  |
-| opentelemetry-collector.config.exporters.opensearch/trace.http.tls.insecure_skip_verify | bool | `true` |  |
-| opentelemetry-collector.config.extensions.basicauth/client.client_auth.password | string | `"admin"` |  |
-| opentelemetry-collector.config.extensions.basicauth/client.client_auth.username | string | `"admin"` |  |
+| opentelemetry-collector.config.exporters.otlp/jaeger.endpoint | string | `"telemetry-jaeger-collector:4317"` |  |
+| opentelemetry-collector.config.exporters.otlp/jaeger.tls.insecure | bool | `true` |  |
 | opentelemetry-collector.config.extensions.health_check.endpoint | string | `"${env:MY_POD_IP}:13133"` |  |
 | opentelemetry-collector.config.extensions.memory_ballast | object | `{}` |  |
 | opentelemetry-collector.config.processors.batch | object | `{}` |  |
@@ -146,10 +146,9 @@ Kubernetes: `>= 1.26.0`
 | opentelemetry-collector.config.receivers.zipkin | string | `nil` |  |
 | opentelemetry-collector.config.service.extensions[0] | string | `"health_check"` |  |
 | opentelemetry-collector.config.service.extensions[1] | string | `"memory_ballast"` |  |
-| opentelemetry-collector.config.service.extensions[2] | string | `"basicauth/client"` |  |
 | opentelemetry-collector.config.service.pipelines.logs | string | `nil` |  |
 | opentelemetry-collector.config.service.pipelines.metrics | string | `nil` |  |
-| opentelemetry-collector.config.service.pipelines.traces.exporters[0] | string | `"opensearch/trace"` |  |
+| opentelemetry-collector.config.service.pipelines.traces.exporters[0] | string | `"otlp/jaeger"` |  |
 | opentelemetry-collector.config.service.pipelines.traces.processors[0] | string | `"memory_limiter"` |  |
 | opentelemetry-collector.config.service.pipelines.traces.processors[1] | string | `"batch"` |  |
 | opentelemetry-collector.config.service.pipelines.traces.receivers[0] | string | `"otlp"` |  |

@@ -1,3 +1,109 @@
+data-prepper:
+  enabled: false
+
+  securityContext:
+    capabilities:
+      drop:
+      - ALL
+    #readOnlyRootFilesystem: true
+    #runAsNonRoot: true
+    #runAsUser: 1000
+
+  pipelineConfig:
+    config:
+      simple-sample-pipeline: null
+      otel-trace-pipeline:
+        workers: 1
+        delay: "100"
+        source:
+          otel_trace_source:
+            ssl: false
+        buffer:
+          bounded_blocking:
+            # default value is 12800
+            #buffer_size: 25600
+            # Default is 200.
+            # Make sure buffer_size >= workers * batch_size
+            #batch_size: 400
+        sink:
+          - pipeline:
+              name: "raw-traces-pipeline"
+          - pipeline:
+              name: "otel-service-map-pipeline"
+      raw-traces-pipeline:
+        workers: 1
+        delay: 3000
+        source:
+          pipeline:
+            name: "otel-trace-pipeline"
+        buffer:
+          bounded_blocking:
+            #buffer_size: 25600
+            #batch_size: 400
+        processor:
+          - otel_traces:
+          - otel_trace_group:
+              hosts: [ "https://telemetry:9200" ]
+              insecure: true
+              username: "admin"
+              password: "admin"
+        sink:
+          - opensearch:
+              hosts: ["https://telemetry:9200"]
+              username: "admin"
+              password: "admin"
+              insecure: true
+              index_type: trace-analytics-raw
+      otel-service-map-pipeline:
+        workers: 1
+        delay: 3000
+        source:
+          pipeline:
+            name: "otel-trace-pipeline"
+        processor:
+          - service_map:
+              # The window duration is the maximum length of time the data prepper stores the most recent trace data to evaluvate service-map relationships.
+              # The default is 3 minutes, this means we can detect relationships between services from spans reported in last 3 minutes.
+              # Set higher value if your applications have higher latency.
+              window_duration: 180
+        buffer:
+            bounded_blocking:
+              #buffer_size: 25600
+              #batch_size: 400
+        sink:
+          - opensearch:
+              hosts: ["https://telemetry:9200"]
+              username: "admin"
+              password: "admin"
+              insecure: true
+              index_type: trace-analytics-service-map
+              #index: otel-v1-apm-span-%{yyyy.MM.dd}
+              #max_retries: 20
+              bulk_size: 4
+
+  config:
+    log4j2-rolling.properties: |
+      status = error
+      dest = err
+      name = PropertiesConfig
+
+      appender.console.type = Console
+      appender.console.name = STDOUT
+      appender.console.layout.type = PatternLayout
+      appender.console.layout.pattern = %d{ISO8601} [%t] %-5p %40C - %m%n
+
+      rootLogger.level = warn
+      rootLogger.appenderRef.stdout.ref = STDOUT
+
+      logger.pipeline.name = org.opensearch.dataprepper.pipeline
+      logger.pipeline.level = info
+
+      logger.parser.name = org.opensearch.dataprepper.parser
+      logger.parser.level = info
+
+      logger.plugins.name = org.opensearch.dataprepper.plugins
+      logger.plugins.level = info
+
 opentelemetry-collector:
   enabled: false
 
@@ -15,6 +121,10 @@ opentelemetry-collector:
     exporters:
       otlp/jaeger:
         endpoint: telemetry-jaeger-collector:4317
+        tls:
+          insecure: true
+      otlp/data-prepper:
+        endpoint: telemetry-data-prepper:21890
         tls:
           insecure: true
 
@@ -45,6 +155,7 @@ opentelemetry-collector:
         traces:
           exporters:
             - otlp/jaeger
+            - otlp/data-prepper
           processors:
             - memory_limiter
             - batch
@@ -83,12 +194,9 @@ jaeger:
         grpc:
           name: otlp-grpc
           port: 4317
-   #    http:
-   #      name: otlp-http
-   #      port: 4318
-   #extraEnv:
-   #  - name: ES_TAGS_AS_FIELDS_ALL
-   #    value: "true"
+        http:
+          name: otlp-http
+          port: 4318
     serviceMonitor:
       enabled: false
 
@@ -103,6 +211,9 @@ jaeger:
       cmdlineParams:
         es.tls.enabled: ""
         es.tls.skip-host-verify: ""
+        es.num-replicas: 1
+        es.num-shards: 2
+        #es.tags-as-fields.all: ""
 
   provisionDataStore:
     cassandra: false

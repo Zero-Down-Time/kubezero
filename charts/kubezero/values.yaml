@@ -85,12 +85,12 @@ falco:
 telemetry:
   enabled: false
   namespace: telemetry
-  targetRevision: 0.3.0
+  targetRevision: 0.4.0
 
 operators:
   enabled: false
   namespace: operators
-  targetRevision: 0.1.3
+  targetRevision: 0.1.4
 
 metrics:
   enabled: false
