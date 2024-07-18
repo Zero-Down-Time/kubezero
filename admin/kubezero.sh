@@ -149,8 +149,8 @@ kubeadm_upgrade() {
   post_kubeadm
 
   # If we have a re-cert kubectl config install for root
-  if [ -f ${HOSTFS}/etc/kubernetes/admin.conf ]; then
-    cp ${HOSTFS}/etc/kubernetes/admin.conf ${HOSTFS}/root/.kube/config
+  if [ -f ${HOSTFS}/etc/kubernetes/super-admin.conf ]; then
+    cp ${HOSTFS}/etc/kubernetes/super-admin.conf ${HOSTFS}/root/.kube/config
   fi
 
   # post upgrade hook
@@ -190,7 +190,7 @@ control_plane_node() {
     cp -r ${WORKDIR}/pki ${HOSTFS}/etc/kubernetes
 
     # Always use kubeadm kubectl config to never run into chicken egg with custom auth hooks
-    cp ${WORKDIR}/admin.conf ${HOSTFS}/root/.kube/config
+    cp ${WORKDIR}/super-admin.conf ${HOSTFS}/root/.kube/config
 
     # Only restore etcd data during "restore" and none exists already
     if [[ "$CMD" =~ ^(restore)$ ]]; then
@@ -258,7 +258,7 @@ control_plane_node() {
 
   _kubeadm init phase kubelet-start
 
-  cp ${HOSTFS}/etc/kubernetes/admin.conf ${HOSTFS}/root/.kube/config
+  cp ${HOSTFS}/etc/kubernetes/super-admin.conf ${HOSTFS}/root/.kube/config
 
   # Wait for api to be online
   echo "Waiting for Kubernetes API to be online ..."
@@ -347,7 +347,7 @@ delete_module() {
 # backup etcd + /etc/kubernetes/pki
 backup() {
   # Display all ENVs, careful this exposes the password !
-  [ -n "$DEBUG" ] && env 
+  [ -n "$DEBUG" ] && env
 
   restic snapshots || restic init || exit 1
 
@@ -361,7 +361,8 @@ backup() {
 
   # pki & cluster-admin access
   cp -r ${HOSTFS}/etc/kubernetes/pki ${WORKDIR}
-  cp -r ${HOSTFS}/etc/kubernetes/admin.conf ${WORKDIR}
+  cp ${HOSTFS}/etc/kubernetes/admin.conf ${WORKDIR}
+  cp ${HOSTFS}/etc/kubernetes/super-admin.conf ${WORKDIR}
 
   # Backup via restic
   restic backup ${WORKDIR} -H $CLUSTERNAME --tag $CLUSTER_VERSION
