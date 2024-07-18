@@ -35,4 +35,5 @@ spec:
      indexPatterns:
        - "logstash-*"
        - "jaeger-*"
+      -  "otel-v1-apm-span-*"
 {{- end }}

@@ -45,10 +45,6 @@ cilium:
     #-- Ensure this is false if multus is enabled
     exclusive: false
 
-# bpf:
-#   autoMount:
-#     enabled: false
-
   cluster:
     # This should match the second octet of clusterPoolIPv4PodCIDRList
     # to prevent IP space overlap and easy tracking
@@ -70,6 +66,14 @@ cilium:
     autoMount:
       enabled: false
     hostRoot: "/sys/fs/cgroup"
+
+  # we need biDirectional so use helm init-container
+  #bpf:
+  # autoMount:
+  #   enabled: false
+
+  sysctlfix:
+    enabled: false
 
   routingMode: tunnel
   tunnelProtocol: geneve

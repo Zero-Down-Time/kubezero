@@ -33,5 +33,6 @@ kubeReserved:
 #evictionHard:
 #  memory.available: "484Mi"
 imageGCLowThresholdPercent: 70
+imageMaximumGCAge: 168h
 serializeImagePulls: false
 maxParallelImagePulls: 4
