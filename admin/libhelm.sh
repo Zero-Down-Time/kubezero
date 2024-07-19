@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Simulate well-known CRDs being available
-API_VERSIONS="-a monitoring.coreos.com/v1 -a snapshot.storage.k8s.io/v1 -a policy/v1/PodDisruptionBudget"
+API_VERSIONS="-a monitoring.coreos.com/v1 -a snapshot.storage.k8s.io/v1 -a policy/v1/PodDisruptionBudget -a apiregistration.k8s.io/v1"
 
 export HELM_SECRETS_BACKEND="vals"
 
@@ -108,10 +108,12 @@ function delete_ns() {
 
 # Extract crds via helm calls
 function _crds() {
-  helm secrets --evaluate-templates template $(chart_location $chart) -n $namespace --name-template $module $targetRevision --include-crds --set ${module}.installCRDs=true -f $WORKDIR/values.yaml $API_VERSIONS --kube-version $KUBE_VERSION $@ | python3 -c '
+  helm secrets --evaluate-templates template $(chart_location $chart) -n $namespace --name-template $module $targetRevision --include-crds -f $WORKDIR/values.yaml $API_VERSIONS --kube-version $KUBE_VERSION $@ | python3 -c '
 #!/usr/bin/python3
 import yaml
 import sys
+
+yaml.add_multi_constructor("tag:yaml.org,2002:value", lambda loader, suffix, node: None, Loader=yaml.SafeLoader)
 
 for manifest in yaml.safe_load_all(sys.stdin):
     if manifest:
@@ -135,6 +137,8 @@ function render() {
 #!/usr/bin/python3
 import yaml
 import sys
+
+yaml.add_multi_constructor("tag:yaml.org,2002:value", lambda loader, suffix, node: None, Loader=yaml.SafeLoader)
 
 for manifest in yaml.safe_load_all(sys.stdin):
     if manifest:
