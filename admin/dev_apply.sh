@@ -4,7 +4,7 @@
 set -x
 
 ARTIFACTS=($(echo $1 | tr "," "\n"))
-ACTION=${2:-apply}
+ACTION=$2
 
 LOCAL_DEV=1
 
@@ -70,15 +70,19 @@ if [ ${ARTIFACTS[0]} == "all" ]; then
   ARTIFACTS=($(ls $WORKDIR/kubezero/templates | sed -e 's/.yaml//g'))
 fi
 
-if [ $ACTION == "apply" -o $ACTION == "crds" ]; then
-  for t in ${ARTIFACTS[@]}; do
-    _helm $ACTION $t || true
-  done
-
 # Delete in reverse order, continue even if errors
-elif [ $ACTION == "delete" ]; then
+if [ $ACTION == "delete" ]; then
   set +e
   for (( idx=${#ARTIFACTS[@]}-1 ; idx>=0 ; idx-- )) ; do
     _helm delete ${ARTIFACTS[idx]} || true
+  done
+else
+  if [ "$ACTION" == "" -o "$ACTION" == "crds" ]; then
+    for t in ${ARTIFACTS[@]}; do
+      _helm crds $t || true
+    done
+  fi
+  for t in ${ARTIFACTS[@]}; do
+    _helm apply $t || true
   done
 fi

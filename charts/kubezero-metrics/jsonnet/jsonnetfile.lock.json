@@ -88,8 +88,8 @@
           "subdir": "grafana-builder"
         }
       },
-      "version": "1d877bb0651ef92176f651d0be473c06e372a8a0",
-      "sum": "udZaafkbKYMGodLqsFhEe+Oy/St2p0edrK7hiMPEey0="
+      "version": "02db06f540086fa3f67d487bd01e1b314853fb8f",
+      "sum": "B49EzIY2WZsFxNMJcgRxE/gcZ9ltnS8pkOOV6Q5qioc="
     },
     {
       "source": {
@@ -128,7 +128,7 @@
           "subdir": "jsonnet/kube-state-metrics"
         }
       },
-      "version": "7104d579e93d672754c018a924d6c3f7ec23874e",
+      "version": "38c268909335d243fc260ed4d6ce713db3265464",
       "sum": "pvInhJNQVDOcC3NGWRMKRIP954mAvLXCQpTlafIg7fA="
     },
     {
@@ -138,7 +138,7 @@
           "subdir": "jsonnet/kube-state-metrics-mixin"
         }
       },
-      "version": "7104d579e93d672754c018a924d6c3f7ec23874e",
+      "version": "38c268909335d243fc260ed4d6ce713db3265464",
       "sum": "qclI7LwucTjBef3PkGBkKxF0mfZPbHnn4rlNWKGtR4c="
     },
     {
