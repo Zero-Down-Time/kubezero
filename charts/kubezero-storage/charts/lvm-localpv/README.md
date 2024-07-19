@@ -10,15 +10,6 @@ A Helm chart for openebs lvm localpv provisioner. This chart bootstraps OpenEBS 
 
 **Homepage:** <http://www.openebs.io/>
 
-## Maintainers
-
-| Name | Email | Url |
-| ---- | ------ | --- |
-| pawanpraka1 | pawan@mayadata.io |  |
-| prateekpandey14 | prateek.pandey@mayadata.io |  |
-| iyashu | yashpal.c1995@gmail.com |  |
-
-
 ## Get Repo Info
 
 ```console
@@ -101,7 +92,7 @@ helm install openebs-lvmlocalpv openebs-lvmlocalpv/lvm-localpv --namespace opene
 | `lvmPlugin.image.registry`                          | Registry for openebs-lvm-plugin image                                            | `""`                                    |
 | `lvmPlugin.image.repository`                        | Image repository for openebs-lvm-plugin                                          | `openebs/lvm-driver`                    |
 | `lvmPlugin.image.pullPolicy`                        | Image pull policy for openebs-lvm-plugin                                         | `IfNotPresent`                          |
-| `lvmPlugin.image.tag`                               | Image tag for openebs-lvm-plugin                                                 | `1.3.0`                                 |
+| `lvmPlugin.image.tag`                               | Image tag for openebs-lvm-plugin                                                 | `1.6.0`                                 |
 | `lvmPlugin.metricsPort`                             | The TCP port number used for exposing lvm-metrics                                | `9500`                                  |
 | `lvmPlugin.allowedTopologies`                       | The comma seperated list of allowed node topologies                              | `kubernetes.io/hostname,`               |
 | `lvmNode.driverRegistrar.image.registry`            | Registry for csi-node-driver-registrar image                                     | `registry.k8s.io/`                      |
