@@ -25,18 +25,8 @@ control_plane_upgrade kubeadm_upgrade
 # shellcheck disable=SC2015
 #argo_used && kubectl edit app kubezero -n argocd || kubectl edit cm kubezero-values -n kube-system
 
-### v1.28
-# - remove old argocd app, all resources will be taken over by argo.argo-cd
-argo_used && rc=$? || rc=$?
-if [ $rc -eq 0 ]; then
-  kubectl patch app argocd -n argocd \
-    --type json \
-    --patch='[ { "op": "remove", "path": "/metadata/finalizers" } ]' && \
-  kubectl delete app argocd -n argocd || true
-
-  # remove legacy argocd app resources, but NOT kubezero-git-sync nor the appproject
-  kubectl api-resources --verbs=list --namespaced -o name | grep -ve 'app.*argoproj' | xargs -n 1 kubectl delete --ignore-not-found -l argocd.argoproj.io/instance=argocd -n argocd
-fi
+### v1.29
+#
 
 # upgrade modules
 control_plane_upgrade "apply_network, apply_addons, apply_storage, apply_operators"
@@ -49,9 +39,9 @@ echo "Applying remaining KubeZero modules..."
 control_plane_upgrade "apply_cert-manager, apply_istio, apply_istio-ingress, apply_istio-private-ingress, apply_logging, apply_metrics, apply_telemetry, apply_argo"
 
 # Trigger backup of upgraded cluster state
-kubectl create job --from=cronjob/kubezero-backup kubezero-backup-$VERSION -n kube-system
+kubectl create job --from=cronjob/kubezero-backup kubezero-backup-$KUBE_VERSION -n kube-system
 while true; do
-  kubectl wait --for=condition=complete job/kubezero-backup-$VERSION -n kube-system 2>/dev/null && kubectl delete job kubezero-backup-$VERSION -n kube-system && break
+  kubectl wait --for=condition=complete job/kubezero-backup-$KUBE_VERSION -n kube-system 2>/dev/null && kubectl delete job kubezero-backup-$KUBE_VERSION -n kube-system && break
   sleep 1
 done
 

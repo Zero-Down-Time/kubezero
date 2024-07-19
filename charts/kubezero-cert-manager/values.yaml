@@ -19,6 +19,9 @@ localCA:
 cert-manager:
   enabled: true
 
+  crds:
+    enabled: true
+
   global:
     leaderElection:
       namespace: "cert-manager"
