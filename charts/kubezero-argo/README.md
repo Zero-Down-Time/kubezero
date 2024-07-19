@@ -1,6 +1,6 @@
 # kubezero-argo
 
-![Version: 0.2.3](https://img.shields.io/badge/Version-0.2.3-informational?style=flat-square)
+![Version: 0.2.4](https://img.shields.io/badge/Version-0.2.4-informational?style=flat-square)
 
 KubeZero Argo - Events, Workflow, CD
 
@@ -18,10 +18,10 @@ Kubernetes: `>= 1.26.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://argoproj.github.io/argo-helm | argo-cd | 7.1.3 |
-| https://argoproj.github.io/argo-helm | argo-events | 2.4.4 |
+| https://argoproj.github.io/argo-helm | argo-cd | 7.3.8 |
+| https://argoproj.github.io/argo-helm | argo-events | 2.4.7 |
 | https://argoproj.github.io/argo-helm | argocd-apps | 2.0.0 |
-| https://argoproj.github.io/argo-helm | argocd-image-updater | 0.10.0 |
+| https://argoproj.github.io/argo-helm | argocd-image-updater | 0.11.0 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
 
 ## Values
@@ -30,10 +30,10 @@ Kubernetes: `>= 1.26.0`
 |-----|------|---------|-------------|
 | argo-cd.configs.cm."resource.customizations" | string | `"cert-manager.io/Certificate:\n  # Lua script for customizing the health status assessment\n  health.lua: |\n    hs = {}\n    if obj.status ~= nil then\n      if obj.status.conditions ~= nil then\n        for i, condition in ipairs(obj.status.conditions) do\n          if condition.type == \"Ready\" and condition.status == \"False\" then\n            hs.status = \"Degraded\"\n            hs.message = condition.message\n            return hs\n          end\n          if condition.type == \"Ready\" and condition.status == \"True\" then\n            hs.status = \"Healthy\"\n            hs.message = condition.message\n            return hs\n          end\n        end\n      end\n    end\n    hs.status = \"Progressing\"\n    hs.message = \"Waiting for certificate\"\n    return hs\n"` |  |
 | argo-cd.configs.cm."timeout.reconciliation" | string | `"300s"` |  |
-| argo-cd.configs.cm."ui.bannercontent" | string | `"KubeZero v1.28 - Release notes"` |  |
+| argo-cd.configs.cm."ui.bannercontent" | string | `"KubeZero v1.29 - Release notes"` |  |
 | argo-cd.configs.cm."ui.bannerpermanent" | string | `"true"` |  |
 | argo-cd.configs.cm."ui.bannerposition" | string | `"bottom"` |  |
-| argo-cd.configs.cm."ui.bannerurl" | string | `"https://kubezero.com/releases/v1.28"` |  |
+| argo-cd.configs.cm."ui.bannerurl" | string | `"https://kubezero.com/releases/v1.29"` |  |
 | argo-cd.configs.cm.url | string | `"https://argocd.example.com"` |  |
 | argo-cd.configs.params."controller.operation.processors" | string | `"5"` |  |
 | argo-cd.configs.params."controller.status.processors" | string | `"10"` |  |
