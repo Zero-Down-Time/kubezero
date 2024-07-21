@@ -50,7 +50,7 @@ Kubernetes: `>= 1.26.0`
 | argo-cd.dex.enabled | bool | `false` |  |
 | argo-cd.enabled | bool | `false` |  |
 | argo-cd.global.image.repository | string | `"public.ecr.aws/zero-downtime/zdt-argocd"` |  |
-| argo-cd.global.image.tag | string | `"v2.11.0"` |  |
+| argo-cd.global.image.tag | string | `"v2.11.5"` |  |
 | argo-cd.global.logging.format | string | `"json"` |  |
 | argo-cd.istio.enabled | bool | `false` |  |
 | argo-cd.istio.gateway | string | `"istio-ingress/ingressgateway"` |  |
@@ -64,7 +64,7 @@ Kubernetes: `>= 1.26.0`
 | argo-cd.repoServer.clusterRoleRules.rules[0].verbs[2] | string | `"list"` |  |
 | argo-cd.repoServer.initContainers[0].command[0] | string | `"/usr/local/bin/sa2kubeconfig.sh"` |  |
 | argo-cd.repoServer.initContainers[0].command[1] | string | `"/home/argocd/.kube/config"` |  |
-| argo-cd.repoServer.initContainers[0].image | string | `"public.ecr.aws/zero-downtime/zdt-argocd:v2.11.0"` |  |
+| argo-cd.repoServer.initContainers[0].image | string | `"{{ default .Values.global.image.repository .Values.repoServer.image.repository }}:{{ default (include \"argo-cd.defaultTag\" .) .Values.repoServer.image.tag }}"` |  |
 | argo-cd.repoServer.initContainers[0].imagePullPolicy | string | `"IfNotPresent"` |  |
 | argo-cd.repoServer.initContainers[0].name | string | `"create-kubeconfig"` |  |
 | argo-cd.repoServer.initContainers[0].securityContext.allowPrivilegeEscalation | bool | `false` |  |
