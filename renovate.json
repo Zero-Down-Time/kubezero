@@ -17,14 +17,14 @@
       "bumpVersion": "patch"
     }
   ],
-  "hostRules": [
+  "customManagers": [
     {
-      "matchHost": "https://registry-1.docker.io",
-      "hostType": "docker"
-    },
-    {
-      "matchHost": "https://public.ecr.aws",
-      "hostType": "docker"
+      "fileMatch": ["Chart.yaml$"],
+      "matchStrings": [
+        "#!\\s+renovate:\\s+datasource=(?<datasource>docker)\\s+name:\\s+['\"]?(?<product>[^'\"\\s]+)['\"]?\\s+repository:\\s+['\"]?oci://(?<namespace>[^'\"\\s]+)['\"]?\\s+version:\\s+['\"]?(?<currentValue>[^'\"\\s]+)['\"]?"
+      ],
+      "depNameTemplate": "{{product}}",
+      "packageNameTemplate": "{{namespace}}/{{product}}"
     }
   ],
   "ignorePaths": ["charts/*/charts/**"],
