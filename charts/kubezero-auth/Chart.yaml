@@ -16,8 +16,9 @@ dependencies:
   - name: kubezero-lib
     version: ">= 0.1.6"
     repository: https://cdn.zero-downtime.net/charts/
-  - name: keycloak
-    version: 18.7.1
+  - #! renovate: datasource=docker
+    name: keycloak
     repository: "oci://registry-1.docker.io/bitnamicharts"
+    version: 18.7.1
     condition: keycloak.enabled
 kubeVersion: ">= 1.26.0"

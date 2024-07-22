@@ -1,6 +1,6 @@
 # kubezero-auth
 
-![Version: 0.4.5](https://img.shields.io/badge/Version-0.4.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 22.0.5](https://img.shields.io/badge/AppVersion-22.0.5-informational?style=flat-square)
+![Version: 0.4.6](https://img.shields.io/badge/Version-0.4.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 22.0.5](https://img.shields.io/badge/AppVersion-22.0.5-informational?style=flat-square)
 
 KubeZero umbrella chart for all things Authentication and Identity management
 
@@ -19,7 +19,7 @@ Kubernetes: `>= 1.26.0`
 | Repository | Name | Version |
 |------------|------|---------|
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| oci://registry-1.docker.io/bitnamicharts | keycloak | 18.3.2 |
+| oci://registry-1.docker.io/bitnamicharts | keycloak | 18.7.1 |
 
 # Keycloak
    
