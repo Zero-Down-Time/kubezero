@@ -3,7 +3,7 @@ name: kubezero-addons
 description: KubeZero umbrella chart for various optional cluster addons
 type: application
 version: 0.8.8
-appVersion: v1.28
+appVersion: v1.29
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
