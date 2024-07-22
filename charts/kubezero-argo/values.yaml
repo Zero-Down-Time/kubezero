@@ -152,7 +152,14 @@ argo-cd:
         - mountPath: /home/argocd/.kube
           name: kubeconfigs
         securityContext:
-          '{{- toYaml .Values.repoServer.containerSecurityContext | nindent 4 }}'
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop:
+            - ALL
 
   server:
     # Rename former https port to grpc, works with istio + insecure
