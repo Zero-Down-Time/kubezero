@@ -9,11 +9,22 @@
   "prConcurrentLimit": 0,
   "packageRules": [
     {
+      "matchDatasources": ["helm", "docker"],
       "matchManagers": ["helmv3", "helm-values"],
       "additionalBranchPrefix": "{{parentDir}}-",
       "matchFileNames": ["charts/*/Chart.yaml"],
       "groupName": "{{parentDir}}-dependencies",
       "bumpVersion": "patch"
+    }
+  ],
+  "hostRules": [
+    {
+      "matchHost": "https://registry-1.docker.io",
+      "hostType": "docker"
+    },
+    {
+      "matchHost": "https://public.ecr.aws",
+      "hostType": "docker"
     }
   ],
   "ignorePaths": ["charts/*/charts/**"],
