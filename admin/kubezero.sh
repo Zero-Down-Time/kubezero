@@ -190,7 +190,9 @@ control_plane_node() {
     cp -r ${WORKDIR}/pki ${HOSTFS}/etc/kubernetes
 
     # Always use kubeadm kubectl config to never run into chicken egg with custom auth hooks
-    cp ${WORKDIR}/super-admin.conf ${HOSTFS}/root/.kube/config
+    # Fallback to old config remove with 1.30 !!
+    cp ${WORKDIR}/super-admin.conf ${HOSTFS}/root/.kube/config || \
+      cp ${WORKDIR}/admin.conf ${HOSTFS}/root/.kube/config
 
     # Only restore etcd data during "restore" and none exists already
     if [[ "$CMD" =~ ^(restore)$ ]]; then
@@ -376,7 +378,7 @@ backup() {
   restic forget --keep-hourly 24 --keep-daily ${RESTIC_RETENTION:-7} --prune
 
   # Defrag etcd backend
-  etcdctl --endpoints=https://${ETCD_NODENAME}:2379 defrag
+  etcdctl --endpoints=https://${ETCD_NODENAME}:2379 --command-timeout=60s defrag
 }
 
 

@@ -643,6 +643,10 @@ Create the HTTP port for interacting with the controller
         {{- end -}}
     {{- end -}}
     {{- end }}
+    {{- if $root.Values.controller.sidecars.configAutoReload.logging.configuration.override }}
+    - name: LOG_CONFIG
+      value: "{{ $root.Values.controller.jenkinsHome }}/auto-reload/auto-reload-config.yaml"
+    {{- end }}
 
   resources:
 {{ toYaml $root.Values.controller.sidecars.configAutoReload.resources | indent 4 }}
@@ -654,5 +658,14 @@ Create the HTTP port for interacting with the controller
       {{- if $root.Values.persistence.subPath }}
       subPath: {{ $root.Values.persistence.subPath }}
       {{- end }}
+    {{- if $root.Values.controller.sidecars.configAutoReload.logging.configuration.override }}
+    - name: auto-reload-config
+      mountPath: {{ $root.Values.controller.jenkinsHome }}/auto-reload
+    - name: auto-reload-config-logs
+      mountPath: {{ $root.Values.controller.jenkinsHome }}/auto-reload-logs
+    {{- end }}
+    {{- if $root.Values.controller.sidecars.configAutoReload.additionalVolumeMounts }}
+{{ (tpl (toYaml $root.Values.controller.sidecars.configAutoReload.additionalVolumeMounts) $root) | indent 4 }}
+    {{- end }}
 
 {{- end -}}
