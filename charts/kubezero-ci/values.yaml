@@ -183,7 +183,7 @@ jenkins:
   agent:
     image:
       repository: public.ecr.aws/zero-downtime/jenkins-podman
-      tag: v0.6.0
+      tag: v0.6.1
     #alwaysPullImage: true
     podRetention: "Default"
     showRawYaml: false

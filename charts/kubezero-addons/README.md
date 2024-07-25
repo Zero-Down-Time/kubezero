@@ -1,6 +1,6 @@
 # kubezero-addons
 
-![Version: 0.8.8](https://img.shields.io/badge/Version-0.8.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.28](https://img.shields.io/badge/AppVersion-v1.28-informational?style=flat-square)
+![Version: 0.8.8](https://img.shields.io/badge/Version-0.8.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.29](https://img.shields.io/badge/AppVersion-v1.29-informational?style=flat-square)
 
 KubeZero umbrella chart for various optional cluster addons
 
@@ -63,7 +63,7 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | aws-eks-asg-rolling-update-handler.environmentVars[8].name | string | `"AWS_STS_REGIONAL_ENDPOINTS"` |  |
 | aws-eks-asg-rolling-update-handler.environmentVars[8].value | string | `"regional"` |  |
 | aws-eks-asg-rolling-update-handler.image.repository | string | `"twinproduction/aws-eks-asg-rolling-update-handler"` |  |
-| aws-eks-asg-rolling-update-handler.image.tag | string | `"v1.8.3"` |  |
+| aws-eks-asg-rolling-update-handler.image.tag | string | `"v1.8.4"` |  |
 | aws-eks-asg-rolling-update-handler.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | aws-eks-asg-rolling-update-handler.resources.limits.memory | string | `"128Mi"` |  |
 | aws-eks-asg-rolling-update-handler.resources.requests.cpu | string | `"10m"` |  |
