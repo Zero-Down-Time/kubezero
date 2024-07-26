@@ -155,6 +155,10 @@ aws-ebs-csi-driver:
     loggingFormat: json
     tolerateAllTaints: false
     priorityClassName: system-node-critical
+
+    # We have /var on additional volume: root + ENI + /var = 3
+    reservedVolumeAttachments: 3
+
     tolerations:
     - key: kubezero-workergroup
       effect: NoSchedule
