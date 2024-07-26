@@ -148,10 +148,8 @@ kubeadm_upgrade() {
 
   post_kubeadm
 
-  # If we have a re-cert kubectl config install for root
-  if [ -f ${HOSTFS}/etc/kubernetes/super-admin.conf ]; then
-    cp ${HOSTFS}/etc/kubernetes/super-admin.conf ${HOSTFS}/root/.kube/config
-  fi
+  # install re-certed kubectl config for root
+  cp ${HOSTFS}/etc/kubernetes/super-admin.conf ${HOSTFS}/root/.kube/config
 
   # post upgrade hook
   [ -f /var/lib/kubezero/post-upgrade.sh ] && . /var/lib/kubezero/post-upgrade.sh
@@ -260,7 +258,12 @@ control_plane_node() {
 
   _kubeadm init phase kubelet-start
 
-  cp ${HOSTFS}/etc/kubernetes/super-admin.conf ${HOSTFS}/root/.kube/config
+  # Remove conditional with 1.30
+  if [ -f ${HOSTFS}/etc/kubernetes/super-admin.conf ]; then
+    cp ${HOSTFS}/etc/kubernetes/super-admin.conf ${HOSTFS}/root/.kube/config
+  else
+    cp ${HOSTFS}/etc/kubernetes/admin.conf ${HOSTFS}/root/.kube/config
+  fi
 
   # Wait for api to be online
   echo "Waiting for Kubernetes API to be online ..."
@@ -306,7 +309,7 @@ control_plane_node() {
 
   post_kubeadm
 
-  echo "${1} cluster $CLUSTERNAME successfull."
+  echo "${CMD}ed cluster $CLUSTERNAME successfully."
 }
 
 
@@ -364,7 +367,9 @@ backup() {
   # pki & cluster-admin access
   cp -r ${HOSTFS}/etc/kubernetes/pki ${WORKDIR}
   cp ${HOSTFS}/etc/kubernetes/admin.conf ${WORKDIR}
-  cp ${HOSTFS}/etc/kubernetes/super-admin.conf ${WORKDIR}
+
+  # Remove conditional with 1.30
+  [ -f ${HOSTFS}/etc/kubernetes/super-admin.conf ] && cp ${HOSTFS}/etc/kubernetes/super-admin.conf ${WORKDIR}
 
   # Backup via restic
   restic backup ${WORKDIR} -H $CLUSTERNAME --tag $CLUSTER_VERSION
