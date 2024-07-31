@@ -181,6 +181,10 @@ control_plane_node() {
     # restore latest backup
     retry 10 60 30 restic restore latest --no-lock -t / # --tag $KUBE_VERSION_MINOR
 
+    # get timestamp from latest snap for debug / message
+    # we need a way to surface this info to eg. Slack
+    #snapTime="$(restic snapshots latest --json | jq -r '.[].time')"
+
     # Make last etcd snapshot available
     cp ${WORKDIR}/etcd_snapshot ${HOSTFS}/etc/kubernetes
 
