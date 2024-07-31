@@ -90,7 +90,14 @@ Kubernetes: `>= 1.26.0`
 | fluent-bit.serviceMonitor.selector.release | string | `"metrics"` |  |
 | fluent-bit.testFramework.enabled | bool | `false` |  |
 | fluent-bit.tolerations[0].effect | string | `"NoSchedule"` |  |
+| fluent-bit.tolerations[0].key | string | `"kubezero-workergroup"` |  |
 | fluent-bit.tolerations[0].operator | string | `"Exists"` |  |
+| fluent-bit.tolerations[1].effect | string | `"NoSchedule"` |  |
+| fluent-bit.tolerations[1].key | string | `"nvidia.com/gpu"` |  |
+| fluent-bit.tolerations[1].operator | string | `"Exists"` |  |
+| fluent-bit.tolerations[2].effect | string | `"NoSchedule"` |  |
+| fluent-bit.tolerations[2].key | string | `"aws.amazon.com/neuron"` |  |
+| fluent-bit.tolerations[2].operator | string | `"Exists"` |  |
 | fluentd.configMapConfigs[0] | string | `"fluentd-prometheus-conf"` |  |
 | fluentd.dashboards.enabled | bool | `false` |  |
 | fluentd.enabled | bool | `false` |  |

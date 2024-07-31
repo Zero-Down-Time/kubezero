@@ -14,7 +14,7 @@ KubeZero is a Kubernetes distribution providing an integrated container platform
 
 
 # Architecture
-![aws_architecture](docs/aws_architecture.png)
+![aws_architecture](docs/images/aws_architecture.png)
 
 
 # Version / Support Matrix
