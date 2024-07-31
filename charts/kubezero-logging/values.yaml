@@ -240,6 +240,8 @@ fluent-bit:
   #dnsPolicy: ClusterFirstWithHostNet
 
   tolerations:
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
     - key: kubezero-workergroup
       effect: NoSchedule
       operator: Exists
