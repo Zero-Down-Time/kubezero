@@ -1,6 +1,6 @@
 # kubezero-istio-gateway
 
-![Version: 0.22.3](https://img.shields.io/badge/Version-0.22.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.22.3-1](https://img.shields.io/badge/Version-0.22.3--1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Istio gateways
 
@@ -33,7 +33,6 @@ Kubernetes: `>= 1.26.0-0`
 | gateway.autoscaling.minReplicas | int | `1` |  |
 | gateway.autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
 | gateway.podAnnotations."proxy.istio.io/config" | string | `"{ \"terminationDrainDuration\": \"20s\" }"` |  |
-| gateway.priorityClassName | string | `"system-cluster-critical"` |  |
 | gateway.replicaCount | int | `1` |  |
 | gateway.resources.limits.memory | string | `"512Mi"` |  |
 | gateway.resources.requests.cpu | string | `"50m"` |  |
