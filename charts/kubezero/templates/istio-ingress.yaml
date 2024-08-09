@@ -3,6 +3,10 @@
 gateway:
   name: istio-ingressgateway
 
+  {{- if ne .Values.global.platform "gke" }}
+    priorityClassName: "system-cluster-critical"
+  {{- end }}
+
   {{- with index .Values "istio-ingress" "gateway" "replicaCount" }}
   replicaCount: {{ . }}
   {{- if gt (int .) 1 }}
@@ -11,7 +15,7 @@ gateway:
   {{- end }}
   {{- end }}
 
-  {{- if not (index .Values "istio-ingress" "gateway" "affinity") }}
+  {{- if eq .Values.global.platform "aws" }}
   # Only nodes who are fronted with matching LB
   affinity:
     nodeAffinity:

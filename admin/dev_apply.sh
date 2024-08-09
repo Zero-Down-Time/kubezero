@@ -19,6 +19,22 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 . "$SCRIPT_DIR"/libhelm.sh
 CHARTS="$(dirname $SCRIPT_DIR)/charts"
 
+# Guess platform from current context
+_auth_cmd=$(kubectl config view | yq .users[0].user.exec.command)
+if [ "$_auth_cmd" == "gke-gcloud-auth-plugin" ]; then
+  PLATFORM=gke
+elif [ "$_auth_cmd" == "aws-iam-authenticator" ]; then
+  PLATFORM=aws
+else
+  PLATFORM=nocloud
+fi
+
+parse_version() {
+  echo $([[ $1 =~ ^v[0-9]+\.[0-9]+\.[0-9]+ ]] && echo "${BASH_REMATCH[0]//v/}")
+}
+
+KUBE_VERSION=$(parse_version $KUBE_VERSION)
+
 ### Various hooks for modules
 
 ################
@@ -71,7 +87,7 @@ if [ ${ARTIFACTS[0]} == "all" ]; then
 fi
 
 # Delete in reverse order, continue even if errors
-if [ $ACTION == "delete" ]; then
+if [ "$ACTION" == "delete" ]; then
   set +e
   for (( idx=${#ARTIFACTS[@]}-1 ; idx>=0 ; idx-- )) ; do
     _helm delete ${ARTIFACTS[idx]} || true

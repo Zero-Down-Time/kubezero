@@ -61,31 +61,15 @@ cert-manager:
   #  mountPath: "/var/run/secrets/sts.amazonaws.com/serviceaccount/"
   #  readOnly: true
 
-  tolerations:
-  - key: node-role.kubernetes.io/control-plane
-    effect: NoSchedule
-  nodeSelector:
-    node-role.kubernetes.io/control-plane: ""
-
   ingressShim:
     defaultIssuerName: letsencrypt-dns-prod
     defaultIssuerKind: ClusterIssuer
 
   webhook:
-    tolerations:
-    - key: node-role.kubernetes.io/control-plane
-      effect: NoSchedule
-    nodeSelector:
-      node-role.kubernetes.io/control-plane: ""
     extraArgs:
       - "--logging-format=json"
 
   cainjector:
-    tolerations:
-    - key: node-role.kubernetes.io/control-plane
-      effect: NoSchedule
-    nodeSelector:
-      node-role.kubernetes.io/control-plane: ""
     extraArgs:
       - "--logging-format=json"
       - "--leader-elect=false"
