@@ -14,7 +14,7 @@ KubeZero Argo - Events, Workflow, CD
 
 ## Requirements
 
-Kubernetes: `>= 1.26.0`
+Kubernetes: `>= 1.26.0-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
@@ -65,7 +65,7 @@ Kubernetes: `>= 1.26.0`
 | argo-cd.repoServer.initContainers[0].command[0] | string | `"/usr/local/bin/sa2kubeconfig.sh"` |  |
 | argo-cd.repoServer.initContainers[0].command[1] | string | `"/home/argocd/.kube/config"` |  |
 | argo-cd.repoServer.initContainers[0].image | string | `"{{ default .Values.global.image.repository .Values.repoServer.image.repository }}:{{ default (include \"argo-cd.defaultTag\" .) .Values.repoServer.image.tag }}"` |  |
-| argo-cd.repoServer.initContainers[0].imagePullPolicy | string | `"IfNotPresent"` |  |
+| argo-cd.repoServer.initContainers[0].imagePullPolicy | string | `"{{ default .Values.global.image.imagePullPolicy .Values.repoServer.image.imagePullPolicy }}"` |  |
 | argo-cd.repoServer.initContainers[0].name | string | `"create-kubeconfig"` |  |
 | argo-cd.repoServer.initContainers[0].securityContext.allowPrivilegeEscalation | bool | `false` |  |
 | argo-cd.repoServer.initContainers[0].securityContext.capabilities.drop[0] | string | `"ALL"` |  |
