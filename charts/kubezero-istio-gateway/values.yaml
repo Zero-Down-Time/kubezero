@@ -8,7 +8,6 @@ gateway:
   replicaCount: 1
 
   terminationGracePeriodSeconds: 120
-  priorityClassName: system-cluster-critical
 
   resources:
     requests:

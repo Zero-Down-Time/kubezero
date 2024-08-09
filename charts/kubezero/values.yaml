@@ -5,9 +5,15 @@ kubezero:
   gitSync: {}
 
 global:
-  highAvailable: false
   clusterName: zdt-trial-cluster
+
+  # platform: aws (kubeadm), gke, or nocloud ( default )
+  platform: "nocloud"
+
+  highAvailable: false
+
   aws: {}
+  gcp: {}
 
 addons:
   enabled: true
@@ -37,7 +43,7 @@ network:
 cert-manager:
   enabled: false
   namespace: cert-manager
-  targetRevision: 0.9.8
+  targetRevision: 0.9.9
 
 storage:
   enabled: false
@@ -58,13 +64,13 @@ storage:
 istio:
   enabled: false
   namespace: istio-system
-  targetRevision: 0.22.3
+  targetRevision: 0.22.3-1
 
 istio-ingress:
   enabled: false
   chart: kubezero-istio-gateway
   namespace: istio-ingress
-  targetRevision: 0.22.3
+  targetRevision: 0.22.3-1
   gateway:
     service: {}
 
@@ -72,7 +78,7 @@ istio-private-ingress:
   enabled: false
   chart: kubezero-istio-gateway
   namespace: istio-ingress
-  targetRevision: 0.22.3
+  targetRevision: 0.22.3-1
   gateway:
     service: {}
 

@@ -9,10 +9,29 @@ cert-manager:
     type: Recreate
   {{- end }}
 
-  prometheus:
-    servicemonitor:
-      enabled: {{ $.Values.metrics.enabled }}
-{{ with index .Values "cert-manager" "IamArn" }}
+  {{- if eq .Values.global.platform "aws" }}
+  # map everything to the control-plane
+  nodeSelector:
+    node-role.kubernetes.io/control-plane: ""
+  tolerations:
+  - key: node-role.kubernetes.io/control-plane
+    effect: NoSchedule
+
+  webhook:
+    tolerations:
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
+    nodeSelector:
+      node-role.kubernetes.io/control-plane: ""
+
+  cainjector:
+    tolerations:
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
+    nodeSelector:
+      node-role.kubernetes.io/control-plane: ""
+
+  {{ with index .Values "cert-manager" "IamArn" }}
   extraEnv:
   - name: AWS_ROLE_ARN
     value: "{{ . }}"
@@ -34,7 +53,19 @@ cert-manager:
   - name: aws-token
     mountPath: "/var/run/secrets/sts.amazonaws.com/serviceaccount/"
     readOnly: true
-{{- end }}
+  {{- end }}
+
+  {{- end }}
+
+  {{- if eq .Values.global.platform "gke" }}
+  serviceAccount:
+    annotations:
+      iam.gke.io/gcp-service-account: "dns01-solver@{{ .Values.global.gcp.projectId }}.iam.gserviceaccount.com"
+  {{- end }}
+
+  prometheus:
+    servicemonitor:
+      enabled: {{ $.Values.metrics.enabled }}
 
 {{- with index .Values "cert-manager" "clusterIssuer" }}
 clusterIssuer:

@@ -91,7 +91,7 @@ argo-cd:
 
     secret:
       createSecret: false
-      # `htpasswd -nbBC 10 "" $ARGO_PWD | tr -d ':\n' | sed 's/$2y/$2a/'`
+      # `htpasswd -nbBC 10 "" $ARGO_PWD | tr -d ':\n' | sed 's/$2y/$2a/' | base64 -w0`
       # argocdServerAdminPassword: "$2a$10$ivKzaXVxMqdeDSfS3nqi1Od3iDbnL7oXrixzDfZFRHlXHnAG6LydG"
       # argocdServerAdminPassword: "ref+file://secrets.yaml#/test"
       # argocdServerAdminPasswordMtime: "2020-04-24T15:33:09BST"

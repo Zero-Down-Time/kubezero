@@ -1,6 +1,6 @@
 # kubezero-istio
 
-![Version: 0.22.3](https://img.shields.io/badge/Version-0.22.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.22.3-1](https://img.shields.io/badge/Version-0.22.3--1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for Istio
 
@@ -16,14 +16,14 @@ Installs the Istio control plane
 
 ## Requirements
 
-Kubernetes: `>= 1.26.0`
+Kubernetes: `>= 1.26.0-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
 | https://istio-release.storage.googleapis.com/charts | base | 1.22.3 |
 | https://istio-release.storage.googleapis.com/charts | istiod | 1.22.3 |
-| https://kiali.org/helm-charts | kiali-server | 1.87.0 |
+| https://kiali.org/helm-charts | kiali-server | 1.88.0 |
 
 ## Values
 
@@ -31,19 +31,15 @@ Kubernetes: `>= 1.26.0`
 |-----|------|---------|-------------|
 | global.defaultPodDisruptionBudget.enabled | bool | `false` |  |
 | global.logAsJson | bool | `true` |  |
-| global.priorityClassName | string | `"system-cluster-critical"` |  |
 | global.variant | string | `"distroless"` |  |
 | istiod.meshConfig.accessLogEncoding | string | `"JSON"` |  |
 | istiod.meshConfig.accessLogFile | string | `"/dev/stdout"` |  |
 | istiod.meshConfig.tcpKeepalive.interval | string | `"60s"` |  |
 | istiod.meshConfig.tcpKeepalive.time | string | `"120s"` |  |
 | istiod.pilot.autoscaleEnabled | bool | `false` |  |
-| istiod.pilot.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | istiod.pilot.replicaCount | int | `1` |  |
 | istiod.pilot.resources.requests.cpu | string | `"100m"` |  |
 | istiod.pilot.resources.requests.memory | string | `"128Mi"` |  |
-| istiod.pilot.tolerations[0].effect | string | `"NoSchedule"` |  |
-| istiod.pilot.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | istiod.telemetry.enabled | bool | `false` |  |
 | kiali-server.auth.strategy | string | `"anonymous"` |  |
 | kiali-server.deployment.ingress_enabled | bool | `false` |  |

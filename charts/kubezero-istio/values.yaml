@@ -6,18 +6,10 @@ global:
   defaultPodDisruptionBudget:
     enabled: false
 
-  priorityClassName: "system-cluster-critical"
-
 istiod:
   pilot:
     autoscaleEnabled: false
     replicaCount: 1
-
-    nodeSelector:
-      node-role.kubernetes.io/control-plane: ""
-    tolerations:
-    - key: node-role.kubernetes.io/control-plane
-      effect: NoSchedule
 
     resources:
       requests:
@@ -57,7 +49,7 @@ kiali-server:
 
     prometheus:
       url: "http://metrics-kube-prometheus-st-prometheus.monitoring:9090"
- 
+
   istio:
     enabled: false
     gateway: istio-ingress/private-ingressgateway
