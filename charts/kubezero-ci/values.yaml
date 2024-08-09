@@ -190,7 +190,8 @@ jenkins:
     podName: "podman-aws"
     defaultsProviderTemplate: "podman-aws"
     annotations:
-      container.apparmor.security.beta.kubernetes.io/jnlp: unconfined
+      container.apparmor.security.beta.kubernetes.io/jnlp: "unconfined"
+      cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
     customJenkinsLabels:
     - podman-aws-trivy
     idleMinutes: 30
@@ -224,8 +225,8 @@ jenkins:
         - name: jnlp
           resources:
             requests:
-              cpu: "512m"
-              memory: "1024Mi"
+              cpu: "200m"
+              memory: "512Mi"
             limits:
               cpu: "4"
               memory: "6144Mi"
