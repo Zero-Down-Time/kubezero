@@ -5,9 +5,15 @@ kubezero:
   gitSync: {}
 
 global:
-  highAvailable: false
   clusterName: zdt-trial-cluster
+
+  # platform: aws (kubeadm), gke, or nocloud ( default )
+  platform: "nocloud"
+
+  highAvailable: false
+
   aws: {}
+  gcp: {}
 
 addons:
   enabled: true
