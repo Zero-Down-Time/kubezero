@@ -14,7 +14,7 @@ KubeZero Argo - Events, Workflow, CD
 
 ## Requirements
 
-Kubernetes: `>= 1.26.0`
+Kubernetes: `>= 1.26.0-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
