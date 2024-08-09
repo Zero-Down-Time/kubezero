@@ -1,21 +1,37 @@
 {{- define "istio-values" }}
+
+{{- if .Values.global.highAvailable }}
+global:
+  defaultPodDisruptionBudget:
+    enabled: true
+  {{- if ne .Values.global.platform "gke" }}
+    priorityClassName: "system-cluster-critical"
+  {{- end }}
+{{- end }}
+
 istiod:
   telemetry:
     enabled: {{ $.Values.metrics.enabled }}
   pilot:
+{{- if eq .Values.global.platform "aws" }}
+    nodeSelector:
+      node-role.kubernetes.io/control-plane: ""
+    tolerations:
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
+{{- end }}
 {{- if .Values.global.highAvailable }}
     replicaCount: 2
-global:
-  defaultPodDisruptionBudget:
-    enabled: true
 {{- else }}
     extraContainerArgs:
     - --leader-elect=false
 {{- end }}
+
 {{- with  index .Values "istio" "kiali-server" }}
 kiali-server:
   {{- toYaml . | nindent 2 }}
 {{- end }}
+
 {{- with .Values.istio.rateLimiting }}
 rateLimiting:
   {{- toYaml . | nindent 2 }}

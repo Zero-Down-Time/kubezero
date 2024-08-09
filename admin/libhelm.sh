@@ -34,9 +34,11 @@ function argo_used() {
 
 # get kubezero-values from ArgoCD if available or use in-cluster CM without Argo
 function get_kubezero_values() {
+  local _namespace="kube-system"
+  [ "$PLATFORM" == "gke" ] && _namespace=kubezero
   argo_used && \
     { kubectl get application kubezero -n argocd -o yaml | yq .spec.source.helm.values > ${WORKDIR}/kubezero-values.yaml; } || \
-    { kubectl get configmap -n kube-system kubezero-values -o yaml | yq '.data."values.yaml"' > ${WORKDIR}/kubezero-values.yaml ;}
+    { kubectl get configmap -n $_namespace kubezero-values -o yaml | yq '.data."values.yaml"' > ${WORKDIR}/kubezero-values.yaml ;}
 }
 
 
@@ -169,14 +171,14 @@ function _helm() {
 
   yq eval '.spec.source.helm.values' $WORKDIR/kubezero/templates/${module}.yaml > $WORKDIR/values.yaml
 
-  echo "using values to $action of module $module: "
-  cat $WORKDIR/values.yaml
-
   if [ $action == "crds" ]; then
     # Allow custom CRD handling
     declare -F ${module}-crds && ${module}-crds || _crds
 
   elif [ $action == "apply" ]; then
+    echo "using values to $action of module $module: "
+    cat $WORKDIR/values.yaml
+
     # namespace must exist prior to apply
     create_ns $namespace
 

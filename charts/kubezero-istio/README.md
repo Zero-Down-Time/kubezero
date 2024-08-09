@@ -16,7 +16,7 @@ Installs the Istio control plane
 
 ## Requirements
 
-Kubernetes: `>= 1.26.0`
+Kubernetes: `>= 1.26.0-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
@@ -31,19 +31,15 @@ Kubernetes: `>= 1.26.0`
 |-----|------|---------|-------------|
 | global.defaultPodDisruptionBudget.enabled | bool | `false` |  |
 | global.logAsJson | bool | `true` |  |
-| global.priorityClassName | string | `"system-cluster-critical"` |  |
 | global.variant | string | `"distroless"` |  |
 | istiod.meshConfig.accessLogEncoding | string | `"JSON"` |  |
 | istiod.meshConfig.accessLogFile | string | `"/dev/stdout"` |  |
 | istiod.meshConfig.tcpKeepalive.interval | string | `"60s"` |  |
 | istiod.meshConfig.tcpKeepalive.time | string | `"120s"` |  |
 | istiod.pilot.autoscaleEnabled | bool | `false` |  |
-| istiod.pilot.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | istiod.pilot.replicaCount | int | `1` |  |
 | istiod.pilot.resources.requests.cpu | string | `"100m"` |  |
 | istiod.pilot.resources.requests.memory | string | `"128Mi"` |  |
-| istiod.pilot.tolerations[0].effect | string | `"NoSchedule"` |  |
-| istiod.pilot.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
 | istiod.telemetry.enabled | bool | `false` |  |
 | kiali-server.auth.strategy | string | `"anonymous"` |  |
 | kiali-server.deployment.ingress_enabled | bool | `false` |  |
