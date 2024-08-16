@@ -1,8 +1,9 @@
 keycloak:
   enabled: false
 
-  proxy: edge
   production: true
+  hostnameStrict: true
+  proxyHeaders: xforwarded
 
   auth:
     adminUser: admin
@@ -15,14 +16,18 @@ keycloak:
     create: false
     minAvailable: 1
 
+  resources:
+    limits:
+      #cpu: 750m
+      memory: 768Mi
+    requests:
+      cpu: 100m
+      memory: 512Mi
+
   metrics:
     enabled: false
     serviceMonitor:
       enabled: true
-  resources:
-    requests:
-      cpu: 100m
-      memory: 512Mi
 
   postgresql:
     auth:
