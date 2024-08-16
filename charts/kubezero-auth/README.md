@@ -1,6 +1,6 @@
 # kubezero-auth
 
-![Version: 0.4.6](https://img.shields.io/badge/Version-0.4.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 22.0.5](https://img.shields.io/badge/AppVersion-22.0.5-informational?style=flat-square)
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 22.0.5](https://img.shields.io/badge/AppVersion-22.0.5-informational?style=flat-square)
 
 KubeZero umbrella chart for all things Authentication and Identity management
 
@@ -19,7 +19,7 @@ Kubernetes: `>= 1.26.0`
 | Repository | Name | Version |
 |------------|------|---------|
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| oci://registry-1.docker.io/bitnamicharts | keycloak | 18.7.1 |
+| oci://registry-1.docker.io/bitnamicharts | keycloak | 22.1.1 |
 
 # Keycloak
    
@@ -41,6 +41,7 @@ https://github.com/keycloak/keycloak-benchmark/tree/main/provision/minikube/keyc
 | keycloak.auth.existingSecret | string | `"kubezero-auth"` |  |
 | keycloak.auth.passwordSecretKey | string | `"admin-password"` |  |
 | keycloak.enabled | bool | `false` |  |
+| keycloak.hostnameStrict | bool | `true` |  |
 | keycloak.istio.admin.enabled | bool | `false` |  |
 | keycloak.istio.admin.gateway | string | `"istio-ingress/private-ingressgateway"` |  |
 | keycloak.istio.admin.url | string | `""` |  |
@@ -57,7 +58,5 @@ https://github.com/keycloak/keycloak-benchmark/tree/main/provision/minikube/keyc
 | keycloak.postgresql.primary.persistence.size | string | `"1Gi"` |  |
 | keycloak.postgresql.readReplicas.replicaCount | int | `0` |  |
 | keycloak.production | bool | `true` |  |
-| keycloak.proxy | string | `"edge"` |  |
+| keycloak.proxyHeaders | string | `"xforwarded"` |  |
 | keycloak.replicaCount | int | `1` |  |
-| keycloak.resources.requests.cpu | string | `"100m"` |  |
-| keycloak.resources.requests.memory | string | `"512Mi"` |  |
