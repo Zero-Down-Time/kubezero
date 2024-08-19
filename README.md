@@ -28,15 +28,15 @@ KubeZero is distributed as a collection of versioned Helm charts, allowing custo
 gantt
     title KubeZero Support Timeline
     dateFormat  YYYY-MM-DD
-    section 1.27
-    beta     :127b, 2023-09-01, 2023-09-30
-    release  :after 127b, 2024-04-30
     section 1.28
     beta     :128b, 2024-03-01, 2024-04-30
     release  :after 128b, 2024-08-31
     section 1.29
-    beta     :129b, 2024-07-01, 2024-08-30
+    beta     :129b, 2024-07-01, 2024-07-31
     release  :after 129b, 2024-11-30
+    section 1.30
+    beta     :130b, 2024-09-01, 2024-10-31
+    release  :after 130b, 2025-02-28
 ```
 
 [Upstream release policy](https://kubernetes.io/releases/)
