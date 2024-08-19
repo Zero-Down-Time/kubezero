@@ -60,3 +60,6 @@ https://github.com/keycloak/keycloak-benchmark/tree/main/provision/minikube/keyc
 | keycloak.production | bool | `true` |  |
 | keycloak.proxyHeaders | string | `"xforwarded"` |  |
 | keycloak.replicaCount | int | `1` |  |
+| keycloak.resources.limits.memory | string | `"768Mi"` |  |
+| keycloak.resources.requests.cpu | string | `"100m"` |  |
+| keycloak.resources.requests.memory | string | `"512Mi"` |  |

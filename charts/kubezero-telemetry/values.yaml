@@ -62,9 +62,6 @@ data-prepper:
             name: "otel-trace-pipeline"
         processor:
           - service_map:
-              # The window duration is the maximum length of time the data prepper stores the most recent trace data to evaluvate service-map relationships.
-              # The default is 3 minutes, this means we can detect relationships between services from spans reported in last 3 minutes.
-              # Set higher value if your applications have higher latency.
               window_duration: 180
         buffer:
             bounded_blocking:
@@ -231,7 +228,7 @@ jaeger:
     url: jaeger.example.com
 
 opensearch:
-  version: 2.15.0
+  version: 2.16.0
   prometheus: false
 
   # custom cluster settings
@@ -577,6 +574,7 @@ fluent-bit:
           Merge_Log_Key kube
           Kube_Tag_Prefix cri.var.log.containers.
           Keep_Log Off
+          Annotations Off
           K8S-Logging.Parser Off
           K8S-Logging.Exclude Off
           Kube_Meta_Cache_TTL 3600s
