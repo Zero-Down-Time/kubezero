@@ -5,8 +5,8 @@
 - shell into running posgres-auth pod
 ```
 export PGPASSWORD="<postgres_password from secret>"
-cd /bitnami/posgres
-pg_dumpall > backup
+cd /bitnami/posgresql
+pg_dumpall -U postgres > backup
 ```
 
 - store backup off-site
@@ -37,7 +37,7 @@ psql -U postgres
 - drop database `keycloak` in case the keycloak instances connected early
 ```
 DROP database keycloak
-``` 
+```
 
 - actual restore
 ```
