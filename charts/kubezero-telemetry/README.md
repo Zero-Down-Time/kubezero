@@ -29,8 +29,43 @@ Kubernetes: `>= 1.26.0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| data-prepper.config."log4j2-rolling.properties" | string | `"status = error\ndest = err\nname = PropertiesConfig\n\nappender.console.type = Console\nappender.console.name = STDOUT\nappender.console.layout.type = PatternLayout\nappender.console.layout.pattern = %d{ISO8601} [%t] %-5p %40C - %m%n\n\nrootLogger.level = warn\nrootLogger.appenderRef.stdout.ref = STDOUT\n\nlogger.pipeline.name = org.opensearch.dataprepper.pipeline\nlogger.pipeline.level = info\n\nlogger.parser.name = org.opensearch.dataprepper.parser\nlogger.parser.level = info\n\nlogger.plugins.name = org.opensearch.dataprepper.plugins\nlogger.plugins.level = info\n"` |  |
+| data-prepper.enabled | bool | `false` |  |
+| data-prepper.pipelineConfig.config.otel-service-map-pipeline.buffer.bounded_blocking | string | `nil` |  |
+| data-prepper.pipelineConfig.config.otel-service-map-pipeline.delay | int | `3000` |  |
+| data-prepper.pipelineConfig.config.otel-service-map-pipeline.processor[0].service_map.window_duration | int | `180` |  |
+| data-prepper.pipelineConfig.config.otel-service-map-pipeline.sink[0].opensearch.bulk_size | int | `4` |  |
+| data-prepper.pipelineConfig.config.otel-service-map-pipeline.sink[0].opensearch.hosts[0] | string | `"https://telemetry:9200"` |  |
+| data-prepper.pipelineConfig.config.otel-service-map-pipeline.sink[0].opensearch.index_type | string | `"trace-analytics-service-map"` |  |
+| data-prepper.pipelineConfig.config.otel-service-map-pipeline.sink[0].opensearch.insecure | bool | `true` |  |
+| data-prepper.pipelineConfig.config.otel-service-map-pipeline.sink[0].opensearch.password | string | `"admin"` |  |
+| data-prepper.pipelineConfig.config.otel-service-map-pipeline.sink[0].opensearch.username | string | `"admin"` |  |
+| data-prepper.pipelineConfig.config.otel-service-map-pipeline.source.pipeline.name | string | `"otel-trace-pipeline"` |  |
+| data-prepper.pipelineConfig.config.otel-service-map-pipeline.workers | int | `1` |  |
+| data-prepper.pipelineConfig.config.otel-trace-pipeline.buffer.bounded_blocking | string | `nil` |  |
+| data-prepper.pipelineConfig.config.otel-trace-pipeline.delay | string | `"100"` |  |
+| data-prepper.pipelineConfig.config.otel-trace-pipeline.sink[0].pipeline.name | string | `"raw-traces-pipeline"` |  |
+| data-prepper.pipelineConfig.config.otel-trace-pipeline.sink[1].pipeline.name | string | `"otel-service-map-pipeline"` |  |
+| data-prepper.pipelineConfig.config.otel-trace-pipeline.source.otel_trace_source.ssl | bool | `false` |  |
+| data-prepper.pipelineConfig.config.otel-trace-pipeline.workers | int | `1` |  |
+| data-prepper.pipelineConfig.config.raw-traces-pipeline.buffer.bounded_blocking | string | `nil` |  |
+| data-prepper.pipelineConfig.config.raw-traces-pipeline.delay | int | `3000` |  |
+| data-prepper.pipelineConfig.config.raw-traces-pipeline.processor[0].otel_traces | string | `nil` |  |
+| data-prepper.pipelineConfig.config.raw-traces-pipeline.processor[1].otel_trace_group.hosts[0] | string | `"https://telemetry:9200"` |  |
+| data-prepper.pipelineConfig.config.raw-traces-pipeline.processor[1].otel_trace_group.insecure | bool | `true` |  |
+| data-prepper.pipelineConfig.config.raw-traces-pipeline.processor[1].otel_trace_group.password | string | `"admin"` |  |
+| data-prepper.pipelineConfig.config.raw-traces-pipeline.processor[1].otel_trace_group.username | string | `"admin"` |  |
+| data-prepper.pipelineConfig.config.raw-traces-pipeline.sink[0].opensearch.hosts[0] | string | `"https://telemetry:9200"` |  |
+| data-prepper.pipelineConfig.config.raw-traces-pipeline.sink[0].opensearch.index_type | string | `"trace-analytics-raw"` |  |
+| data-prepper.pipelineConfig.config.raw-traces-pipeline.sink[0].opensearch.insecure | bool | `true` |  |
+| data-prepper.pipelineConfig.config.raw-traces-pipeline.sink[0].opensearch.password | string | `"admin"` |  |
+| data-prepper.pipelineConfig.config.raw-traces-pipeline.sink[0].opensearch.username | string | `"admin"` |  |
+| data-prepper.pipelineConfig.config.raw-traces-pipeline.source.pipeline.name | string | `"otel-trace-pipeline"` |  |
+| data-prepper.pipelineConfig.config.raw-traces-pipeline.workers | int | `1` |  |
+| data-prepper.pipelineConfig.config.simple-sample-pipeline | string | `nil` |  |
+| data-prepper.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | fluent-bit.config.customParsers | string | `"[PARSER]\n    Name cri-log\n    Format regex\n    Regex ^(?<time>.+) (?<stream>stdout|stderr) (?<logtag>F|P) (?<log>.*)$\n    Time_Key    time\n    Time_Format %Y-%m-%dT%H:%M:%S.%L%z\n"` |  |
-| fluent-bit.config.filters | string | `"[FILTER]\n    Name parser\n    Match cri.*\n    Parser cri-log\n    Key_Name log\n\n[FILTER]\n    Name kubernetes\n    Match cri.*\n    Merge_Log On\n    Merge_Log_Key kube\n    Kube_Tag_Prefix cri.var.log.containers.\n    Keep_Log Off\n    K8S-Logging.Parser Off\n    K8S-Logging.Exclude Off\n    Kube_Meta_Cache_TTL 3600s\n    Buffer_Size 0\n    #Use_Kubelet true\n\n{{- if index .Values \"config\" \"extraRecords\" }}\n\n[FILTER]\n    Name record_modifier\n    Match cri.*\n    {{- range $k,$v := index .Values \"config\" \"extraRecords\" }}\n    Record {{ $k }} {{ $v }}\n    {{- end }}\n{{- end }}\n\n[FILTER]\n    Name rewrite_tag\n    Match cri.*\n    Emitter_Name kube_tag_rewriter\n    Rule $kubernetes['pod_id'] .* kube.$kubernetes['namespace_name'].$kubernetes['container_name'] false\n\n[FILTER]\n    Name    lua\n    Match   kube.*\n    script  /fluent-bit/scripts/kubezero.lua\n    call    nest_k8s_ns\n"` |  |
+| fluent-bit.config.filters | string | `"[FILTER]\n    Name parser\n    Match cri.*\n    Parser cri-log\n    Key_Name log\n\n[FILTER]\n    Name kubernetes\n    Match cri.*\n    Merge_Log On\n    Merge_Log_Key kube\n    Kube_Tag_Prefix cri.var.log.containers.\n    Keep_Log Off\n    Annotations Off\n    K8S-Logging.Parser Off\n    K8S-Logging.Exclude Off\n    Kube_Meta_Cache_TTL 3600s\n    Buffer_Size 0\n    #Use_Kubelet true\n\n{{- if index .Values \"config\" \"extraRecords\" }}\n\n[FILTER]\n    Name record_modifier\n    Match cri.*\n    {{- range $k,$v := index .Values \"config\" \"extraRecords\" }}\n    Record {{ $k }} {{ $v }}\n    {{- end }}\n{{- end }}\n\n[FILTER]\n    Name rewrite_tag\n    Match cri.*\n    Emitter_Name kube_tag_rewriter\n    Rule $kubernetes['pod_id'] .* kube.$kubernetes['namespace_name'].$kubernetes['container_name'] false\n\n[FILTER]\n    Name    lua\n    Match   kube.*\n    script  /fluent-bit/scripts/kubezero.lua\n    call    nest_k8s_ns\n"` |  |
 | fluent-bit.config.flushInterval | int | `5` |  |
 | fluent-bit.config.input.memBufLimit | string | `"16MB"` |  |
 | fluent-bit.config.input.refreshInterval | int | `5` |  |
@@ -120,6 +155,8 @@ Kubernetes: `>= 1.26.0`
 | jaeger.provisionDataStore.elasticsearch | bool | `false` |  |
 | jaeger.query.agentSidecar.enabled | bool | `false` |  |
 | jaeger.query.serviceMonitor.enabled | bool | `false` |  |
+| jaeger.storage.elasticsearch.cmdlineParams."es.num-replicas" | int | `1` |  |
+| jaeger.storage.elasticsearch.cmdlineParams."es.num-shards" | int | `2` |  |
 | jaeger.storage.elasticsearch.cmdlineParams."es.tls.enabled" | string | `""` |  |
 | jaeger.storage.elasticsearch.cmdlineParams."es.tls.skip-host-verify" | string | `""` |  |
 | jaeger.storage.elasticsearch.host | string | `"telemetry"` |  |
@@ -133,7 +170,9 @@ Kubernetes: `>= 1.26.0`
 | opensearch.dashboard.istio.url | string | `"telemetry-dashboard.example.com"` |  |
 | opensearch.nodeSets | list | `[]` |  |
 | opensearch.prometheus | bool | `false` |  |
-| opensearch.version | string | `"2.15.0"` |  |
+| opensearch.version | string | `"2.16.0"` |  |
+| opentelemetry-collector.config.exporters.otlp/data-prepper.endpoint | string | `"telemetry-data-prepper:21890"` |  |
+| opentelemetry-collector.config.exporters.otlp/data-prepper.tls.insecure | bool | `true` |  |
 | opentelemetry-collector.config.exporters.otlp/jaeger.endpoint | string | `"telemetry-jaeger-collector:4317"` |  |
 | opentelemetry-collector.config.exporters.otlp/jaeger.tls.insecure | bool | `true` |  |
 | opentelemetry-collector.config.extensions.health_check.endpoint | string | `"${env:MY_POD_IP}:13133"` |  |
@@ -149,6 +188,7 @@ Kubernetes: `>= 1.26.0`
 | opentelemetry-collector.config.service.pipelines.logs | string | `nil` |  |
 | opentelemetry-collector.config.service.pipelines.metrics | string | `nil` |  |
 | opentelemetry-collector.config.service.pipelines.traces.exporters[0] | string | `"otlp/jaeger"` |  |
+| opentelemetry-collector.config.service.pipelines.traces.exporters[1] | string | `"otlp/data-prepper"` |  |
 | opentelemetry-collector.config.service.pipelines.traces.processors[0] | string | `"memory_limiter"` |  |
 | opentelemetry-collector.config.service.pipelines.traces.processors[1] | string | `"batch"` |  |
 | opentelemetry-collector.config.service.pipelines.traces.receivers[0] | string | `"otlp"` |  |
