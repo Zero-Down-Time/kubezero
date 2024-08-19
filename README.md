@@ -19,7 +19,7 @@ KubeZero is a Kubernetes distribution providing an integrated container platform
 
 # Version / Support Matrix
 KubeZero releases track the same *minor* version of Kubernetes.
-Any 1.26.X-Y release of Kubezero supports any Kubernetes cluster 1.26.X.
+Any 1.30.X-Y release of Kubezero supports any Kubernetes cluster 1.30.X.
 
 KubeZero is distributed as a collection of versioned Helm charts, allowing custom upgrade schedules and module versions as needed.
 
@@ -44,7 +44,7 @@ gantt
 # Components
 
 ## OS
-- all compute nodes are running on Alpine V3.19
+- all compute nodes are running on Alpine V3.20
 - 1 or 2 GB encrypted root file system
 - no external dependencies at boot time, apart from container registries
 - minimal attack surface
