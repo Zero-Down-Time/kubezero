@@ -3,12 +3,16 @@ redis:
 
   architecture: standalone
 
+  # Stick to last OSS version for now
+  image:
+    tag: 7.2.5-debian-12-r4
+
   replica:
     replicaCount: 0
-  
+
   auth:
     enabled: false
-  
+
   master:
     persistence:
       enabled: false
@@ -16,7 +20,7 @@ redis:
 #     requests:
 #       memory: 256Mi
 #       cpu: 100m
-  
+
   metrics:
     enabled: false
     serviceMonitor:
