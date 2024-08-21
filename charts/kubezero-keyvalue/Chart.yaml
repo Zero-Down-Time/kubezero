@@ -1,8 +1,8 @@
 apiVersion: v2
-name: kubezero-redis
-description: KubeZero Umbrella Chart for Redis HA
+name: kubezero-keyvalue
+description: KubeZero KeyValue Module
 type: application
-version: 0.4.2
+version: 0.1.0
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
 keywords:
@@ -17,12 +17,12 @@ dependencies:
     version: ">= 0.1.6"
     repository: https://cdn.zero-downtime.net/charts/
   - name: redis
-    version: 16.13.2
+    version: 20.0.3
     repository: https://charts.bitnami.com/bitnami
     condition: redis.enabled
   - name: redis-cluster
-    version: 7.6.4
+    version: 11.0.2
     repository: https://charts.bitnami.com/bitnami
     condition: redis-cluster.enabled
 
-kubeVersion: ">= 1.25.0"
+kubeVersion: ">= 1.26.0"
