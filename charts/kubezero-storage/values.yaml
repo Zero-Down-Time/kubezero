@@ -244,7 +244,7 @@ aws-efs-csi-driver:
         cpu: 20m
         memory: 96Mi
       limits:
-        memory: 128Mi
+        memory: 256Mi
 
     affinity:
       nodeAffinity:
