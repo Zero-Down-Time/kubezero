@@ -1,8 +1,8 @@
-# kubezero-redis
+# kubezero-keyvalue
 
-![Version: 0.4.1](https://img.shields.io/badge/Version-0.4.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
-KubeZero Umbrella Chart for Redis HA
+KubeZero KeyValue Module
 
 **Homepage:** <https://kubezero.com>
 
@@ -14,13 +14,13 @@ KubeZero Umbrella Chart for Redis HA
 
 ## Requirements
 
-Kubernetes: `>= 1.25.0`
+Kubernetes: `>= 1.26.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://charts.bitnami.com/bitnami | redis | 16.10.1 |
-| https://charts.bitnami.com/bitnami | redis-cluster | 7.6.1 |
+| https://charts.bitnami.com/bitnami | redis | 20.0.3 |
+| https://charts.bitnami.com/bitnami | redis-cluster | 11.0.2 |
 
 ## Values
 
