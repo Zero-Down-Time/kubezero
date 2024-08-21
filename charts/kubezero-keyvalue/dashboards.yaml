@@ -7,3 +7,8 @@ dashboards:
   url: https://grafana.com/api/dashboards/11835/revisions/1/download
   tags:
   - Redis
+- name: redis-cluster
+  url: https://grafana.com/api/dashboards/14615/revisions/1/download
+  tags:
+  - Redis
+  - Redis-Cluster
