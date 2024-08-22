@@ -2,11 +2,11 @@
 
 ## backup
 
-- shell into running posgres-auth pod
+- shell into running postgres-auth pod
 ```
-export PGPASSWORD="<postgres_password from secret>"
-cd /bitnami/posgresql
-pg_dumpall -U postgres > backup
+export PGPASSWORD="$POSTGRES_POSTGRES_PASSWORD"
+cd /bitnami/postgresql
+pg_dumpall -U postgres > /bitnami/postgresql/backup
 ```
 
 - store backup off-site
@@ -29,8 +29,10 @@ kubectl cp keycloak/kubezero-auth-postgresql-0:/bitnami/postgresql/backup postgr
 kubectl cp postgres-backup keycloak/kubezero-auth-postgresql-0:/bitnami/postgresql/backup
 ```
 
-- log into psql as admin ( shell on running pod )
+- shell into running postgres-auth pod
 ```
+export PGPASSWORD="$POSTGRES_POSTGRES_PASSWORD"
+cd /bitnami/postgresql
 psql -U postgres
 ```
 

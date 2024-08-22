@@ -393,7 +393,7 @@ controller:
   # Plugins will be installed during Jenkins controller start
   # -- List of Jenkins plugins to install. If you don't want to install plugins, set it to `false`
   installPlugins:
-    - kubernetes:4280.vd919fa_528c7e
+    - kubernetes:4285.v50ed5f624918
     - workflow-aggregator:600.vb_57cdd26fdd7
     - git:5.3.0
     - configuration-as-code:1836.vccda_4a_122a_a_e
@@ -906,6 +906,14 @@ agent:
   # -- The name of the pod template to use for providing default values
   defaultsProviderTemplate: ""
 
+  # Useful for not including a serviceAccount in the template if `false`
+  # -- Use `serviceAccountAgent.name` as the default value for defaults template `serviceAccount`
+  useDefaultServiceAccount: true
+
+  # -- Override the default service account
+  # @default -- `serviceAccountAgent.name` if `agent.useDefaultServiceAccount` is `true`
+  serviceAccount:
+
   # For connecting to the Jenkins controller
   # -- Overrides the Kubernetes Jenkins URL
   jenkinsUrl:
@@ -937,7 +945,7 @@ agent:
     # -- Repository to pull the agent jnlp image from
     repository: "jenkins/inbound-agent"
     # -- Tag of the image to pull
-    tag: "3256.v88a_f6e922152-1"
+    tag: "3261.v9c670a_4748a_9-1"
   # -- Configure working directory for default agent
   workingDir: "/home/jenkins/agent"
   nodeUsageMode: "NORMAL"
@@ -1089,6 +1097,18 @@ agent:
   containerCap: 10
   # -- Agent Pod base name
   podName: "default"
+
+  # Enables garbage collection of orphan pods for this Kubernetes cloud. (beta)
+  garbageCollection:
+    # -- When enabled, Jenkins will periodically check for orphan pods that have not been touched for the given timeout period and delete them.
+    enabled: false
+    # -- Namespaces to look at for garbage collection, in addition to the default namespace defined for the cloud. One namespace per line.
+    namespaces: ""
+    # namespaces: |-
+    #   namespaceOne
+    #   namespaceTwo
+    # -- Timeout value for orphaned pods
+    timeout: 300
 
   # -- Allows the Pod to remain active for reuse until the configured number of minutes has passed since the last step was executed on it
   idleMinutes: 0
