@@ -1,6 +1,6 @@
 # kubezero-ci
 
-![Version: 0.8.14](https://img.shields.io/badge/Version-0.8.14-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.8.15](https://img.shields.io/badge/Version-0.8.15-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for all things CI
 
@@ -20,7 +20,7 @@ Kubernetes: `>= 1.25.0`
 |------------|------|---------|
 | https://aquasecurity.github.io/helm-charts/ | trivy | 0.7.0 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://charts.jenkins.io | jenkins | 5.5.4 |
+| https://charts.jenkins.io | jenkins | 5.5.8 |
 | https://dl.gitea.io/charts/ | gitea | 10.4.0 |
 | https://docs.renovatebot.com/helm-charts | renovate | 37.440.7 |
 
@@ -91,7 +91,7 @@ Kubernetes: `>= 1.25.0`
 | jenkins.agent.defaultsProviderTemplate | string | `"podman-aws"` |  |
 | jenkins.agent.idleMinutes | int | `30` |  |
 | jenkins.agent.image.repository | string | `"public.ecr.aws/zero-downtime/jenkins-podman"` |  |
-| jenkins.agent.image.tag | string | `"v0.6.1"` |  |
+| jenkins.agent.image.tag | string | `"v0.6.2"` |  |
 | jenkins.agent.inheritYamlMergeStrategy | bool | `true` |  |
 | jenkins.agent.podName | string | `"podman-aws"` |  |
 | jenkins.agent.podRetention | string | `"Default"` |  |
