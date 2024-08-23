@@ -2,17 +2,16 @@
 nats:
   enabled: false
 
-  nats:
-    advertise: false
-
+  config:
     jetstream:
       enabled: true
 
-  natsbox:
+  natsBox:
     enabled: false
 
-  exporter:
-    serviceMonitor:
+  promExporter:
+    enabled: false
+    podMonitor:
       enabled: false
 
   mqtt:
@@ -71,18 +70,18 @@ rabbitmq:
       failIfNoPeerCert: false
       existingSecret: rabbitmq-server-certificate
       existingSecretFullChain: true
-  
+
   clustering:
     enabled: false
     forceBoot: false
-  
+
   resources:
     requests:
       memory: 512Mi
       cpu: 100m
-  
+
   replicaCount: 1
-  
+
   persistence:
     size: 2Gi
 
@@ -98,10 +97,10 @@ rabbitmq:
       whenUnsatisfiable: DoNotSchedule
       labelSelector:
         matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
- 
+
   pdb:
     create: false
-  
+
   metrics:
     enabled: false
     serviceMonitor:

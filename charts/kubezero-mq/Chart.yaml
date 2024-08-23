@@ -18,8 +18,8 @@ dependencies:
     version: ">= 0.1.6"
     repository: https://cdn.zero-downtime.net/charts/
   - name: nats
-    version: 0.8.4
-    #repository: https://nats-io.github.io/k8s/helm/charts/
+    version: 1.2.2
+    repository: https://nats-io.github.io/k8s/helm/charts/
     condition: nats.enabled
   - name: rabbitmq
     version: 14.6.6
@@ -29,4 +29,4 @@ dependencies:
     version: 4.3.19
     repository: https://charts.bitnami.com/bitnami
     condition: rabbitmq-cluster-operator.enabled
-kubeVersion: ">= 1.25.0"
+kubeVersion: ">= 1.26.0"
