@@ -1,6 +1,6 @@
 # kubezero-mq
 
-![Version: 0.3.5](https://img.shields.io/badge/Version-0.3.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.3.10](https://img.shields.io/badge/Version-0.3.10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero umbrella chart for MQ systems like NATS, RabbitMQ
 
@@ -14,14 +14,14 @@ KubeZero umbrella chart for MQ systems like NATS, RabbitMQ
 
 ## Requirements
 
-Kubernetes: `>= 1.20.0`
+Kubernetes: `>= 1.25.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-|  | nats | 0.8.4 |
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://charts.bitnami.com/bitnami | rabbitmq | 11.3.2 |
-| https://charts.bitnami.com/bitnami | rabbitmq-cluster-operator | 3.1.4 |
+| https://charts.bitnami.com/bitnami | rabbitmq | 14.6.6 |
+| https://charts.bitnami.com/bitnami | rabbitmq-cluster-operator | 4.3.19 |
+| https://nats-io.github.io/k8s/helm/charts/ | nats | 1.2.2 |
 
 ## Values
 
@@ -64,7 +64,7 @@ Kubernetes: `>= 1.20.0`
 | rabbitmq.podAntiAffinityPreset | string | `""` |  |
 | rabbitmq.replicaCount | int | `1` |  |
 | rabbitmq.resources.requests.cpu | string | `"100m"` |  |
-| rabbitmq.resources.requests.memory | string | `"256Mi"` |  |
+| rabbitmq.resources.requests.memory | string | `"512Mi"` |  |
 | rabbitmq.topologySpreadConstraints | string | `"- maxSkew: 1\n  topologyKey: topology.kubernetes.io/zone\n  whenUnsatisfiable: DoNotSchedule\n  labelSelector:\n    matchLabels: {{- include \"common.labels.matchLabels\" . | nindent 6 }}\n- maxSkew: 1\n  topologyKey: kubernetes.io/hostname\n  whenUnsatisfiable: DoNotSchedule\n  labelSelector:\n    matchLabels: {{- include \"common.labels.matchLabels\" . | nindent 6 }}"` |  |
 | rabbitmq.ulimitNofiles | string | `""` |  |
 
