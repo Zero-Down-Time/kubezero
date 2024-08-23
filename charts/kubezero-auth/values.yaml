@@ -39,6 +39,14 @@ keycloak:
       persistence:
         size: 1Gi
 
+      resources:
+        limits:
+          #cpu: 750m
+          memory: 128Mi
+        requests:
+          cpu: 100m
+          memory: 64Mi
+
     readReplicas:
       replicaCount: 0
 
