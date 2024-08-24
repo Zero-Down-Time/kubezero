@@ -5,7 +5,7 @@ global:
   defaultPodDisruptionBudget:
     enabled: true
   {{- if ne .Values.global.platform "gke" }}
-    priorityClassName: "system-cluster-critical"
+  priorityClassName: "system-cluster-critical"
   {{- end }}
 {{- end }}
 

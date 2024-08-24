@@ -31,8 +31,10 @@ cert-manager:
     nodeSelector:
       node-role.kubernetes.io/control-plane: ""
 
-  {{ with index .Values "cert-manager" "IamArn" }}
   extraEnv:
+  - name: AWS_REGION
+    value: {{ .Values.global.aws.region }}
+  {{ with index .Values "cert-manager" "IamArn" }}
   - name: AWS_ROLE_ARN
     value: "{{ . }}"
   - name: AWS_WEB_IDENTITY_TOKEN_FILE

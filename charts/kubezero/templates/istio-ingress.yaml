@@ -4,7 +4,7 @@ gateway:
   name: istio-ingressgateway
 
   {{- if ne .Values.global.platform "gke" }}
-    priorityClassName: "system-cluster-critical"
+  priorityClassName: "system-cluster-critical"
   {{- end }}
 
   {{- with index .Values "istio-ingress" "gateway" "replicaCount" }}
