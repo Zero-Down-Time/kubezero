@@ -21,6 +21,9 @@ argo_used && disable_argo
 
 control_plane_upgrade kubeadm_upgrade
 
+echo "Control plane upgraded, <Return> to continue"
+read -r
+
 #echo "Adjust kubezero values as needed:"
 # shellcheck disable=SC2015
 #argo_used && kubectl edit app kubezero -n argocd || kubectl edit cm kubezero-values -n kube-system
