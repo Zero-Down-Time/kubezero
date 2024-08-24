@@ -7,8 +7,8 @@ kubezero:
 global:
   clusterName: zdt-trial-cluster
 
-  # platform: aws (kubeadm), gke, or nocloud ( default )
-  platform: "nocloud"
+  # platform: aws (kubeadm, default), gke, or nocloud
+  platform: "aws"
 
   highAvailable: false
 
