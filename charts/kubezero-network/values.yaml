@@ -27,9 +27,10 @@ multus:
 cilium:
   enabled: false
 
-  # breaks preloaded images otherwise
+  # Always use cached images
   image:
     useDigest: false
+    pullPolicy: Never
 
   resources:
     requests:
