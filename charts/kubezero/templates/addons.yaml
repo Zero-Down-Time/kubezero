@@ -181,6 +181,7 @@ aws-eks-asg-rolling-update-handler:
     - name: AWS_WEB_IDENTITY_TOKEN_FILE
       value: "/var/run/secrets/sts.amazonaws.com/serviceaccount/token"
     - name: AWS_STS_REGIONAL_ENDPOINTS
+      value: "regional"
 {{- end }}
 
 {{- end }}

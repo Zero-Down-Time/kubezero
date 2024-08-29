@@ -28,6 +28,8 @@ spec:
       containers:
       - name: kube-multus
         image: {{ .Values.multus.image.repository }}:{{ .Values.multus.image.tag }}
+        # Always used cached images
+        imagePullPolicy: Never
         command: ["/entrypoint.sh"]
         args:
         - "--multus-conf-file=/tmp/multus-conf/00-multus.conf"
@@ -45,6 +47,7 @@ spec:
           privileged: true
           capabilities:
             add: ["SYS_ADMIN"]
+        terminationMessagePolicy: FallbackToLogsOnError
         volumeMounts:
         - name: run
           mountPath: /run
