@@ -1,6 +1,6 @@
 # kubezero-auth
 
-![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 22.0.5](https://img.shields.io/badge/AppVersion-22.0.5-informational?style=flat-square)
+![Version: 0.5.1](https://img.shields.io/badge/Version-0.5.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 22.0.5](https://img.shields.io/badge/AppVersion-22.0.5-informational?style=flat-square)
 
 KubeZero umbrella chart for all things Authentication and Identity management
 
@@ -19,7 +19,7 @@ Kubernetes: `>= 1.26.0`
 | Repository | Name | Version |
 |------------|------|---------|
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| oci://registry-1.docker.io/bitnamicharts | keycloak | 22.1.1 |
+| oci://registry-1.docker.io/bitnamicharts | keycloak | 22.2.1 |
 
 # Keycloak
    
@@ -41,7 +41,7 @@ https://github.com/keycloak/keycloak-benchmark/tree/main/provision/minikube/keyc
 | keycloak.auth.existingSecret | string | `"kubezero-auth"` |  |
 | keycloak.auth.passwordSecretKey | string | `"admin-password"` |  |
 | keycloak.enabled | bool | `false` |  |
-| keycloak.hostnameStrict | bool | `true` |  |
+| keycloak.hostnameStrict | bool | `false` |  |
 | keycloak.istio.admin.enabled | bool | `false` |  |
 | keycloak.istio.admin.gateway | string | `"istio-ingress/private-ingressgateway"` |  |
 | keycloak.istio.admin.url | string | `""` |  |
@@ -56,6 +56,9 @@ https://github.com/keycloak/keycloak-benchmark/tree/main/provision/minikube/keyc
 | keycloak.postgresql.auth.existingSecret | string | `"kubezero-auth"` |  |
 | keycloak.postgresql.auth.username | string | `"keycloak"` |  |
 | keycloak.postgresql.primary.persistence.size | string | `"1Gi"` |  |
+| keycloak.postgresql.primary.resources.limits.memory | string | `"128Mi"` |  |
+| keycloak.postgresql.primary.resources.requests.cpu | string | `"100m"` |  |
+| keycloak.postgresql.primary.resources.requests.memory | string | `"64Mi"` |  |
 | keycloak.postgresql.readReplicas.replicaCount | int | `0` |  |
 | keycloak.production | bool | `true` |  |
 | keycloak.proxyHeaders | string | `"xforwarded"` |  |

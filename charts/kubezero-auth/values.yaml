@@ -2,7 +2,7 @@ keycloak:
   enabled: false
 
   production: true
-  hostnameStrict: true
+  hostnameStrict: false
   proxyHeaders: xforwarded
 
   auth:
