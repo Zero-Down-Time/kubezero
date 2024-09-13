@@ -13,6 +13,9 @@ argo-cd:
   repoServer:
     metrics:
       enabled: {{ .Values.metrics.enabled }}
+    {{- with index .Values "argo" "argo-cd" "repoServer" }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
   server:
     metrics:
       enabled: {{ .Values.metrics.enabled }}
