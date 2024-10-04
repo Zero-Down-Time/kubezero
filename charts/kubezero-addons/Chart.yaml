@@ -2,7 +2,7 @@ apiVersion: v2
 name: kubezero-addons
 description: KubeZero umbrella chart for various optional cluster addons
 type: application
-version: 0.8.8
+version: 0.8.9
 appVersion: v1.29
 home: https://kubezero.com
 icon: https://cdn.zero-downtime.net/assets/kubezero/logo-small-64.png
@@ -20,24 +20,24 @@ maintainers:
     email: stefan@zero-downtime.net
 dependencies:
   - name: external-dns
-    version: 1.14.5
+    version: 1.15.0
     repository: https://kubernetes-sigs.github.io/external-dns/
     condition: external-dns.enabled
   - name: cluster-autoscaler
-    version: 9.37.0
+    version: 9.43.0
     repository: https://kubernetes.github.io/autoscaler
     condition: cluster-autoscaler.enabled
   - name: nvidia-device-plugin
-    version: 0.16.0
+    version: 0.16.2
     # https://github.com/NVIDIA/k8s-device-plugin
     repository: https://nvidia.github.io/k8s-device-plugin
     condition: nvidia-device-plugin.enabled
   - name: sealed-secrets
-    version: 2.16.0
+    version: 2.16.1
     repository: https://bitnami-labs.github.io/sealed-secrets
     condition: sealed-secrets.enabled
   - name: aws-node-termination-handler
-    version: 0.24.0
+    version: 0.24.1
     repository: "oci://public.ecr.aws/aws-ec2/helm"
     condition: aws-node-termination-handler.enabled
   - name: aws-eks-asg-rolling-update-handler
