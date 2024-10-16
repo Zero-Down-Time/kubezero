@@ -37,6 +37,7 @@ Kubernetes: `>= 1.26.0`
 | redis.architecture | string | `"standalone"` |  |
 | redis.auth.enabled | bool | `false` |  |
 | redis.enabled | bool | `false` |  |
+| redis.image.tag | string | `"7.2.5-debian-12-r4"` |  |
 | redis.master.persistence.enabled | bool | `false` |  |
 | redis.metrics.enabled | bool | `false` |  |
 | redis.metrics.serviceMonitor.enabled | bool | `false` |  |

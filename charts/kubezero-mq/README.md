@@ -14,7 +14,7 @@ KubeZero umbrella chart for MQ systems like NATS, RabbitMQ
 
 ## Requirements
 
-Kubernetes: `>= 1.25.0`
+Kubernetes: `>= 1.26.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
@@ -27,14 +27,14 @@ Kubernetes: `>= 1.25.0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| nats.config.jetstream.enabled | bool | `true` |  |
 | nats.enabled | bool | `false` |  |
-| nats.exporter.serviceMonitor.enabled | bool | `false` |  |
 | nats.istio.enabled | bool | `false` |  |
 | nats.istio.gateway | string | `"istio-ingress/private-ingressgateway"` |  |
 | nats.mqtt.enabled | bool | `false` |  |
-| nats.nats.advertise | bool | `false` |  |
-| nats.nats.jetstream.enabled | bool | `true` |  |
-| nats.natsbox.enabled | bool | `false` |  |
+| nats.natsBox.enabled | bool | `false` |  |
+| nats.promExporter.enabled | bool | `false` |  |
+| nats.promExporter.podMonitor.enabled | bool | `false` |  |
 | rabbitmq-cluster-operator.clusterOperator.metrics.enabled | bool | `false` |  |
 | rabbitmq-cluster-operator.clusterOperator.metrics.serviceMonitor.enabled | bool | `true` |  |
 | rabbitmq-cluster-operator.enabled | bool | `false` |  |

@@ -17,7 +17,7 @@ update-chart-docs:
 	for c in charts/*; do \
 		[[ $$c =~ "kubezero-lib" ]] && continue ; \
 		[[ $$c =~ "kubeadm" ]] && continue ; \
-		helm-docs -c $$c ; \
+		helm-docs --skip-version-footer -c $$c ; \
 	done
 
 publish-charts:

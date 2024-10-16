@@ -47,6 +47,5 @@ Kubernetes: `>= 1.26.0-0`
 
 ## Resources
 
-- https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/#IstioOperatorSpec
-- https://github.com/istio/istio/blob/master/manifests/profiles/default.yaml
-- https://istio.io/latest/docs/setup/install/standalone-operator/
+- https://github.com/cilium/cilium/blob/main/operator/pkg/model/translation/envoy_listener.go#L134
+
