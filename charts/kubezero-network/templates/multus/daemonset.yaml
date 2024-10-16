@@ -29,7 +29,7 @@ spec:
       - name: kube-multus
         image: {{ .Values.multus.image.repository }}:{{ .Values.multus.image.tag }}
         # Always used cached images
-        imagePullPolicy: Never
+        imagePullPolicy: {{ .Values.multus.image.pullPolicy }}
         command: ["/entrypoint.sh"]
         args:
         - "--multus-conf-file=/tmp/multus-conf/00-multus.conf"

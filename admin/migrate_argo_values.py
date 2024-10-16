@@ -8,14 +8,6 @@ import yaml
 def migrate(values):
     """Actual changes here"""
 
-    # argoCD moves to argo module
-    try:
-        if values["argocd"]["enabled"]:
-            values["argo"] = { "enabled": True, "argo-cd": values["argocd"] }
-            values.pop("argocd")
-    except KeyError:
-        pass
-
     return values
 
 

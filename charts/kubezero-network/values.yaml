@@ -30,12 +30,11 @@ cilium:
   # Always use cached images
   image:
     useDigest: false
-    pullPolicy: Never
 
   resources:
     requests:
       cpu: 10m
-      memory: 256Mi
+      memory: 160Mi
     limits:
       memory: 1024Mi
       # cpu: 4000m
@@ -60,7 +59,8 @@ cilium:
 
   # Keep it simple for now
   l7Proxy: false
-
+  envoy:
+    enabled: false
   #rollOutCiliumPods: true
 
   cgroup:

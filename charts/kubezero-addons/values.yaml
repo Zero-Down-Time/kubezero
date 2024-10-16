@@ -160,7 +160,7 @@ awsNeuron:
 
   image:
     name: public.ecr.aws/neuron/neuron-device-plugin
-    tag: 2.19.16.0
+    tag: 2.22.4.0
 
 nvidia-device-plugin:
   enabled: false
@@ -200,7 +200,7 @@ cluster-autoscaler:
 
   image:
     repository: registry.k8s.io/autoscaling/cluster-autoscaler
-    tag: v1.29.4
+    tag: v1.30.2
 
   autoDiscovery:
     clusterName: ""

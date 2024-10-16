@@ -47,14 +47,23 @@ _kubeadm() {
 
 # Render cluster config
 render_kubeadm() {
-  helm template $CHARTS/kubeadm --output-dir ${WORKDIR} -f ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml
+  local phase=$1
+
+  helm template $CHARTS/kubeadm --output-dir ${WORKDIR} \
+    -f ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml \
+    --set patches=/etc/kubernetes/patches
 
   # Assemble kubeadm config
   cat /dev/null > ${HOSTFS}/etc/kubernetes/kubeadm.yaml
-  for f in Cluster Init Join KubeProxy Kubelet; do
+  for f in Cluster KubeProxy Kubelet; do
     # echo "---" >> /etc/kubernetes/kubeadm.yaml
     cat ${WORKDIR}/kubeadm/templates/${f}Configuration.yaml >> ${HOSTFS}/etc/kubernetes/kubeadm.yaml
   done
+
+  # skip InitConfig during upgrade
+  if [ "$phase" != "upgrade" ]; then
+    cat ${WORKDIR}/kubeadm/templates/InitConfiguration.yaml >> ${HOSTFS}/etc/kubernetes/kubeadm.yaml
+  fi
 
   # "uncloak" the json patches after they got processed by helm
   for s in apiserver controller-manager scheduler; do
@@ -98,7 +107,7 @@ pre_kubeadm() {
   fi
 
   # copy patches to host to make --rootfs of kubeadm work
-  cp -r ${WORKDIR}/kubeadm/templates/patches /host/tmp/
+  cp -r ${WORKDIR}/kubeadm/templates/patches ${HOSTFS}/etc/kubernetes
 }
 
 
@@ -111,8 +120,6 @@ post_kubeadm() {
 
   # Patch coreDNS addon, ideally we prevent kubeadm to reset coreDNS to its defaults
   kubectl patch deployment coredns -n kube-system --patch-file ${WORKDIR}/kubeadm/templates/patches/coredns0.yaml $LOG
-
-  rm -rf /host/tmp/patches
 }
 
 
@@ -126,26 +133,28 @@ kubeadm_upgrade() {
   migrate_argo_values.py < "$WORKDIR"/kubezero-values.yaml > "$WORKDIR"/new-kubezero-values.yaml
 
   # Update kubezero-values CM
-  kubectl get cm -n kube-system kubezero-values -o=yaml | \
+  kubectl get cm -n kubezero kubezero-values -o=yaml | \
     yq e '.data."values.yaml" |= load_str("/tmp/kubezero/new-kubezero-values.yaml")' | \
     kubectl replace -f -
 
   # update argo app
   kubectl get application kubezero -n argocd -o yaml | \
     kubezero_chart_version=$(yq .version /charts/kubezero/Chart.yaml) \
-    yq '.spec.source.helm.values |= load_str("/tmp/kubezero/new-kubezero-values.yaml") | .spec.source.targetRevision = strenv(kubezero_chart_version)' | \
+    yq 'del (.spec.source.helm.values) | .spec.source.helm.valuesObject |= load("/tmp/kubezero/new-kubezero-values.yaml") | .spec.source.targetRevision = strenv(kubezero_chart_version)' | \
     kubectl apply -f -
 
   # finally remove annotation to allow argo to sync again
   kubectl patch app kubezero -n argocd --type json -p='[{"op": "remove", "path": "/metadata/annotations"}]'
 
   # Local node upgrade
-  render_kubeadm
+  render_kubeadm upgrade
 
   pre_kubeadm
 
-  # Upgrade
-  _kubeadm upgrade apply -y --patches /tmp/patches
+  # Upgrade - we upload the new config first so we can use --patch during 1.30
+  _kubeadm init phase upload-config kubeadm
+
+  kubeadm upgrade apply --yes --patches /etc/kubernetes/patches $KUBE_VERSION --rootfs ${HOSTFS} $LOG
 
   post_kubeadm
 
@@ -172,7 +181,7 @@ kubeadm_upgrade() {
 control_plane_node() {
   CMD=$1
 
-  render_kubeadm
+  render_kubeadm $CMD
 
   # Ensure clean slate if bootstrap, restore PKI otherwise
   if [[ "$CMD" =~ ^(bootstrap)$ ]]; then
@@ -193,9 +202,7 @@ control_plane_node() {
     cp -r ${WORKDIR}/pki ${HOSTFS}/etc/kubernetes
 
     # Always use kubeadm kubectl config to never run into chicken egg with custom auth hooks
-    # Fallback to old config remove with 1.30 !!
-    cp ${WORKDIR}/super-admin.conf ${HOSTFS}/root/.kube/config || \
-      cp ${WORKDIR}/admin.conf ${HOSTFS}/root/.kube/config
+    cp ${WORKDIR}/super-admin.conf ${HOSTFS}/root/.kube/config
 
     # Only restore etcd data during "restore" and none exists already
     if [[ "$CMD" =~ ^(restore)$ ]]; then
@@ -254,7 +261,7 @@ control_plane_node() {
     yq eval -i '.etcd.state = "existing"
       | .etcd.initialCluster = strenv(ETCD_INITIAL_CLUSTER)
       ' ${HOSTFS}/etc/kubernetes/kubeadm-values.yaml
-    render_kubeadm
+    render_kubeadm join
   fi
 
   # Generate our custom etcd yaml
@@ -263,12 +270,7 @@ control_plane_node() {
 
   _kubeadm init phase kubelet-start
 
-  # Remove conditional with 1.30
-  if [ -f ${HOSTFS}/etc/kubernetes/super-admin.conf ]; then
-    cp ${HOSTFS}/etc/kubernetes/super-admin.conf ${HOSTFS}/root/.kube/config
-  else
-    cp ${HOSTFS}/etc/kubernetes/admin.conf ${HOSTFS}/root/.kube/config
-  fi
+  cp ${HOSTFS}/etc/kubernetes/super-admin.conf ${HOSTFS}/root/.kube/config
 
   # Wait for api to be online
   echo "Waiting for Kubernetes API to be online ..."
@@ -372,9 +374,7 @@ backup() {
   # pki & cluster-admin access
   cp -r ${HOSTFS}/etc/kubernetes/pki ${WORKDIR}
   cp ${HOSTFS}/etc/kubernetes/admin.conf ${WORKDIR}
-
-  # Remove conditional with 1.30
-  [ -f ${HOSTFS}/etc/kubernetes/super-admin.conf ] && cp ${HOSTFS}/etc/kubernetes/super-admin.conf ${WORKDIR}
+  cp ${HOSTFS}/etc/kubernetes/super-admin.conf ${WORKDIR}
 
   # Backup via restic
   restic backup ${WORKDIR} -H $CLUSTERNAME --tag $CLUSTER_VERSION

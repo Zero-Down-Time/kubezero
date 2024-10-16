@@ -25,8 +25,8 @@ spec:
     repoURL: {{ .Values.kubezero.repoURL }}
     targetRevision: {{ default .Values.kubezero.targetRevision ( index .Values $name "targetRevision" ) | quote }}
     helm:
-      values: |
-{{- include (print $name "-values") $ | nindent 8 }}
+      valuesObject:
+        {{- include (print $name "-values") $ | nindent 8 }}
 
   destination:
     server: {{ .Values.kubezero.server }}

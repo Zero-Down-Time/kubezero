@@ -36,3 +36,5 @@ etcd:
 # -- Set to false for openrc, eg. on Gentoo or Alpine
 systemd: false
 protectKernelDefaults: false
+
+# patches: /tmp/patches

@@ -17,14 +17,6 @@ Installs Istio Ingress Gateways, requires kubezero-istio to be installed !
 
 {{ template "chart.valuesSection" . }}
 
-## ToDo
-- exclude certain ports from any Envoyfilters
-```
-            - filter_disabled:
-                destination_port_range:
-                  end: 1026
-                  start: 1025
-```
 ## Resources
 
 - https://github.com/cilium/cilium/blob/main/operator/pkg/model/translation/envoy_listener.go#L134

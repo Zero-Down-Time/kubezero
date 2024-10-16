@@ -2,9 +2,8 @@
 {{- /* Issues: MemoryQoS */ -}}
 {{- /* v1.28: PodAndContainerStatsFromCRI still not working */ -}}
 {{- /* v1.28: UnknownVersionInteroperabilityProxy requires StorageVersionAPI which is still alpha in 1.30 */ -}}
-{{- /* v1.30: remove/beta KubeProxyDrainingTerminatingNodes */ -}}
 {{- define "kubeadm.featuregates" }}
-{{- $gates := list "CustomCPUCFSQuotaPeriod" "KubeProxyDrainingTerminatingNodes" "ImageMaximumGCAge" }}
+{{- $gates := list "CustomCPUCFSQuotaPeriod" }}
 {{- if eq .return "csv" }}
 {{- range $key := $gates }}
 {{- $key }}=true,

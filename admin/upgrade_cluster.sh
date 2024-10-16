@@ -2,7 +2,7 @@
 set -eE
 set -o pipefail
 
-KUBE_VERSION=v1.29
+KUBE_VERSION=v1.30
 
 ARGO_APP=${1:-/tmp/new-kubezero-argoapp.yaml}
 
@@ -26,9 +26,9 @@ read -r
 
 #echo "Adjust kubezero values as needed:"
 # shellcheck disable=SC2015
-#argo_used && kubectl edit app kubezero -n argocd || kubectl edit cm kubezero-values -n kube-system
+#argo_used && kubectl edit app kubezero -n argocd || kubectl edit cm kubezero-values -n kubezero
 
-### v1.29
+### v1.30
 #
 
 # upgrade modules
@@ -42,7 +42,7 @@ echo "Applying remaining KubeZero modules..."
 control_plane_upgrade "apply_cert-manager, apply_istio, apply_istio-ingress, apply_istio-private-ingress, apply_logging, apply_metrics, apply_telemetry, apply_argo"
 
 # Final step is to commit the new argocd kubezero app
-kubectl get app kubezero -n argocd -o yaml | yq 'del(.status) | del(.metadata) | del(.operation) | .metadata.name="kubezero" | .metadata.namespace="argocd"' | yq 'sort_keys(..) | .spec.source.helm.values |= (from_yaml | to_yaml)' > $ARGO_APP
+kubectl get app kubezero -n argocd -o yaml | yq 'del(.status) | del(.metadata) | del(.operation) | .metadata.name="kubezero" | .metadata.namespace="argocd"' | yq 'sort_keys(..)' > $ARGO_APP
 
 # Trigger backup of upgraded cluster state
 kubectl create job --from=cronjob/kubezero-backup kubezero-backup-$KUBE_VERSION -n kube-system

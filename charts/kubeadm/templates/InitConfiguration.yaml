@@ -3,8 +3,10 @@ kind: InitConfiguration
 localAPIEndpoint:
   advertiseAddress: {{ .Values.listenAddress }}
   bindPort: {{ .Values.api.listenPort }}
+{{- with .Values.patches }}
 patches:
-  directory: /tmp/patches
+  directory: {{ . }}
+{{- end }}
 nodeRegistration:
   criSocket: "unix:///var/run/crio/crio.sock"
   ignorePreflightErrors:

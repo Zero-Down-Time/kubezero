@@ -1,5 +1,4 @@
 {{- define "addons-values" }}
-
 clusterBackup:
   enabled: {{ ternary "true" "false" (or (hasKey .Values.global.aws "region") .Values.addons.clusterBackup.enabled) }}
 

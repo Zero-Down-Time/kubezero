@@ -1,6 +1,6 @@
 # kubezero-addons
 
-![Version: 0.8.8](https://img.shields.io/badge/Version-0.8.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.29](https://img.shields.io/badge/AppVersion-v1.29-informational?style=flat-square)
+![Version: 0.8.9](https://img.shields.io/badge/Version-0.8.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.29](https://img.shields.io/badge/AppVersion-v1.29-informational?style=flat-square)
 
 KubeZero umbrella chart for various optional cluster addons
 
@@ -18,12 +18,12 @@ Kubernetes: `>= 1.26.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://bitnami-labs.github.io/sealed-secrets | sealed-secrets | 2.16.0 |
-| https://kubernetes-sigs.github.io/external-dns/ | external-dns | 1.14.5 |
-| https://kubernetes.github.io/autoscaler | cluster-autoscaler | 9.37.0 |
-| https://nvidia.github.io/k8s-device-plugin | nvidia-device-plugin | 0.16.0 |
+| https://bitnami-labs.github.io/sealed-secrets | sealed-secrets | 2.16.1 |
+| https://kubernetes-sigs.github.io/external-dns/ | external-dns | 1.15.0 |
+| https://kubernetes.github.io/autoscaler | cluster-autoscaler | 9.43.0 |
+| https://nvidia.github.io/k8s-device-plugin | nvidia-device-plugin | 0.16.2 |
 | https://twin.github.io/helm-charts | aws-eks-asg-rolling-update-handler | 1.5.0 |
-| oci://public.ecr.aws/aws-ec2/helm | aws-node-termination-handler | 0.24.0 |
+| oci://public.ecr.aws/aws-ec2/helm | aws-node-termination-handler | 0.24.1 |
 
 # MetalLB   
    
@@ -101,7 +101,7 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | aws-node-termination-handler.useProviderId | bool | `true` |  |
 | awsNeuron.enabled | bool | `false` |  |
 | awsNeuron.image.name | string | `"public.ecr.aws/neuron/neuron-device-plugin"` |  |
-| awsNeuron.image.tag | string | `"2.19.16.0"` |  |
+| awsNeuron.image.tag | string | `"2.22.4.0"` |  |
 | cluster-autoscaler.autoDiscovery.clusterName | string | `""` |  |
 | cluster-autoscaler.awsRegion | string | `"us-west-2"` |  |
 | cluster-autoscaler.enabled | bool | `false` |  |
@@ -110,7 +110,7 @@ Device plugin for [AWS Neuron](https://aws.amazon.com/machine-learning/neuron/) 
 | cluster-autoscaler.extraArgs.scan-interval | string | `"30s"` |  |
 | cluster-autoscaler.extraArgs.skip-nodes-with-local-storage | bool | `false` |  |
 | cluster-autoscaler.image.repository | string | `"registry.k8s.io/autoscaling/cluster-autoscaler"` |  |
-| cluster-autoscaler.image.tag | string | `"v1.29.4"` |  |
+| cluster-autoscaler.image.tag | string | `"v1.30.2"` |  |
 | cluster-autoscaler.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
 | cluster-autoscaler.podDisruptionBudget | bool | `false` |  |
 | cluster-autoscaler.prometheusRule.enabled | bool | `false` |  |

@@ -34,11 +34,18 @@ function argo_used() {
 
 # get kubezero-values from ArgoCD if available or use in-cluster CM without Argo
 function get_kubezero_values() {
-  local _namespace="kube-system"
-  [ "$PLATFORM" == "gke" ] && _namespace=kubezero
+  ### Remove with 1.31
+  ### Migrate the kubezero CM from kube-system to kubezero NS during the 1.30 cycle
+  kubectl get cm kubezero-values -n kubezero > /dev/null || \
+    { create_ns kubezero; kubectl get cm kubezero-values -n kube-system -o yaml | \
+      sed 's/^  namespace: kube-system/  namespace: kubezero/' | \
+      kubectl create -f - && \
+      kubectl delete cm kubezero-values -n kube-system ; }
+  ###
+
   argo_used && \
-    { kubectl get application kubezero -n argocd -o yaml | yq .spec.source.helm.values > ${WORKDIR}/kubezero-values.yaml; } || \
-    { kubectl get configmap -n $_namespace kubezero-values -o yaml | yq '.data."values.yaml"' > ${WORKDIR}/kubezero-values.yaml ;}
+    { kubectl get application kubezero -n argocd -o yaml | yq .spec.source.helm.valuesObject > ${WORKDIR}/kubezero-values.yaml ; } || \
+    { kubectl get configmap kubezero-values -n kubezero -o yaml | yq '.data."values.yaml"' > ${WORKDIR}/kubezero-values.yaml ; }
 }
 
 
@@ -96,7 +103,7 @@ function argo_app_synced() {
 function create_ns() {
   local namespace=$1
   if [ "$namespace" != "kube-system" ]; then
-    kubectl get ns $namespace || kubectl create ns $namespace
+    kubectl get ns $namespace > /dev/null || kubectl create ns $namespace
   fi
 }
 
@@ -169,7 +176,7 @@ function _helm() {
     [ -n "$_version" ] && targetRevision="--version $_version"
   fi
 
-  yq eval '.spec.source.helm.values' $WORKDIR/kubezero/templates/${module}.yaml > $WORKDIR/values.yaml
+  yq eval '.spec.source.helm.valuesObject' $WORKDIR/kubezero/templates/${module}.yaml > $WORKDIR/values.yaml
 
   if [ $action == "crds" ]; then
     # Allow custom CRD handling
