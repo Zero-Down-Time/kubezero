@@ -138,9 +138,9 @@ kubeadm_upgrade() {
     kubectl replace -f -
 
   # update argo app
+  export kubezero_chart_version=$(yq .version $CHARTS/kubezero/Chart.yaml)
   kubectl get application kubezero -n argocd -o yaml | \
-    kubezero_chart_version=$(yq .version /charts/kubezero/Chart.yaml) \
-    yq 'del (.spec.source.helm.values) | .spec.source.helm.valuesObject |= load("/tmp/kubezero/new-kubezero-values.yaml") | .spec.source.targetRevision = strenv(kubezero_chart_version)' | \
+    yq 'del(.spec.source.helm.values) | .spec.source.helm.valuesObject |= load("/tmp/kubezero/new-kubezero-values.yaml") | .spec.source.targetRevision = strenv(kubezero_chart_version)' | \
     kubectl apply -f -
 
   # finally remove annotation to allow argo to sync again

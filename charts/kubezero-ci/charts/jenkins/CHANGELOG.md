@@ -12,6 +12,86 @@ Use the following links to reference issues, PRs, and commits prior to v2.6.0.
 The changelog until v1.5.7 was auto-generated based on git commits.
 Those entries include a reference to the git commit to be able to get more details.
 
+## 5.7.5
+
+Fix helm release deployment with flux revision reconciliation
+
+## 5.7.4
+
+Update `kubernetes` to version `4292.v11898cf8fa_66`
+
+## 5.7.3
+
+Update `git` to version `5.5.2`
+
+## 5.7.2
+
+Update `jenkins/jenkins` to version `2.462.3-jdk17`
+
+## 5.7.1
+
+Update `docker.io/kiwigrid/k8s-sidecar` to version `1.28.0`
+
+## 5.7.0
+
+Add RBAC support for using the `nonroot` and `nonroot-v2` `SecurityContextConstraints` on OpenShift.
+
+## 5.6.5
+
+Update `kubernetes` to version `4290.v93ea_4b_b_26a_61`
+
+## 5.6.4
+
+Update `git` to version `5.5.1`
+
+## 5.6.3
+
+Update `git` to version `5.5.0`
+
+## 5.6.2
+
+Update `kubernetes` to version `4288.v1719f9d0c854`
+
+## 5.6.1
+
+Documentation about OCI installation
+
+## 5.6.0
+
+Helm chart is also now deployed on GitHub packages and can be installed from `oci://ghcr.io/jenkinsci/helm-charts/jenkins`
+
+## 5.5.16
+
+Update `kubernetes` to version `4287.v73451380b_576`
+
+## 5.5.15
+
+Add support for `controller.enableServiceLinks` to disable service links in the controller pod.
+
+## 5.5.14
+
+Update `jenkins/jenkins` to version `2.462.2-jdk17`
+
+## 5.5.13
+
+Update `docker.io/kiwigrid/k8s-sidecar` to version `1.27.6`
+
+## 5.5.12
+
+Update `configuration-as-code` to version `1850.va_a_8c31d3158b_`
+
+## 5.5.11
+
+Update `configuration-as-code` to version `1849.v3a_d20568000a_`
+
+## 5.5.10
+
+Update `git` to version `5.4.1`
+
+## 5.5.9
+
+Update `git` to version `5.4.0`
+
 ## 5.5.8
 
 Add `agent.garbageCollection` to support setting [kubernetes plugin garbage collection](https://plugins.jenkins.io/kubernetes/#plugin-content-garbage-collection-beta).

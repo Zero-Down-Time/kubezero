@@ -2,7 +2,7 @@ gitea:
   enabled: false
 
   image:
-    # tag: 1.21.11
+    tag: 1.22.3
     rootless: true
 
   repliaCount: 1
@@ -277,7 +277,7 @@ jenkins:
 trivy:
   enabled: false
   image:
-    tag: 0.52.1
+   tag: 0.56.2
   persistence:
     enabled: true
     size: 1Gi

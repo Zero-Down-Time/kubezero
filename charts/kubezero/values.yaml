@@ -36,7 +36,7 @@ addons:
 network:
   enabled: true
   retain: true
-  targetRevision: 0.5.4
+  targetRevision: 0.5.5
   cilium:
     cluster: {}
 

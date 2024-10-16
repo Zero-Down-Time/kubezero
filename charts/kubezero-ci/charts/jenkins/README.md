@@ -23,8 +23,13 @@ _See [`helm repo`](https://helm.sh/docs/helm/helm_repo/) for command documentati
 ## Install Chart
 
 ```console
-# Helm 3
-$ helm install [RELEASE_NAME] jenkins/jenkins [flags]
+helm install [RELEASE_NAME] jenkins/jenkins [flags]
+```
+
+Since version `5.6.0` the chart is available as an OCI image and can be installed using:
+
+```console
+helm install [RELEASE_NAME] oci://ghcr.io/jenkinsci/helm-charts/jenkins [flags]
 ```
 
 _See [configuration](#configuration) below._
@@ -70,7 +75,7 @@ To see all configurable options with detailed comments, visit the chart's [value
 $ helm show values jenkins/jenkins
 ```
 
-For a summary of all configurable options, see [VALUES_SUMMARY.md](https://github.com/jenkinsci/helm-charts/blob/main/charts/jenkins/VALUES_SUMMARY.md).
+For a summary of all configurable options, see [VALUES.md](https://github.com/jenkinsci/helm-charts/blob/main/charts/jenkins/VALUES.md).
 
 ### Configure Security Realm and Authorization Strategy
 

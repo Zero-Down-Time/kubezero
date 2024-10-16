@@ -36,7 +36,7 @@ cilium:
       cpu: 10m
       memory: 160Mi
     limits:
-      memory: 1024Mi
+      memory: 1Gi
       # cpu: 4000m
 
   cni:
