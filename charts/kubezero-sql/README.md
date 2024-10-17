@@ -1,8 +1,8 @@
 # kubezero-sql
 
-![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
-KubeZero umbrella chart for SQL databases, Percona XtraDB Cluster
+KubeZero umbrella chart for SQL databases, mariadb-galera
 
 **Homepage:** <https://kubezero.com>
 
@@ -14,13 +14,12 @@ KubeZero umbrella chart for SQL databases, Percona XtraDB Cluster
 
 ## Requirements
 
-Kubernetes: `>= 1.24.0`
+Kubernetes: `>= 1.26.0`
 
 | Repository | Name | Version |
 |------------|------|---------|
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://charts.bitnami.com/bitnami | mariadb-galera | 7.4.7 |
-| https://percona.github.io/percona-helm-charts/ | pxc-operator | 1.12.1 |
+| https://charts.bitnami.com/bitnami | mariadb-galera | 14.0.10 |
 
 ## Values
 
@@ -38,14 +37,6 @@ Kubernetes: `>= 1.24.0`
 | mariadb-galera.metrics.prometheusRules.enabled | bool | `false` |  |
 | mariadb-galera.metrics.serviceMonitor.enabled | bool | `false` |  |
 | mariadb-galera.replicaCount | int | `2` |  |
-| pxc-operator.enabled | bool | `false` |  |
-| pxc-operator.nodeSelector."node-role.kubernetes.io/control-plane" | string | `""` |  |
-| pxc-operator.resources.limits.memory | string | `"512Mi"` |  |
-| pxc-operator.resources.requests.cpu | string | `"50m"` |  |
-| pxc-operator.resources.requests.memory | string | `"32Mi"` |  |
-| pxc-operator.tolerations[0].effect | string | `"NoSchedule"` |  |
-| pxc-operator.tolerations[0].key | string | `"node-role.kubernetes.io/control-plane"` |  |
-| pxc-operator.watchAllNamespaces | bool | `true` |  |
 
 # Changes
 

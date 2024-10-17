@@ -1,24 +1,3 @@
-pxc-operator:
-  enabled: false
-
-  # we want a clusterwide operator
-  watchAllNamespaces: true
-
-  # running on the control-plane
-  tolerations:
-  - key: node-role.kubernetes.io/control-plane
-    effect: NoSchedule
-  nodeSelector:
-    node-role.kubernetes.io/control-plane: ""
-
-  resources:
-    limits:
-      #cpu: 200m
-      memory: 512Mi
-    requests:
-      cpu: 50m
-      memory: 32Mi
-
 mariadb-galera:
   enabled: false
 
