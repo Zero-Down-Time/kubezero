@@ -5,8 +5,9 @@ mariadb-galera:
 
   db:
     user: mariadb
-  galera:
-    # For a single node "cluster" force bootstrap
+
+  # For a single node "cluster" force bootstrap
+  #galera:
     #bootstrap:
     #  bootstrapFromNode: 0
     #  forceSafeToBootstrap: true
