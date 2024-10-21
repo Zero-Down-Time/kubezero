@@ -64,13 +64,13 @@ storage:
 istio:
   enabled: false
   namespace: istio-system
-  targetRevision: 0.22.3-1
+  targetRevision: 0.23.2
 
 istio-ingress:
   enabled: false
   chart: kubezero-istio-gateway
   namespace: istio-ingress
-  targetRevision: 0.22.3-1
+  targetRevision: 0.23.2
   gateway:
     service: {}
 
@@ -78,7 +78,7 @@ istio-private-ingress:
   enabled: false
   chart: kubezero-istio-gateway
   namespace: istio-ingress
-  targetRevision: 0.22.3-1
+  targetRevision: 0.23.2
   gateway:
     service: {}
 
@@ -101,7 +101,7 @@ operators:
 metrics:
   enabled: false
   namespace: monitoring
-  targetRevision: 0.10.0
+  targetRevision: 0.10.1
   istio:
     grafana: {}
     prometheus: {}

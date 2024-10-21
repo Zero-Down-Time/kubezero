@@ -83,7 +83,7 @@ spec:
         description: StatefulSet {{`{{`}} $labels.namespace {{`}}`}}/{{`{{`}} $labels.statefulset {{`}}`}} update has not been rolled out.
         runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubestatefulsetupdatenotrolledout
         summary: StatefulSet update has not been rolled out.
-      expr: "(\n  max by(namespace, statefulset) (\n    kube_statefulset_status_current_revision{job=\"kube-state-metrics\"}\n      unless\n    kube_statefulset_status_update_revision{job=\"kube-state-metrics\"}\n  )\n    *\n  (\n    kube_statefulset_replicas{job=\"kube-state-metrics\"}\n      !=\n    kube_statefulset_status_replicas_updated{job=\"kube-state-metrics\"}\n  )\n)  and (\n  changes(kube_statefulset_status_replicas_updated{job=\"kube-state-metrics\"}[5m])\n    ==\n  0\n)\n"
+      expr: "(\n  max by(namespace, statefulset, job, cluster) (\n    kube_statefulset_status_current_revision{job=\"kube-state-metrics\"}\n      unless\n    kube_statefulset_status_update_revision{job=\"kube-state-metrics\"}\n  )\n    *\n  (\n    kube_statefulset_replicas{job=\"kube-state-metrics\"}\n      !=\n    kube_statefulset_status_replicas_updated{job=\"kube-state-metrics\"}\n  )\n)  and (\n  changes(kube_statefulset_status_replicas_updated{job=\"kube-state-metrics\"}[5m])\n    ==\n  0\n)\n"
       for: 15m
       labels:
         severity: warning
@@ -328,11 +328,11 @@ spec:
         description: The API server is burning too much error budget.
         runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapierrorbudgetburn
         summary: The API server is burning too much error budget.
-      expr: 'sum(apiserver_request:burnrate1h) > (14.40 * 0.01000)
+      expr: 'sum by(cluster) (apiserver_request:burnrate1h) > (14.40 * 0.01000)
 
-        and
+        and on(cluster)
 
-        sum(apiserver_request:burnrate5m) > (14.40 * 0.01000)
+        sum by(cluster) (apiserver_request:burnrate5m) > (14.40 * 0.01000)
 
         '
       for: 2m
@@ -345,11 +345,11 @@ spec:
         description: The API server is burning too much error budget.
         runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapierrorbudgetburn
         summary: The API server is burning too much error budget.
-      expr: 'sum(apiserver_request:burnrate6h) > (6.00 * 0.01000)
+      expr: 'sum by(cluster) (apiserver_request:burnrate6h) > (6.00 * 0.01000)
 
-        and
+        and on(cluster)
 
-        sum(apiserver_request:burnrate30m) > (6.00 * 0.01000)
+        sum by(cluster) (apiserver_request:burnrate30m) > (6.00 * 0.01000)
 
         '
       for: 15m
@@ -362,11 +362,11 @@ spec:
         description: The API server is burning too much error budget.
         runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapierrorbudgetburn
         summary: The API server is burning too much error budget.
-      expr: 'sum(apiserver_request:burnrate1d) > (3.00 * 0.01000)
+      expr: 'sum by(cluster) (apiserver_request:burnrate1d) > (3.00 * 0.01000)
 
-        and
+        and on(cluster)
 
-        sum(apiserver_request:burnrate2h) > (3.00 * 0.01000)
+        sum by(cluster) (apiserver_request:burnrate2h) > (3.00 * 0.01000)
 
         '
       for: 1h
@@ -379,11 +379,11 @@ spec:
         description: The API server is burning too much error budget.
         runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapierrorbudgetburn
         summary: The API server is burning too much error budget.
-      expr: 'sum(apiserver_request:burnrate3d) > (1.00 * 0.01000)
+      expr: 'sum by(cluster) (apiserver_request:burnrate3d) > (1.00 * 0.01000)
 
-        and
+        and on(cluster)
 
-        sum(apiserver_request:burnrate6h) > (1.00 * 0.01000)
+        sum by(cluster) (apiserver_request:burnrate6h) > (1.00 * 0.01000)
 
         '
       for: 3h
@@ -398,7 +398,7 @@ spec:
         description: A client certificate used to authenticate to kubernetes apiserver is expiring in less than 7.0 days.
         runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeclientcertificateexpiration
         summary: Client certificate is about to expire.
-      expr: 'apiserver_client_certificate_expiration_seconds_count{job="apiserver"} > 0 and on(job) histogram_quantile(0.01, sum by (job, le) (rate(apiserver_client_certificate_expiration_seconds_bucket{job="apiserver"}[5m]))) < 604800
+      expr: 'apiserver_client_certificate_expiration_seconds_count{job="apiserver"} > 0 and on(cluster, job) histogram_quantile(0.01, sum by (cluster, job, le) (rate(apiserver_client_certificate_expiration_seconds_bucket{job="apiserver"}[5m]))) < 604800
 
         '
       for: 5m
@@ -409,7 +409,7 @@ spec:
         description: A client certificate used to authenticate to kubernetes apiserver is expiring in less than 24.0 hours.
         runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeclientcertificateexpiration
         summary: Client certificate is about to expire.
-      expr: 'apiserver_client_certificate_expiration_seconds_count{job="apiserver"} > 0 and on(job) histogram_quantile(0.01, sum by (job, le) (rate(apiserver_client_certificate_expiration_seconds_bucket{job="apiserver"}[5m]))) < 86400
+      expr: 'apiserver_client_certificate_expiration_seconds_count{job="apiserver"} > 0 and on(cluster, job) histogram_quantile(0.01, sum by (cluster, job, le) (rate(apiserver_client_certificate_expiration_seconds_bucket{job="apiserver"}[5m]))) < 86400
 
         '
       for: 5m
@@ -452,7 +452,7 @@ spec:
         description: The kubernetes apiserver has terminated {{`{{`}} $value | humanizePercentage {{`}}`}} of its incoming requests.
         runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapiterminatedrequests
         summary: The kubernetes apiserver has terminated {{`{{`}} $value | humanizePercentage {{`}}`}} of its incoming requests.
-      expr: 'sum(rate(apiserver_request_terminations_total{job="apiserver"}[10m]))  / (  sum(rate(apiserver_request_total{job="apiserver"}[10m])) + sum(rate(apiserver_request_terminations_total{job="apiserver"}[10m])) ) > 0.20
+      expr: 'sum by(cluster) (rate(apiserver_request_terminations_total{job="apiserver"}[10m])) / ( sum by(cluster) (rate(apiserver_request_total{job="apiserver"}[10m])) + sum by(cluster) (rate(apiserver_request_terminations_total{job="apiserver"}[10m])) ) > 0.20
 
         '
       for: 5m
@@ -642,14 +642,6 @@ spec:
       labels:
         verb: write
       record: code:apiserver_request_total:increase30d
-    - expr: 'sum by (cluster, verb, scope) (increase(apiserver_request_sli_duration_seconds_count{job="apiserver"}[1h]))
-
-        '
-      record: cluster_verb_scope:apiserver_request_sli_duration_seconds_count:increase1h
-    - expr: 'sum by (cluster, verb, scope) (avg_over_time(cluster_verb_scope:apiserver_request_sli_duration_seconds_count:increase1h[30d]) * 24 * 30)
-
-        '
-      record: cluster_verb_scope:apiserver_request_sli_duration_seconds_count:increase30d
     - expr: 'sum by (cluster, verb, scope, le) (increase(apiserver_request_sli_duration_seconds_bucket[1h]))
 
         '
@@ -658,6 +650,14 @@ spec:
 
         '
       record: cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase30d
+    - expr: 'sum by (cluster, verb, scope) (cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase1h{le="+Inf"})
+
+        '
+      record: cluster_verb_scope:apiserver_request_sli_duration_seconds_count:increase1h
+    - expr: 'sum by (cluster, verb, scope) (cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase30d{le="+Inf"} * 24 * 30)
+
+        '
+      record: cluster_verb_scope:apiserver_request_sli_duration_seconds_count:increase30d
     - expr: "1 - (\n  (\n    # write too slow\n    sum by (cluster) (cluster_verb_scope:apiserver_request_sli_duration_seconds_count:increase30d{verb=~\"POST|PUT|PATCH|DELETE\"})\n    -\n    sum by (cluster) (cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase30d{verb=~\"POST|PUT|PATCH|DELETE\",le=\"1\"})\n  ) +\n  (\n    # read too slow\n    sum by (cluster) (cluster_verb_scope:apiserver_request_sli_duration_seconds_count:increase30d{verb=~\"LIST|GET\"})\n    -\n    (\n      (\n        sum by (cluster) (cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase30d{verb=~\"LIST|GET\",scope=~\"resource|\",le=\"1\"})\n        or\n        vector(0)\n      )\n      +\n      sum by (cluster) (cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase30d{verb=~\"LIST|GET\",scope=\"namespace\",le=\"5\"})\n      +\n      sum by (cluster) (cluster_verb_scope_le:apiserver_request_sli_duration_seconds_bucket:increase30d{verb=~\"LIST|GET\",scope=\"\
         cluster\",le=\"30\"})\n    )\n  ) +\n  # errors\n  sum by (cluster) (code:apiserver_request_total:increase30d{code=~\"5..\"} or vector(0))\n)\n/\nsum by (cluster) (code:apiserver_request_total:increase30d)\n"
       labels:
@@ -800,20 +800,26 @@ spec:
     rules:
     - expr: "container_memory_swap{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", image!=\"\"}\n* on (cluster, namespace, pod) group_left(node) topk by(cluster, namespace, pod) (1,\n  max by(cluster, namespace, pod, node) (kube_pod_info{node!=\"\"})\n)\n"
       record: node_namespace_pod_container:container_memory_swap
-  - name: k8s.rules.container_resource
+  - name: k8s.rules.container_memory_requests
     rules:
     - expr: "kube_pod_container_resource_requests{resource=\"memory\",job=\"kube-state-metrics\"}  * on (namespace, pod, cluster)\ngroup_left() max by (namespace, pod, cluster) (\n  (kube_pod_status_phase{phase=~\"Pending|Running\"} == 1)\n)\n"
       record: cluster:namespace:pod_memory:active:kube_pod_container_resource_requests
     - expr: "sum by (namespace, cluster) (\n    sum by (namespace, pod, cluster) (\n        max by (namespace, pod, container, cluster) (\n          kube_pod_container_resource_requests{resource=\"memory\",job=\"kube-state-metrics\"}\n        ) * on(namespace, pod, cluster) group_left() max by (namespace, pod, cluster) (\n          kube_pod_status_phase{phase=~\"Pending|Running\"} == 1\n        )\n    )\n)\n"
       record: namespace_memory:kube_pod_container_resource_requests:sum
+  - name: k8s.rules.container_cpu_requests
+    rules:
     - expr: "kube_pod_container_resource_requests{resource=\"cpu\",job=\"kube-state-metrics\"}  * on (namespace, pod, cluster)\ngroup_left() max by (namespace, pod, cluster) (\n  (kube_pod_status_phase{phase=~\"Pending|Running\"} == 1)\n)\n"
       record: cluster:namespace:pod_cpu:active:kube_pod_container_resource_requests
     - expr: "sum by (namespace, cluster) (\n    sum by (namespace, pod, cluster) (\n        max by (namespace, pod, container, cluster) (\n          kube_pod_container_resource_requests{resource=\"cpu\",job=\"kube-state-metrics\"}\n        ) * on(namespace, pod, cluster) group_left() max by (namespace, pod, cluster) (\n          kube_pod_status_phase{phase=~\"Pending|Running\"} == 1\n        )\n    )\n)\n"
       record: namespace_cpu:kube_pod_container_resource_requests:sum
+  - name: k8s.rules.container_memory_limits
+    rules:
     - expr: "kube_pod_container_resource_limits{resource=\"memory\",job=\"kube-state-metrics\"}  * on (namespace, pod, cluster)\ngroup_left() max by (namespace, pod, cluster) (\n  (kube_pod_status_phase{phase=~\"Pending|Running\"} == 1)\n)\n"
       record: cluster:namespace:pod_memory:active:kube_pod_container_resource_limits
     - expr: "sum by (namespace, cluster) (\n    sum by (namespace, pod, cluster) (\n        max by (namespace, pod, container, cluster) (\n          kube_pod_container_resource_limits{resource=\"memory\",job=\"kube-state-metrics\"}\n        ) * on(namespace, pod, cluster) group_left() max by (namespace, pod, cluster) (\n          kube_pod_status_phase{phase=~\"Pending|Running\"} == 1\n        )\n    )\n)\n"
       record: namespace_memory:kube_pod_container_resource_limits:sum
+  - name: k8s.rules.container_cpu_limits
+    rules:
     - expr: "kube_pod_container_resource_limits{resource=\"cpu\",job=\"kube-state-metrics\"}  * on (namespace, pod, cluster)\ngroup_left() max by (namespace, pod, cluster) (\n (kube_pod_status_phase{phase=~\"Pending|Running\"} == 1)\n )\n"
       record: cluster:namespace:pod_cpu:active:kube_pod_container_resource_limits
     - expr: "sum by (namespace, cluster) (\n    sum by (namespace, pod, cluster) (\n        max by (namespace, pod, container, cluster) (\n          kube_pod_container_resource_limits{resource=\"cpu\",job=\"kube-state-metrics\"}\n        ) * on(namespace, pod, cluster) group_left() max by (namespace, pod, cluster) (\n          kube_pod_status_phase{phase=~\"Pending|Running\"} == 1\n        )\n    )\n)\n"
