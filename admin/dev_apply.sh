@@ -7,6 +7,7 @@ ARTIFACTS=($(echo $1 | tr "," "\n"))
 ACTION=$2
 
 LOCAL_DEV=1
+ARGOCD="False"
 
 #VERSION="latest"
 KUBE_VERSION="$(kubectl version -o json | jq -r .serverVersion.gitVersion)"
@@ -76,7 +77,7 @@ function metrics-pre() {
 
 
 ### Main
-get_kubezero_values
+get_kubezero_values $ARGOCD
 
 # Always use embedded kubezero chart
 helm template $CHARTS/kubezero -f $WORKDIR/kubezero-values.yaml --kube-version $KUBE_VERSION --version ~$KUBE_VERSION --devel --output-dir $WORKDIR

@@ -126,8 +126,30 @@ post_kubeadm() {
 kubeadm_upgrade() {
   # pre upgrade hook
 
+  ### Remove with 1.31
+  # migrate kubezero CM to kubezero NS
+  # migrate ArgoCD app from values to valuesObject
+  if [ "$ARGOCD" == "True" ]; then
+    kubectl get app kubezero -n argocd -o yaml > $WORKDIR/kubezero-argo-app.yaml
+    if [ "$(yq '(.spec.source.helm | has "values")' $WORKDIR/kubezero-argo-app.yaml)" == "true" ]; then
+      yq '.spec.source.helm.valuesObject = (.spec.source.helm.values | from_yaml)' \
+        $WORKDIR/kubezero-argo-app.yaml | kubectl apply --server-side --force-conflicts -f -
+
+      kubectl patch app kubezero -n argocd --type json -p='[{"op": "remove", "path": "/spec/source/helm/values"}]'
+      kubectl delete cm kubezero-values -n kube-system > /dev/null || true
+    fi
+
+  else
+    kubectl get cm kubezero-values -n kubezero > /dev/null || \
+      { create_ns kubezero; kubectl get cm kubezero-values -n kube-system -o yaml | \
+        sed 's/^  namespace: kube-system/  namespace: kubezero/' | \
+        kubectl create -f - && \
+        kubectl delete cm kubezero-values -n kube-system ; }
+  fi
+  ###
+
   # get current values, argo app over cm
-  get_kubezero_values
+  get_kubezero_values $ARGOCD
 
   # tumble new config through migrate.py
   migrate_argo_values.py < "$WORKDIR"/kubezero-values.yaml > "$WORKDIR"/new-kubezero-values.yaml
@@ -140,8 +162,8 @@ kubeadm_upgrade() {
   # update argo app
   export kubezero_chart_version=$(yq .version $CHARTS/kubezero/Chart.yaml)
   kubectl get application kubezero -n argocd -o yaml | \
-    yq 'del(.spec.source.helm.values) | .spec.source.helm.valuesObject |= load("/tmp/kubezero/new-kubezero-values.yaml") | .spec.source.targetRevision = strenv(kubezero_chart_version)' | \
-    kubectl apply -f -
+    yq '.spec.source.helm.valuesObject |= load("/tmp/kubezero/new-kubezero-values.yaml") | .spec.source.targetRevision = strenv(kubezero_chart_version)' | \
+    kubectl apply --server-side --force-conflicts -f -
 
   # finally remove annotation to allow argo to sync again
   kubectl patch app kubezero -n argocd --type json -p='[{"op": "remove", "path": "/metadata/annotations"}]'
@@ -323,7 +345,7 @@ control_plane_node() {
 apply_module() {
   MODULES=$1
 
-  get_kubezero_values
+  get_kubezero_values $ARGOCD
 
   # Always use embedded kubezero chart
   helm template $CHARTS/kubezero -f $WORKDIR/kubezero-values.yaml --version ~$KUBE_VERSION --devel --output-dir $WORKDIR
@@ -344,7 +366,7 @@ apply_module() {
 delete_module() {
   MODULES=$1
 
-  get_kubezero_values
+  get_kubezero_values $ARGOCD
 
   # Always use embedded kubezero chart
   helm template $CHARTS/kubezero -f $WORKDIR/kubezero-values.yaml --version ~$KUBE_VERSION --devel --output-dir $WORKDIR
@@ -406,14 +428,21 @@ parse_kubezero
 # Execute tasks
 for t in $@; do
   case "$t" in
-    kubeadm_upgrade) kubeadm_upgrade;;
     bootstrap) control_plane_node bootstrap;;
     join) control_plane_node join;;
     restore) control_plane_node restore;;
-    apply_*) apply_module "${t##apply_}";;
-    delete_*) delete_module "${t##delete_}";;
+    kubeadm_upgrade)
+      ARGOCD=$(argo_used)
+      kubeadm_upgrade;;
+    apply_*)
+      ARGOCD=$(argo_used)
+      apply_module "${t##apply_}";;
+    delete_*)
+      ARGOCD=$(argo_used)
+      delete_module "${t##delete_}";;
     backup) backup;;
     debug_shell) debug_shell;;
     *) echo "Unknown command: '$t'";;
   esac
 done
+

@@ -12,12 +12,15 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 . "$SCRIPT_DIR"/libhelm.sh
 
+ARGOCD=$(argo_used)
+
 echo "Checking that all pods in kube-system are running ..."
-waitSystemPodsRunning
+#waitSystemPodsRunning
 
-argo_used && disable_argo
+[ "$ARGOCD" == "True" ] && disable_argo
 
-#all_nodes_upgrade ""
+# Preload cilium images to running nodes
+all_nodes_upgrade "chroot /host crictl pull quay.io/cilium/cilium:v1.16.3"
 
 control_plane_upgrade kubeadm_upgrade
 
@@ -26,7 +29,7 @@ read -r
 
 #echo "Adjust kubezero values as needed:"
 # shellcheck disable=SC2015
-#argo_used && kubectl edit app kubezero -n argocd || kubectl edit cm kubezero-values -n kubezero
+#[ "$ARGOCD" == "True" ] && kubectl edit app kubezero -n argocd || kubectl edit cm kubezero-values -n kubezero
 
 ### v1.30
 #
@@ -57,4 +60,4 @@ echo "Then head over to ArgoCD for this cluster and sync all KubeZero modules to
 echo "<Return> to continue and re-enable ArgoCD:"
 read -r
 
-argo_used && enable_argo
+[ "$ARGOCD" == "True" ] && enable_argo

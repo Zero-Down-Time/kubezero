@@ -27,25 +27,20 @@ function chart_location() {
 
 
 function argo_used() {
-  kubectl get application kubezero -n argocd >/dev/null && rc=$? || rc=$?
-  return $rc
+  kubectl get application kubezero -n argocd >/dev/null \
+    && echo "True" || echo "False"
 }
 
 
-# get kubezero-values from ArgoCD if available or use in-cluster CM without Argo
+# get kubezero-values from ArgoCD if available or use in-cluster CM
 function get_kubezero_values() {
-  ### Remove with 1.31
-  ### Migrate the kubezero CM from kube-system to kubezero NS during the 1.30 cycle
-  kubectl get cm kubezero-values -n kubezero > /dev/null || \
-    { create_ns kubezero; kubectl get cm kubezero-values -n kube-system -o yaml | \
-      sed 's/^  namespace: kube-system/  namespace: kubezero/' | \
-      kubectl create -f - && \
-      kubectl delete cm kubezero-values -n kube-system ; }
-  ###
+  local argo=${1:-"False"}
 
-  argo_used && \
-    { kubectl get application kubezero -n argocd -o yaml | yq .spec.source.helm.valuesObject > ${WORKDIR}/kubezero-values.yaml ; } || \
-    { kubectl get configmap kubezero-values -n kubezero -o yaml | yq '.data."values.yaml"' > ${WORKDIR}/kubezero-values.yaml ; }
+  if [ "$argo" == "True" ]; then
+    kubectl get application kubezero -n argocd -o yaml | yq .spec.source.helm.valuesObject > ${WORKDIR}/kubezero-values.yaml
+  else
+    kubectl get configmap kubezero-values -n kubezero -o yaml | yq '.data."values.yaml"' > ${WORKDIR}/kubezero-values.yaml
+  fi
 }
 
 
@@ -235,7 +230,6 @@ spec:
       hostPID: true
       tolerations:
       - operator: Exists
-        effect: NoSchedule
       initContainers:
       - name: node-upgrade
         image: busybox
