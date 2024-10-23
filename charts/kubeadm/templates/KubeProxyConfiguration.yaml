@@ -5,3 +5,6 @@ metricsBindAddress: "0.0.0.0:10249"
 mode: "iptables"
 logging:
   format: json
+iptables:
+  localhostNodePorts: false
+#nodePortAddresses: primary
