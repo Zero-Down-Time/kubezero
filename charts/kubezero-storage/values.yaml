@@ -204,6 +204,9 @@ aws-efs-csi-driver:
 
   replicaCount: 1
 
+  image:
+    tag: "v2.0.9"
+
   controller:
     create: true
     logLevel: 2

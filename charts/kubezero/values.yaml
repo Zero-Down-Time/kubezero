@@ -47,7 +47,7 @@ cert-manager:
 
 storage:
   enabled: false
-  targetRevision: 0.8.8
+  targetRevision: 0.8.9
   lvm-localpv:
     enabled: false
   aws-ebs-csi-driver:
