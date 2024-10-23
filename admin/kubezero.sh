@@ -166,7 +166,7 @@ kubeadm_upgrade() {
     kubectl apply --server-side --force-conflicts -f -
 
   # finally remove annotation to allow argo to sync again
-  kubectl patch app kubezero -n argocd --type json -p='[{"op": "remove", "path": "/metadata/annotations"}]'
+  kubectl patch app kubezero -n argocd --type json -p='[{"op": "remove", "path": "/metadata/annotations"}]' || true
 
   # Local node upgrade
   render_kubeadm upgrade
