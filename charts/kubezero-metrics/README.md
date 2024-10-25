@@ -165,11 +165,13 @@ Kubernetes: `>= 1.26.0`
 | kube-prometheus-stack.prometheus.prometheusSpec.logFormat | string | `"json"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues | bool | `false` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.portName | string | `"http-prometheus"` |  |
+| kube-prometheus-stack.prometheus.prometheusSpec.probeSelectorNilUsesHelmValues | bool | `false` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.resources.limits.memory | string | `"4Gi"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.resources.requests.cpu | string | `"500m"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.resources.requests.memory | string | `"2Gi"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.retention | string | `"8d"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.ruleSelectorNilUsesHelmValues | bool | `false` |  |
+| kube-prometheus-stack.prometheus.prometheusSpec.scrapeConfigSelectorNilUsesHelmValues | bool | `false` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues | bool | `false` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.accessModes[0] | string | `"ReadWriteOnce"` |  |
 | kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage | string | `"16Gi"` |  |

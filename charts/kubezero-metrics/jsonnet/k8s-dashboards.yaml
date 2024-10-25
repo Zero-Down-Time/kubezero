@@ -3,13 +3,13 @@ gzip: true
 folder: Kubernetes
 dashboards:
 - name: coreDNS
-  url: https://grafana.com/api/dashboards/12539/revisions/5/download
+  url: https://grafana.com/api/dashboards/15762/revisions/18/download
   tags: ['kubernetes', 'DNS']
 - name: etcd
-  url: https://grafana.com/api/dashboards/15308/revisions/1/download
+  url: https://grafana.com/api/dashboards/21473/revisions/3/download
   tags: ['kubernetes', 'etcd']
 - name: node
-  url: https://grafana.com/api/dashboards/1860/revisions/27/download
+  url: https://grafana.com/api/dashboards/1860/revisions/37/download
   tags: ['kubernetes']
 # cd dashboards; for f in *.json; do echo "- name: ${f%%.json}" >> ../dashboards.yaml; echo "  url: file://dashboards/$f" >> ../dashboards.yaml; done; cd -
 - name: apiserver
