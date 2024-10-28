@@ -61,6 +61,8 @@ function cert-manager-post() {
 # ArgoCD  #
 ###########
 function argocd-pre() {
+  kubectl delete job argo-argocd-redis-secret-init -n argocd || true
+
   for f in $CLUSTER/secrets/argocd-*.yaml; do
     kubectl apply -f $f
   done

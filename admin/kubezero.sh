@@ -129,6 +129,8 @@ kubeadm_upgrade() {
   ### Remove with 1.31
   # migrate kubezero CM to kubezero NS
   # migrate ArgoCD app from values to valuesObject
+  create_ns kubezero
+
   if [ "$ARGOCD" == "True" ]; then
     kubectl get app kubezero -n argocd -o yaml > $WORKDIR/kubezero-argo-app.yaml
     if [ "$(yq '(.spec.source.helm | has "values")' $WORKDIR/kubezero-argo-app.yaml)" == "true" ]; then
@@ -137,11 +139,12 @@ kubeadm_upgrade() {
 
       kubectl patch app kubezero -n argocd --type json -p='[{"op": "remove", "path": "/spec/source/helm/values"}]'
       kubectl delete cm kubezero-values -n kube-system > /dev/null || true
+      kubectl create configmap -n kubezero kubezero-values || true
     fi
 
   else
     kubectl get cm kubezero-values -n kubezero > /dev/null || \
-      { create_ns kubezero; kubectl get cm kubezero-values -n kube-system -o yaml | \
+      { kubectl get cm kubezero-values -n kube-system -o yaml | \
         sed 's/^  namespace: kube-system/  namespace: kubezero/' | \
         kubectl create -f - && \
         kubectl delete cm kubezero-values -n kube-system ; }
@@ -157,16 +160,18 @@ kubeadm_upgrade() {
   # Update kubezero-values CM
   kubectl get cm -n kubezero kubezero-values -o=yaml | \
     yq e '.data."values.yaml" |= load_str("/tmp/kubezero/new-kubezero-values.yaml")' | \
-    kubectl replace -f -
-
-  # update argo app
-  export kubezero_chart_version=$(yq .version $CHARTS/kubezero/Chart.yaml)
-  kubectl get application kubezero -n argocd -o yaml | \
-    yq '.spec.source.helm.valuesObject |= load("/tmp/kubezero/new-kubezero-values.yaml") | .spec.source.targetRevision = strenv(kubezero_chart_version)' | \
     kubectl apply --server-side --force-conflicts -f -
 
-  # finally remove annotation to allow argo to sync again
-  kubectl patch app kubezero -n argocd --type json -p='[{"op": "remove", "path": "/metadata/annotations"}]' || true
+  if [ "$ARGOCD" == "True" ]; then
+    # update argo app
+    export kubezero_chart_version=$(yq .version $CHARTS/kubezero/Chart.yaml)
+    kubectl get application kubezero -n argocd -o yaml | \
+      yq '.spec.source.helm.valuesObject |= load("/tmp/kubezero/new-kubezero-values.yaml") | .spec.source.targetRevision = strenv(kubezero_chart_version)' | \
+      kubectl apply --server-side --force-conflicts -f -
+
+    # finally remove annotation to allow argo to sync again
+    kubectl patch app kubezero -n argocd --type json -p='[{"op": "remove", "path": "/metadata/annotations"}]' || true
+  fi
 
   # Local node upgrade
   render_kubeadm upgrade

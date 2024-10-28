@@ -267,6 +267,8 @@ EOF
 function control_plane_upgrade() {
   TASKS="$1"
 
+  [ -z "$KUBE_VERSION" ] && KUBE_VERSION="latest"
+
   echo "Deploy cluster admin task: $TASKS"
   cat <<EOF | kubectl apply -f -
 apiVersion: v1

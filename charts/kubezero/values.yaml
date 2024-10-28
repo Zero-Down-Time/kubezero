@@ -43,7 +43,7 @@ network:
 cert-manager:
   enabled: false
   namespace: cert-manager
-  targetRevision: 0.9.9
+  targetRevision: 0.9.10
 
 storage:
   enabled: false
@@ -96,7 +96,7 @@ telemetry:
 operators:
   enabled: false
   namespace: operators
-  targetRevision: 0.1.4
+  targetRevision: 0.1.5
 
 metrics:
   enabled: false
@@ -114,7 +114,7 @@ metrics:
 logging:
   enabled: false
   namespace: logging
-  targetRevision: 0.8.12
+  targetRevision: 0.8.13
 
 argo:
   enabled: false

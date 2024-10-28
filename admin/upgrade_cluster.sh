@@ -19,9 +19,6 @@ echo "Checking that all pods in kube-system are running ..."
 
 [ "$ARGOCD" == "True" ] && disable_argo
 
-# Preload cilium images to running nodes
-all_nodes_upgrade "chroot /host crictl pull quay.io/cilium/cilium:v1.16.3"
-
 control_plane_upgrade kubeadm_upgrade
 
 echo "Control plane upgraded, <Return> to continue"
@@ -35,6 +32,10 @@ read -r
 #
 
 # upgrade modules
+#
+# Preload cilium images to running nodes
+all_nodes_upgrade "chroot /host crictl pull quay.io/cilium/cilium:v1.16.3"
+
 control_plane_upgrade "apply_network, apply_addons, apply_storage, apply_operators"
 
 echo "Checking that all pods in kube-system are running ..."
