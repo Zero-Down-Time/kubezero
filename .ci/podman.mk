@@ -1,3 +1,13 @@
+SHELL := bash
+.SHELLFLAGS := -eu -o pipefail -c
+.DELETE_ON_ERROR:
+.SILENT: ; # no need for @
+.ONESHELL: ; # recipes execute in same shell
+.NOTPARALLEL: ; # wait for this target to finish
+.EXPORT_ALL_VARIABLES: ; # send all vars to shell
+.PHONY: all # All targets are accessible for user
+.DEFAULT: help # Running Make will run the help target
+
 # Parse version from latest git semver tag
 GIT_TAG ?= $(shell git describe --tags --match v*.*.* 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
 GIT_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD 2>/dev/null)
@@ -23,13 +33,6 @@ ifneq ($(TRIVY_REMOTE),)
 	TRIVY_OPTS ::= --server $(TRIVY_REMOTE)
 endif
 
-.SILENT: ; # no need for @
-.ONESHELL: ; # recipes execute in same shell
-.NOTPARALLEL: ; # wait for this target to finish
-.EXPORT_ALL_VARIABLES: ; # send all vars to shell
-.PHONY: all # All targets are accessible for user
-.DEFAULT: help # Running Make will run the help target
-
 help: ## Show Help
 	grep -E '^[a-zA-Z_-]+:.*?## .*$$' .ci/podman.mk | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
@@ -40,27 +43,28 @@ fmt:: ## auto format source
 lint:: ## Lint source
 
 build: ## Build the app
-	buildah build --rm --layers -t $(IMAGE):$(TAG)-$(_ARCH) --build-arg TAG=$(TAG) --build-arg ARCH=$(_ARCH) --platform linux/$(_ARCH) .
+	podman build --rm --layers -t $(IMAGE):$(TAG)-$(_ARCH) --build-arg TAG=$(TAG) --build-arg ARCH=$(_ARCH) --platform linux/$(_ARCH) .
 
 test:: ## test built artificats
 
 scan: ## Scan image using trivy
 	echo "Scanning $(IMAGE):$(TAG)-$(_ARCH) using Trivy $(TRIVY_REMOTE)"
-	trivy image $(TRIVY_OPTS) --quiet --no-progress localhost/$(IMAGE):$(TAG)-$(_ARCH)
+	trivy image $(TRIVY_OPTS) --quiet --no-progress --ignorefile ./.trivyignore.yaml localhost/$(IMAGE):$(TAG)-$(_ARCH)
 
 # first tag and push all actual images
 # create new manifest for each tag and add all available TAG-ARCH before pushing
 push: ecr-login ## push images to registry
-	for t in $(TAG) latest $(EXTRA_TAGS); do \
+	for t in $(TAG) latest $(EXTRA_TAGS); do
 		echo "Tagging image with $(REGISTRY)/$(IMAGE):$${t}-$(ARCH)"
-		buildah tag $(IMAGE):$(TAG)-$(_ARCH) $(REGISTRY)/$(IMAGE):$${t}-$(_ARCH); \
-		buildah manifest rm $(IMAGE):$$t || true; \
-		buildah manifest create $(IMAGE):$$t; \
-		for a in $(ALL_ARCHS); do \
-			buildah manifest add $(IMAGE):$$t $(REGISTRY)/$(IMAGE):$(TAG)-$$a; \
-		done; \
+		podman tag $(IMAGE):$(TAG)-$(_ARCH) $(REGISTRY)/$(IMAGE):$${t}-$(_ARCH)
+		podman manifest rm $(IMAGE):$$t || true
+		podman manifest create $(IMAGE):$$t
+		for a in $(ALL_ARCHS); do
+			podman image exists $(REGISTRY)/$(IMAGE):$$t-$$a && \
+			podman manifest add $(IMAGE):$$t containers-storage:$(REGISTRY)/$(IMAGE):$$t-$$a
+		done
 		echo "Pushing manifest $(IMAGE):$$t"
-		buildah manifest push --all $(IMAGE):$$t docker://$(REGISTRY)/$(IMAGE):$$t; \
+		podman manifest push --all $(IMAGE):$$t docker://$(REGISTRY)/$(IMAGE):$$t
 	done
 
 ecr-login: ## log into AWS ECR public
@@ -73,8 +77,11 @@ rm-remote-untagged: ## delete all remote untagged and in-dev images, keep 10 tag
 clean:: ## clean up source folder
 
 rm-image:
-	test -z "$$(podman image ls -q $(IMAGE):$(TAG)-$(_ARCH))" || podman image rm -f $(IMAGE):$(TAG)-$(_ARCH) > /dev/null
-	test -z "$$(podman image ls -q $(IMAGE):$(TAG)-$(_ARCH))" || echo "Error: Removing image failed"
+	for t in $(TAG) latest $(EXTRA_TAGS); do
+		for a in $(ALL_ARCHS); do
+			podman image exists $(IMAGE):$$t-$$a && podman image rm -f $(IMAGE):$$t-$$a || true
+		done
+	done
 
 ## some useful tasks during development
 ci-pull-upstream: ## pull latest shared .ci subtree
