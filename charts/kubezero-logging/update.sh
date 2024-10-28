@@ -9,7 +9,7 @@ FLUENT_BIT_VERSION=$(yq eval '.dependencies[] | select(.name=="fluent-bit") | .v
 FLUENTD_VERSION=$(yq eval '.dependencies[] | select(.name=="fluentd") | .version' Chart.yaml)
 
 # fluent-bit
-patch_chart fluent-bit
+# patch_chart fluent-bit
 
 # FluentD
 patch_chart fluentd

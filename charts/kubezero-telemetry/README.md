@@ -1,6 +1,6 @@
 # kubezero-telemetry
 
-![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.4.1](https://img.shields.io/badge/Version-0.4.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 KubeZero Umbrella Chart for OpenTelemetry, Jaeger etc.
 
@@ -19,10 +19,10 @@ Kubernetes: `>= 1.26.0`
 | Repository | Name | Version |
 |------------|------|---------|
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://fluent.github.io/helm-charts | fluent-bit | 0.47.1 |
+| https://fluent.github.io/helm-charts | fluent-bit | 0.47.10 |
 | https://fluent.github.io/helm-charts | fluentd | 0.5.2 |
-| https://jaegertracing.github.io/helm-charts | jaeger | 3.1.1 |
-| https://open-telemetry.github.io/opentelemetry-helm-charts | opentelemetry-collector | 0.97.1 |
+| https://jaegertracing.github.io/helm-charts | jaeger | 3.3.1 |
+| https://open-telemetry.github.io/opentelemetry-helm-charts | opentelemetry-collector | 0.108.0 |
 | https://opensearch-project.github.io/helm-charts/ | data-prepper | 0.1.0 |
 
 ## Values
@@ -170,19 +170,14 @@ Kubernetes: `>= 1.26.0`
 | opensearch.dashboard.istio.url | string | `"telemetry-dashboard.example.com"` |  |
 | opensearch.nodeSets | list | `[]` |  |
 | opensearch.prometheus | bool | `false` |  |
-| opensearch.version | string | `"2.16.0"` |  |
+| opensearch.version | string | `"2.17.0"` |  |
 | opentelemetry-collector.config.exporters.otlp/data-prepper.endpoint | string | `"telemetry-data-prepper:21890"` |  |
 | opentelemetry-collector.config.exporters.otlp/data-prepper.tls.insecure | bool | `true` |  |
 | opentelemetry-collector.config.exporters.otlp/jaeger.endpoint | string | `"telemetry-jaeger-collector:4317"` |  |
 | opentelemetry-collector.config.exporters.otlp/jaeger.tls.insecure | bool | `true` |  |
 | opentelemetry-collector.config.extensions.health_check.endpoint | string | `"${env:MY_POD_IP}:13133"` |  |
-| opentelemetry-collector.config.extensions.memory_ballast | object | `{}` |  |
-| opentelemetry-collector.config.processors.batch | object | `{}` |  |
-| opentelemetry-collector.config.processors.memory_limiter | string | `nil` |  |
-| opentelemetry-collector.config.receivers.jaeger | string | `nil` |  |
 | opentelemetry-collector.config.receivers.otlp.protocols.grpc.endpoint | string | `"${env:MY_POD_IP}:4317"` |  |
 | opentelemetry-collector.config.receivers.otlp.protocols.http.endpoint | string | `"${env:MY_POD_IP}:4318"` |  |
-| opentelemetry-collector.config.receivers.zipkin | string | `nil` |  |
 | opentelemetry-collector.config.service.extensions[0] | string | `"health_check"` |  |
 | opentelemetry-collector.config.service.extensions[1] | string | `"memory_ballast"` |  |
 | opentelemetry-collector.config.service.pipelines.logs | string | `nil` |  |

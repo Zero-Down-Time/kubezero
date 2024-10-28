@@ -1,6 +1,6 @@
 # kubezero-logging
 
-![Version: 0.8.12](https://img.shields.io/badge/Version-0.8.12-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6.0](https://img.shields.io/badge/AppVersion-1.6.0-informational?style=flat-square)
+![Version: 0.8.13](https://img.shields.io/badge/Version-0.8.13-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6.0](https://img.shields.io/badge/AppVersion-1.6.0-informational?style=flat-square)
 
 KubeZero Umbrella Chart for complete EFK stack
 
@@ -19,7 +19,7 @@ Kubernetes: `>= 1.26.0`
 | Repository | Name | Version |
 |------------|------|---------|
 | https://cdn.zero-downtime.net/charts/ | kubezero-lib | >= 0.1.6 |
-| https://fluent.github.io/helm-charts | fluent-bit | 0.46.2 |
+| https://fluent.github.io/helm-charts | fluent-bit | 0.47.10 |
 | https://fluent.github.io/helm-charts | fluentd | 0.5.2 |
 
 ## Changes from upstream

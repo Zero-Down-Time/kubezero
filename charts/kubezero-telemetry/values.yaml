@@ -1,6 +1,9 @@
 data-prepper:
   enabled: false
 
+  image:
+    tag: 2.10.1
+
   securityContext:
     capabilities:
       drop:
@@ -113,7 +116,6 @@ opentelemetry-collector:
     extensions:
       health_check:
         endpoint: ${env:MY_POD_IP}:13133
-      memory_ballast: {}
 
     exporters:
       otlp/jaeger:
@@ -125,14 +127,7 @@ opentelemetry-collector:
         tls:
           insecure: true
 
-    processors:
-      batch: {}
-      # If set to null, will be overridden with values based on k8s resource limits
-      memory_limiter: null
-
     receivers:
-      jaeger: null
-      zipkin: null
       otlp:
         protocols:
           grpc:
@@ -145,10 +140,7 @@ opentelemetry-collector:
           address: ${env:MY_POD_IP}:8888
       extensions:
         - health_check
-        - memory_ballast
       pipelines:
-        metrics: null
-        logs: null
         traces:
           exporters:
             - otlp/jaeger
@@ -228,7 +220,7 @@ jaeger:
     url: jaeger.example.com
 
 opensearch:
-  version: 2.16.0
+  version: 2.17.0
   prometheus: false
 
   # custom cluster settings
@@ -274,7 +266,7 @@ fluentd:
   #- fluent-plugin-s3
 
   source:
-    sharedKey: secretref+k8s://v1/Secret/kube-system/kubezero-secrets/telemetry.fluentd.source.sharedKey # "cloudbender"
+    sharedKey: secretref+k8s://v1/Secret/kubezero/kubezero-secrets/telemetry.fluentd.source.sharedKey # "cloudbender"
 
   output:
     # Defaults to OpenSearch in same namespace
@@ -509,7 +501,7 @@ fluent-bit:
   config:
     output:
       host: telemetry-fluentd
-      sharedKey: secretref+k8s://v1/Secret/kube-system/kubezero-secrets/telemetry.fluentd.source.sharedKey
+      sharedKey: secretref+k8s://v1/Secret/kubezero/kubezero-secrets/telemetry.fluentd.source.sharedKey
       tls: false
 
     output_otel:
