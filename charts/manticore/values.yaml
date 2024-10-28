@@ -1,5 +1,0 @@
-manticoresearch:
-  worker:
-    replicaCount: 1
-    volume:
-      size: 4Gi

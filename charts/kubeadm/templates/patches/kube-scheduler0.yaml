@@ -1,7 +1,0 @@
-spec:
-  containers:
-  - name: kube-scheduler
-    resources:
-      requests:
-        cpu: 50m
-        memory: 96Mi
