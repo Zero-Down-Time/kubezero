@@ -1,8 +1,8 @@
 data-prepper:
   enabled: false
 
-  image:
-    tag: 2.10.1
+  #image:
+  #  tag: 2.10.1
 
   securityContext:
     capabilities:
